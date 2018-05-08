@@ -1,0 +1,33 @@
+Some quick notes:
+
+xpilot-ng-temp/c/                       <-- this is where the AI bots are written
+xpilot-ng-temp/src/client/x11/cAI.c     <-- this is where the AI-lib implementation is
+
+How to run the server( do this before running a client )
+cd src/server/
+./base_defense_server
+This is a script that executes the current rendition of the map with a bunch of 
+configuration options that I've been playing around with.
+
+How to run the client ( so that you control the ship )
+cd src/client/x11
+./base_defense_client < username > < shipShape name >
+username can be anything you want
+shipShape should be one of the following: quad, fixed, drone_tank or infantry
+
+How to run an AI bot
+First have the server running.
+cd xpilot-ng-temp/c
+Compile the bot you want to run, example: gcc Spinner.c libcAI.so -o Spinner
+Another example: gcc StationaryDefender.c libcAI.so -lm -o StationaryDefender
+Then run it like so:
+./Spinner -team 0 -color0 "#23221f" -join -name < username > -shipShape < quad, fixed, drone_tank or infantry >
+
+Note: At the time of writing and sending this to you, StationaryDefender is buggy and 
+just stands still.
+
+Note2: You can have default AI bots spawn by changing the min/max number of robots in the
+base_defense_server script, but this *may* crash the server due to some recent changes 
+i've made, I haven't tested it
+
+-Rene Sanchez ( 10/30/2017 )

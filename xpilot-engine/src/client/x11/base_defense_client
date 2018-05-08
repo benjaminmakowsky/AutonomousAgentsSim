@@ -1,0 +1,1 @@
+./xpilot-ng-x11 -team 2 -color0 "#23221f" -join -name $1 -shipShape $2

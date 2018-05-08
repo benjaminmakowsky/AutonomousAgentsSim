@@ -1,0 +1,9 @@
+Example of how to run:
+
+./Spinner -team 0 -color0 "#23221f" -join -name test -shipShape quad
+
+Example of how to run the other scripts ( defender and such ):
+
+$ ./buildDefender
+$ export LD_LIBRARY_PATH=.
+$ ./defender < params >  or $ ./runHeadOn... 
