@@ -1060,12 +1060,13 @@ static void Player_collides_with_killing_shot(player_t *pl, object_t *obj)
      *
      * Sound effects are missing when shot is deadly.
      */
-
-    if (BIT(pl->used, HAS_SHIELD)
-	|| Player_has_armor(pl)
+    //if (BIT(pl->used, HAS_SHIELD) ||
+    if(
+	Player_has_armor(pl)
 	|| (obj->type == OBJ_TORPEDO
 	    && Mods_get(obj->mods, ModsNuclear)
 	    && (rfrac() >= 0.25))) {
+      warn("Player had armor when hit\n");
 	switch (obj->type) {
 	case OBJ_TORPEDO:
 	    sound_play_sensors(pl->pos, PLAYER_EAT_TORPEDO_SHOT_SOUND);
@@ -1101,7 +1102,7 @@ static void Player_collides_with_killing_shot(player_t *pl, object_t *obj)
 	    pl->forceVisible += 2;
 	    break;
 
-	case OBJ_SHOT:
+	case OBJ_SHOT:  warn("Player was hit by a shot\n");
 	case OBJ_CANNON_SHOT:
 	    sound_play_sensors(pl->pos, PLAYER_EAT_SHOT_SOUND);
 	    if (!Player_uses_emergency_shield(pl)) {
@@ -1125,13 +1126,17 @@ static void Player_collides_with_killing_shot(player_t *pl, object_t *obj)
 	    break;
 	}
 
-	if (pl->fuel.sum <= 0)
+	if (pl->fuel.sum <= 0){
 	    CLR_BIT(pl->used, HAS_SHIELD);
-	if (!BIT(pl->used, HAS_SHIELD)
+  }
+/*	if (!BIT(pl->used, HAS_SHIELD)
 	    && Player_has_armor(pl))
 	    Player_hit_armor(pl);
-
-    } else {
+*/
+    if( Player_has_armor(pl) )
+      warn("Player had armor\n");
+      Player_hit_armor(pl);
+    }else {
 	switch (obj->type) {
 	case OBJ_TORPEDO:
 	case OBJ_SMART_SHOT:

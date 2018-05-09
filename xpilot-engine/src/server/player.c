@@ -246,7 +246,9 @@ void Go_home(player_t *pl)
     Emergency_shield(pl, false);
     Player_used_kill(pl);
     /*Player_init_items(pl);*/
-/*
+    Player_init_items(pl);
+
+    //
     if (options.playerStartsShielded) {
 	SET_BIT(pl->used, HAS_SHIELD);
 	if (!options.allowShields) {
@@ -256,8 +258,8 @@ void Go_home(player_t *pl)
 	if (Player_has_deflector(pl))
 	    Deflector(pl, true);
     }
+  //
 
-*/
     Thrust(pl, false);
     pl->updateVisibility = true;
     for (i = 0; i < NumPlayers; i++) {
@@ -367,8 +369,9 @@ void Player_remove_tank(player_t *pl, int which_tank)
 
 void Player_hit_armor(player_t *pl)
 {
-    if (--pl->armor <= 0)
-	CLR_BIT(pl->have, HAS_ARMOR);
+    if ((--pl->armor) <= 0){
+      CLR_BIT(pl->have, HAS_ARMOR);
+    }
 }
 
 /*
@@ -598,6 +601,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
     pl->maxturnsps = MAX_SERVER_FPS;
 
     Player_init_items(pl);
+    SET_BIT(pl->have, HAS_ARMOR);
 
     if (options.allowShipShapes && ship)
 	pl->ship = ship;

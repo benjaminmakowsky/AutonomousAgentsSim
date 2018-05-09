@@ -1,0 +1,17 @@
+client/talkmacros.c:166:		    outbuf[pos++] = player->life + '0';
+client/talkmacros.c:169:		tmpptr = player->nick_name;
+client/talkmacros.c:175:		    pos += sprintf(outbuf + pos, "%.2f", player->score);
+client/talkmacros.c:179:		    outbuf[pos++] = player->team + '0';
+common/pack.h:63: * and a 'player->version' variable.
+common/pack.h:71: * 3.0.4.2: new player-self status byte in self packet.
+server/player.h:69: * These values are set in the player->pl_type field.
+server/player.h:76: * These values are set in the player->pl_state field.
+server/player.h:88: * These are the bits of the player->have and player->used fields.
+server/cmdline.c:892:	"Elastic or inelastic properties of the player-ball collision\n"
+server/cmdline.c:903:	"Player-wall friction (0 to 1).\n",
+Binary file server/cmdline.o matches
+server/help_msg:286:	Elastic or inelastic properties of the player-ball collision
+server/help_msg:290:	Player-wall friction (0 to 1).
+Binary file server/xpilot-ng-server matches
+server/help:286:	Elastic or inelastic properties of the player-ball collision
+server/help:290:	Player-wall friction (0 to 1).
