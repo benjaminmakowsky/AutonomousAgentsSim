@@ -15,12 +15,15 @@
 #include <time.h>
 #include <string.h>
 #define PI 3.1415926536
-#define STATE_INIT 0 
-#define STATE_REFUELING 1
-#define STATE_ENGAGING 2
-#define STATE_IN_POSITION 3
-#define STATE_HEADING_TO_POSITION 4
-#define STATE_DEAD 5
+
+enum State{
+  STATE_INIT,
+  STATE_REFUELING,
+  STATE_ENGAGING,
+  STATE_IN_POSITION,
+  STATE_HEADING_TO_POSITION,
+  STATE_DEAD
+};
 
 struct pair{
   int first;
@@ -77,6 +80,17 @@ char* moveup_line = "Moving up.";
 char custom_msg[50];
 char prev_msg[50];
 
+const char* printState(enum State s ){
+  switch(s){
+    case STATE_INIT : return "INIT";
+    case STATE_REFUELING : return "REFUELING";
+    case STATE_ENGAGING : return "ENGAGING";
+    case STATE_IN_POSITION : return "IN_POSITION";
+    case STATE_HEADING_TO_POSITION : return "HEADING_TO_POSITION";
+    case STATE_DEAD : return "DEAD";
+  }
+}
+
 // Simulates rate at which fuel is depleted in xpilot
 void* lose_fuel(){
   while(1){
@@ -127,7 +141,7 @@ void Refueling(){
     talk( refuel_line );
 
     //Calculate fuel station degree
-    angleToTurn = atan2( selfY() - fuely, selfX() - fuelx ); 
+    angleToTurn = atan2( fuely - selfY(), fuelx - selfX()); 
     angleToTurn = radToDeg( angleToTurn ); // convert from rad to deg
         
     if( angleToTurn < 0 ){
@@ -141,13 +155,13 @@ void Refueling(){
         ( selfY() + 20 >= fuely && selfY() -20 <= fuely ) ){
       thrust(0);
       inFuelingPosition = true;
+      refuel(1);
     }
     else{
       thrust(1);
     }
   }
   else{
-    refuel(1);
     pl_fuel += 2;
     //TODO: Have refuel limit also be a parameter
     if( pl_fuel >= 1500 ){
@@ -307,6 +321,10 @@ AI_loop( ) {
     if( state != STATE_REFUELING ){
       refuel( 0 );
     }
+    else{
+      Refueling();
+      return;
+    }
 
     if( !isLeader ){
       if( strcmp( scanMsg( 0 ), prev_msg ) != 0 ){
@@ -351,7 +369,7 @@ AI_loop( ) {
     }
 
     // Check if we are dead
-    if( init && !selfAlive() ){
+    if( !selfAlive() ){
       state = STATE_DEAD;
     }
 
@@ -360,7 +378,7 @@ AI_loop( ) {
       state = STATE_INIT;
     }
 
-    printf( "STATE: %d\n", state );
+    printf( "state: %s\n", printState( state ) );
     switch( state ){
       case( STATE_INIT ):
         Initialize();
@@ -378,8 +396,7 @@ AI_loop( ) {
         break;
 
       case( STATE_DEAD ):
-        //exit(1);
-        init = false;
+        state = STATE_HEADING_TO_POSITION;
         break;
 
       case( STATE_HEADING_TO_POSITION ):
@@ -387,7 +404,7 @@ AI_loop( ) {
         break;
     }
 
-    //printf( "current fuel: %f\n", pl_fuel );
+    printf( "current fuel: %f\n", pl_fuel );
 }
 
 int main(int argc, char *argv[]) {

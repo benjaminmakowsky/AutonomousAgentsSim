@@ -16,6 +16,10 @@ xpilot-ng-4.7.3/src/client/x11/xpilot-ng-x11   <-- this is the Xpilot client scr
 **************************
 ** BUILDING AND RUNNING **
 **************************
+How to build Xpilot-engine:
+$ cd .../xpilot-le/xpilot-engine
+$ ./build.sh
+
 How to run the server( do this before running a client )
 cd src/server/
 ./base_defense_server

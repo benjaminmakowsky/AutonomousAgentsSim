@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://xpilot-ai.org/index.php/docs/examples -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb" dir="ltr" slick-uniqueid="3"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<base href="http://xpilot-ai.org/index.php/docs/examples">--><base href=".">
+  
+  <meta name="description" content="xpilot artificial intelligence learning system multiplayer space combat simulation ">
+  <meta name="generator" content="Joomla! - Open Source Content Management">
+  <title>Examples</title>
+  <link href="http://xpilot-ai.org/index.php/docs/examples" rel="canonical">
+  <link href="http://xpilot-ai.org/index.php/docs/examples?format=feed&amp;type=rss" rel="alternate" type="application/rss+xml" title="RSS 2.0">
+  <link href="http://xpilot-ai.org/index.php/docs/examples?format=feed&amp;type=atom" rel="alternate" type="application/atom+xml" title="Atom 1.0">
+  <link href="http://xpilot-ai.org/templates/protostar/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+  <link href="http://xpilot-ai.org/index.php/component/search/?Itemid=114&amp;format=opensearch" rel="search" title="Search Xpilot-AI" type="application/opensearchdescription+xml">
+  <link rel="stylesheet" href="./Examples_files/template.css" type="text/css">
+  <script src="./Examples_files/mootools-core.js.download" type="text/javascript"></script>
+  <script src="./Examples_files/core.js.download" type="text/javascript"></script>
+  <script src="./Examples_files/caption.js.download" type="text/javascript"></script>
+  <script src="./Examples_files/mootools-more.js.download" type="text/javascript"></script>
+  <script src="./Examples_files/jquery.min.js.download" type="text/javascript"></script>
+  <script src="./Examples_files/jquery-noconflict.js.download" type="text/javascript"></script>
+  <script src="./Examples_files/bootstrap.min.js.download" type="text/javascript"></script>
+  <script type="text/javascript">
+window.addEvent('load', function() {
+				new JCaption('img.caption');
+			});
+window.addEvent('domready', function() {
+			$$('.hasTip').each(function(el) {
+				var title = el.get('title');
+				if (title) {
+					var parts = title.split('::', 2);
+					el.store('tip:title', parts[0]);
+					el.store('tip:text', parts[1]);
+				}
+			});
+			var JTooltips = new Tips($$('.hasTip'), {"maxTitleChars": 50,"fixed": false});
+		});
+function keepAlive() {	var myAjax = new Request({method: "get", url: "index.php"}).send();} window.addEvent("domready", function(){ keepAlive.periodical(840000); });
+jQuery(document).ready(function()
+				{
+					jQuery('.hasTooltip').tooltip({});
+				});
+  </script>
+
+      <link href="./Examples_files/css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+      h1,h2,h3,h4,h5,h6,.site-title{
+        font-family: 'Open Sans', sans-serif;
+      }
+    </style>
+      <style type="text/css">
+    body.site
+    {
+      border-top: 3px solid #e67a00;
+      background-color: #006591    }
+    a
+    {
+      color: #e67a00;
+    }
+    .navbar-inner, .nav-list > .active > a, .nav-list > .active > a:hover, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .nav-pills > .active > a, .nav-pills > .active > a:hover,
+    .btn-primary
+    {
+      background: #e67a00;
+    }
+    .navbar-inner
+    {
+      -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+      -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+    }
+  </style>
+    <!--[if lt IE 9]>
+    <script src="/media/jui/js/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body class="site com_content view-category layout-blog no-task itemid-114">
+
+  <!-- Body -->
+  <div class="body">
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-inner clearfix">
+          <a class="brand pull-left" href="http://xpilot-ai.org/" style="background-color:#006591;-webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px;padding: 6px;">
+            <img src="./Examples_files/xpilotaibannersmall.png" alt="Xpilot-AI"> <div class="site-description">A library for writing XPilot bots</div>          </a>
+          <div class="header-search pull-right">
+            <div class="search">
+    <form action="http://xpilot-ai.org/index.php/docs/examples" method="post" class="form-inline">
+    		<label for="mod-search-searchword" class="element-invisible">Search...</label> <input name="searchword" id="mod-search-searchword" maxlength="20" class="inputbox search-query" type="text" size="20" value="Search..." onblur="if (this.value==&#39;&#39;) this.value=&#39;Search...&#39;;" onfocus="if (this.value==&#39;Search...&#39;) this.value=&#39;&#39;;">    	<input type="hidden" name="task" value="search">
+    	<input type="hidden" name="option" value="com_search">
+    	<input type="hidden" name="Itemid" value="114">
+    </form>
+</div>
+
+          </div>
+        </div>
+      </div>
+            <div class="navigation">
+        <ul class="nav menu nav-pills">
+<li class="item-101"><a href="http://xpilot-ai.org/">Home</a></li><li class="item-111 active deeper parent"><a href="http://xpilot-ai.org/index.php/docs">Docs</a><ul class="nav-child unstyled small"><li class="item-113"><a href="http://xpilot-ai.org/index.php/docs/about">About</a></li><li class="item-114 current active"><a href="http://xpilot-ai.org/index.php/docs/examples">Examples</a></li><li class="item-115"><a href="http://xpilot-ai.org/index.php/docs/install">Install</a></li><li class="item-112"><a href="http://xpilot-ai.org/index.php/docs/versions">Versions</a></li><li class="item-121"><a href="http://xpilot-ai.org/index.php/docs/library">Library</a></li></ul></li><li class="item-122"><a href="http://xpilot-ai.org/index.php/downloads">Downloads</a></li><li class="item-120"><a href="http://xpilot-ai.org/index.php/forum">Forum</a></li></ul>
+
+      </div>
+            
+      <div class="row-fluid">
+                <div id="content" class="span9">
+          <!-- Begin Content -->
+          
+          
+<div id="system-message-container">
+<div id="system-message">
+</div>
+</div>
+          <div class="blog">
+		
+	
+				<div class="items-leading">
+				<div class="leading-0">
+			
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/examples/15-general">
+						General</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/examples#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/examples/15-general?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=0a2475d18d1890156a8eda2f1d7eac05f104821c" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p>Xpilot-AI works by allowing a programmer to easily inject code within the framework of the game during the same time that the system would read user input and draw the current frame. We refer to this code that will be injected as the AI loop. There are many functions included in Xpilot-AI which allow a programmer to effortlessly read information from the XPilot client and send instructions to the ship in the same way a player could see the display and use the keyboard and mouse.</p>
+<p>An important note: If the Xpilot-AI libraries are <em>not</em> installed to your library path, then you will need to set the library path to where they are located.</p>
+<p>For example, in Ubuntu, if the bots are located in the same folder as the library .so, as is the default method, the following line should be run <em>once, before</em> executing the bot:</p>
+<pre><code>
+export LD_LIBRARY_PATH=.<br>
+</code></pre>
+<p><strong>If you get errors about libraries, try that first!</strong></p>
+
+
+
+		</div>
+		<div class="clearfix"></div>
+					</div><!-- end items-leading -->
+	<div class="clearfix"></div>
+							<div class="items-row cols-1 row-0 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/examples/14-server">
+						Server</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/examples#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/examples/14-server?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=f1063652fba44efc6c94d5e8379cd92ce77f30b1" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p>The various XPilot clients and servers are, on the whole, compatible with one another. Our custom server adds switchBase, which is helpful for artificial learning systems.</p>
+<p>We are working to bring our modified server code up to date, for now you can use the <a href="http://xpilot-ai.org/downloads/old%20xpilot%20versions/retired/xpserver-0.5.5-src.tar.gz">previous server</a></p>
+<p>This is how to run a basic server:</p>
+<pre><code>
+./xpilots -map maps/lifeless.xp -noQuit -switchBase 1<br>
+</code></pre>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-1 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/examples/13-c">
+						C</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/examples#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/examples/13-c?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=7e36438245599c4478289be869578b5a77c2c706" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p>Spinner.c</p>
+<pre><code>
+#include "cAI.h" //This allows us to use the AI functions
+AI_loop() { //This must be the name of the AI loop in C
+  turnLeft(1); //Bot code goes here
+}
+int main(int argc, char *argv[]) { //Called when bot is run
+  return start(argc, argv); //Starts Xpilot-AI
+}
+<br></code></pre>
+<p>To compile:</p>
+<pre><code>
+gcc Spinner.c libcAI.so -o Spinner
+<br></code></pre>
+<p>To run:</p>
+<pre><code>
+./Spinner
+<br></code></pre>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-2 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/examples/12-java">
+						Java</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/examples#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/examples/12-java?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=83aa7773572cdd995705285cd3a886d74c6510ff" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p>Spinner.java</p>
+<pre><code>
+class Spinner extends javaAI { //"extends" allows us to use the AI functions
+        @Override //Tells Java to override the existing AI_loop
+        public void AI_loop() { //This must be the name of the AI loop in Java
+                turnLeft(1); //Bot code goes here
+        }
+        public Spinner(String args[]) { //Required for superclass javaAI
+                super(args);
+        }
+        public static void main(String args[]) { //Called when bot is run
+                String[] new_args = {"-name","Spinner"}; //Sets args
+                Spinner spinner = new Spinner(new_args); //Starts Xpilot-AI
+        }
+}
+
+<br></code></pre>
+<p>To compile:</p>
+<pre><code>
+javac Spinner.java
+<br></code></pre>
+<p>To run:</p>
+<pre><code>
+java Spinner
+<br></code></pre>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-3 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/examples/11-python">
+						Python</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/examples#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/examples/11-python?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=44fd3f5d270408790d18b53a852435ddcc2852f0" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p>Spinner.py</p>
+<pre><code>
+import libpyAI as ai #This allows us to use the AI functions
+def AI_loop(): #Our method to be called as AI_loop, can be anything
+  ai.turnLeft(1) #Bot code goes here
+ai.start(AI_loop,["-name","Spinner"]) #Starts Xpilot-AI
+<br></code></pre>
+<p>No compilation necessary</p>
+<p>To run:</p>
+<pre><code>
+python3 Spinner.py
+<br></code></pre>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-4 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/examples/10-racket">
+						Racket</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/examples#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/examples/10-racket?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=03b064e353aa112a69d7be464d2e155f5685e6fa" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p>Spinner.rkt</p>
+<pre><code>
+#lang racket
+(require "rktAI.rkt") ;This allows us to use the AI functions
+(start (lambda () (turnLeft 1)) '("-name" "Spinner")) ;Starts Xpilot-AI
+<br></code></pre>
+<p>No compilation necessary</p>
+<p>To run:</p>
+<pre><code>
+racket Spinner.rkt
+<br></code></pre>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+					
+			</div>
+
+          
+          <!-- End Content -->
+        </div>
+                <div id="aside" class="span3">
+          <!-- Begin Right Sidebar -->
+          <div class="well "><h3 class="page-header">Login Form</h3><form action="http://xpilot-ai.org/index.php/docs/examples" method="post" id="login-form" class="form-inline">
+		<div class="userdata">
+		<div id="form-login-username" class="control-group">
+			<div class="controls">
+									<div class="input-prepend input-append">
+						<span class="add-on">
+							<span class="icon-user tip" title="User Name"></span>
+							<label for="modlgn-username" class="element-invisible">User Name</label>
+						</span>
+						<input id="modlgn-username" type="text" name="username" class="input-small" tabindex="0" size="18" placeholder="User Name">
+					</div>
+							</div>
+		</div>
+		<div id="form-login-password" class="control-group">
+			<div class="controls">
+									<div class="input-prepend input-append">
+						<span class="add-on">
+							<span class="icon-lock tip" title="Password">
+							</span>
+								<label for="modlgn-passwd" class="element-invisible">Password							</label>
+						</span>
+						<input id="modlgn-passwd" type="password" name="password" class="input-small" tabindex="0" size="18" placeholder="Password">
+				</div>
+				
+			</div>
+		</div>
+				<div id="form-login-remember" class="control-group checkbox">
+			<label for="modlgn-remember" class="control-label">Remember Me</label> <input id="modlgn-remember" type="checkbox" name="remember" class="inputbox" value="yes">
+		</div>
+				<div id="form-login-submit" class="control-group">
+			<div class="controls">
+				<button type="submit" tabindex="0" name="Submit" class="btn btn-primary">Log in</button>
+			</div>
+		</div>
+					<ul class="unstyled">
+				<li>
+					<a href="http://xpilot-ai.org/index.php/component/users/?view=registration">
+					Create an account <span class="icon-arrow-right"></span></a>
+				</li>
+				<li>
+					<a href="http://xpilot-ai.org/index.php/component/users/?view=remind">
+					  Forgot your username?</a>
+				</li>
+				<li>
+					<a href="http://xpilot-ai.org/index.php/component/users/?view=reset">Forgot your password?</a>
+				</li>
+
+			</ul>
+				<input type="hidden" name="option" value="com_users">
+		<input type="hidden" name="task" value="user.login">
+		<input type="hidden" name="return" value="aW5kZXgucGhwP0l0ZW1pZD0xMTQ=">
+		<input type="hidden" name="8d2d4acd6ae55d89a5dbfd6ad9e647b3" value="1">	</div>
+	</form>
+</div>
+          <!-- End Right Sidebar -->
+        </div>
+              </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="footer">
+    <div class="container">
+      <!-- <hr /> (Changing -CJG)-->
+      <br>
+      
+      <p class="pull-right"><a href="http://xpilot-ai.org/index.php/docs/examples#top" id="back-top">Back to Top</a></p>
+      <p><a href="http://xpilot-ai.org/">© Xpilot-AI 2017</a></p>
+    </div>
+  </div>
+  
+
+
+</body></html>

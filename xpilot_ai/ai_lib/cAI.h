@@ -16,7 +16,7 @@
 // Shooting methods -JNE
 	extern void fireShot(); // Fires a Shot -JRA
 	extern void fireMissile(); // Fires a Missile -JRA
-	extern void fireTorpedo(); // Fires a Torpedo 
+	extern void fireTorpedo(); // Fires a Torpedo
 	extern void fireHeat(); // Fires a Heat Seeking Missile -JRA
 	extern void dropMine(); // Drops a Stationary Mine from the ship -JRA
 	extern void detachMine(); // Releases a Mine from the ship -JRA

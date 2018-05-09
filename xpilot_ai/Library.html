@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)http://xpilot-ai.org/index.php/docs/library -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb" dir="ltr" slick-uniqueid="3"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<base href="http://xpilot-ai.org/index.php/docs/library">--><base href=".">
+  
+  <meta name="description" content="xpilot artificial intelligence learning system multiplayer space combat simulation ">
+  <meta name="generator" content="Joomla! - Open Source Content Management">
+  <title>Library</title>
+  <link href="http://xpilot-ai.org/index.php/docs/library" rel="canonical">
+  <link href="http://xpilot-ai.org/index.php/docs/library?format=feed&amp;type=rss" rel="alternate" type="application/rss+xml" title="RSS 2.0">
+  <link href="http://xpilot-ai.org/index.php/docs/library?format=feed&amp;type=atom" rel="alternate" type="application/atom+xml" title="Atom 1.0">
+  <link href="http://xpilot-ai.org/templates/protostar/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+  <link href="http://xpilot-ai.org/index.php/component/search/?Itemid=121&amp;format=opensearch" rel="search" title="Search Xpilot-AI" type="application/opensearchdescription+xml">
+  <link rel="stylesheet" href="./Library_files/template.css" type="text/css">
+  <script src="./Library_files/mootools-core.js.download" type="text/javascript"></script>
+  <script src="./Library_files/core.js.download" type="text/javascript"></script>
+  <script src="./Library_files/caption.js.download" type="text/javascript"></script>
+  <script src="./Library_files/mootools-more.js.download" type="text/javascript"></script>
+  <script src="./Library_files/jquery.min.js.download" type="text/javascript"></script>
+  <script src="./Library_files/jquery-noconflict.js.download" type="text/javascript"></script>
+  <script src="./Library_files/bootstrap.min.js.download" type="text/javascript"></script>
+  <script type="text/javascript">
+window.addEvent('load', function() {
+				new JCaption('img.caption');
+			});
+window.addEvent('domready', function() {
+			$$('.hasTip').each(function(el) {
+				var title = el.get('title');
+				if (title) {
+					var parts = title.split('::', 2);
+					el.store('tip:title', parts[0]);
+					el.store('tip:text', parts[1]);
+				}
+			});
+			var JTooltips = new Tips($$('.hasTip'), {"maxTitleChars": 50,"fixed": false});
+		});
+function keepAlive() {	var myAjax = new Request({method: "get", url: "index.php"}).send();} window.addEvent("domready", function(){ keepAlive.periodical(840000); });
+jQuery(document).ready(function()
+				{
+					jQuery('.hasTooltip').tooltip({});
+				});
+  </script>
+
+      <link href="./Library_files/css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+      h1,h2,h3,h4,h5,h6,.site-title{
+        font-family: 'Open Sans', sans-serif;
+      }
+    </style>
+      <style type="text/css">
+    body.site
+    {
+      border-top: 3px solid #e67a00;
+      background-color: #006591    }
+    a
+    {
+      color: #e67a00;
+    }
+    .navbar-inner, .nav-list > .active > a, .nav-list > .active > a:hover, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .nav-pills > .active > a, .nav-pills > .active > a:hover,
+    .btn-primary
+    {
+      background: #e67a00;
+    }
+    .navbar-inner
+    {
+      -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+      -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+    }
+  </style>
+    <!--[if lt IE 9]>
+    <script src="/media/jui/js/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body class="site com_content view-category layout-blog no-task itemid-121">
+
+  <!-- Body -->
+  <div class="body">
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-inner clearfix">
+          <a class="brand pull-left" href="http://xpilot-ai.org/" style="background-color:#006591;-webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px;padding: 6px;">
+            <img src="./Library_files/xpilotaibannersmall.png" alt="Xpilot-AI"> <div class="site-description">A library for writing XPilot bots</div>          </a>
+          <div class="header-search pull-right">
+            <div class="search">
+    <form action="http://xpilot-ai.org/index.php/docs/library" method="post" class="form-inline">
+    		<label for="mod-search-searchword" class="element-invisible">Search...</label> <input name="searchword" id="mod-search-searchword" maxlength="20" class="inputbox search-query" type="text" size="20" value="Search..." onblur="if (this.value==&#39;&#39;) this.value=&#39;Search...&#39;;" onfocus="if (this.value==&#39;Search...&#39;) this.value=&#39;&#39;;">    	<input type="hidden" name="task" value="search">
+    	<input type="hidden" name="option" value="com_search">
+    	<input type="hidden" name="Itemid" value="121">
+    </form>
+</div>
+
+          </div>
+        </div>
+      </div>
+            <div class="navigation">
+        <ul class="nav menu nav-pills">
+<li class="item-101"><a href="http://xpilot-ai.org/">Home</a></li><li class="item-111 active deeper parent"><a href="http://xpilot-ai.org/index.php/docs">Docs</a><ul class="nav-child unstyled small"><li class="item-113"><a href="http://xpilot-ai.org/index.php/docs/about">About</a></li><li class="item-114"><a href="http://xpilot-ai.org/index.php/docs/examples">Examples</a></li><li class="item-115"><a href="http://xpilot-ai.org/index.php/docs/install">Install</a></li><li class="item-112"><a href="http://xpilot-ai.org/index.php/docs/versions">Versions</a></li><li class="item-121 current active"><a href="http://xpilot-ai.org/index.php/docs/library">Library</a></li></ul></li><li class="item-122"><a href="http://xpilot-ai.org/index.php/downloads">Downloads</a></li><li class="item-120"><a href="http://xpilot-ai.org/index.php/forum">Forum</a></li></ul>
+
+      </div>
+            
+      <div class="row-fluid">
+                <div id="content" class="span9">
+          <!-- Begin Content -->
+          
+          
+<div id="system-message-container">
+<div id="system-message">
+</div>
+</div>
+          <div class="blog">
+		
+	
+				<div class="items-leading">
+				<div class="leading-0">
+			
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/36-ai-function-library">
+						AI Function Library</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/36-ai-function-library?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=bb93138f11bdb35d45c5a3dfcfff044af6be7b7d" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p>In Xpilot-AI, 0 degrees is to the right and 90 degrees is up.</p>
+<p>Please note that many of the item related functions simulate keypresses. So, for example, if pressing Tab would not place a mine (say, because you have none), dropMine will not either.</p>
+<p>ID functions refer to a specific ship's ID, while IDX functions refer to the ship's index within your buffer.</p>
+<p><strong>headlessMode()</strong> - Execute this before start to run windowless.</p>
+<p><strong>start(int argc, char* argv[])</strong> - [C] Initializes the AI interface and starts Xpilot</p>
+<p><strong>Class var = new Class(String[] args);</strong> - [Java] Initializes the AI interface and starts Xpilot</p>
+<p><strong>start(func, ["listof","args"])</strong> - [Python] Initializes the AI interface and starts Xpilot</p>
+<p><strong>(start func '("listof" "args")</strong> - [Racket] Initializes the AI interface and starts Xpilot</p>
+
+
+
+		</div>
+		<div class="clearfix"></div>
+					</div><!-- end items-leading -->
+	<div class="clearfix"></div>
+							<div class="items-row cols-1 row-0 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/23-capture-the-flag-functions">
+						Capture the Flag Functions</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/23-capture-the-flag-functions?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=ae682575583e28f85c7cb26a58e10f162f8f1c78" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="font-size: 12.16px; line-height: 15.808px;"><strong>int ballX()</strong>&nbsp;- Returns the x position of the first ball found on the map.&nbsp; Returns -1 if no balls are found.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>int ballY()</strong>&nbsp;- Returns the y position of the first ball found on the map. Returns -1 if no balls are found.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>int connectorX0()</strong>&nbsp;- Returns the X position of the point that is one end of the connector.&nbsp; Returns -1 if no connectors are found.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>int connectorX1()</strong>&nbsp;- Returns the X position of the point that is the other end of the connector.&nbsp; Returns -1 if no connectors are found.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>int connectorY0()</strong>&nbsp;- Returns the Y position of the point that is one end of the connector.&nbsp; Returns -1 if no connectors are found.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>int connectorY1()</strong>&nbsp;- Returns the Y position of the point that is the other end of the connector.&nbsp; Returns -1 if no connectors are found.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-1 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/27-closest-functions">
+						Closest Functions</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/27-closest-functions?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=e534d5e683e61550e0b9cef3d43a9a07642d8ac4" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int closestRadarX()</strong>&nbsp;- Returns the closest ship's X radar coordinate. (0-256)&nbsp; Returns -1 if there are no ships on the radar.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int closestRadarY()</strong>&nbsp;- Returns the closest ship's Y radar coordinate. (0-256)&nbsp; Returns -1 if there are no ships on the radar.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int closestItemX()</strong>&nbsp;- Returns the closest item's X radar coordinate.&nbsp; Returns -1 if there are no items on the screen.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int closestItemY()</strong>&nbsp;- Returns the closest item's Y radar coordinate.&nbsp; Returns -1 if there are no items on the screen.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int closestShipId()</strong>&nbsp;- Returns the closest ship's ID.&nbsp; Returns -1 if there are no ships on the screen.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-2 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/26-id-functions">
+						ID Functions</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/26-id-functions?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=55c659527d3346d9653662fb146be521e8d049ad" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemySpeedId(int id)</strong>&nbsp;- Returns the speed of the specified enemy in pixels per frame.&nbsp; Returns -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyTrackingRadId(int id)</strong>&nbsp;- Returns the direction in which the specified enemy is moving in radians.&nbsp; Returns 0.0 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyTrackingDegId(int id)</strong>&nbsp;- Returns the direction in which the specified enemy is moving in degrees.&nbsp; Returns 0.0 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int enemyReloadId(int id)</strong>&nbsp;- Returns the specified enemy's reload time remaining.&nbsp; Returns -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int screenEnemyXId(int id)</strong>&nbsp;- Returns the specified enemy's X coordinate on the map.&nbsp; Returns -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int screenEnemyYId(int id)</strong>&nbsp;- Returns the specified enemy's Y coordinate on the map.&nbsp; Returns -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyHeadingDegId(int id)</strong>&nbsp;- Returns the direction the specified enemy is facing in degrees.&nbsp; Returns -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyHeadingRadId(int id)</strong>&nbsp;- Returns the direction the specified enemy is facing in radians.&nbsp; Returns -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int enemyShieldId(int id)</strong>&nbsp;- Returns 1 if the specified enemies shield is up, 0 if it is down,&nbsp; or -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int enemyLivesId(int id)</strong>&nbsp;- Returns the specified enemy's remaining lives (if there is a limit) or the number of lives spent.&nbsp; Returns -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>char* enemyNameId(int id)</strong>&nbsp;- Returns the specified enemy's name.&nbsp; Returns NULL if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyScoreId(int id)</strong>&nbsp;- Returns the specified enemy's score.&nbsp; Returns -1 if the specified id could not be found.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int enemyTeamId(int id)</strong>&nbsp;- Returns the specified enemy's team ID.&nbsp; &nbsp; Returns -1 if the specified id could not be found.&nbsp; &nbsp; Returns -1 if there are no teams.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyDistanceId(int id)</strong>&nbsp;- Returns the distance between the ship and the specified enemy.&nbsp; Returns -1 if the specified id could not be found.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-3 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/25-idx">
+						IDX Functions</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/25-idx?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=046b7da4f9981551b315019fa966f60d8c729b07" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>Ships are sorted from near (nearest at index 0) to far. &nbsp;Only ships that are on screen should be accessible.</strong></p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyDistance(int idx)</strong>&nbsp;- Returns the distance between the ship and the specified enemy.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemySpeed(int idx)</strong>&nbsp;- Returns the speed of the specified enemy.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int enemyReload(int idx)</strong>&nbsp;- Returns the specified enemy's reload time remaining.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyTrackingRad(int idx)</strong>&nbsp;- Returns the specified enemy's tracking in radians.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyTrackingDeg(int idx)</strong>&nbsp;- Returns the specified enemy's tracking in degrees.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int screenEnemyX(int idx)</strong>&nbsp;- Returns the specified enemy's X coordinate on the map.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int screenEnemyY(int idx)</strong>&nbsp;- Returns the specified enemy's Y coordinate on the map.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyHeadingDeg(int idx)</strong>&nbsp;- Returns the direction the specified enemy is facing in degrees.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyHeadingRad(int idx)</strong>&nbsp;- Returns the direction the specified enemy is facing in radians.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int enemyShield(int idx)</strong>&nbsp;- Returns the specified enemy's shield status.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int enemyLives(int idx)</strong>&nbsp;- Returns the specified enemy's remaining lives.&nbsp; Returns -1 if the corresponding object cannot be found within the Others array.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int enemyTeam(int idx)</strong>&nbsp;- Returns the specified enemy's team.&nbsp; &nbsp; Returns -1 if the corresponding object cannot be found within the Others array.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>char* enemyName(int idx)</strong>&nbsp;- Returns the specified enemy's name.&nbsp; Returns empty string if the corresponding object cannot be found within the Others array.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double enemyScore(int idx)</strong>&nbsp;- Returns the specified enemy's score.&nbsp; Returns 0.0 if the corresponding object cannot be found within the Others array.&nbsp;</p>
+<p>&nbsp;</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-4 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/33-item-usage-methods">
+						Item Usage Methods</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/33-item-usage-methods?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=edb61a661ef4cc17bc96f80757f765c55761f1c1" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void tankDetach()</strong>&nbsp;- Detaches a fuel tank from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void cloak()</strong>&nbsp;- Cloaks the ship from sight.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void ecm()</strong>&nbsp;- Launches an ECM to temporarily blind opponents.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void transporter()</strong>&nbsp;- Uses the transporter item to steal an opponent's item or fuel supply.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void tractorBeam(int flag)</strong>&nbsp;- Uses the ship's tractor beam to pull in enemy ships. Flag is either 1, to virtually hold down the key, or 0, to release the key.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void pressorBeam(int flag)</strong>&nbsp;- Uses the ship's pressor beam to push away enemy ships. Flag is either 1, to virtually hold down the key, or 0, to release the key.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void phasing()</strong>&nbsp;- Uses the phasing item to allow the ship to pass through walls.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void shield(int flag)</strong>&nbsp;- Turns on or off the ship's Shield. Flag is either 1, to virtually hold down the key (shields up), or 0, to release the key (shields down).</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void emergencyShield()</strong>&nbsp;- Uses the emergency shield item to protect your ship from damage for a period of time.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void hyperjump()</strong>&nbsp;- Uses the hyper jump item to warp the ship to a random location on the map.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void nextTank()</strong>&nbsp;- Switches to the ship's next fuel tank.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void prevTank()</strong>&nbsp;- Switches to the ship's previous fuel tank.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void toggleAutopilot()</strong>&nbsp;- Uses the autopilot item to stop the ship's movement.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void emergencyThrust()</strong>&nbsp;- Uses the emergency thrust item to increase the ship's movement speed for a period of time.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void deflector()</strong>&nbsp;- Uses the deflector item to push everything away from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void selectItem()</strong>&nbsp;- Selects the ship's item to be dropped.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void loseItem()</strong>&nbsp;- Drops the ship's selected item.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-5 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/32-lock-methods">
+						Lock Methods</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/32-lock-methods?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=9bb711f9f75f13de498168ce96229f03f5c9596c" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void lockNext()</strong>&nbsp;- Locks onto the next ship in the ship buffer.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void lockPrev()</strong>&nbsp;- Locks onto the prev ship in the ship buffer.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void lockClose()</strong>&nbsp;- Locks onto the closest ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void lockNextClose()</strong>&nbsp;- Locks-on to the next closest ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void loadLock1()</strong>&nbsp;- Load a saved lock-on enemy ship</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void loadLock2()</strong>&nbsp;- Load a saved lock-on enemy ship</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void loadLock3()</strong>&nbsp;- Load a saved lock-on enemy ship</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void loadLock4()</strong>&nbsp;- Load a saved lock-on enemy ship</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-6 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/30-map-features">
+						Map Features</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/30-map-features?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=77a45583b2ce066bb6392c32b8f8c93d6f778a5e" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void connector(int flag)</strong>&nbsp;- Connects the ship to the ball in Capture the Flag Mode. Flag is either 1, to virtually hold down the key, or 0, to release the key.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void dropBall()</strong>&nbsp;- Drops the ball in Capture the Flag Mode.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void refuel(int flag)</strong>&nbsp;- Refuels the ship. Flag is either 1, to virtually hold down the key, or 0, to release the key.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-7 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/31-modifier-methods">
+						Modifier Methods</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/31-modifier-methods?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=3a8ccd6b7b43bda67d3a0e67332b0a6de5e98481" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="font-size: 12.16px; line-height: 15.808px;"><strong>void toggleNuclear()</strong>&nbsp;- Toggles the option to have the ship fire Nuclear weapons instead of regualar weapons, takes up five mines or seven missiles per shot.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void togglePower()</strong>&nbsp;- Toggles the power levels of the ship's weapons.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void toggleVelocity()</strong>&nbsp;- Modifies the explosion velocity of mines and missiles.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void toggleCluster()</strong>&nbsp;- Toggles the option to have the ship fire Cluster weapons instead of regular weapons.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void toggleMini()</strong>&nbsp;- Toggles the option to have the ship fire Mini weapons instead of regular weapons.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void toggleSpread()</strong>&nbsp;- Toggles the option to have the ship fire Spread weapons instead of regular weapons.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void toggleLaser()</strong>&nbsp;- Toggles between the LS stun laser and the LB blinding laser.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void toggleImplosion()</strong>&nbsp;- Toggle the option to have mines and missiles implode instead of explode, the explosion will draw in players instead of blowing them away.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void toggleUserName()</strong>&nbsp;- Toggles the displayed information on the HUD on the left of the screen.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void loadModifiers1()</strong>&nbsp;- Loads Modifiers.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void loadModifiers2()</strong>&nbsp;- Loads Modifiers.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void loadModifiers3()</strong>&nbsp;- Loads Modifiers.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void loadModifiers4()</strong>&nbsp;- Loads Modifiers.</p>
+<p style="font-size: 12.16px; line-height: 15.808px;"><strong>void clearModifiers()</strong>&nbsp;- Clears Modifiers.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-8 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/35-movement-methods">
+						Movement Methods</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/35-movement-methods?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=c50bdbda98078500d6f975f3bebbf8c1eb900b7c" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void turnLeft(int flag)</strong>&nbsp;- Turns the ship left. Flag is either 1, to virtually hold down the key, or 0, to release the key.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void turnRight(int flag)</strong>&nbsp;- Turns the ship right. Flag is either 1, to virtually hold down the key, or 0, to release the key.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void turn(int deg)</strong>&nbsp;- Turns the ship in the specified number of degrees.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void turnToDeg(int deg)</strong>&nbsp;- Turns the ship towards the specified heading in degrees.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void thrust(int flag)</strong>&nbsp;- Turns the ship's thrusters on or off. Flag is either 1, to virtually hold down the key, or 0, to release the key.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void setTurnSpeed(double s)</strong>&nbsp;- Sets the speed the ship will turn by. The minimum power level is 4.0 and the maximum power level is 64.0.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void setTurnSpeedDeg(int s)</strong>&nbsp;- Ship turns to input degree.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void setPower(double s)</strong>&nbsp;- Sets the amount of power the ship will use for thrusting, the minimum power level is 5.0 and the maximum power is 55.0.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void fasterTurnrate()</strong>&nbsp;- Increases the ship's turn rate.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void slowerTurnrate()</strong>&nbsp;- Decreases the ship's turn rate.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void morePower()</strong>&nbsp;- Increases the ship's thrusting power.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void lessPower()</strong>&nbsp;- Decreases the ship's thrusting power.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-9 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/29-other-options">
+						Other Options</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/29-other-options?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=72e7a77c6e3ac109709186e1e94b7727bb8eca39" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void keyHome()</strong>&nbsp;- Changes the ship's home base or respawn location.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void selfDestruct()</strong>&nbsp;- Triggers the ship's self destruct mechanism.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void pauseAI()</strong>&nbsp;- Pauses the game for the ship, does not affect other ships.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void swapSettings()</strong>&nbsp;- Swaps between the ship's settings for turn rate and thrusting power.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void quitAI()</strong>&nbsp;- Quits Xpilot.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void talkKey()</strong>&nbsp;- Opens up the chat window.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void toggleCompass()</strong>&nbsp;- Toggles the ship's Compass.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void toggleShowMessage()</strong>&nbsp;- Toggles messages on the HUD on the left side of the screen.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void toggleShowItems()</strong>&nbsp;- Toggles items on the HUD on the left side of the screen.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void repair()</strong>&nbsp;- Repairs a target.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void reprogram()</strong>&nbsp;- Reprograms a modifier or lock bank.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void talk(char* talk_str)</strong>&nbsp;- Sends a message.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>char* scanMsg(int id)</strong>&nbsp;- Returns the specified player message. ID 0 is the most recent occurring message.&nbsp; If the id is past the max numbers of messages it returns empty string.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>char* scanGameMsg(int id)</strong>&nbsp;- Returns the specified game message. ID 0 is the most recent occurring message.&nbsp; If the id is past the max numbers of messages it returns empty string.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double degToRad(int deg)</strong>&nbsp;- Converts degrees to radians.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double radToDeg(double rad)</strong>&nbsp;- Converts radians to degrees.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double angleDiff(int angle1, int angle2)</strong>&nbsp;- Calculates the difference between two angles. Output range [-180,180] degrees.&nbsp; Returns the smallest angle which angle1 could add to itself to be equal to angle2.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double angleAdd(int angle1, int angle2)</strong>&nbsp;- Calculates the sum of two angles. Takes and returns in degrees.&nbsp; Output range [0,360).</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-10 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/28-self-properties">
+						Self Properties</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/28-self-properties?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=7ee087650d30cb6a6964fdcdcc055f5b423f55ff" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfX()</strong>&nbsp;- Returns the ship's X position on the map.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfY()</strong>&nbsp;- Returns the ship's Y position on the map.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfRadarX()</strong>&nbsp;- Returns the ship's X radar coordinate.&nbsp; If the ship is hidden from the radar returns -1.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfRadarY()</strong>&nbsp;- Returns the ship's Y radar coordinate.&nbsp; If the ship is hidden from the radar returns -1;</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfVelX()</strong>&nbsp;- Returns the ship's X velocity.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfVelY()</strong>&nbsp;- Returns the ship's Y velocity.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfSpeed()</strong>&nbsp;- Returns the ship's speed.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double lockHeadingDeg()</strong>&nbsp;- Returns in degrees the direction of the ship's lock-on of an enemy. (Direction from ship to target ship)</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double lockHeadingRad()</strong>&nbsp;- Returns in radians the direction of the ship's lock-on of an enemy. (Direction from ship to target ship)</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>short selfLockDist()</strong>&nbsp;- Returns the distance of the enemy that the ship has locked-on to. Need to check this.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfReload()</strong>&nbsp;- Returns the player's reload time remaining, based on a call to fireShot(). 0 means that the ship is able to fire again.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfID()</strong>&nbsp;- Returns the ID of the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfAlive()</strong>&nbsp;- Returns 0 if the ship is dead or 1 if alive.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfTeam()</strong>&nbsp;- Returns an integer corresponding to the ship's team.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfLives()</strong>&nbsp;- Returns how many lives are left for the ship (if there is a life limit).&nbsp; Otherwise it returns the number of lives spent.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double selfTrackingRad()</strong>&nbsp;- Returns the ship's tracking (direction it is moving in) in radians.&nbsp; If the ship is not moving it returns the direction the ship is facing.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double selfTrackingDeg()</strong>&nbsp;- Returns the ship's tracking (direction it is moving in) in degrees.&nbsp; If the ship is not moving it returns the direction the ship is facing.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double selfHeadingDeg()</strong>&nbsp;- Returns the direction the ship is facing in degrees.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double selfHeadingRad()</strong>&nbsp;- Returns the direction the ship is facing in radians.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>char* hud(int i)</strong>&nbsp;- Returns the name of the object with index i in the score_objects list.&nbsp;</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>char* hudScore(int i)</strong>&nbsp;- Returns the score of object at index i of score_objects on the HUD.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double hudTimeLeft(int i)</strong>&nbsp;- Returns the remaining time left on the HUD for a score of object at index i of score_objects in seconds.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double getTurnSpeed()</strong>&nbsp;- Returns the ship's turn speed.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double getPower()</strong>&nbsp;- Returns the ship's power level.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int selfShield()</strong>&nbsp;- Returns 1 if the player's shield is on, 0 if it's down, or -1 if the player is not alive.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>char* selfName()</strong>&nbsp;- Returns the ship's name.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>double selfScore()</strong>&nbsp;- Returns the ship's score.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int wallFeeler(int dist, int angle)</strong>&nbsp;- takes a distance to search from the ship (dist), and an angle to search in degrees (angle).&nbsp; If no wall is felt it returns dist.&nbsp; If a wall is felt it returns the wall's distance from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int wallFeelerRad(int dist, double a)</strong>&nbsp;- takes a distance to search from the ship (dist), and an angle to search in radians (a).&nbsp; If no wall is felt it returns dist.&nbsp; If a wall is felt it returns the wall's distance from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int wallBetween(int x1, int y1, int x2, int y2)</strong>&nbsp;- If there is a wall between the given points it returns the distance from point 1 to the first found wall.&nbsp; If no wall is found it returns -1.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-11 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/34-shooting-methods">
+						Shooting Methods</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/34-shooting-methods?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=e4e1fad571a3d29c3e34016773abad050bca25d7" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void fireShot()</strong>&nbsp;- Fires a shot from the ship's main cannon.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void fireMissile()</strong>&nbsp;- Fires a missile from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void fireTorpedo()</strong>&nbsp;- Fires a torpedo from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void fireHeat()</strong>&nbsp;- Fires a heat seeking missile from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void dropMine()</strong>&nbsp;- Drops a stationary mine from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void detachMine()</strong>&nbsp;- Releases a mine from the ship that will have the same velocity as the ship upon point of detachment.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void detonateMines()</strong>&nbsp;- Detonates mines previously released from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>void fireLaser()</strong>&nbsp;- Fires a laser from the ship.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+							<div class="items-row cols-1 row-12 row-fluid">
+					<div class="span12">
+				<div class="item column-1">
+					
+
+			<div class="page-header">
+
+							<h2>
+											<a href="http://xpilot-ai.org/index.php/docs/library/24-shot-functions">
+						Shot Functions</a>
+									</h2>
+			
+					</div>
+	
+
+<div id="icons">
+	
+					<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="http://xpilot-ai.org/index.php/docs/library#"> <span class="icon-cog"></span> <span class="caret"></span> </a>
+								<ul class="dropdown-menu">
+											<li class="print-icon"> <a href="http://xpilot-ai.org/index.php/docs/library/24-shot-functions?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Print" onclick="window.open(this.href,&#39;win2&#39;,&#39;status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no&#39;); return false;" rel="nofollow"><span class="icon-print"></span>&nbsp;Print&nbsp;</a> </li>
+																<li class="email-icon"> <a href="http://xpilot-ai.org/index.php/component/mailto/?tmpl=component&amp;template=protostar&amp;link=73ec7ce192c64e70ae3bd708685f2e09bbd37351" title="Email" onclick="window.open(this.href,&#39;win2&#39;,&#39;width=400,height=350,menubar=yes,resizable=yes&#39;); return false;"><span class="icon-envelope"></span> Email</a> </li>
+														</ul>
+			</div>
+		
+	</div>
+
+
+
+
+
+ <p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>These will return -1 if the buffer has no shot at the given index. &nbsp;Buffer is sorted near (nearest at 0) to far. &nbsp;Shots that are not on the screen should not be in the buffer.<br></strong></p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int shotAlert(int idx)</strong>&nbsp;- Returns a danger rating of a shot, the smaller the number the more likely the shot is to hit the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int shotX(int idx)</strong>&nbsp;- Returns the X coordinate of a shot on the map.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int shotY(int idx)</strong>&nbsp;- Returns the Y coordinate of a shot on the map.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int shotDist(int idx)</strong>&nbsp;- Returns the distance of a shot from the ship.</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int shotVel(int idx)</strong>&nbsp;- Returns the velocity of a shot. (Technically speed, velocity is a vector, not a scalar)</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int shotVelDir(int idx)</strong>&nbsp;- Returns the direction of the velocity of a shot.&nbsp; (in degrees)</p>
+<p style="margin: 0px 0px 9px; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 18px;"><strong>int aimdir(int idx)</strong>&nbsp;- Returns the direction that the ship needs to turn to in order to face the enemy in degrees.&nbsp; Fails and returns -1 under a few conditions.</p>
+
+
+
+				</div><!-- end item -->
+							</div><!-- end spann -->
+					</div><!-- end row -->
+					
+			</div>
+
+          
+          <!-- End Content -->
+        </div>
+                <div id="aside" class="span3">
+          <!-- Begin Right Sidebar -->
+          <div class="well "><h3 class="page-header">Login Form</h3><form action="http://xpilot-ai.org/index.php/docs/library" method="post" id="login-form" class="form-inline">
+		<div class="userdata">
+		<div id="form-login-username" class="control-group">
+			<div class="controls">
+									<div class="input-prepend input-append">
+						<span class="add-on">
+							<span class="icon-user tip" title="User Name"></span>
+							<label for="modlgn-username" class="element-invisible">User Name</label>
+						</span>
+						<input id="modlgn-username" type="text" name="username" class="input-small" tabindex="0" size="18" placeholder="User Name">
+					</div>
+							</div>
+		</div>
+		<div id="form-login-password" class="control-group">
+			<div class="controls">
+									<div class="input-prepend input-append">
+						<span class="add-on">
+							<span class="icon-lock tip" title="Password">
+							</span>
+								<label for="modlgn-passwd" class="element-invisible">Password							</label>
+						</span>
+						<input id="modlgn-passwd" type="password" name="password" class="input-small" tabindex="0" size="18" placeholder="Password">
+				</div>
+				
+			</div>
+		</div>
+				<div id="form-login-remember" class="control-group checkbox">
+			<label for="modlgn-remember" class="control-label">Remember Me</label> <input id="modlgn-remember" type="checkbox" name="remember" class="inputbox" value="yes">
+		</div>
+				<div id="form-login-submit" class="control-group">
+			<div class="controls">
+				<button type="submit" tabindex="0" name="Submit" class="btn btn-primary">Log in</button>
+			</div>
+		</div>
+					<ul class="unstyled">
+				<li>
+					<a href="http://xpilot-ai.org/index.php/component/users/?view=registration">
+					Create an account <span class="icon-arrow-right"></span></a>
+				</li>
+				<li>
+					<a href="http://xpilot-ai.org/index.php/component/users/?view=remind">
+					  Forgot your username?</a>
+				</li>
+				<li>
+					<a href="http://xpilot-ai.org/index.php/component/users/?view=reset">Forgot your password?</a>
+				</li>
+
+			</ul>
+				<input type="hidden" name="option" value="com_users">
+		<input type="hidden" name="task" value="user.login">
+		<input type="hidden" name="return" value="aW5kZXgucGhwP0l0ZW1pZD0xMjE=">
+		<input type="hidden" name="8d2d4acd6ae55d89a5dbfd6ad9e647b3" value="1">	</div>
+	</form>
+</div>
+          <!-- End Right Sidebar -->
+        </div>
+              </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="footer">
+    <div class="container">
+      <!-- <hr /> (Changing -CJG)-->
+      <br>
+      
+      <p class="pull-right"><a href="http://xpilot-ai.org/index.php/docs/library#top" id="back-top">Back to Top</a></p>
+      <p><a href="http://xpilot-ai.org/">© Xpilot-AI 2017</a></p>
+    </div>
+  </div>
+  
+
+
+</body></html>
