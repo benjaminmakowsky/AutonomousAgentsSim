@@ -41,6 +41,40 @@ I have some scripts in place to recompile the AI library and bots ( buildDefende
 ******************************
 ** END BUILDING AND RUNNING **
 ******************************
+*********************
+** IMPORTANT FILES **
+*********************
+../src/server/player.h
+This is where the player_t struct is defined. Which we have used to give the different 
+ships specific stats. You can see how we give these ships specific stats in 
+player.c ( see int Init_player @ line 499 ) 
+
+../src/server/update.c
+This is where all the magic happens. Specifically, in the static void Update_players(void) 
+function. That's the function where the player states are updated, as far as movement, 
+spawning, calculating damage, etc.
+IMPORTANT NOTE: AI bots spawned by the AI library are considered to be HUMAN PLAYERS, not robots.
+So you can safely ignore any functions that are specific to robots.
+
+../src/server/walls.c
+This is where the very important void Move_player(player_t *pl) & void Turn_player(player_t *pl, bool push) are.
+You can see the formula used to determine the changes in position here.
+Some important ones right of the bat:
+(see line 994 in ../src/server/update.c ): 
+pl->acc.x = pl->power * tcos(pl->dir) / inert;      ( inert is pl->mass )
+pl->acc.y = pl->power * tsin(pl->dir) / inert;
+
+(see line 1036 in ../src/server/update.c ):
+pl->vel += pl->acc
+
+
+
+/usr/local/share/xpilot-ng/shipshapes.txt
+This is where the dimensions, positions of thrusters and weapons of the different ships are defined.
+
+*************************
+** END IMPORTANT FILES **
+*************************
 
 *******************************
 ** IMPORTANT AI CONFIG SCRIPT** 

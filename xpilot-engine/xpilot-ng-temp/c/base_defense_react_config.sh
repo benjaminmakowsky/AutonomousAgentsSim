@@ -42,8 +42,10 @@ gridrally_22y="2255"
 fuelx="1760"
 fuely="1900"
 
-quadfuel="3000"
-fixedfuel="2500"
+quadfuel="150"
+#quadfuel="3000"
+fixedfuel="100"
+#fixedfuel="2500"
 tankfuel="9999"
 infantryfuel="9999"
 

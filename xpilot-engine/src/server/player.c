@@ -238,7 +238,7 @@ void Go_home(player_t *pl)
     }
     pl->vel.x = vx;
     pl->vel.y = vy;
-    pl->velocity = velo;
+    //pl->velocity = velo;
     pl->acc.x = pl->acc.y = 0.0;
     pl->turnacc = pl->turnvel = 0.0;
     memset(pl->last_keyv, 0, sizeof(pl->last_keyv));
@@ -521,52 +521,64 @@ int Init_player(int ind, shipshape_t *ship, int type)
     // New code: Give different stats to ship based on the shipshape
     warn( "%s\n", ship->name );
     if( !strcmp( ship->name, "quad" ) ){
-      pl->power = 125.0;
+      pl->power = 0.5;
       pl->armor = 2;
       //pl->maxturnsps = 255;
       pl->shots = 2;
       pl->sight_range = 4;
-      pl->mass = 5;
+      pl->mass = 75;
       pl->emptymass = 5;
       pl->fuel.max = 4000;
       pl->flying = true;
       //pl->turnspeed = 50;
+      pl->velocity = 3;
+      pl->acc.x = 0.1;
+      pl->acc.y = 0.1;
     }
     else if( !strcmp( ship->name,"fixed" ) ){
-      pl->power = 185.0;
+      pl->power = 0.5;
       pl->armor = 1;
       //pl->maxturnsps = 180;
       pl->shots = 1;
       pl->sight_range = 7;
-      pl->mass = 5;
+      pl->mass = 50;
       pl->emptymass = 5;
       pl->fuel.max = 2500;
       pl->flying = true;
       //pl->turnspeed = 35;
+      pl->velocity = 7;
+      pl->acc.x = 0.1;
+      pl->acc.y = 0.1;
     }
     else if( !strcmp( ship->name, "drone_tank" ) ){
-      pl->power = 70.0;
+      pl->power = 0.5;
       pl->armor = 5;
       //pl->maxturnsps = 100;
       pl->shots = 5;
       pl->sight_range = 2;
-      pl->mass = 5;
+      pl->mass = 150;
       pl->emptymass = 5;
       pl->fuel.max = 9999;
       pl->flying = false;
       //pl->turnspeed = 25;
+      pl->velocity = 0.1;
+      pl->acc.x = 0.1;
+      pl->acc.y = 0.1;
     }
     else if( !strcmp( ship->name, "infantry" ) ){
-      pl->power = 100.0;
+      pl->power = 0.5;
       pl->armor = 2;
       //pl->maxturnsps = 255;
       pl->shots = 3;
       pl->sight_range = 2;
-      pl->mass = 5;
+      pl->mass = 100;
       pl->emptymass = 5;
       pl->fuel.max = 9999;
       pl->flying = false;
       //pl->turnspeed = 50;
+      pl->velocity = 0.1;
+      pl->acc.x = 0.1;
+      pl->acc.y = 0.1;
     }
     else{
       pl->power = pl->power_s = MAX_PLAYER_POWER;
@@ -577,6 +589,9 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->emptymass = options.shipMass;
       pl->fuel.max = 9999;
       pl->flying = true;
+      pl->velocity = 3;
+      pl->acc.x = 0.1;
+      pl->acc.y = 0.1;
     }
 
     pl->turnspeed = MAX_PLAYER_TURNSPEED;

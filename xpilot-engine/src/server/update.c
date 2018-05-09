@@ -1028,8 +1028,10 @@ static void Update_players(void)
 	    if (BIT(pl->obj_status, GRAVITY)) {
 		vector_t gravity = World_gravity(pl->pos);
 
-		acc.x += gravity.x;
-		acc.y += gravity.y;
+    // Commented out to remove that annoying "slight drift"
+    // when a ship is stationary
+		//acc.x += gravity.x;
+		//acc.y += gravity.y;
 	    }
 	    acc.x *= timeStep / 2;
 	    acc.y *= timeStep / 2;
