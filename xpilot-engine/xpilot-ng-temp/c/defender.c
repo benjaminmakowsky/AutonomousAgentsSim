@@ -10,7 +10,6 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <math.h>
-#include <pthread.h>
 #include <unistd.h>
 #include <time.h>
 #include <string.h>
@@ -45,7 +44,6 @@ struct pair prevRally;
 int state = STATE_INIT;
 //TODO: Make this dynamic
 struct pair gridPointList[ 9 ];
-pthread_mutex_t fuelLock;
 
 // Some notes:
 // 1.It appears that trying to execute thrust continually causes errors
@@ -91,33 +89,11 @@ const char* printState(enum State s ){
   }
 }
 
-// Simulates rate at which fuel is depleted in xpilot
-void* lose_fuel(){
-  while(1){
-    if( !inFuelingPosition ){
-      // We use less fuel when stationary
-      // TODO: Implement an AI function for retrieving the current fuel from the server.
-      pthread_mutex_lock(&fuelLock);
-      if( ( state == STATE_IN_POSITION ) || ( state != STATE_ENGAGING && inFuelingPosition ) ){
-        pl_fuel -= 2.5;
-      }
-      else{
-        pl_fuel -= 3;
-      }
-      pthread_mutex_unlock(&fuelLock);
-    }
-    sleep(1);
-  }
-}
-
 int distanceFormula( int x1, int x2, int y1, int y2 ){
   return sqrt( ( x1 - x2 ) * ( x1 - x2 ) + ( y1 - y2 ) * ( y1 - y2 ) );
 }
 
 void Initialize(){
-  pthread_t tid;
-  pthread_create( &tid, NULL, lose_fuel, NULL );
-
   if( !gridMovement ){
     //Calculate rallypoint
     printf( "idx:%d\n", idx );
@@ -162,7 +138,6 @@ void Refueling(){
     }
   }
   else{
-    pl_fuel += 2;
     //TODO: Have refuel limit also be a parameter
     if( pl_fuel >= 1500 ){
       inFuelingPosition = false;
@@ -306,6 +281,7 @@ void Engaging( int closestEnemy){
 }
 
 AI_loop( ) {
+    pl_fuel = selfFuel();
     thrust( 0 );
     if( talk_frames ){
       if( talk_frames == 2 ){
