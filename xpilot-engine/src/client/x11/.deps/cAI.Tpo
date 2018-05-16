@@ -64,22 +64,22 @@ cAI.o: cAI.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/in.h /usr/include/arpa/inet.h /usr/include/net/if.h \
  /usr/include/netinet/tcp.h /usr/include/netdb.h /usr/include/rpc/netdb.h \
  /usr/include/bits/netdb.h /usr/include/sys/fcntl.h \
- /usr/include/arpa/nameser.h /usr/include/sys/bitypes.h \
- /usr/include/arpa/nameser_compat.h /usr/include/resolv.h \
- /usr/include/values.h ../../../src/common/version.h \
- ../../../src/common/xpconfig.h ../../../src/common/arraylist.h \
- ../../../src/common/types.h ../../../src/common/xpcommon.h \
- ../../../src/common/astershape.h ../../../src/common/bit.h \
- ../../../src/common/checknames.h ../../../src/common/click.h \
- ../../../src/common/const.h ../../../src/common/commonproto.h \
- ../../../src/common/error.h ../../../src/common/item.h \
- ../../../src/common/list.h ../../../src/common/metaserver.h \
- ../../../src/common/net.h ../../../src/common/socklib.h \
- ../../../src/common/pack.h ../../../src/common/packet.h \
- ../../../src/common/portability.h ../../../src/common/rules.h \
- ../../../src/common/setup.h ../../../src/common/shipshape.h \
- ../../../src/common/wreckshape.h ../../../src/common/xpmap.h \
- ../../../src/common/keys.h /usr/include/zlib.h /usr/include/zconf.h \
+ /usr/include/arpa/nameser.h /usr/include/arpa/nameser_compat.h \
+ /usr/include/resolv.h /usr/include/values.h \
+ ../../../src/common/version.h ../../../src/common/xpconfig.h \
+ ../../../src/common/arraylist.h ../../../src/common/types.h \
+ ../../../src/common/xpcommon.h ../../../src/common/astershape.h \
+ ../../../src/common/bit.h ../../../src/common/checknames.h \
+ ../../../src/common/click.h ../../../src/common/const.h \
+ ../../../src/common/commonproto.h ../../../src/common/error.h \
+ ../../../src/common/item.h ../../../src/common/list.h \
+ ../../../src/common/metaserver.h ../../../src/common/net.h \
+ ../../../src/common/socklib.h ../../../src/common/pack.h \
+ ../../../src/common/packet.h ../../../src/common/portability.h \
+ ../../../src/common/rules.h ../../../src/common/setup.h \
+ ../../../src/common/shipshape.h ../../../src/common/wreckshape.h \
+ ../../../src/common/xpmap.h ../../../src/common/keys.h \
+ /usr/local/include/zlib.h /usr/local/include/zconf.h \
  ../../../src/client/client.h ../../../src/common/shipshape.h \
  ../../../src/client/connectparam.h ../../../src/client/option.h \
  ../../../src/client/clientcommand.h ../../../src/client/clientrank.h \
@@ -372,8 +372,6 @@ xpclient_x11.h:
 
 /usr/include/arpa/nameser.h:
 
-/usr/include/sys/bitypes.h:
-
 /usr/include/arpa/nameser_compat.h:
 
 /usr/include/resolv.h:
@@ -432,9 +430,9 @@ xpclient_x11.h:
 
 ../../../src/common/keys.h:
 
-/usr/include/zlib.h:
+/usr/local/include/zlib.h:
 
-/usr/include/zconf.h:
+/usr/local/include/zconf.h:
 
 ../../../src/client/client.h:
 

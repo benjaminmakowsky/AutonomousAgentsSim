@@ -74,9 +74,9 @@ cell.o: cell.c /usr/include/stdc-predef.h xpserver.h \
  ../../src/common/packet.h ../../src/common/portability.h \
  ../../src/common/rules.h ../../src/common/setup.h \
  ../../src/common/shipshape.h ../../src/common/wreckshape.h \
- ../../src/common/xpmap.h /usr/include/expat.h \
- /usr/include/expat_external.h serverconst.h object.h map.h modifiers.h \
- player.h connection.h ../../src/common/keys.h \
+ ../../src/common/xpmap.h /usr/local/include/expat.h \
+ /usr/local/include/expat_external.h serverconst.h object.h map.h \
+ modifiers.h player.h connection.h ../../src/common/keys.h \
  ../../src/common/shipshape.h option.h asteroid.h cannon.h walls.h \
  defaults.h netserver.h objpos.h ../../src/common/packet.h rank.h \
  recwrap.h ../../src/common/net.h robot.h saudio.h \
@@ -397,9 +397,9 @@ xpserver.h:
 
 ../../src/common/xpmap.h:
 
-/usr/include/expat.h:
+/usr/local/include/expat.h:
 
-/usr/include/expat_external.h:
+/usr/local/include/expat_external.h:
 
 serverconst.h:
 

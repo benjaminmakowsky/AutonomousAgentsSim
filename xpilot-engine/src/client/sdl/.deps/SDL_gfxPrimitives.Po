@@ -77,17 +77,17 @@ SDL_gfxPrimitives.o: SDL_gfxPrimitives.c /usr/include/stdc-predef.h \
  ../../../src/common/portability.h ../../../src/common/rules.h \
  ../../../src/common/setup.h ../../../src/common/shipshape.h \
  ../../../src/common/wreckshape.h ../../../src/common/xpmap.h \
- ../../../src/common/keys.h /usr/include/zlib.h /usr/include/zconf.h \
- ../../../src/client/client.h ../../../src/common/shipshape.h \
- ../../../src/client/connectparam.h ../../../src/client/option.h \
- ../../../src/client/clientcommand.h ../../../src/client/clientrank.h \
- ../../../src/client/configure.h ../../../src/client/datagram.h \
- ../../../src/client/gfx2d.h ../../../src/client/guimap.h \
- ../../../src/client/guiobjects.h ../../../src/client/meta.h \
- ../../../src/client/netclient.h ../../../src/client/paint.h \
- ../../../src/client/recordfmt.h ../../../src/client/talk.h \
- /usr/include/GL/gl.h /usr/include/GL/glext.h /usr/include/GL/glu.h \
- /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
+ ../../../src/common/keys.h /usr/local/include/zlib.h \
+ /usr/local/include/zconf.h ../../../src/client/client.h \
+ ../../../src/common/shipshape.h ../../../src/client/connectparam.h \
+ ../../../src/client/option.h ../../../src/client/clientcommand.h \
+ ../../../src/client/clientrank.h ../../../src/client/configure.h \
+ ../../../src/client/datagram.h ../../../src/client/gfx2d.h \
+ ../../../src/client/guimap.h ../../../src/client/guiobjects.h \
+ ../../../src/client/meta.h ../../../src/client/netclient.h \
+ ../../../src/client/paint.h ../../../src/client/recordfmt.h \
+ ../../../src/client/talk.h /usr/include/GL/gl.h /usr/include/GL/glext.h \
+ /usr/include/GL/glu.h /usr/include/SDL/SDL.h /usr/include/SDL/SDL_main.h \
  /usr/include/SDL/SDL_stdinc.h /usr/include/SDL/SDL_config.h \
  /usr/include/SDL/SDL_config-x86_64.h /usr/include/SDL/SDL_platform.h \
  /usr/include/iconv.h /usr/include/SDL/begin_code.h \
@@ -431,9 +431,9 @@ xpclient_sdl.h:
 
 ../../../src/common/keys.h:
 
-/usr/include/zlib.h:
+/usr/local/include/zlib.h:
 
-/usr/include/zconf.h:
+/usr/local/include/zconf.h:
 
 ../../../src/client/client.h:
 

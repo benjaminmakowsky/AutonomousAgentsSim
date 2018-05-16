@@ -1,3 +1,3 @@
 #! /bin/bash
-./runStationary.sh $0
-./runReactionary.sh $0
+./runStationary.sh $1
+./runReactionary.sh $2

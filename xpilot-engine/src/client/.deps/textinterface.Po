@@ -74,11 +74,11 @@ textinterface.o: textinterface.c /usr/include/stdc-predef.h xpclient.h \
  ../../src/common/packet.h ../../src/common/portability.h \
  ../../src/common/rules.h ../../src/common/setup.h \
  ../../src/common/shipshape.h ../../src/common/wreckshape.h \
- ../../src/common/xpmap.h ../../src/common/keys.h /usr/include/zlib.h \
- /usr/include/zconf.h client.h ../../src/common/shipshape.h \
- connectparam.h option.h clientcommand.h clientrank.h configure.h \
- datagram.h gfx2d.h guimap.h guiobjects.h meta.h netclient.h paint.h \
- recordfmt.h talk.h
+ ../../src/common/xpmap.h ../../src/common/keys.h \
+ /usr/local/include/zlib.h /usr/local/include/zconf.h client.h \
+ ../../src/common/shipshape.h connectparam.h option.h clientcommand.h \
+ clientrank.h configure.h datagram.h gfx2d.h guimap.h guiobjects.h meta.h \
+ netclient.h paint.h recordfmt.h talk.h
 
 /usr/include/stdc-predef.h:
 
@@ -396,9 +396,9 @@ xpclient.h:
 
 ../../src/common/keys.h:
 
-/usr/include/zlib.h:
+/usr/local/include/zlib.h:
 
-/usr/include/zconf.h:
+/usr/local/include/zconf.h:
 
 client.h:
 
