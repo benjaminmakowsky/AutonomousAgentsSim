@@ -267,7 +267,10 @@ void Engaging( int closestEnemy){
     turnToDeg( degToAim );
 
     // TODO: Parameterize number of shots. Shooting on every frame isn't efficient. 
+    // Notice that fireShot() has been commented out, since we don't need it for our
+    // collision avoidance purposes.
     fireShot();
+    //thrust( 1 ); //uncomment this to enable chasing
 
     // TODO: Paramaterize how far away we can move away from our rallypoint
     if( distanceFormula( selfX(), objx, selfY(), objy ) > rubber  ){
@@ -277,7 +280,7 @@ void Engaging( int closestEnemy){
 
     // TODO: Paramaterize how far away we can move away from our objective
     if( distanceFormula( selfX(), objx, selfY(), objy ) > 5000 || rubber != 999999 ){
-      thrust( 0 );
+      thrust( 0 ); //should be 0, set to 1 to enable chasing
       return;
     }
 
