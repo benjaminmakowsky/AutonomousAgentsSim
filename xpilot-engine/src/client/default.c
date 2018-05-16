@@ -26,6 +26,9 @@
  */
 
 #include "xpclient.h"
+#include "client.h"
+
+bool headless;
 
 static double	hudScale;	/* Scale for HUD drawing */
 
@@ -1355,6 +1358,13 @@ xp_option_t default_options[] = {
 	XP_OPTFLAG_CONFIG_DEFAULT,
 	"Is sound enabled? (set to false to mute client).\n"),
 #endif
+  XP_BOOL_OPTION(
+  "headlessMode",
+  false,
+  &headless,
+  NULL,
+  XP_OPTFLAG_CONFIG_DEFAULT,
+  "Run windowless? (set to true to run client without window).\n"),
 
 };
 

@@ -65,6 +65,7 @@ double pl_fuel;
 int rubber;
 int gridMovement = 0;
 int numGrids = 0;
+int windowless = 0;
 
 // chat lines
 char* refuel_line = "I'm low, heading to refuel.";
@@ -393,6 +394,7 @@ int main(int argc, char *argv[]) {
   fuely = strtol( argv[8], NULL, 10 );
   pl_fuel = (double) strtol( argv[9], NULL, 10 );
   rubber = strtol( argv[10], NULL, 10 );  
+  windowless = strtol( argv[11], NULL, 11 );
 
   gridMovement = strtol( argv[11], NULL, 10 );
   if( gridMovement == 2 ){

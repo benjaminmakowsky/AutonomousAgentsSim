@@ -913,3 +913,9 @@ extern	void WinXCreateItemBitmaps();
 #endif
 
 #endif
+
+/*
+ * client.c
+ */
+//added for headless
+extern bool headless;

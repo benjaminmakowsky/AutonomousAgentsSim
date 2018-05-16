@@ -24,6 +24,7 @@
  */
 
 #include "xpclient.h"
+#include "client.h"
 
 client_data_t	clData = { 0, };
 
@@ -1479,6 +1480,7 @@ int Handle_score_object(double score, int x, int y, char *msg)
 	    sprintf(sobj->hud_msg, "%s %d", msg, sc);
 	}
 	sobj->hud_msg_len = strlen(sobj->hud_msg);
+  if( !headless ) // HEADLESS
 	sobj->hud_msg_width = -1;
     } else
 	sobj->hud_msg_len = 0;
@@ -1491,6 +1493,7 @@ int Handle_score_object(double score, int x, int y, char *msg)
 	sprintf(sobj->msg, "%d", sc);
     }
     sobj->msg_len = strlen(sobj->msg);
+    if( !headless ) //HEADLESS
     sobj->msg_width = -1;
 
     /* Update global index variable */
@@ -1561,7 +1564,8 @@ int Handle_end(long server_loops)
 {
     end_loops = server_loops;
     snooping = (self && eyesId != self->id) ? true : false;
-    update_timing();    
+    update_timing();
+    if(!headless) //HEADLESS
     Paint_frame();
 #ifdef SOUND
     audioUpdate();
@@ -2162,7 +2166,7 @@ int Client_setup(void)
     }
 
     RadarHeight = (RadarWidth * Setup->height) / Setup->width;
-
+    if( !headless ) // HEADLESS
     if (Init_playing_windows() == -1)
 	return -1;
 
