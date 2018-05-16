@@ -472,35 +472,36 @@ void turnToDeg(int deg) {
 	selfHead = (int)selfHeadingDeg();
 	dif = abs(deg-selfHead);
 	if (dif != 0) {			//sets speed depending on how close it is to the target angle -JNE
-		if (dif > 20 && dif < 340) {
-			speed = 64;
-		}
-		else if (dif >= 2 && dif <= 358) {
-			speed = 8;
-		}
-		else {		//heading in Xpilot goes in increments of 2.8125 (because it uses a scale of 0-127 instead of 0-360), so we stop if we're close -JNE
-			speed = 0;  
-		}
-		if (deg < 180) {
-			if (selfHead-deg<180 && selfHead-deg>0 ) {
-        printf( "TURNING -64\n" );
-				turn(-speed);
-			}
-		  else {
-        printf( "TURNING 64\n" );
-				turn(speed);
-			}
-		}
-		else if (deg >= 180) {
-			if (deg-selfHead<180 && deg-selfHead>0) {
-        printf( "TURNING 64\n" );
-				turn(speed);
-			}
-			else {
-        printf( "TURNING -64\n" );
-				turn(-speed);
-			}
-		}
+	  if (dif > 20 && dif < 340) {
+	    speed = 64;
+	  }
+	  else if (dif >= 2 && dif <= 358) {
+	    speed = 8;
+	  }
+	  else {		//heading in Xpilot goes in increments of 2.8125 (because it uses a scale of 0-127 instead of 0-360), so we stop if we're close -JNE
+	    speed = 0;  
+	  }
+		
+	  if (deg < 180) {
+	    if (selfHead-deg<180 && selfHead-deg>0 ) {
+              printf( "TURNING -64\n" );
+	      turn(-speed);
+	    }
+	    else {
+              printf( "TURNING 64\n" );
+	      turn(speed);
+	    }
+	  }
+	  else if (deg >= 180) {
+	    if (deg-selfHead<180 && deg-selfHead>0) {
+              printf( "TURNING 64\n" );
+	      turn(speed);
+	    }
+	    else {
+              printf( "TURNING -64\n" );
+	      turn(-speed);
+	    }
+	  }
 	}
 }
 void thrust(int flag) {
@@ -1399,7 +1400,7 @@ int wallBetween(int x1, int y1, int x2, int y2, int flag_wf, int flag_wd) {
       }
       px+=sdx;
       ret = Wall_here(px, py, flag_wf, flag_wd);
-      if (ret) return sqrt(pow((px-x1),2)+pow((py-y1),2));
+      if (ret) return 1; //sqrt(pow((px-x1),2)+pow((py-y1),2));
     }
   }
   else /* the line is more vertical than horizontal */
@@ -1414,10 +1415,10 @@ int wallBetween(int x1, int y1, int x2, int y2, int flag_wf, int flag_wd) {
       }
       py+=sdy;
       ret = Wall_here(px, py, flag_wf, flag_wd);
-      if (ret) return sqrt(pow((px-x1),2)+pow((py-y1),2));
+      if (ret) return 1; //sqrt(pow((px-x1),2)+pow((py-y1),2));
     }
   }
-  return -1;
+  return 0; //-1;
 }
 //Wall_here -EGG
 //Parameters: x, y, flag to draw wall feelers, flag to draw wall detection. -EGG
