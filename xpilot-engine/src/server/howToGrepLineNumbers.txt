@@ -1,0 +1,1 @@
+grep -n '\EndOfMapdata' demomap.xp | awk '/^[0-9]*/{i++}i==2' | grep -o "^[0-9]{1,3}"

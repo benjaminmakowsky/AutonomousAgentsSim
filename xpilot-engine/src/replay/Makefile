@@ -135,7 +135,7 @@ X_CFLAGS =
 X_EXTENSIONS_LIB = -lXxf86misc -lXext
 X_EXTRA_LIBS = 
 X_LIBS = 
-X_PRE_LIBS = 
+X_PRE_LIBS =  -lSM -lICE
 abs_builddir = /home/coffmanm/xpilot-le/xpilot-engine/src/replay
 abs_srcdir = /home/coffmanm/xpilot-le/xpilot-engine/src/replay
 abs_top_builddir = /home/coffmanm/xpilot-le/xpilot-engine
@@ -192,7 +192,7 @@ top_srcdir = ../..
 AM_CPPFLAGS = -DCONF_DATADIR=\"$(pkgdatadir)/\"
 INCLUDES = -I$(top_srcdir)/src/common -I$(top_srcdir)/src/client
 xpilot_ng_replay_SOURCES = buttons.c buttons.h xp-replay.c xp-replay.h
-xpilot_ng_replay_LDADD = $(top_builddir)/src/common/libxpcommon.a    -lX11
+xpilot_ng_replay_LDADD = $(top_builddir)/src/common/libxpcommon.a   -lSM -lICE  -lX11
 SUBDIRS = tools
 all: all-recursive
 

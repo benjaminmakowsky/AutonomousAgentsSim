@@ -255,7 +255,7 @@ void Engaging( int closestEnemy){
 
     // TODO: Paramaterize how far away we can move away from our objective
     if( distanceFormula( selfX(), objx, selfY(), objy ) > 5000 || rubber != 999999 ){
-      thrust( 0 ); //should be 0, set to 1 to enable chasing
+      thrust( 1 ); //should be 0, set to 1 to enable chasing
       return;
     }
 
@@ -284,6 +284,9 @@ void Engaging( int closestEnemy){
 }
 
 AI_loop( ) {
+
+    //printf("WALL FEELER:\t\t%d\n", wallFeeler(100, radToDeg(selfHeadingRad()), 1, 1));
+
     pl_fuel = selfFuel();
     thrust( 0 );
     if( talk_frames ){
@@ -343,9 +346,9 @@ AI_loop( ) {
 
     //If low on fuel, refuel
     //TODO: Have refuel % threshold be a parameter
-    if( pl_fuel < 50 ){
+    /*if( pl_fuel < 50 ){
       state = STATE_REFUELING;
-    }
+    }*/
 
     // Check if we are dead
     if( !selfAlive() ){

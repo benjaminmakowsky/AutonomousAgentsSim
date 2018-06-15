@@ -484,21 +484,21 @@ void turnToDeg(int deg) {
 		
 	  if (deg < 180) {
 	    if (selfHead-deg<180 && selfHead-deg>0 ) {
-              printf( "TURNING -64\n" );
+              //printf( "TURNING -64\n" );
 	      turn(-speed);
 	    }
 	    else {
-              printf( "TURNING 64\n" );
+              //printf( "TURNING 64\n" );
 	      turn(speed);
 	    }
 	  }
 	  else if (deg >= 180) {
 	    if (deg-selfHead<180 && deg-selfHead>0) {
-              printf( "TURNING 64\n" );
+              //printf( "TURNING 64\n" );
 	      turn(speed);
 	    }
 	    else {
-              printf( "TURNING -64\n" );
+              //printf( "TURNING -64\n" );
 	      turn(-speed);
 	    }
 	  }
@@ -967,38 +967,98 @@ double selfScore() {
 }
 //End self properties -JNE
 
-int closestRadarX() {       //returns x radar coordinate (0-256) of closest ship on radar
-    int i, x;
+/*
+int closestRadarId() {       //returns the id of closest ship on radar
+    int i, id;
     double best = -1, l = -1;
     for (i = 1;i < num_radar;i++) {         //go through each enemy
         if (radar_ptr[i].type == RadarEnemy) {  //skip if they are a friend
             l = sqrt(pow(radar_ptr[i].x-radar_ptr[0].x,2)+pow(radar_ptr[i].y-radar_ptr[0].y,2));    //get enemy distance
             if ((l < best) || (best == -1)) {       //if distance is the smallest or this is the first distance measured
                 best = l;                       //update distance
-                x = radar_ptr[i].x;             //update value to be returned
+                id = radar_ptr[i].id;             //update value to be returned
             }
         }
     }
     if (best ==-1) //If so, there are no enemies (alive).
         return -1;
-    return x;
+    return id;
 }
-int closestRadarY() {       //returns y radar coordinate (0-256) of closest ship on radar -JNE
-    int i, y;
-    double best = -1, l = -1;
-    for (i = 1;i < num_radar;i++) {         //go through each ship on radar
-        if (radar_ptr[i].type == RadarEnemy) {  //skip if they are a friend
-            l = sqrt(pow(radar_ptr[i].x-radar_ptr[0].y,2)+pow(radar_ptr[i].y-radar_ptr[0].y,2));    //get enemy distance
-            if (l < best || best == -1) {           //if distance is the smallest or this is the first distance measured
-                best = l;                       //update distance
-                y = radar_ptr[i].y;             //update value to be returned
-            }
-        }
+*/
+
+int closestEFRadarX(int ef) //returns x radar coordinate (0-256) of closest ship on radar
+{      
+  int i, x;
+  double best = -1, l = -1;
+  
+  for(i = 1;i < num_radar;i++) 		 //go through each enemy/friend
+  {         
+    if(radar_ptr[i].type == ef) 	 //if they are an enemy/friend, depending on ef
+    {  
+      //get enemy/friend distance
+      l = sqrt(pow(radar_ptr[i].x-radar_ptr[0].x,2)+pow(radar_ptr[i].y-radar_ptr[0].y,2));   
+      if ((l < best) || (best == -1))   //if this distance is smallest OR the first one 
+      {      
+        best = l;                       //update distance
+        x = radar_ptr[i].x;             //update value to be returned
+      }
     }
-    if (best == -1) //if so, there are no enemies alive -JNE
-        return -1;
-    return y;
+  }
+
+  if(best ==-1) 			//If so, there are no enemies/friends (alive).
+  {
+    return -1;
+  }
+
+  return x;
 }
+
+int closestEnemyRadarX()
+{
+  return closestEFRadarX(RadarEnemy);
+}
+
+int closestFriendRadarX()
+{
+  return closestEFRadarX(RadarFriend);
+}
+
+int closestEFRadarY(int ef) //returns y radar coordinate (0-256) of closest ship on radar -JNE
+{       
+  int i, y;
+  double best = -1, l = -1;
+
+  for(i = 1;i < num_radar;i++)  	//go through each ship on radar  
+  {       
+    if(radar_ptr[i].type == ef) 
+    {
+      //get enemy/friend distance 
+      //XXX: used to have [0].y twice, instead of [0].x in 1st expression, [0].y in 2nd
+      l = sqrt(pow(radar_ptr[i].x-radar_ptr[0].x,2)+pow(radar_ptr[i].y-radar_ptr[0].y,2));   
+      if(l < best || best == -1) 	//if this distance is smallest OR the first one
+      {                           
+        best = l;                       //update distance
+        y = radar_ptr[i].y;             //update value to be returned
+      }
+    }
+  }
+  
+  if(best == -1) 			//if so, there are no enemies alive -JNE
+    return -1;
+  
+  return y;
+}
+
+int closestEnemyRadarY()
+{
+  return closestEFRadarY(RadarEnemy);
+}
+
+int closestFriendRadarY()
+{
+  return closestEFRadarY(RadarFriend);
+}
+
 int closestItemX() {                //returns x coordinate of closest item on screen -JNE
     int i, x;
     double best = -1, l = -1;
@@ -1063,23 +1123,26 @@ int closestFriendlyShipId() {
 
 }
 
-
 int closestEnemyShipId() {
-	int i, d;
-	double best = -1, l = -1;
-	for (i=0;i<num_ship;i++) {		//go through each ship on screen
-		if ( ( ship_ptr[i].x!=selfPos.x || ship_ptr[i].y!=selfPos.y ) && enemyTeamId( ship_ptr[i].id ) != -1 &&  enemyTeamId( ship_ptr[i].id ) != selfTeam() ){		//make sure ship is not player's ship
-			l = sqrt(pow(wrapX(ship_ptr[i].x,selfPos.x)-selfPos.x,2)+pow(wrapY(ship_ptr[i].y,selfPos.y)-selfPos.y,2));		//distance formula
-			if (l < best || best == -1) {		//if distance is smallest yet
-				best = l;			//update distance
-				d = ship_ptr[i].id;		//update id
-			}
-		}
-	}
-	if (best == -1)	//if so there are no ships on screen
-		return -1;
-	return d;
+  int i, d, acc = 0;
+  double best = -1, l = -1;
 
+  for (i=0;i<num_ship;i++) {		//go through each ship on screen
+    if((ship_ptr[i].x!=selfPos.x || ship_ptr[i].y!=selfPos.y) 
+        && enemyTeamId(ship_ptr[i].id) != -1 
+        && enemyTeamId(ship_ptr[i].id) != selfTeam()){		//make sure ship is not player's ship
+
+      l = sqrt(pow(wrapX(ship_ptr[i].x,selfPos.x)-selfPos.x,2)+pow(wrapY(ship_ptr[i].y,selfPos.y)-selfPos.y,2));		//distance formula
+      if (l < best || best == -1) {		//if distance is smallest yet
+        best = l;			//update distance
+	d = ship_ptr[i].id;		//update id
+      }
+    }
+  }
+
+  if (best == -1)	//if so there are no ships on screen
+    return -1;
+  return d;
 }
 
 //End closest functions -JNE
@@ -1105,7 +1168,7 @@ double enemyTrackingRadId(int id) {	//returns direction of a ship's velocity in 
 		if (ship_ptr[i].id==id) {
 			for (j=0;j<128;j++) {
 				if (allShips[j][0].ship.id==id) {
-					if (allShips[j][2].vel != -1) { //ship is there, push onto array, calculate distance ,return distance
+					if (allShips[j][0].vel != -1) { //ship is there, push onto array, calculate distance ,return distance
 						return allShips[j][0].trackingRad;
 					}
 				}
@@ -1119,13 +1182,15 @@ double enemyTrackingDegId(int id) {	//returns direction of a ship's velocity in 
 		if (ship_ptr[i].id==id) {
 			for (j=0;j<128;j++) {
 				if (allShips[j][0].ship.id==id) {
-					if (allShips[j][2].vel != -1) { //ship is there, push onto array, calculate distance ,return distance
+					if (allShips[j][0].vel != -1) { //ship is there, push onto array, calculate distance ,return distance
 						return allShips[j][0].trackingDeg;
 					}
+					else{ return -3.0; }
 				}
 			}
 		}
 	}
+  return -2.0;
 }
 int enemyReloadId(int id) {
 	int i, j;
@@ -1269,6 +1334,7 @@ double enemyDistanceId(int id) {		//returns the distance of a ship with a partic
 	}
 	return -1;
 }
+
 //End ID functions -JNE
 //Begin idx functions! -JNE
 double enemyDistance(int idx) {	//returns the distance of a ship with a particular index -JNE
@@ -1385,8 +1451,8 @@ int wallFeelerRad(int dist, double a, int flag_wf, int flag_wd) {
 //Returns 1 if there is a wall between the two points or 0 if not. -EGG
 int wallBetween(int x1, int y1, int x2, int y2, int flag_wf, int flag_wd) {
   int i,dx,dy,sdx,sdy,dxabs,dyabs,x,y,px,py,ret;
-  dx=x2-x1;      /* the horizontal distance of the line */
-  dy=y2-y1;      /* the vertical distance of the line */
+  dx=x2-x1;      // the horizontal distance of the line 
+  dy=y2-y1;      // the vertical distance of the line
   dxabs=abs(dx);
   dyabs=abs(dy);
   sdx=sgn(dx);
@@ -1395,7 +1461,7 @@ int wallBetween(int x1, int y1, int x2, int y2, int flag_wf, int flag_wd) {
   y=dxabs>>1;
   px=x1;
   py=y1;
-  if (dxabs>=dyabs) /* the line is more horizontal than vertical */
+  if (dxabs>=dyabs) // the line is more horizontal than vertical 
   {
     for(i=0;i<dxabs;i++)
     {
@@ -1407,10 +1473,10 @@ int wallBetween(int x1, int y1, int x2, int y2, int flag_wf, int flag_wd) {
       }
       px+=sdx;
       ret = Wall_here(px, py, flag_wf, flag_wd);
-      if (ret) return 1; //sqrt(pow((px-x1),2)+pow((py-y1),2));
+      if (ret) return sqrt(pow((px-x1),2)+pow((py-y1),2));
     }
   }
-  else /* the line is more vertical than horizontal */
+  else // the line is more vertical than horizontal
   {
     for(i=0;i<dyabs;i++)
     {
@@ -1422,7 +1488,7 @@ int wallBetween(int x1, int y1, int x2, int y2, int flag_wf, int flag_wd) {
       }
       py+=sdy;
       ret = Wall_here(px, py, flag_wf, flag_wd);
-      if (ret) return 1; //sqrt(pow((px-x1),2)+pow((py-y1),2));
+      if (ret) return sqrt(pow((px-x1),2)+pow((py-y1),2));
     }
   }
   return 0; //-1;
@@ -1447,10 +1513,10 @@ int Wall_here(int x_here, int y_here, int flag_wf, int flag_wd) {
 	    xb = 0;
 	if (yb < 0)
 	    yb = 0;
-	if (xe >= Setup->x)
-	    xe = Setup->x - 1;
-	if (ye >= Setup->y)
-	    ye = Setup->y - 1;
+	//if (xe >= Setup->x)
+	//    xe = Setup->x - 1;
+	//if (ye >= Setup->y)
+	//    ye = Setup->y - 1;
     }
     y = yb * BLOCK_SZ;
     yi = mod(yb, Setup->y);
@@ -1469,17 +1535,17 @@ int Wall_here(int x_here, int y_here, int flag_wf, int flag_wd) {
         mapptr = mapbase;
     }
     type = *mapptr;
-    if (flag_wf) {
+    /*if (flag_wf) {
         Bitmap_paint(drawPixmap, BM_WALL_LEFT, WINSCALE(X(x - 1)), WINSCALE(Y(y + BLOCK_SZ)), 0);
         Bitmap_paint(drawPixmap, BM_WALL_BOTTOM, WINSCALE(X(x)), WINSCALE(Y(y + BLOCK_SZ - 1)), 0);
         Bitmap_paint(drawPixmap, BM_WALL_RIGHT, WINSCALE(X(x + 1)), WINSCALE(Y(y + BLOCK_SZ)), 0);
         Bitmap_paint(drawPixmap, BM_WALL_TOP, WINSCALE(X(x)), WINSCALE(Y(y + BLOCK_SZ + 1)), 0);
-    }
+    }*/
     if (type & BLUE_BIT) {
-        if (flag_wd) {
+       /* if (flag_wd) {
             Bitmap_paint(drawPixmap, BM_WALL_UR, WINSCALE(X(x)), WINSCALE(Y(y + BLOCK_SZ)), 0);
             Bitmap_paint(drawPixmap, BM_WALL_UL, WINSCALE(X(x)), WINSCALE(Y(y + BLOCK_SZ)), 0);
-        }
+        }*/
         return 1;
     }
     return 0;
@@ -1869,3 +1935,257 @@ int start(int argc, char *argv[]) {
 
     return retval;
 }
+
+
+
+
+
+// UNUSED RADAR FUNCTIONS (IMPROVED VERSIONS ABOVE)
+
+/*
+int closestEnemyRadarX() {       //returns x radar coordinate (0-256) of closest ship on radar
+    int i, x;
+    double best = -1, l = -1;
+    for (i = 1;i < num_radar;i++) {         //go through each enemy
+        if (radar_ptr[i].type == RadarEnemy) {  //skip if they are a friend
+            l = sqrt(pow(radar_ptr[i].x-radar_ptr[0].x,2)+pow(radar_ptr[i].y-radar_ptr[0].y,2));    //get enemy distance
+            if ((l < best) || (best == -1)) {       //if distance is the smallest or this is the first distance measured
+                best = l;                       //update distance
+                x = radar_ptr[i].x;             //update value to be returned
+            }
+        }
+    }
+    if (best ==-1) //If so, there are no enemies (alive).
+        return -1;
+    return x;
+}
+
+int closestEnemyRadarY() {       //returns y radar coordinate (0-256) of closest ship on radar -JNE
+    int i, y;
+    double best = -1, l = -1;
+    for (i = 1;i < num_radar;i++) {         //go through each ship on radar
+        if (radar_ptr[i].type == RadarEnemy) {  //skip if they are a friend
+            l = sqrt(pow(radar_ptr[i].x-radar_ptr[0].x*//*XXX used to say .y, fixed it now*//*,2)+pow(radar_ptr[i].y-radar_ptr[0].y,2));    //get enemy distance
+            if (l < best || best == -1) {           //if distance is the smallest or this is the first distance measured
+                best = l;                       //update distance
+                y = radar_ptr[i].y;             //update value to be returned
+            }
+        }
+    }
+    if (best == -1) //if so, there are no enemies alive -JNE
+        return -1;
+    return y;
+}
+*/
+
+
+
+
+
+// BEGINNING OF HELPER FUNCTIONS FOR CHASER.C (MATTHEW COFFMAN - MAY 2018)
+
+//returns the width of the current map
+int getMapWidth()
+{
+  return Setup->width;
+}
+
+//returns the height of the current map
+int getMapHeight()
+{
+  return Setup->height;
+}
+
+//scales a radar x-coordinate (0-256) to the width of the map
+int radarToPixelX(int x)
+{
+  return (int)(x * Setup->width / 256.0);
+}
+
+//scales a radar y-coordinate (0-256) to the height of the map
+int radarToPixelY(int y)
+{
+  return (int)(y * Setup->height / 256.0);
+}
+
+//computes the distance between two points, given x- and y- coordinates
+int distanceFormula(int x1, int x2, int y1, int y2)
+{
+  return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
+//returns the slope of the secant line between two points
+double secantLine(int x1, int x2, int y1, int y2)
+{
+  return (double)(y2 - y1) / (double)(x2 - x1);
+}
+
+//by default, for a negative integer n and a positive integer m, in C the 
+//expression (n % m) will also be negative. This function mods the way one 
+//would expect in conventional algebra, e.g. modm(-18,7) == 3 rather than -4
+int modm(int n, int m)
+{
+  int res = n % m;
+  if(res < 0)
+  { 
+    res += m; 
+  }
+  return res;
+}
+
+//uses radar to find the x-coordinate of the nearest enemy, give or take a few
+//pixels due to the conversion from radar (0-256) to pixels (0-1120 minimum). Returns
+//-1 if no enemy is found.
+int getNearestEnemyX()
+{
+  int radarX = closestEnemyRadarX();
+  if(radarX == -1)
+  {
+    return -1; 
+  }
+  return radarToPixelX(radarX); 
+}
+
+//like getNearestEnemyX() above, uses radar to find nearest enemy's y-position, or
+//returns -1 if no enemy is found
+int getNearestEnemyY()
+{
+  int radarY = closestEnemyRadarY();
+  if(radarY == -1)
+  {
+    return -1; 
+  }
+  return radarToPixelY(radarY);
+}
+
+//gives the distance from oneself to the closest enemy in the area, using the radar
+//functions defined above. Returns -1 if it cannot compute the distance
+int distanceToNearestEnemy()
+{
+  int x = getNearestEnemyX();
+  int y = getNearestEnemyY();
+
+  //used to be &&, changed to ||
+  if(x == -1 || y == -1)
+  {
+    return -1;
+  }
+  return distanceFormula(selfX(), getNearestEnemyX(), selfY(), getNearestEnemyY());
+}
+
+//returns 1, 2, 3, or 4 if you are within a certain distance from one of the corners
+//where 1 = bottom-left, 2 = top-left, 3 = top-right, 4 = bottom-right
+//returns 0 otherwise
+int closeToCorner(int minDist)
+{
+  int wid = Setup->width;
+  int hgt = Setup->height;
+ 
+  if(distanceFormula(selfX(), 0, selfY(), 0) < minDist)
+  {
+    return 1;  
+  }
+  else if(distanceFormula(selfX(), 0, selfY(), hgt) < minDist)
+  {
+    return 2;
+  }
+  else if(distanceFormula(selfX(), wid, selfY(), hgt) < minDist)
+  {
+    return 3;
+  }
+  else if(distanceFormula(selfX(), wid, selfY(), 0) < minDist)
+  {
+    return 4;
+  }
+  
+  return 0;
+}
+
+//returns the angle between (x1, y1) and (x2, y2) in degrees from 0-360
+int getHeading(int x1, int x2, int y1, int y2)
+{
+  int angle = (int)radToDeg(atan2(y2 - y1, x2 - x1));
+  return modm(angle, 360);
+}
+
+//returns average x coordinate (in pixels) of all friends within a certain radius
+int averageFriendRadarX(int r) 
+{      
+  int i, x = 0, count = 0;
+  int friendX, friendY;  
+
+  //go through each ship
+  for(i = 1; i < num_radar; i++) 		 
+  {       
+    //if they are a friend
+    if(radar_ptr[i].type == RadarFriend)
+    {
+      friendX = radarToPixelX(radar_ptr[i].x);
+      friendY = radarToPixelY(radar_ptr[i].y);
+      
+      //if they are in range
+      if(distanceFormula(selfX(), friendX, selfY(), friendY) < r)
+      {  
+        //get friend's x radar coordinate and add it to total
+        x += radar_ptr[i].x;
+        count++;
+      }
+    }
+  }
+  
+  //If so, there are no friends (alive).
+  if(!count) 			
+  {
+    return -1;
+  }
+
+  //return the average x coordinate
+  return radarToPixelX((int)(x / count));
+}
+
+//returns average y coordinate (in pixels) of all friends
+int averageFriendRadarY(int r) 
+{      
+  int i, y = 0, count = 0;
+  int friendX, friendY;
+ 
+  //go through each ship
+  for(i = 1;i < num_radar;i++) 		 
+  {        
+    //if they are a friend 
+    if(radar_ptr[i].type == RadarFriend)
+    {
+      friendX = radarToPixelX(radar_ptr[i].x);
+      friendY = radarToPixelY(radar_ptr[i].y);
+      
+      //if they are in range
+      if(distanceFormula(selfX(), friendX, selfY(), friendY) < r) 
+      {  
+        //get friend's y radar coordinate and add it to total
+        y += radar_ptr[i].y;
+        count++;
+      }
+    }
+  }
+
+  //If so, there are no friends (alive). 
+  if(!count) 		
+  {
+    return -1;
+  }
+
+  //return the average y coordinate
+  return radarToPixelY((int)(y / count));
+}
+
+//gets the angle at which to travel to get to the specified point on the map in a 
+//straight line, first checking to make sure the point exists on the map
+int angleToXY(int x, int y)
+{
+  if(x > 0 && x < Setup->width && y > 0 && y < Setup->height)
+    return getHeading(selfX(), x, selfY(), y);
+  
+  return -1;
+}
+
+

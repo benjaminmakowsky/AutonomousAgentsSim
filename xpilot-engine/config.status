@@ -623,7 +623,7 @@ cat >"$tmp/subs-2.sed" <<\CEOF
 s,@XMKMF@,|#_!!_#|,g
 s,@CPP@,|#_!!_#|gcc -E,g
 s,@X_CFLAGS@,|#_!!_#|,g
-s,@X_PRE_LIBS@,|#_!!_#|,g
+s,@X_PRE_LIBS@,|#_!!_#| -lSM -lICE,g
 s,@X_LIBS@,|#_!!_#|,g
 s,@X_EXTRA_LIBS@,|#_!!_#|,g
 s,@X_EXTENSIONS_LIB@,|#_!!_#|-lXxf86misc -lXext,g

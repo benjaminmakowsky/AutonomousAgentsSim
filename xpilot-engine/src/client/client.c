@@ -1822,6 +1822,7 @@ int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
 	if (eyes != NULL)
 	    eyeTeam = eyes->team;
 	selfVisible = (self && (id == self->id));
+	//Added an id to Handle_radar
 	return Handle_radar(x, y, 3);
     }
 
@@ -1989,6 +1990,7 @@ int Handle_appearing(int x, int y, int id, int count)
     return 0;
 }
 
+//Added an id field to radar_t
 int Handle_fastradar(int x, int y, int size)
 {
     radar_t t;
@@ -2007,7 +2009,7 @@ int Handle_fastradar(int x, int y, int size)
     return 0;
 }
 
-
+//Added an id field to radar_t
 int Handle_radar(int x, int y, int size)
 {
     return Handle_fastradar

@@ -60,9 +60,8 @@ events.o: events.c /usr/include/stdc-predef.h xpmapedit.h \
  /usr/include/bits/in.h /usr/include/arpa/inet.h /usr/include/net/if.h \
  /usr/include/netinet/tcp.h /usr/include/netdb.h /usr/include/rpc/netdb.h \
  /usr/include/bits/netdb.h /usr/include/sys/fcntl.h \
- /usr/include/arpa/nameser.h /usr/include/sys/bitypes.h \
- /usr/include/arpa/nameser_compat.h /usr/include/resolv.h \
- /usr/include/values.h ../../src/common/version.h \
+ /usr/include/arpa/nameser.h /usr/include/arpa/nameser_compat.h \
+ /usr/include/resolv.h /usr/include/values.h ../../src/common/version.h \
  ../../src/common/xpconfig.h ../../src/common/arraylist.h \
  ../../src/common/types.h ../../src/common/xpcommon.h \
  ../../src/common/astershape.h ../../src/common/bit.h \
@@ -336,8 +335,6 @@ xpmapedit.h:
 /usr/include/sys/fcntl.h:
 
 /usr/include/arpa/nameser.h:
-
-/usr/include/sys/bitypes.h:
 
 /usr/include/arpa/nameser_compat.h:
 

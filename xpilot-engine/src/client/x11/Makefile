@@ -132,7 +132,7 @@ X_CFLAGS =
 X_EXTENSIONS_LIB = -lXxf86misc -lXext
 X_EXTRA_LIBS = 
 X_LIBS = 
-X_PRE_LIBS = 
+X_PRE_LIBS =  -lSM -lICE
 abs_builddir = /home/coffmanm/xpilot-le/xpilot-engine/src/client/x11
 abs_srcdir = /home/coffmanm/xpilot-le/xpilot-engine/src/client/x11
 abs_top_builddir = /home/coffmanm/xpilot-le/xpilot-engine
@@ -204,7 +204,7 @@ xpilot_ng_x11_SOURCES = \
 
 
 #xpilot_CFLAGS = 
-xpilot_ng_x11_LDADD = $(top_builddir)/src/client/libxpclient.a $(top_builddir)/src/common/libxpcommon.a   -lXxf86misc -lXext  -lX11 
+xpilot_ng_x11_LDADD = $(top_builddir)/src/client/libxpclient.a $(top_builddir)/src/common/libxpcommon.a   -lSM -lICE -lXxf86misc -lXext  -lX11 
 all: all-am
 
 .SUFFIXES:

@@ -59,12 +59,11 @@ arraylist.o: arraylist.c /usr/include/stdc-predef.h xpcommon.h \
  /usr/include/bits/in.h /usr/include/arpa/inet.h /usr/include/net/if.h \
  /usr/include/netinet/tcp.h /usr/include/netdb.h /usr/include/rpc/netdb.h \
  /usr/include/bits/netdb.h /usr/include/sys/fcntl.h \
- /usr/include/arpa/nameser.h /usr/include/sys/bitypes.h \
- /usr/include/arpa/nameser_compat.h /usr/include/resolv.h \
- /usr/include/values.h version.h xpconfig.h arraylist.h types.h \
- astershape.h bit.h checknames.h click.h const.h commonproto.h error.h \
- item.h list.h metaserver.h net.h socklib.h pack.h packet.h portability.h \
- rules.h setup.h shipshape.h wreckshape.h xpmap.h
+ /usr/include/arpa/nameser.h /usr/include/arpa/nameser_compat.h \
+ /usr/include/resolv.h /usr/include/values.h version.h xpconfig.h \
+ arraylist.h types.h astershape.h bit.h checknames.h click.h const.h \
+ commonproto.h error.h item.h list.h metaserver.h net.h socklib.h pack.h \
+ packet.h portability.h rules.h setup.h shipshape.h wreckshape.h xpmap.h
 
 /usr/include/stdc-predef.h:
 
@@ -319,8 +318,6 @@ xpcommon.h:
 /usr/include/sys/fcntl.h:
 
 /usr/include/arpa/nameser.h:
-
-/usr/include/sys/bitypes.h:
 
 /usr/include/arpa/nameser_compat.h:
 

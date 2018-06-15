@@ -965,8 +965,10 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
     int			ship_shape;
 
     ship = Ship_by_id(id);
+    #ifdef NOPRINT
     printf( "num points: %d\n", ship->num_points );
     printf( "num OG points:%d\n", ship->num_orig_points );
+    #endif
     other = Other_by_id(id);
     ship_color = WHITE;
 
@@ -1023,7 +1025,9 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
         ship_shape = BM_QUAD;
       }
       else if( !strcmp( ship->name, "fixed" ) ){
+        #ifdef NOPRINT
         printf( "FIXED\n" );
+        #endif
         ship_shape = BM_FIXED;
       }
       else if( !strcmp( ship->name, "drone_tank" ) ){
@@ -1046,9 +1050,11 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
         printf( "BM_SHIP_SELF\n" );
 		    ship_shape = BM_SHIP_SELF;
       }
+      #ifdef NOPRINT
       printf( "x: %d\n", x );
       printf( "y: %d\n", y );
       printf( "dir: %d\n", dir );
+      #endif
 	    generic_paint_ship(x, y, dir, ship_shape);
 	}
 

@@ -129,7 +129,7 @@ X_CFLAGS =
 X_EXTENSIONS_LIB = -lXxf86misc -lXext
 X_EXTRA_LIBS = 
 X_LIBS = 
-X_PRE_LIBS = 
+X_PRE_LIBS =  -lSM -lICE
 abs_builddir = /home/coffmanm/xpilot-le/xpilot-engine/src/mapedit
 abs_srcdir = /home/coffmanm/xpilot-le/xpilot-engine/src/mapedit
 abs_top_builddir = /home/coffmanm/xpilot-le/xpilot-engine
@@ -186,7 +186,7 @@ top_srcdir = ../..
 AM_CPPFLAGS = -DCONF_DATADIR=\"$(pkgdatadir)/\"
 INCLUDES = -I$(top_srcdir)/src/common
 xpilot_ng_xp_mapedit_SOURCES = default_colors.h defaults.h events.c expose.c file.c file.h forms.c grow.c help.c main.c main.h proto.h round.c T_Form.c T_Handler.c tools.c T_Popup.c T_Toolkit.c T_Toolkit.h xpmapedit.h
-xpilot_ng_xp_mapedit_LDADD = $(top_builddir)/src/common/libxpcommon.a    -lX11
+xpilot_ng_xp_mapedit_LDADD = $(top_builddir)/src/common/libxpcommon.a   -lSM -lICE  -lX11
 EXTRA_DIST = COPYRIGHT README README.UPDATE TODO
 all: all-am
 

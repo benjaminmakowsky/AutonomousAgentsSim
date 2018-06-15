@@ -149,7 +149,7 @@ X_CFLAGS =
 X_EXTENSIONS_LIB = -lXxf86misc -lXext
 X_EXTRA_LIBS = 
 X_LIBS = 
-X_PRE_LIBS = 
+X_PRE_LIBS =  -lSM -lICE
 abs_builddir = /home/coffmanm/xpilot-le/xpilot-engine/src/client/sdl
 abs_srcdir = /home/coffmanm/xpilot-le/xpilot-engine/src/client/sdl
 abs_top_builddir = /home/coffmanm/xpilot-le/xpilot-engine
@@ -217,7 +217,7 @@ xpilot_ng_sdl_SOURCES = asteroid_data.h DT_drawtext.c DT_drawtext.h \
 	$(am__append_3)
 xpilot_ng_sdl_LDADD = $(top_builddir)/src/client/libxpclient.a \
 	$(top_builddir)/src/common/libxpcommon.a -lSDL -lpthread -L/usr/X11R6/lib -lGL -lGLU \
-	 -lSDL_ttf -lSDL_image   -lXxf86misc -lXext \
+	 -lSDL_ttf -lSDL_image   -lSM -lICE -lXxf86misc -lXext \
 	   $(am__append_4)
 EXTRA_DIST = xpilot.rc xpilot_sdl.dsp xpilot_sdl.dsw
 all: all-am
