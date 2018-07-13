@@ -1124,7 +1124,7 @@ int closestFriendlyShipId() {
 }
 
 int closestEnemyShipId() {
-  int i, d, acc = 0;
+  int i, d;
   double best = -1, l = -1;
 
   for (i=0;i<num_ship;i++) {		//go through each ship on screen
@@ -2009,7 +2009,7 @@ int radarToPixelY(int y)
 }
 
 //computes the distance between two points, given x- and y- coordinates
-int distanceFormula(int x1, int x2, int y1, int y2)
+int distForm(int x1, int x2, int y1, int y2)
 {
   return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
@@ -2070,7 +2070,7 @@ int distanceToNearestEnemy()
   {
     return -1;
   }
-  return distanceFormula(selfX(), getNearestEnemyX(), selfY(), getNearestEnemyY());
+  return distForm(selfX(), getNearestEnemyX(), selfY(), getNearestEnemyY());
 }
 
 //returns 1, 2, 3, or 4 if you are within a certain distance from one of the corners
@@ -2081,19 +2081,19 @@ int closeToCorner(int minDist)
   int wid = Setup->width;
   int hgt = Setup->height;
  
-  if(distanceFormula(selfX(), 0, selfY(), 0) < minDist)
+  if(distForm(selfX(), 0, selfY(), 0) < minDist)
   {
     return 1;  
   }
-  else if(distanceFormula(selfX(), 0, selfY(), hgt) < minDist)
+  else if(distForm(selfX(), 0, selfY(), hgt) < minDist)
   {
     return 2;
   }
-  else if(distanceFormula(selfX(), wid, selfY(), hgt) < minDist)
+  else if(distForm(selfX(), wid, selfY(), hgt) < minDist)
   {
     return 3;
   }
-  else if(distanceFormula(selfX(), wid, selfY(), 0) < minDist)
+  else if(distForm(selfX(), wid, selfY(), 0) < minDist)
   {
     return 4;
   }
@@ -2102,14 +2102,83 @@ int closeToCorner(int minDist)
 }
 
 //returns the angle between (x1, y1) and (x2, y2) in degrees from 0-360
-int getHeading(int x1, int x2, int y1, int y2)
+int getAngle(int x1, int x2, int y1, int y2)
 {
   int angle = (int)radToDeg(atan2(y2 - y1, x2 - x1));
   return modm(angle, 360);
 }
 
+//gets the angle at which to travel to get to the specified point on the map in a 
+//straight line, first checking to make sure the point exists on the map
+int selfAngleToXY(int x, int y)
+{
+  if(x > 0 && x < Setup->width && y > 0 && y < Setup->height)
+    return getAngle(selfX(), x, selfY(), y);
+  
+  return -1;
+}
+
+//determines if the given XY point is within range of vision
+bool withinROV(int x, int y, int rov)
+{
+  int dist = distForm(selfX(), x, selfY(), y);
+  return (dist != -1 && dist < rov);
+}
+
+//determines if the given XY point is within field of vision
+bool withinFOV(int x, int y, int fov)
+{
+  int currHead = radToDeg(selfHeadingRad());
+  int headToEn = selfAngleToXY(x, y);
+  int headDiff = abs(currHead - headToEn);
+
+  return (headToEn != -1 && (headDiff < fov || headDiff > 360 - fov));
+}
+
+//determines if the given XY point is in sight by checking to see if it's within
+//range and field of vision
+bool inSight(int x, int y, int fov, int rov)
+{
+  return (withinROV(x, y, rov) 
+          && withinFOV(x, y, fov)
+          && !wallBetween(selfX(), selfY(), x, y, 1, 1));
+}
+
+//determines if there are any enemies or friends (depending on ef value) within 
+//this drone's field of vision
+bool radarEFInView(int fov, int rov, int ef)
+{
+  int i, enemyX, enemyY;
+
+  for(i = 1; i < num_radar; i++)
+  {
+    if(radar_ptr[i].type == ef)
+    {
+      enemyX = radarToPixelX(radar_ptr[i].x);
+      enemyY = radarToPixelY(radar_ptr[i].y);
+
+      if(inSight(enemyX, enemyY, fov, rov))
+        return true;
+    }
+  }
+
+  return false;
+}
+
+//determines if there are any enemies in this drone's field of view
+bool radarEnemyInView(int fov, int rov)
+{
+  return radarEFInView(fov, rov, RadarEnemy);
+}
+
+//determines if there are any friends in this drone's field of view
+bool radarFriendInView(int fov, int rov)
+{
+  return radarEFInView(fov, rov, RadarFriend);
+}
+
 //returns average x coordinate (in pixels) of all friends within a certain radius
-int averageFriendRadarX(int r) 
+int averageFriendRadarX(int r, int fov) 
 {      
   int i, x = 0, count = 0;
   int friendX, friendY;  
@@ -2124,7 +2193,7 @@ int averageFriendRadarX(int r)
       friendY = radarToPixelY(radar_ptr[i].y);
       
       //if they are in range
-      if(distanceFormula(selfX(), friendX, selfY(), friendY) < r)
+      if(inSight(friendX, friendY, fov, r))
       {  
         //get friend's x radar coordinate and add it to total
         x += radar_ptr[i].x;
@@ -2144,7 +2213,7 @@ int averageFriendRadarX(int r)
 }
 
 //returns average y coordinate (in pixels) of all friends
-int averageFriendRadarY(int r) 
+int averageFriendRadarY(int r, int fov) 
 {      
   int i, y = 0, count = 0;
   int friendX, friendY;
@@ -2159,7 +2228,7 @@ int averageFriendRadarY(int r)
       friendY = radarToPixelY(radar_ptr[i].y);
       
       //if they are in range
-      if(distanceFormula(selfX(), friendX, selfY(), friendY) < r) 
+      if(inSight(friendX, friendY, fov, r)) 
       {  
         //get friend's y radar coordinate and add it to total
         y += radar_ptr[i].y;
@@ -2178,14 +2247,44 @@ int averageFriendRadarY(int r)
   return radarToPixelY((int)(y / count));
 }
 
-//gets the angle at which to travel to get to the specified point on the map in a 
-//straight line, first checking to make sure the point exists on the map
-int angleToXY(int x, int y)
+int avgFriendlyDir(int r, int fov)
 {
-  if(x > 0 && x < Setup->width && y > 0 && y < Setup->height)
-    return getHeading(selfX(), x, selfY(), y);
+  int i, d;
+  int num = 0, total = 0;
+
+  for(i = 0; i < num_ship; i++)
+  {
+    int x = ship_ptr[i].x;
+    int y = ship_ptr[i].y;
+    if((x != selfPos.x || y != selfPos.y)
+       && inSight(x, y, fov, r)
+       && enemyTeamId(ship_ptr[i].id) != -1
+       && enemyTeamId(ship_ptr[i].id) == selfTeam())
+    {
+      total += ship_ptr[i].dir;
+      num++;
+    }
+  }
+
+  if(!total)
+    return -1;
+  
+  return total * 360 / 128 / num;
+}
+
+int getIdAtXY(int x, int y)
+{
+  int i;
+
+  for(i = 0; i < num_ship; i++)
+    if(selfID() != ship_ptr[i].id)	
+      if(x == ship_ptr[i].x && y == ship_ptr[i].y)
+        return ship_ptr[i].id;
   
   return -1;
 }
 
-
+double rand_double()
+{
+  return rand()/(double)RAND_MAX;
+}

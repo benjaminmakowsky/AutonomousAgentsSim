@@ -1,8 +1,8 @@
+//Matthew Coffman - June 2018
 #include <stdio.h>
 #include <stdbool.h>
 #include <limits.h>
 #include <string.h>
-//#include "graph.c"
 
 //vertex_status structure: in the execution of Dijkstra's algorithm, we'll need to
 //keep track of the following information for each vertex:
@@ -28,7 +28,6 @@ int get_vs_index_d(vsd_t *vsptr, int len, int id)
   
   return i;
 }
-
 
 //Computes the shortest path from the start vertex to the end vertex, and stores the
 //path in the given path variable.
@@ -123,6 +122,8 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
       //If all vertices are done, we're done.
       if(min_not_done_vsi == g.num_v)
         path_found = true;
+      //Otherwise, find the vertex that isn't done and has the lowest total weight
+      //currently ascribed to it.
       else
       {
         for(i = 0; i < g.num_v; i++)
@@ -138,6 +139,8 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   for(i = 0; i < g.num_v + 1; i++)
     backwards_path[i] = '\0';
 
+  //If the end vertex still hasn't been looked at, there must be no path from
+  //start to end.
   end_vsi = get_vs_index_d(vsptr, g.num_v, end.id);
   if(vsptr[end_vsi].pred_id == -2)
   {
@@ -147,6 +150,7 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   }
 
   i = 0;
+  //Work backwards through predecessors to copy the path into an array.
   while(vsptr[end_vsi].pred_id != -1)
   {
     backwards_path[i++] = vsptr[end_vsi].id;
@@ -169,3 +173,36 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   //Put a null character at the end of the path, like above.
   path[i] = '\0';
 }
+
+//Generates a path from start to end that first goes through an unspecified
+//number of points.
+void dijkstraN(graph_t g, vertex_t start, vertex_t end, int *path, int n, ...)
+{
+  int i, j, index = 0, temppath[g.num_v+1];
+  va_list list;
+  vertex_t temp_v1, temp_v2 = start;
+
+  path[index++] = start.id;
+
+  va_start(list, n);
+  for(i = 0; i < n; i++)
+  {
+    temp_v1 = temp_v2;
+    temp_v2 = va_arg(list, vertex_t);
+
+    dijkstra(g, temp_v1, temp_v2, temppath);
+    j = 1;
+    while(temppath[j] != '\0')
+      path[index++] = temppath[j++];
+  }
+
+  dijkstra(g, temp_v2, end, temppath);
+  j = 1;
+  while(temppath[j] != '\0')
+    path[index++] = temppath[j++];
+
+  path[index] = '\0';
+
+  va_end(list);
+}
+

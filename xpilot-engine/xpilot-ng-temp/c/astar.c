@@ -1,8 +1,8 @@
+//Matthew Coffman - June 2018
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include <limits.h>
-//#include "graph.c"
 
 //vertex_status structure: during the execution of the A* algorithm, we will need
 //information on every vertex, including the following:

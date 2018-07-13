@@ -1,9 +1,9 @@
-# Created by ./xpilot-ng-xp-mapedit on Fri Jun 29 12:48:27 2018
+# Created by ./xpilot-ng-xp-mapedit on Mon Jul  2 06:53:23 2018
 
-mapwidth : 32
-mapheight : 32u
-mapname : blankmap
-mapauthor : mc
+mapwidth : 70
+mapheight : 70
+mapname : bigblankmap
+mapauthor : MC
 limitedlives : no
 worldlives : 0
 selfimmunity : no
@@ -261,36 +261,74 @@ cannonmaxscore : 100.0
 teamsharescore : no
 
 mapData: \multiline: EndOfMapdata
-                                
-                                
-                                
-                                
-                                
-     1    2    1    2    1      
-                                
-                                
-                                
-                                
-                                
-     2    1    2    1    2      
-                                
-                                
-                                
-                                
-                                
-                                
-     1    2    1    2    1      
-                                
-                                
-                                
-                                
-                                
-     2    1    2    1    2      
-                                
-                                
-                                
-                                
-                                
-                                
-                                
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+         1         2          1         2          1         2        
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+         2         1          2         1          2         1        
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+         1         2          1         2          1         2        
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+         2         1          2         1          2         1        
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+         1         2          1         2          1         2        
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+         2         1          2         1          2         1        
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
+                                                                      
 EndOfMapdata

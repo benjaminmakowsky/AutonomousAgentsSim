@@ -44,6 +44,7 @@ typedef struct edge
 //global constants
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define BUFFER_SIZE 255
+#define OS 25
 
 //global variables
 int frameCount = 0;			//keeps track of time by counting frames
@@ -104,8 +105,38 @@ void Compute()
     {
       int x2 = vertices[j].x;
       int y2 = vertices[j].y;
-      
-      if(!wallBetween(x1, y1, x2, y2, 1, 1))
+     
+      int dx = x1 - x2;
+      int dy = y1 - y2;
+      bool offsetWorks = true;
+
+      if(dx * dy > 0)
+      {
+        offsetWorks = !wallBetween(x1+OS, y1-OS, x2+OS, y2-OS, 1, 1)
+                      && !wallBetween(x1-OS, y1+OS, x2-OS, y2+OS, 1, 1);
+      }
+      else if(dx * dy < 0)
+      {
+        offsetWorks = !wallBetween(x1+OS, y1+OS, x2+OS, y2+OS, 1, 1)
+                      && !wallBetween(x1-OS, y1-OS, x2-OS, y2-OS, 1, 1);
+      }
+      else if(!dx)
+      {
+        offsetWorks = !wallBetween(x1-OS, y1, x2-OS, y2, 1, 1)
+                      && !wallBetween(x1+OS, y1, x2+OS, y2, 1, 1);
+      }
+      else if(!dy)
+      {
+        offsetWorks = !wallBetween(x1, y1-OS, x2, y2-OS, 1, 1)
+                      && !wallBetween(x1, y1+OS, x2, y2+OS, 1, 1);
+      }
+      else
+      {
+        perror("ERROR: something went wrong with wall-checks");
+        exit(1);
+      }
+ 
+      if(offsetWorks && !wallBetween(x1, y1, x2, y2, 1, 1))
       {
         edges[num_edges].id1 = vertices[i].id;
         edges[num_edges].x1 = vertices[i].x;
@@ -131,17 +162,14 @@ void Compute()
     fprintf(fp, "%d %d %d %d %d %d\n", edges[i].id1, edges[i].x1, edges[i].y1, edges[i].id2, edges[i].x2, edges[i].y2);
 
   printf("\n\n\n/****************** MAP GENERATION COMPLETE *******************/\n\n\n");
-
-  //exit(0);
 }
 
 //this is where the magic happens (i.e., this loop fires every frame and decides
 //which state the chaser is currently in and acts accordingly)
 AI_loop()
 {
-  //by default, don't thrust, and increment the frame counter
-  thrust(0);
   frameCount = MIN(frameCount + 1, INT_MAX);
+  thrust(0);
  
   switch(state)
   {
@@ -150,7 +178,7 @@ AI_loop()
       break;
 
     case(STATE_COMPUTING):
-      if(frameCount == 100)
+      if(frameCount == 50)
         Compute();
       break;
 

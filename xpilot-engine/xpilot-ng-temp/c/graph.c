@@ -1,3 +1,4 @@
+//Matthew Coffman - June 2018
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -14,7 +15,7 @@ typedef struct vertex
   int y;
 } vertex_t;
 
-//edge structure: a edge has two vertices and a weight
+//edge structure: an edge has two vertices and a weight
 typedef struct edge
 {
   vertex_t v1;
@@ -22,9 +23,9 @@ typedef struct edge
   int weight;
 } edge_t;
 
-//graph structure: a graph comprises a set of unique vertices and edges
-//for convenience, num_v and num_e store the number of vertices and edges
-//currently in the graph
+//graph structure: a graph comprises a set of unique vertices and edges, along
+//with values num_v and num_e store the number of vertices and edges currently
+//in the graph
 typedef struct graph
 {
   vertex_t vertices[MAX_VERTS];
@@ -39,8 +40,7 @@ int distance_formula(int x1, int y1, int x2, int y2)
   return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 }
 
-//determines whether the given vertex is in the given graph, and returns
-//a boolean value
+//determines whether the given vertex is in the given graph
 bool vertex_in_graph(graph_t g, vertex_t v)
 {
   int i;
@@ -52,6 +52,7 @@ bool vertex_in_graph(graph_t g, vertex_t v)
   return false;
 }
 
+//determines whether the given integer is found in the given integer array
 bool found_in_array(int arr[], int n)
 {
   int i;
@@ -97,7 +98,6 @@ graph_t add_edge(graph_t g, vertex_t v1, vertex_t v2)
   int i, w;
   bool found_v1 = vertex_in_graph(g, v1);
   bool found_v2 = vertex_in_graph(g, v2);
-  bool edge_already_exists = false;
 
   if(!found_v1)
   {
@@ -122,23 +122,20 @@ graph_t add_edge(graph_t g, vertex_t v1, vertex_t v2)
     int id1 = g.edges[i].v1.id;
     int id2 = g.edges[i].v2.id;
     if((id1 == v1.id && id2 == v2.id) || (id1 == v2.id && id2 == v1.id))
-      edge_already_exists = true;
+    {
+      printf("An edge between %d and %d already exists!\n", v1.id, v2.id);
+      return g;
+    }
   }
 
-  if(!edge_already_exists)
-  {
-    w = distance_formula(v1.x, v1.y, v2.x, v2.y);
-    g.edges[g.num_e++] = (edge_t) {v1, v2, w};
-  }
-  else
-    printf("An edge between %d and %d already exists!\n", v1.id, v2.id);
+  w = distance_formula(v1.x, v1.y, v2.x, v2.y);
+  g.edges[g.num_e++] = (edge_t) {v1, v2, w};
 
   return g;
 }
 
-//removes an edge between the given vertices, first checking to ensure that
-//such an edge exists, then removing that edge by shifting all the other
-//vertices to the left and overwriting what was previously there
+//removes the edge between the two given vertices from the given graph,
+//after checking to ensure that such an edge exists
 graph_t remove_edge(graph_t g, vertex_t v1, vertex_t v2)
 {
   int i, edge_index = -1;
@@ -177,6 +174,8 @@ graph_t remove_edge(graph_t g, vertex_t v1, vertex_t v2)
   return g;
 }
 
+//removes the given vertex from the given graph, along with all edges that
+//involved the given vertex
 graph_t remove_vertex(graph_t g, vertex_t v)
 {
   int i, vert_index;

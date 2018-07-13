@@ -1,6 +1,6 @@
+//Matthew Coffman - June 2018
 #include <stdio.h>
 #include <stdbool.h>
-//#include "graph.c"
 
 //vertex_status structure: during the execution of breadth-first search, we'll be
 //generating a queue (or in this case just a list) of vertices as we step through
