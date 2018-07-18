@@ -2284,7 +2284,64 @@ int getIdAtXY(int x, int y)
   return -1;
 }
 
-double rand_double()
+//swap two points
+void swapPoints(int *x1ptr, int *y1ptr, int *x2ptr, int *y2ptr)
 {
-  return rand()/(double)RAND_MAX;
+  *x1ptr = *x1ptr + *x2ptr;
+  *x2ptr = *x1ptr - *x2ptr;
+  *x1ptr = *x1ptr - *x2ptr;
+  
+  *y1ptr = *y1ptr + *y2ptr;
+  *y2ptr = *y1ptr - *y2ptr;
+  *y1ptr = *y1ptr - *y2ptr;
 }
+
+//given the endpoints of a line segment (x1, y1, x2, y2), determines whether
+//that line segment intersects the circle with the given center and radius
+bool lineInCircle(int xa, int ya, int xb, int yb, int xc, int yc, int r)
+{
+  int x, y, x1, y1, x2, y2;
+
+  x1 = xa;
+  y1 = ya;
+  x2 = xb;
+  y2 = yb;
+  
+  if(xa != xb)
+  {
+    if(xa > xb)
+    {
+      swapPoints(&x1, &y1, &x2, &y2);
+    }
+
+    for(x = x1; x <= x2; x++)
+    {
+      y = (int)((double)(y2 - y1) / (x2 - x1) * (x - x1) + y1);
+      if(pow(x - xc, 2) + pow(y - yc, 2) <= pow(r, 2))
+      {
+        return true;
+      }
+    }
+  }
+  else
+  {
+    if(ya > yb)
+    {
+      swapPoints(&x1, &y1, &x2, &y2);
+    }
+
+    x = x1;
+
+    for(y = y1; y <= y2; y++)
+    {
+      if(pow(x - xc, 2) + pow(y - yc, 2) <= pow(r, 2))
+      {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+

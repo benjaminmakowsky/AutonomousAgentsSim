@@ -22,9 +22,9 @@ typedef struct vertex_status_d
 //same id.
 int get_vs_index_d(vsd_t *vsptr, int len, int id)
 {
-  int i = 0;
-  while(vsptr[i].id != id && i < len)
-    i++;
+  int i = -1;
+
+  while(++i < len && vsptr[i].id != id);
   
   return i;
 }
@@ -78,7 +78,9 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
       curr_vsi = i;
     }
     else
-      vsptr[i] = (vsd_t) {g.vertices[i].id, -2, INT_MAX, false}; 
+    {
+      vsptr[i] = (vsd_t) {g.vertices[i].id, -2, INT_MAX, false};
+    }
   }
 
   while(!path_found)
@@ -91,10 +93,14 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
       int other_vsi = -1;
       
       if(vsptr[curr_vsi].id == g.edges[i].v1.id)
+      {
         other_vsi = get_vs_index_d(vsptr, g.num_v, g.edges[i].v2.id);
+      }
 
       if(vsptr[curr_vsi].id == g.edges[i].v2.id)
+      {
         other_vsi = get_vs_index_d(vsptr, g.num_v, g.edges[i].v1.id);
+      }
 
       //If the total weight of the other vertex is greater than that of the current
       //vertex plus the edge weight between them, update the other vertex's pred_id
@@ -112,23 +118,33 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
     
     //If we've just gotten done looking at the end vertex, we're done.
     if(vsptr[curr_vsi].id == end.id)
+    {
       path_found = true;
+    }
     else
     {
       //Check if there are any vertices still not looked at.
       min_not_done_vsi = -1;
-      while(++min_not_done_vsi < g.num_v && vsptr[min_not_done_vsi].done && vsptr[min_not_done_vsi].t_weight != INT_MAX);
+      while(++min_not_done_vsi < g.num_v 
+            && vsptr[min_not_done_vsi].done 
+            && vsptr[min_not_done_vsi].t_weight != INT_MAX);
   
       //If all vertices are done, we're done.
       if(min_not_done_vsi == g.num_v)
+      {
         path_found = true;
+      }
       //Otherwise, find the vertex that isn't done and has the lowest total weight
       //currently ascribed to it.
       else
       {
         for(i = 0; i < g.num_v; i++)
+        {
           if(!vsptr[i].done && vsptr[i].t_weight < vsptr[min_not_done_vsi].t_weight)
+          {
             min_not_done_vsi = i;
+          }
+        }
       }
 
       //Update the vertex we're currently looking at.
@@ -137,7 +153,9 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   }
 
   for(i = 0; i < g.num_v + 1; i++)
+  {
     backwards_path[i] = '\0';
+  }
 
   //If the end vertex still hasn't been looked at, there must be no path from
   //start to end.
@@ -168,7 +186,9 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   //Reverse the path so it's in the right order, from start to end, and store these
   //vertex id's to the given path array.
   for(i = 0; i < length(backwards_path); i++)
+  {
     path[i] = backwards_path[length(backwards_path)-i-1];
+  }
 
   //Put a null character at the end of the path, like above.
   path[i] = '\0';
@@ -193,13 +213,17 @@ void dijkstraN(graph_t g, vertex_t start, vertex_t end, int *path, int n, ...)
     dijkstra(g, temp_v1, temp_v2, temppath);
     j = 1;
     while(temppath[j] != '\0')
+    {
       path[index++] = temppath[j++];
+    }
   }
 
   dijkstra(g, temp_v2, end, temppath);
   j = 1;
   while(temppath[j] != '\0')
+  {
     path[index++] = temppath[j++];
+  }
 
   path[index] = '\0';
 
