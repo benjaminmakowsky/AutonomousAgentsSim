@@ -351,6 +351,12 @@ typedef struct player {
     double fov;       /* Unit's directional FOV in degrees */
     int		privs;			/* Player privileges */
 
+    int shot_range;  /* ??? */
+    int shot_radius; /* ??? */
+    int addShotSpeed; /* Additional speed to this unit's bullets */
+    int shotmass; /* Amount of recoil from firing a shot */
+    int shotlife; /* For how long will this bullet last (range) */
+
 #define PRIV_NOAUTOKICK		1
 #define PRIV_AUTOKICKLAST	2
 

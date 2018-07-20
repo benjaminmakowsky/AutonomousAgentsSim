@@ -553,6 +553,12 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
       pl->fov = 60;
+
+      pl->shot_range = 20;
+      pl->shot_radius = 10;
+      pl->addShotSpeed = 0;
+      pl->shotmass = 5;
+      pl->shotlife = 6;
     }
     else if( !strcmp( ship->name,"fixed" ) ){
       pl->power = 0.5;
@@ -569,6 +575,12 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
       pl->fov = 90;
+
+      pl->shot_range = 10;
+      pl->shot_radius = 10;
+      pl->addShotSpeed = 0;
+      pl->shotmass = 10;
+      pl->shotlife = 4;
     }
     else if( !strcmp( ship->name, "drone_tank" ) ){
       pl->power = 0.5;
@@ -585,6 +597,12 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
       pl->fov = 130;
+
+      pl->shot_range = 10;
+      pl->shot_radius = 0;
+      pl->addShotSpeed = 30;
+      pl->shotmass = 0;
+      pl->shotlife = 20;
     }
     else if( !strcmp( ship->name, "infantry" ) ){
       pl->power = 0.5;
@@ -601,6 +619,12 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
       pl->fov = 200;
+
+      pl->shot_range = 10;
+      pl->shot_radius = 10;
+      pl->addShotSpeed = 10;
+      pl->shotmass = 0;
+      pl->shotlife = 10;
     }
     else{
       pl->power = pl->power_s = MAX_PLAYER_POWER;
@@ -615,6 +639,13 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
       pl->fov = 90;
+
+      pl->shot_range = 10;
+      pl->shot_radius = 10;
+      pl->addShotSpeed = 0;
+      pl->shotmass = 1;
+      pl->shotlife = 5;
+
     }
 
     pl->turnspeed = MAX_PLAYER_TURNSPEED;

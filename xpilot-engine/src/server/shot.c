@@ -857,9 +857,11 @@ void Fire_general_shot(int id, int team,
 	if ((shot = Object_allocate()) == NULL)
 	    break;
 
-	shot->life 	= life / minis;
+	//shot->life 	= life / minis;
+  shot->life = pl->shotlife / minis;
 	shot->fuse 	= fuse;
-	shot->mass	= mass / minis;
+	//shot->mass	= mass / minis;
+  shot->mass = pl->shotmass / minis;
 	shot->type	= type;
 	shot->id	= (pl ? pl->id : NO_ID);
 	shot->team	= team;
@@ -972,11 +974,11 @@ void Fire_general_shot(int id, int team,
 	     * If using "NG controls", use float dir when shooting
 	     * straight ahead.
 	     */
-	    shot->vel.x = mv.x + pl->vel.x + pl->float_dir_cos * speed;
-	    shot->vel.y = mv.y + pl->vel.y + pl->float_dir_sin * speed;
+	    shot->vel.x = mv.x + pl->vel.x + pl->float_dir_cos * (speed + pl->addShotSpeed );
+	    shot->vel.y = mv.y + pl->vel.y + pl->float_dir_sin * (speed + pl->addShotSpeed);
 	} else {
-	    shot->vel.x = mv.x + (pl ? pl->vel.x : 0.0) + tcos(ldir) * speed;
-	    shot->vel.y = mv.y + (pl ? pl->vel.y : 0.0) + tsin(ldir) * speed;
+	    shot->vel.x = mv.x + (pl ? pl->vel.x : 0.0) + tcos(ldir) * ( speed + pl->addShotSpeed );
+	    shot->vel.y = mv.y + (pl ? pl->vel.y : 0.0) + tsin(ldir) * ( speed + pl->addShotSpeed );
 	}
 	/* remove constantSpeed */
 	if (pl && options.constantSpeed) {
@@ -997,8 +999,10 @@ void Fire_general_shot(int id, int team,
 	}
 
 	shot->mods  	= mods;
-	shot->pl_range  = pl_range;
-	shot->pl_radius = pl_radius;
+  //shot->pl_range  = pl_range;
+  shot->pl_range  = pl->shot_range;
+	//shot->pl_radius = pl_radius;
+	shot->pl_radius = pl->shot_radius;
 	Cell_add_object(shot);
 
 	mini_objs[fired] = shot;
