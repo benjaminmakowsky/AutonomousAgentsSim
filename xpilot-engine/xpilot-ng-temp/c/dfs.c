@@ -30,15 +30,21 @@ int dfs_helper(graph_t g, int id, int *vis_vert)
 
     //If either vertex has the given id, note the id of the other vertex.
     if(g.edges[i].v1.id == id)
+    {
       next_id = g.edges[i].v2.id;
+    }
 
     if(g.edges[i].v2.id == id)
+    {
       next_id = g.edges[i].v1.id;
+    }
 
     //If we found an edge where one vertex has the given id, and if the other
     //vertex has not been visited yet, return the next id.
     if(next_id != -1 && !found_in_array(vis_vert, next_id))
+    {
       return next_id;
+    }
   }
 
   //If no appropriate edge can be found, return -1.
@@ -95,7 +101,9 @@ void dfs(graph_t g, vertex_t start, vertex_t end, int *path)
   //Initialize the visited_vertices array with null characters, and indicate
   //that the start vertex has been visited: it won't appear elsewhere in the path.
   for(i = 0; i < g.num_v; i++)
+  {
     visited_vertices[i] = '\0';
+  }
   visited_vertices[num_vv++] = start.id;
 
   //Loop as long as we haven't found a path and we haven't looked at all the vertices.
@@ -138,7 +146,9 @@ void dfs(graph_t g, vertex_t start, vertex_t end, int *path)
    
     //If we ever encounter the end vertex, we must have found a path.
     if(currptr->id == end.id)
+    {
       path_found = true;
+    }
   }
 
   currptr = beginptr;

@@ -23,9 +23,13 @@ bool found_in_list(vsb_t *vsptr, int id)
   while(tempptr)
   {
     if(tempptr->id == id)
+    {
       return true;
+    }
     else
+    {
       tempptr = tempptr->nextptr;
+    }
   }
   return false;
 }
@@ -96,7 +100,10 @@ void bfs(graph_t g, vertex_t start, vertex_t end, int *path)
     //If we ever find ourselves inspecting the vertex we're trying to get to,
     //that means we've found a path and we're done searching.
     else if(currptr->id == end.id)
+    {
       path_found = true;
+    }
+    //Otherwise, keep going.
     else
     {
       //Loop through and check every edge in the given graph.
@@ -105,14 +112,20 @@ void bfs(graph_t g, vertex_t start, vertex_t end, int *path)
         int other_id = -1;
 
         if(g.edges[i].v1.id == currptr->id)
+        {
           other_id = g.edges[i].v2.id;
+        }
 
         if(g.edges[i].v2.id == currptr->id)
+        {
           other_id = g.edges[i].v1.id;
+        }
 
         bool other_not_found = false;
         if(other_id != -1)
+        {
           other_not_found = !found_in_list(beginptr, other_id);
+        }
 
         if(other_not_found)
         {
@@ -163,7 +176,4 @@ void bfs(graph_t g, vertex_t start, vertex_t end, int *path)
     beginptr = tempptr;
   }
 }
-
-
-
 

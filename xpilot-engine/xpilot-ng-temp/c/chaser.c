@@ -21,6 +21,29 @@
 #include "bfs.c"
 #include "dfs.c"
 
+//macros
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define SIGN(X) ((X) > 0 ? 1 : ((X) < 0 ? -1 : 0))
+#define FAST thrust(1);
+#define STOP thrust(0);
+#define SLOW (frameCount % 5 < 2) ? thrust(1) : thrust(0)
+
+//global constants
+#define ALIGNMENT_RADIUS 400
+#define BUFFER_SIZE 255
+#define COHESION_RADIUS 400
+#define CORNER_LOOK_AHEAD 75
+#define EPSILON 1E-6
+#define MAX_DEG 360
+#define NUM_AVOIDPTS 10
+#define NUM_FOLLOWERS 20
+#define NUM_LEADERS 20
+#define PAST_INFO_NUM 10
+#define POINT_PRECISION 50
+#define SEPARATION_RADIUS 100
+#define WALL_LOOK_AHEAD 100
+
 //function prototypes
 void getMap();
 void initialize();
@@ -72,6 +95,14 @@ enum TalkMsgs
   MSG_DIED
 };
 
+//stores info on points that should be avoided
+typedef struct avoidpt
+{
+  int x;
+  int y;
+  int r;
+} avoidpt_t;
+
 //stores info relevant to (an enemy's) movement
 typedef struct movementInfo 
 {
@@ -82,28 +113,6 @@ typedef struct movementInfo
   int deg;
 } moveInfo_t;
 
-//macros
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define SIGN(X) ((X) > 0 ? 1 : ((X) < 0 ? -1 : 0))
-#define FAST thrust(1);
-#define STOP thrust(0);
-#define SLOW (frameCount % 5 < 2) ? thrust(1) : thrust(0)
-
-//global constants
-#define ALIGNMENT_RADIUS 400
-#define BUFFER_SIZE 255
-#define COHESION_RADIUS 400
-#define CORNER_LOOK_AHEAD 75
-#define EPSILON 1E-6
-#define MAX_DEG 360
-#define NUM_FOLLOWERS 20
-#define NUM_LEADERS 20
-#define PAST_INFO_NUM 10
-#define POINT_PRECISION 50
-#define SEPARATION_RADIUS 100
-#define WALL_LOOK_AHEAD 100
-
 //global variables
 bool init = false, isLeader = false;				
 int state = STATE_INIT, frameCount = 0;				
@@ -112,7 +121,7 @@ int degToAim, turnLock = 0;
 int wallAvoidVector = -1, pathVector = -1, leaderVector = -1;
 int cohesionVector = -1, separationVector = -1, alignmentVector = -1;
 int interPointId = -1, *corners_list = NULL;
-int preserving = 0, stealthy = 1, mobile = 1, cautious = 0, focused = 0;
+int preserving = 0, stealthy = 1, mobile = 1, cautious = 0, focused = 1, avoidant = 1;
 char *pastMsg = "dummy", *thisMsg = "dummy";
 int aWeight = 0, sWeight = 0, cWeight = 0;
 int fov = 60, rov = 500;
@@ -120,6 +129,7 @@ int *leaders = NULL, *followers = NULL;
 char talkMsgs[][10] = {"leader ", "died "};
 graph_t map;
 moveInfo_t pastMovement;
+avoidpt_t dangerPoints[NUM_AVOIDPTS];
 
 //argv params
 int idx;
@@ -131,7 +141,7 @@ char *filename;
  * Internal Map Generation
  * ***************************************************************************/
 
-/* Open the given file, generate an internal map representation. */
+//Open the given file, generate an internal map representation.
 void getMap()
 {
   FILE *fp = fopen(filename, "r");
@@ -155,9 +165,13 @@ void getMap()
     for(j = 0; j < 3; j++)
     {
       if(!j)
+      {
         tok = strtok(buf, " ");
+      }
       else
+      {
         tok = strtok(NULL, " ");
+      }
 
       a[j] = atoi(tok);
     }
@@ -182,9 +196,13 @@ void getMap()
     for(j = 0; j < 6; j++)
     {
       if(!j)
+      {
         tok = strtok(buf, " ");
+      }
       else
+      {
         tok = strtok(NULL, " ");
+      }
 
       a[j] = atoi(tok);
     }
@@ -203,7 +221,9 @@ void getMap()
 
   corners_list = malloc(sizeof(int) * num_corners);
   for(i = 0; i < num_corners; i++)
+  {
     corners_list[i] = map.vertices[i].id;
+  }
 }
 
 
@@ -236,7 +256,17 @@ void initialize()
     abort();
   }
   for(i = 0; i < tot_idx; i++)
+  {
     leaders[i] = followers[i] = 0;
+  }
+ 
+  //initialize the map to have one point that drones want to avoid
+  for(i = 0; i < NUM_AVOIDPTS; i++)
+  {
+    dangerPoints[i] = (avoidpt_t) {-1, -1, -1};
+  }
+  dangerPoints[0] = (avoidpt_t) {1820, 3780, 500};
+  dangerPoints[1] = (avoidpt_t) {2835, 2870, 300};
 
   //Declare initialized and set state to no enemies.
   init = true;
@@ -255,8 +285,12 @@ int getMPIndex(graph_t g, int id)
   int i;
 
   for(i = 0; i < g.num_v; i++)
+  {
     if(g.vertices[i].id == id)
+    {
       return i;
+    }
+  }
 
   return -1;
 }
@@ -299,7 +333,7 @@ int cpIndexSelf(graph_t g)
 //to the point with the given id.
 void pathToPointId(int alg, graph_t g, int id, int *path)
 {
-  int i, cpToMe = cpIndexSelf(g), x, y, deg, r;
+  int i, cpToMe = cpIndexSelf(g), x, y, deg, r, angleToDest, tempHead;
   vertex_t v1, v2, v3, v4;
   
   v1 = g.vertices[cpToMe];
@@ -325,12 +359,24 @@ void pathToPointId(int alg, graph_t g, int id, int *path)
       break;
 
     case(ALG_DIJKSTRA_EXT):
+      angleToDest = selfAngleToXY(v2.x, v2.y); 
+      tempHead = modm(angleToDest + 60, MAX_DEG);
+      x = selfX() + 1500 * cos(degToRad(tempHead));
+      y = selfY() + 1500 * sin(degToRad(tempHead));
+      v3 = g.vertices[cpIndexXY(g, x, y)];
+      angleToDest = selfAngleToXY(v2.x, v2.y);
+      tempHead = modm(angleToDest + 60, MAX_DEG);
+      x = v3.x + 1500 * cos(degToRad(tempHead));
+      y = v3.y + 1500 * sin(degToRad(tempHead));
+      v4 = g.vertices[cpIndexXY(g, x, y)];
+/*      
       v3 = g.vertices[rand() % g.num_v];
       deg = getAngle(v3.x, v2.x, v3.y, v2.y);
       r = rand() % 40 - 20;
       x = v3.x + (rand() % 1000) - 500;
       y = v3.y + (rand() % 1000) - 500;
       v4 = g.vertices[cpIndexXY(g, x, y)];
+*/
       printf("MIDPOINTS: %3d %3d\n", v3.id, v4.id);
       dijkstraN(g, v1, v2, path, 2, v3, v4);
       break; 
@@ -357,6 +403,10 @@ void goToXY(int alg, graph_t g, int x, int y)
   static int *path = NULL;
   static bool atDest = true;
   static int interX = -1, interY = -1, pathIndex = 0;
+  bool badPath, edgeNotFound; 
+  graph_t tg;
+  int i;
+  vertex_t v1, v2;
 
   if(!path)
   {
@@ -371,9 +421,58 @@ void goToXY(int alg, graph_t g, int x, int y)
   if(atDest)
   {
     if(distForm(selfX(), x, selfY(), y) < POINT_PRECISION)
+    {
       return;
-    
-    pathToPointXY(alg, g, x, y, path);
+    }
+      
+    if(avoidant)
+    {
+      tg = g;
+      do
+      {
+        badPath = false;
+        pathToPointXY(alg, tg, x, y, path);
+        pathIndex = 0;
+        while(pathIndex + 1 < length(path))
+        {
+          edgeNotFound = true;
+          v1 = tg.vertices[getMPIndex(tg, path[pathIndex])];
+          v2 = tg.vertices[getMPIndex(tg, path[pathIndex + 1])];
+        
+          i = -1;
+          while(edgeNotFound && ++i < NUM_AVOIDPTS)
+          {
+            if(dangerPoints[i].x != -1
+               && lineInCircle(v1.x, v1.y, v2.x, v2.y, 
+                  dangerPoints[i].x, dangerPoints[i].y, dangerPoints[i].r))
+            {
+              tg = remove_edge(tg, v1, v2);
+              badPath = true;
+              edgeNotFound = false;
+            }
+          }
+          pathIndex++;
+        }
+      }
+      while(badPath);
+/*
+       tg = g;
+       for(i = 0; i < g.num_e; i++)
+       {
+         vertex_t v1 = g.edges[i].v1;
+         vertex_t v2 = g.edges[i].v2;
+         if(lineInCircle(v1.x, v1.y, v2.x, v2.y, 1820, 3780, 500))
+         {
+           tg = remove_edge(tg, v1, v2);
+         }
+       }
+       pathToPointXY(alg, tg, x, y, path);
+*/
+    }
+    else
+    {
+      pathToPointXY(alg, g, x, y, path);
+    }
 
     atDest = false;    
     pathIndex = 0;
@@ -474,8 +573,7 @@ void wallAvoidance()
     //If we are close to a corner...
     if(cornerClose)
     {
-      //Turn toward the midpoint of the map and fly in that direction, give or take
-      //25 degrees.
+      //Turn somewhere between 65 and 115 degrees from the current heading.
       r = (rand() % 50) - 25;
       wallAvoidVector = modm(currHeadingDeg + 90 + r, MAX_DEG);
 
@@ -517,12 +615,15 @@ void wallAvoidance()
     }
 
     else
+    {
       wallAvoidVector = -1;
+    }
   }
   //If there's a turnLock on, count down.
   else
+  {
     turnLock--;
-
+  }
 }
 
 
@@ -535,7 +636,9 @@ bool nearCornerPeek()
     int y = map.vertices[getMPIndex(map, interPointId)].y;
     if(found_in_array(corners_list, interPointId) 
        && distForm(selfX(), x, selfY(), y) < 200)
+    {
       return true;
+    }
   }
  
   return false;
@@ -553,9 +656,13 @@ void cohesion()
   int avgFriendY = averageFriendRadarY(COHESION_RADIUS, fov);
  
   if(avgFriendX != -1 && avgFriendY != -1)
+  {
     cohesionVector = getAngle(selfX(), avgFriendX, selfY(), avgFriendY);
+  }
   else
+  {
     cohesionVector = -1;
+  }
 }
 
 
@@ -570,9 +677,13 @@ void separation()
   int sepVec = getAngle(selfX(), avgFriendX, selfY(), avgFriendY);
 
   if(avgFriendX != -1 && avgFriendY != -1)
+  {
     separationVector = modm(sepVec + 180, 360);
+  }
   else
+  {
     separationVector = -1;
+  }
 }
 
 
@@ -584,13 +695,13 @@ void alignment()
 {
   alignmentVector = avgFriendlyDir(ALIGNMENT_RADIUS, fov); 
 }
-
+ 
 
 /*****************************************************************************
  * No Enemy Flying (Controller)
  * ***************************************************************************/
 
-//TODO: find a way to balance wall avoidance, neighbor cohesion, and other vectors
+//TODO: find a way to balance wa ll avoidance, neighbor cohesion, and other vectors
 void noEnemyFlying()
 {
   int numVec = 0, totalVec = 0;
@@ -602,16 +713,15 @@ void noEnemyFlying()
 
   if(focused)
   {
-    if(distForm(selfX(), 2500, selfY(), 500) < 50)
-      goToRandom(ALG_DIJKSTRA, map);
-    else
-      goToXY(ALG_DIJKSTRA_EXT, map, 2500, 500);
+    goToId(ALG_DIJKSTRA, map, 94);
 
     degToAim = pathVector;
   }
 
   if(wallAvoidVector != -1)
+  {
     degToAim = wallAvoidVector;
+  }
   else if(!isLeader)
   { 
     if(alignmentVector != -1)
@@ -633,7 +743,9 @@ void noEnemyFlying()
     }
 
     if(numVec > 0)
+    {
       degToAim = totalVec / numVec;
+    }
   }
 
   turnToDeg(degToAim);
@@ -669,13 +781,19 @@ void updateEnemyPast(int id, int x, int y, double spd, int deg)
    
   //if one of these component values is -1, replace it with the last meaningful entry
   if(id != -1) 
+  {
     pastMovement.id = id;
+  }
 
   if(deg != -1) 
+  {
     pastMovement.deg = deg;
+  }
 
   if(abs(spd + 1) > EPSILON) 
+  {
     pastMovement.spd = spd;
+  }
 }
 
 
@@ -695,13 +813,17 @@ void updateAim(int dist)
   headingDiff = abs(enemyHeadingToMe - enemyHeading);
   
   if(headingDiff < 30 || headingDiff > 330)
+  {
     distInFront = 0;
-
+  }
   else if(pastMovement.spd < 3)
+  {
     distInFront = 0;
-
+  }
   else
+  {
     distInFront = MIN(2 * (dist - (dist % 50)), 300);
+  }
 
   //compute the new target location and turn
   int newX = pastMovement.x + (distInFront * cos(degToRad(pastMovement.deg))); 
@@ -776,9 +898,13 @@ void runAway()
   wallAvoidance();
 
   if(wallAvoidVector != -1)
+  {
     degToAim = wallAvoidVector;
+  }
   else
+  {
     degToAim = selfAngleToXY(newX, newY);
+  }
 
   turnToDeg(degToAim);
   thrust(1);
@@ -802,9 +928,13 @@ void stealth()
 void enemySpotted()
 {
   if(preserving)
+  {
     runAway();
+  }
   else if(stealthy)
+  {
     stealth(); 
+  }
   else
   {
     int x = getNearestEnemyX();
@@ -882,6 +1012,11 @@ void handleMsg()
       tok = strtok(NULL, " ");
       rov = atoi(tok);
     }
+    else if(!strcmp(tok, "avoidant"))
+    {
+      tok = strtok(NULL, " ");
+      avoidant = atoi(tok);
+    }
     else if(!strcmp(tok, "leader"))
     {
       tok = strtok(NULL, " ");
@@ -892,10 +1027,12 @@ void handleMsg()
         while(leaders[++i]);
         leaders[i] = atoi(tok);
       }
+/*
       printf("ALL LEADERS CURRENTLY\n");
       for(i = 0; i < NUM_LEADERS; i++)
         if(leaders[i])
           printf("%d\n", leaders[i]);
+*/
     } 
   }
 }
@@ -931,15 +1068,21 @@ AI_loop()
 
   //if there is an enemy closeby on the map, engage
   if(radarEnemyInView(fov, rov) || enemySpottedFC)
+  {
     state = STATE_ENEMY_SPOTTED;
+  }
 
   //check if we are dead
   if(!selfAlive())
+  {
     state = STATE_DEAD;
+  }
 
   //if we haven't initialized yet
   if(!init)
+  {
     state = STATE_INIT;
+  }
 
   thrust(0);
  
@@ -952,9 +1095,13 @@ AI_loop()
     case(STATE_ENEMY_SPOTTED):
       enemySpotted();
       if(enemySpottedFC == 0)
+      {
         enemySpottedFC = 56;
+      }
       else
+      {
         enemySpottedFC--;
+      }
       break;
 
     case(STATE_NOENEMY):

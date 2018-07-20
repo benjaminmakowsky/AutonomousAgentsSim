@@ -100,10 +100,14 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
       int other_vsi = -1;
       
       if(vsptr[curr_vsi].v.id == g.edges[i].v1.id)
+      {
         other_vsi = get_vs_index_a(vsptr, g.num_v, g.edges[i].v2.id);
+      }
 
       if(vsptr[curr_vsi].v.id == g.edges[i].v2.id)
+      {
         other_vsi = get_vs_index_a(vsptr, g.num_v, g.edges[i].v1.id);
+      }
 
       if(other_vsi != -1 && other_vsi != g.num_v)
       {
@@ -124,7 +128,9 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
 
     //If we're currently looking at the end vertex, we've found a path!
     if(vsptr[curr_vsi].v.id == end.id)
+    {
       path_found = true;
+    }
 
     //To carry on with the algorithm, find the vertex that currently is not done
     //and has the smallest f value.
@@ -133,14 +139,20 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
 
     //If we can't find any vertex that isn't done, we must be done looking.
     if(min_not_done_vsi == g.num_v)
+    {
       path_found = true;
+    }
 
     //Carrying on from before, find the not-done vertex with minimum f value.
     if(!path_found)
     {
       for(i = 0; i < g.num_v; i++)
+      {
         if(!vsptr[i].done && vsptr[i].f < vsptr[min_not_done_vsi].f)
+        {
           min_not_done_vsi = i;
+        }
+      }
     }
 
     //Update the vertex we're currently looking at.
@@ -165,6 +177,8 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
 
   //Then, store the path in the given path variable, this time in forward order.
   for(i = 0; i < length(backwards_path); i++)
+  {
     path[i] = backwards_path[length(backwards_path)-i-1];
+  }
   path[i] = '\0';
 }
