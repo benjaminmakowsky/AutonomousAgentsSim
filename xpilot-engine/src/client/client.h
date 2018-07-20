@@ -300,7 +300,7 @@ typedef struct {
 } ball_t;
 
 typedef struct {
-    short		x, y, id, dir;
+    short		x, y, id, dir, armor;
     u_byte		shield, cloak, eshield;
     u_byte		phased, deflector;
     double fuel;

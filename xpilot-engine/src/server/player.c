@@ -369,6 +369,10 @@ void Player_remove_tank(player_t *pl, int which_tank)
 
 void Player_hit_armor(player_t *pl)
 {
+    if(pl->item[ITEM_ARMOR] > 0 ){
+      pl->item[ITEM_ARMOR]--;
+    }
+
     if ((--pl->armor) <= 0){
       CLR_BIT(pl->have, HAS_ARMOR);
     }
@@ -485,6 +489,12 @@ void Player_init_items(player_t *pl )
     for (i = 0; i < NUM_ITEMS; i++) {
 	if (i == ITEM_FUEL || i == ITEM_TANK)
 	    pl->item[i] = 0;
+  else if(i == ITEM_ARMOR ){
+    pl->item[i] = pl->armor;
+    if( pl->armor > 0 ){
+      SET_BIT(pl->have, HAS_ARMOR);
+    }
+  }
 	else
 	    pl->item[i] = world->items[i].initial;
     }
@@ -495,8 +505,9 @@ void Player_init_items(player_t *pl )
      * Remember the amount of initial items. This way we can
      * later figure out what items the player has picked up.
      */
-    for (i = 0; i < NUM_ITEMS; i++)
-	pl->initial_item[i] = pl->item[i];
+    for (i = 0; i < NUM_ITEMS; i++){
+	    pl->initial_item[i] = pl->item[i];
+    }
 }
 
 int Init_player(int ind, shipshape_t *ship, int type)
@@ -601,7 +612,6 @@ int Init_player(int ind, shipshape_t *ship, int type)
     pl->maxturnsps = MAX_SERVER_FPS;
 
     Player_init_items(pl);
-    SET_BIT(pl->have, HAS_ARMOR);
 
     if (options.allowShipShapes && ship)
 	pl->ship = ship;

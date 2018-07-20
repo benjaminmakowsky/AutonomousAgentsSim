@@ -470,8 +470,10 @@ static inline bool Player_has_afterburner(player_t *pl)
  */
 static inline bool Player_has_armor(player_t *pl)
 {
-    if (BIT(pl->have, HAS_ARMOR))
-	return true;
+    if (pl->item[ITEM_ARMOR] > 0 ){
+    //if (BIT(pl->have, HAS_ARMOR)){
+	    return true;
+    }
     return false;
 }
 

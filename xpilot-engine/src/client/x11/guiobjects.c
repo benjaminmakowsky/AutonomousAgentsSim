@@ -1018,10 +1018,8 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
 	} else {
       if( ship->num_points == 3 ){
         ship_shape = BM_QUAD;
-        printf( "QUAD\n" );
       }
       else if( !strcmp( ship->name, "quad" ) ){
-        printf( "QUAD\n" );
         ship_shape = BM_QUAD;
       }
       else if( !strcmp( ship->name, "fixed" ) ){
@@ -1031,23 +1029,18 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
         ship_shape = BM_FIXED;
       }
       else if( !strcmp( ship->name, "drone_tank" ) ){
-        printf( "TANK\n" );
         ship_shape = BM_TANK;
       }
       else if( !strcmp( ship->name, "infantry" ) ){
-        printf( "INFANTRY\n" );
         ship_shape = BM_INFANTRY;
       }
       else if (ship_color == BLUE){
-        printf( "BM_SHIP_FRIEND\n" );
 		    ship_shape = BM_SHIP_FRIEND;
       }
 	    else if (self != NULL && self->id != id){
-        printf( "BM_SHIP_ENEMY\n" );
 		    ship_shape = BM_SHIP_ENEMY;
       }
 	    else{
-        printf( "BM_SHIP_SELF\n" );
 		    ship_shape = BM_SHIP_SELF;
       }
       #ifdef NOPRINT
