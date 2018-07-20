@@ -348,6 +348,7 @@ typedef struct player {
     int idxInShape;       /* Turn to spawn relative to units in shape */ 
     bool flying;         /* If true, has no wall collision */
     double sight_range;  /* Modifier for unit sight range */
+    double fov;       /* Unit's directional FOV in degrees */
     int		privs;			/* Player privileges */
 
 #define PRIV_NOAUTOKICK		1

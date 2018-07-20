@@ -303,7 +303,7 @@ typedef struct {
     short		x, y, id, dir, armor;
     u_byte		shield, cloak, eshield;
     u_byte		phased, deflector;
-    double fuel;
+    double fuel, fov;
 } ship_t;
 
 typedef struct {

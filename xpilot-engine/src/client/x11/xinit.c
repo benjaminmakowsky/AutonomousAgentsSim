@@ -426,9 +426,10 @@ int Init_top(void)
     }
 
     /*
-     * Create item bitmaps
+     * Create item bitmaps, but only for those < 21.
+     * 21 and onward are custom items that don't have bitmaps.
      */
-    for (i = 0; i < NUM_ITEMS; i++)
+    for (i = 0; i < NUM_ITEMS && i < 21; i++)
 	itemBitmaps[i]
 	    = XCreateBitmapFromData(dpy, topWindow,
 				    (char *)itemBitmapData[i].data,
