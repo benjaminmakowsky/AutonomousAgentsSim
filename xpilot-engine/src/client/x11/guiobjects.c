@@ -730,23 +730,19 @@ static int Gui_calculate_ship_color(int id, other_t *other)
     int ship_color = WHITE;
 
     if (BIT(Setup->mode, TEAM_PLAY)
-	&& eyesId != id
+  && self->id != id 
 	&& other != NULL
 	&& eyeTeam == other->team) {
-	/* Paint teammates and allies ships with last life in teamLWColor */
-	if (BIT(Setup->mode, LIMITED_LIVES)
-	    && (other->life == 0))
-	    ship_color = teamLWColor;
-	else
-	    ship_color = teamShipColor;
-    }
-
+	// Paint teammates and allies as blue
+	    ship_color = BLUE;
+  }
+/*
     if (eyes != NULL
 	&& eyesId != id
 	&& other != NULL
 	&& eyes->alliance != ' '
 	&& eyes->alliance == other->alliance) {
-	/* Paint teammates and allies ships with last life in teamLWColor */
+	// Paint teammates and allies ships with last life in teamLWColor //
 	if (BIT(Setup->mode, LIMITED_LIVES)
 	    && (other->life == 0))
 	    ship_color = teamLWColor;
@@ -760,32 +756,32 @@ static int Gui_calculate_ship_color(int id, other_t *other)
     if (roundDelay > 0 && ship_color == WHITE)
 	ship_color = RED;
 
-    /* Check for team color */
+    // Check for team color //
     if (other && BIT(Setup->mode, TEAM_PLAY)) {
 	int team_color = Team_color(other->team);
 	if (team_color)
 	    return team_color;
     }
 
-    /* Vato color hack start, edited by mara & kps */
+    // Vato color hack start, edited by mara & kps //
     if (BIT(Setup->mode, LIMITED_LIVES)) {
-	/* Paint your ship in selfLWColor when on last life */
+	// Paint your ship in selfLWColor when on last life //
 	if (eyes != NULL
 	    && eyes->id == id
 	    && eyes->life == 0) {
 	    ship_color = selfLWColor;
 	}
-
-	/* Paint enemy ships with last life in enemyLWColor */
-	if (eyes != NULL
-	    && eyes->id != id
+*/
+	// Paint enemy ships with last life in enemyLWColor //
+else if(
+	    self->id != id
 	    && other != NULL
-	    && eyeTeam != other->team
-	    && other->life == 0) {
-	    ship_color = enemyLWColor;
+	    && eyeTeam != other->team ) {
+	    ship_color = RED;
 	}
-    }
-    /* Vato color hack end */
+    
+    // Vato color hack end //
+
 
     return ship_color;
 }
@@ -1020,19 +1016,63 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
         ship_shape = BM_QUAD;
       }
       else if( !strcmp( ship->name, "quad" ) ){
-        ship_shape = BM_QUAD;
+        if( ship_color == WHITE ){
+          ship_shape = BM_QUAD;
+        }
+        else if( ship_color == RED ){
+          ship_shape = BM_QUAD_ENEMY;
+        }
+        else if( ship_color == BLUE ){
+          ship_shape = BM_QUAD_FRIEND;
+        }
+        else{
+          printf("Unknown quad ship: %d - %d\n", id, ship_color ); 
+        }
       }
       else if( !strcmp( ship->name, "fixed" ) ){
-        #ifdef NOPRINT
-        printf( "FIXED\n" );
-        #endif
-        ship_shape = BM_FIXED;
+        if( ship_color == WHITE ){
+          ship_shape = BM_FIXED;
+        }
+        else if ( ship_color == RED ){
+          ship_shape = BM_FIXED_ENEMY;
+        }
+        else if ( ship_color == BLUE ){
+          ship_shape = BM_FIXED_FRIEND;
+        }
+        else{
+          printf("Unknown fixed ship: %d - %d\n", id, ship_color ); 
+        }
+
       }
       else if( !strcmp( ship->name, "drone_tank" ) ){
-        ship_shape = BM_TANK;
+        if( ship_color == WHITE ){
+          ship_shape = BM_TANK;
+        }
+        else if ( ship_color == RED ){
+          ship_shape = BM_TANK_ENEMY;
+        }
+        else if ( ship_color == BLUE ){
+          ship_shape = BM_TANK_FRIEND;
+        }
+        else{
+          printf("Unknown drone_tank ship: %d - %d\n", id, ship_color ); 
+        }
+
       }
       else if( !strcmp( ship->name, "infantry" ) ){
-        ship_shape = BM_INFANTRY;
+        if( ship_color == WHITE ){
+          ship_shape = BM_INFANTRY;
+        }
+        else if ( ship_color == RED ){
+          ship_shape = BM_INFANTRY_ENEMY;
+        }
+        else if ( ship_color == BLUE ){
+          ship_shape = BM_INFANTRY_FRIEND;
+        }
+        else{
+          printf("Unknown infantry ship: %d - %d\n", id, ship_color ); 
+        }
+
       }
       else if (ship_color == BLUE){
 		    ship_shape = BM_SHIP_FRIEND;

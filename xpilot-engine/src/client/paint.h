@@ -34,7 +34,7 @@
 #endif
 
 /* constants begin */
-#define MAX_COLORS		16	/* Max. switched colors ever */
+#define MAX_COLORS		17	/* Max. switched colors ever */
 #define MAX_COLOR_LEN		32	/* Max. length of a color name */
 
 #define MIN_HUD_SIZE		90	/* Size/2 of HUD lines */

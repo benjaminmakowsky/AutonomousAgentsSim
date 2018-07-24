@@ -45,24 +45,26 @@
 #define XP_COLOR2		"#4E7CFF"		/* "xpblue" */
 #define XP_COLOR3		"#FF3A27"		/* "xpred" */
 #define XP_COLOR4		"#33BB44"		/* "xpgreen" */
-#define XP_COLOR5		"#992200"
-#define XP_COLOR6		"#BB7700"
-#define XP_COLOR7		"#EE9900"
-#define XP_COLOR8		"#002299"
-#define XP_COLOR9		"#CC4400"
-#define XP_COLOR10		"#DD8800"
+#define XP_COLOR5		"#992200"   /* darkish-red */
+#define XP_COLOR6		"#BB7700"   /* light brown */
+#define XP_COLOR7		"#EE9900"   /* Orange */
+#define XP_COLOR8		"#002299"   /* King blue */
+#define XP_COLOR9		"#CC4400"   /* light darkish-red */
+#define XP_COLOR10		"#DD8800" /* light light brown */
 #define XP_COLOR11		"#FFBB11"		/* "xpyellow" */
-#define XP_COLOR12		"#9F9F9F"
-#define XP_COLOR13		"#5F5F5F"
-#define XP_COLOR14		"#DFDFDF"
-#define XP_COLOR15		"#202020"
+#define XP_COLOR12		"#9F9F9F"   /* gray */
+#define XP_COLOR13		"#5F5F5F"   /* dark gray */
+#define XP_COLOR14		"#DFDFDF"   /* light gray */
+#define XP_COLOR15		"#202020"   /* Charcoal */
+#define XP_COLOR16   "#9C08DD"   /* Leidos Purple */
 
 static char		color_names[MAX_COLORS][MAX_COLOR_LEN];
 static const char	*color_defaults[MAX_COLORS] = {
     XP_COLOR0,  XP_COLOR1,  XP_COLOR2,  XP_COLOR3,
     XP_COLOR4,  XP_COLOR5,  XP_COLOR6,  XP_COLOR7,
     XP_COLOR8,  XP_COLOR9,  XP_COLOR10, XP_COLOR11,
-    XP_COLOR12, XP_COLOR13, XP_COLOR14, XP_COLOR15
+    XP_COLOR12, XP_COLOR13, XP_COLOR14, XP_COLOR15,
+    XP_COLOR16
 };
 
 char		visualName[MAX_VISUAL_NAME];
