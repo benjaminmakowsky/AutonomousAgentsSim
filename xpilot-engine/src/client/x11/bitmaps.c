@@ -85,7 +85,8 @@ xp_pixmap_t object_pixmaps[] = {
     XP_PIXMAP_INITIALIZER("tank_e.ppm", 128)  ,      
     XP_PIXMAP_INITIALIZER("infantry.ppm", 128),        
     XP_PIXMAP_INITIALIZER("infantry_f.ppm", 128),   // 55        
-    XP_PIXMAP_INITIALIZER("infantry_e.ppm", 128)        
+    XP_PIXMAP_INITIALIZER("infantry_e.ppm", 128),        
+    XP_PIXMAP_INITIALIZER("bullet_red.ppm", -16)        
 };
 
 xp_pixmap_t *pixmaps = 0;

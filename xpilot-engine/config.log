@@ -1701,7 +1701,7 @@ configure:8913: $? = 0
 configure:8931: result: yes
 configure:8938: checking for _doprnt
 configure:8994: gcc -o conftest -g -O2   conftest.c -lexpat -lz -lm  >&5
-/tmp/ccn3Fvdg.o: In function `main':
+/tmp/ccL8h6sJ.o: In function `main':
 /home/sanchezri1/Downloads/xpilot-le/xpilot-le/xpilot-engine/conftest.c:109: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:9000: $? = 1
@@ -1936,7 +1936,7 @@ configure:9157: $? = 0
 configure:9175: result: yes
 configure:9095: checking for strlcat
 configure:9151: gcc -o conftest -g -O2   conftest.c -lexpat -lz -lm  >&5
-/tmp/ccv0QSfE.o: In function `main':
+/tmp/ccSiRspi.o: In function `main':
 /home/sanchezri1/Downloads/xpilot-le/xpilot-le/xpilot-engine/conftest.c:130: undefined reference to `strlcat'
 collect2: error: ld returned 1 exit status
 configure:9157: $? = 1
@@ -2077,7 +2077,7 @@ configure: failed program was:
 configure:9175: result: no
 configure:9095: checking for strlcpy
 configure:9151: gcc -o conftest -g -O2   conftest.c -lexpat -lz -lm  >&5
-/tmp/ccrLRQMJ.o: In function `main':
+/tmp/ccsEIlrl.o: In function `main':
 /home/sanchezri1/Downloads/xpilot-le/xpilot-le/xpilot-engine/conftest.c:130: undefined reference to `strlcpy'
 collect2: error: ld returned 1 exit status
 configure:9157: $? = 1

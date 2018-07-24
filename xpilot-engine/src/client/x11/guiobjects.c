@@ -378,6 +378,8 @@ void Gui_paint_fastshot(int color, int x, int y)
     if (color == 0)
 	return;
 
+    color = RED;
+
     if (!texturedObjects) {
         int z = shotSize/2;
 
@@ -402,7 +404,7 @@ void Gui_paint_fastshot(int color, int x, int y)
 	int s_size = MIN(shotSize, 16);
 	int z = s_size / 2;
 
-	Bitmap_paint(drawPixmap, BM_BULLET, WINSCALE(x) - z,
+	Bitmap_paint(drawPixmap, BM_BULLET_RED, WINSCALE(x) - z,
 		     WINSCALE(y) - z, s_size - 1);
     }
 }
