@@ -2177,25 +2177,25 @@ bool radarFriendInView(int fov, int rov)
   return radarEFInView(fov, rov, RadarFriend);
 }
 
-//returns average x coordinate (in pixels) of all friends within a certain radius
-int averageFriendRadarX(int r, int fov) 
+//returns average x coordinate (in pixels) of all friends/enemies within a certain radius
+int averageEFRadarX(int r, int fov, int ef) 
 {      
   int i, x = 0, count = 0;
-  int friendX, friendY;  
+  int efX, efY;  
 
   //go through each ship
   for(i = 1; i < num_radar; i++) 		 
   {       
-    //if they are a friend
-    if(radar_ptr[i].type == RadarFriend)
+    //if they are a friend/enemy
+    if(radar_ptr[i].type == ef)
     {
-      friendX = radarToPixelX(radar_ptr[i].x);
-      friendY = radarToPixelY(radar_ptr[i].y);
+      efX = radarToPixelX(radar_ptr[i].x);
+      efY = radarToPixelY(radar_ptr[i].y);
       
       //if they are in range
-      if(inSight(friendX, friendY, fov, r))
+      if(inSight(efX, efY, fov, r))
       {  
-        //get friend's x radar coordinate and add it to total
+        //get friend/enemy's x radar coordinate and add it to total
         x += radar_ptr[i].x;
         count++;
       }
@@ -2212,32 +2212,45 @@ int averageFriendRadarX(int r, int fov)
   return radarToPixelX((int)(x / count));
 }
 
-//returns average y coordinate (in pixels) of all friends
-int averageFriendRadarY(int r, int fov) 
+//returns average x coordinate (in pixels) of all friends within a certain radius
+int averageFriendRadarX(int r, int fov)
+{
+  return averageEFRadarX(r, fov, RadarFriend);
+}
+
+//returns average x coordinate (in pixels) of all enemies within a certain radius
+int averageEnemyRadarX(int r, int fov)
+{
+  return averageEFRadarX(r, fov, RadarEnemy);
+}
+
+
+//returns average y coordinate (in pixels) of all friends/enemies in the field of view
+int averageEFRadarY(int r, int fov, int ef) 
 {      
   int i, y = 0, count = 0;
-  int friendX, friendY;
+  int efX, efY;
  
   //go through each ship
   for(i = 1;i < num_radar;i++) 		 
   {        
-    //if they are a friend 
-    if(radar_ptr[i].type == RadarFriend)
+    //if they are a friend/enemy 
+    if(radar_ptr[i].type == ef)
     {
-      friendX = radarToPixelX(radar_ptr[i].x);
-      friendY = radarToPixelY(radar_ptr[i].y);
+      efX = radarToPixelX(radar_ptr[i].x);
+      efY = radarToPixelY(radar_ptr[i].y);
       
       //if they are in range
-      if(inSight(friendX, friendY, fov, r)) 
+      if(inSight(efX, efY, fov, r)) 
       {  
-        //get friend's y radar coordinate and add it to total
+        //get friend/enemy's y radar coordinate and add it to total
         y += radar_ptr[i].y;
         count++;
       }
     }
   }
 
-  //If so, there are no friends (alive). 
+  //If so, there are no friends/enemies (alive). 
   if(!count) 		
   {
     return -1;
@@ -2247,6 +2260,19 @@ int averageFriendRadarY(int r, int fov)
   return radarToPixelY((int)(y / count));
 }
 
+//returns average y coordinate (in pixels) of all friends in the field of view
+int averageFriendRadarY(int r, int fov)
+{
+  return averageEFRadarY(r, fov, RadarFriend);
+}
+
+//returns average y coordinate (in pixels) of all enemies in the field of view
+int averageEnemyRadarY(int r, int fov)
+{
+  return averageEFRadarY(r, fov, RadarEnemy);
+}
+
+//returns average heading (in deg) of all friends in view
 int avgFriendlyDir(int r, int fov)
 {
   int i, d;
