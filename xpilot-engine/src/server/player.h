@@ -348,7 +348,14 @@ typedef struct player {
     int idxInShape;       /* Turn to spawn relative to units in shape */ 
     bool flying;         /* If true, has no wall collision */
     double sight_range;  /* Modifier for unit sight range */
+    double fov;       /* Unit's directional FOV in degrees */
     int		privs;			/* Player privileges */
+
+    int shot_range;  /* ??? */
+    int shot_radius; /* ??? */
+    int addShotSpeed; /* Additional speed to this unit's bullets */
+    int shotmass; /* Amount of recoil from firing a shot */
+    int shotlife; /* For how long will this bullet last (range) */
 
 #define PRIV_NOAUTOKICK		1
 #define PRIV_AUTOKICKLAST	2
@@ -470,8 +477,10 @@ static inline bool Player_has_afterburner(player_t *pl)
  */
 static inline bool Player_has_armor(player_t *pl)
 {
-    if (BIT(pl->have, HAS_ARMOR))
-	return true;
+    if (pl->item[ITEM_ARMOR] > 0 ){
+    //if (BIT(pl->have, HAS_ARMOR)){
+	    return true;
+    }
     return false;
 }
 

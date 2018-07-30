@@ -237,8 +237,8 @@ void Set_initial_resources(void)
 	HAS_TRACTOR_BEAM |
 	HAS_AUTOPILOT |
 	HAS_DEFLECTOR |
-	HAS_MIRROR |
-	HAS_ARMOR);
+	HAS_MIRROR ); 
+  //| HAS_ARMOR);
 
     if (world->items[ITEM_CLOAK].initial > 0){
 	SET_BIT(DEF_HAVE, HAS_CLOAKING_DEVICE);
@@ -258,8 +258,8 @@ void Set_initial_resources(void)
 	SET_BIT(DEF_HAVE, HAS_DEFLECTOR);
     if (world->items[ITEM_MIRROR].initial > 0)
 	SET_BIT(DEF_HAVE, HAS_MIRROR);
-    if (world->items[ITEM_ARMOR].initial > 0)
-	SET_BIT(DEF_HAVE, HAS_ARMOR);
+    //if (world->items[ITEM_ARMOR].initial > 0)
+	//SET_BIT(DEF_HAVE, HAS_ARMOR);
 }
 
 

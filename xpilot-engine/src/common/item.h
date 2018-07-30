@@ -49,7 +49,8 @@ typedef enum Item {
     ITEM_PHASING		= 18,
     ITEM_MIRROR			= 19,
     ITEM_ARMOR			= 20,
-    NUM_ITEMS			= 21
+    ITEM_FOV        = 21,
+    NUM_ITEMS			= 22
 } Item_t;
 
 #define ITEM_BIT_FUEL			(1U << ITEM_FUEL)
@@ -73,6 +74,7 @@ typedef enum Item {
 #define ITEM_BIT_PHASING		(1U << ITEM_PHASING)
 #define ITEM_BIT_MIRROR			(1U << ITEM_MIRROR)
 #define ITEM_BIT_ARMOR			(1U << ITEM_ARMOR)
+#define ITEM_BIT_FOV			(1U << ITEM_FOV)
 
 /* Each item is ITEM_SIZE x ITEM_SIZE */
 #define ITEM_SIZE		16

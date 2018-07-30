@@ -369,6 +369,10 @@ void Player_remove_tank(player_t *pl, int which_tank)
 
 void Player_hit_armor(player_t *pl)
 {
+    if(pl->item[ITEM_ARMOR] > 0 ){
+      pl->item[ITEM_ARMOR]--;
+    }
+
     if ((--pl->armor) <= 0){
       CLR_BIT(pl->have, HAS_ARMOR);
     }
@@ -483,8 +487,18 @@ void Player_init_items(player_t *pl )
      * Give player an initial set of items.
      */
     for (i = 0; i < NUM_ITEMS; i++) {
-	if (i == ITEM_FUEL || i == ITEM_TANK)
+	if (i == ITEM_FUEL || i == ITEM_TANK){
 	    pl->item[i] = 0;
+  }
+  else if(i == ITEM_ARMOR ){
+    pl->item[i] = pl->armor;
+    if( pl->armor > 0 ){
+      SET_BIT(pl->have, HAS_ARMOR);
+    }
+  }
+  else if( i == ITEM_FOV ){
+    pl->item[i] = pl->fov;
+  }
 	else
 	    pl->item[i] = world->items[i].initial;
     }
@@ -495,8 +509,9 @@ void Player_init_items(player_t *pl )
      * Remember the amount of initial items. This way we can
      * later figure out what items the player has picked up.
      */
-    for (i = 0; i < NUM_ITEMS; i++)
-	pl->initial_item[i] = pl->item[i];
+    for (i = 0; i < NUM_ITEMS; i++){
+	    pl->initial_item[i] = pl->item[i];
+    }
 }
 
 int Init_player(int ind, shipshape_t *ship, int type)
@@ -537,6 +552,13 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->velocity = 3;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
+      pl->fov = 60;
+
+      pl->shot_range = 20;
+      pl->shot_radius = 10;
+      pl->addShotSpeed = 0;
+      pl->shotmass = 5;
+      pl->shotlife = 6;
     }
     else if( !strcmp( ship->name,"fixed" ) ){
       pl->power = 0.5;
@@ -552,6 +574,13 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->velocity = 7;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
+      pl->fov = 90;
+
+      pl->shot_range = 10;
+      pl->shot_radius = 10;
+      pl->addShotSpeed = 0;
+      pl->shotmass = 10;
+      pl->shotlife = 4;
     }
     else if( !strcmp( ship->name, "drone_tank" ) ){
       pl->power = 0.5;
@@ -567,6 +596,13 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->velocity = 0.1;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
+      pl->fov = 130;
+
+      pl->shot_range = 10;
+      pl->shot_radius = 0;
+      pl->addShotSpeed = 30;
+      pl->shotmass = 0;
+      pl->shotlife = 20;
     }
     else if( !strcmp( ship->name, "infantry" ) ){
       pl->power = 0.5;
@@ -582,6 +618,13 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->velocity = 0.1;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
+      pl->fov = 200;
+
+      pl->shot_range = 10;
+      pl->shot_radius = 10;
+      pl->addShotSpeed = 10;
+      pl->shotmass = 0;
+      pl->shotlife = 10;
     }
     else{
       pl->power = pl->power_s = MAX_PLAYER_POWER;
@@ -595,13 +638,20 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->velocity = 3;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
+      pl->fov = 90;
+
+      pl->shot_range = 10;
+      pl->shot_radius = 10;
+      pl->addShotSpeed = 0;
+      pl->shotmass = 1;
+      pl->shotlife = 5;
+
     }
 
     pl->turnspeed = MAX_PLAYER_TURNSPEED;
     pl->maxturnsps = MAX_SERVER_FPS;
 
     Player_init_items(pl);
-    SET_BIT(pl->have, HAS_ARMOR);
 
     if (options.allowShipShapes && ship)
 	pl->ship = ship;

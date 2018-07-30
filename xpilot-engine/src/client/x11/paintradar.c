@@ -147,11 +147,15 @@ static void Paint_objects_radar(void)
 
 	color = WHITE;
 	if (radar_ptr[i].type == RadarFriend) {
+      color = BLUE;
 	    if (maxColors > 4)
-		color = 4;
+		color = BLUE;
 	    else if (!colorSwitch)
-		color = RED;
+		color = BLUE;
 	}
+  if(radar_ptr[i].type == RadarEnemy && i != 0 ){
+    color = RED;
+  }
 	XSetForeground(dpy, radarGC, colors[color].pixel);
 	x = radar_ptr[i].x - s / 2 - slidingradar_x;
 	y = RadarHeight - radar_ptr[i].y - 1 - s / 2 - slidingradar_y;

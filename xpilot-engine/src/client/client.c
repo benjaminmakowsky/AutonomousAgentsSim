@@ -26,6 +26,8 @@
 #include "xpclient.h"
 #include "client.h"
 
+#define ITEM_ARMOR  20
+
 client_data_t	clData = { 0, };
 
 char	*geometry;
@@ -1806,6 +1808,8 @@ int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
     t.phased = phased;
     t.deflector = deflector;
     t.fuel = fuelSum;
+    t.armor = numItems[ITEM_ARMOR];
+    t.fov = numItems[ITEM_FOV];
     STORE(ship_t, ship_ptr, num_ship, max_ship, t);
 
     /* if we see a ship in the center of the display, we may be watching

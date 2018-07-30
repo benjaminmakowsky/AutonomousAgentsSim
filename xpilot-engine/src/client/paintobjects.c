@@ -315,14 +315,12 @@ static void Paint_lasers(void)
 static void Paint_fastshots(int i, int x_areas, int y_areas, int areas)
 {
     int		x, y, j, color;
-
     if (num_fastshot[i] > 0) {
 
 	x = BASE_X(i);
 	y = BASE_Y(i);
 	color = COLOR(i);
-	if (color != WHITE && color != BLUE)
-	    color = WHITE;
+	//if (color != WHITE && color != BLUE)
 	for (j = 0; j < num_fastshot[i]; j++)
 	    Gui_paint_fastshot(color,
 			       x + fastshot_ptr[i][j].x ,

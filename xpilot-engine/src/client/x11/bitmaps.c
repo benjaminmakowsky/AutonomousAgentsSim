@@ -75,9 +75,18 @@ xp_pixmap_t object_pixmaps[] = {
     XP_PIXMAP_INITIALIZER("asteroidconcentrator.ppm", 32),
     XP_PIXMAP_INITIALIZER("ball_gray16.ppm", -16),
     XP_PIXMAP_INITIALIZER("quad.ppm", 128),        // 45
+    XP_PIXMAP_INITIALIZER("quad_f.ppm", 128),        
+    XP_PIXMAP_INITIALIZER("quad_e.ppm", 128),        
     XP_PIXMAP_INITIALIZER("fixed.ppm", 128),       
+    XP_PIXMAP_INITIALIZER("fixed_f.ppm", 128),       
+    XP_PIXMAP_INITIALIZER("fixed_e.ppm", 128),     // 50      
     XP_PIXMAP_INITIALIZER("tank.ppm", 128)  ,      
-    XP_PIXMAP_INITIALIZER("infantry.ppm", 128)        
+    XP_PIXMAP_INITIALIZER("tank_f.ppm", 128)  ,      
+    XP_PIXMAP_INITIALIZER("tank_e.ppm", 128)  ,      
+    XP_PIXMAP_INITIALIZER("infantry.ppm", 128),        
+    XP_PIXMAP_INITIALIZER("infantry_f.ppm", 128),   // 55        
+    XP_PIXMAP_INITIALIZER("infantry_e.ppm", 128),        
+    XP_PIXMAP_INITIALIZER("bullet_red.ppm", -16)        
 };
 
 xp_pixmap_t *pixmaps = 0;

@@ -1066,7 +1066,6 @@ static void Player_collides_with_killing_shot(player_t *pl, object_t *obj)
 	|| (obj->type == OBJ_TORPEDO
 	    && Mods_get(obj->mods, ModsNuclear)
 	    && (rfrac() >= 0.25))) {
-      warn("Player had armor when hit\n");
 	switch (obj->type) {
 	case OBJ_TORPEDO:
 	    sound_play_sensors(pl->pos, PLAYER_EAT_TORPEDO_SHOT_SOUND);
@@ -1082,6 +1081,7 @@ static void Player_collides_with_killing_shot(player_t *pl, object_t *obj)
 	}
 
 	switch(obj->type) {
+  case OBJ_SHOT:
 	case OBJ_TORPEDO:
 	case OBJ_HEAT_SHOT:
 	case OBJ_SMART_SHOT:
@@ -1102,7 +1102,6 @@ static void Player_collides_with_killing_shot(player_t *pl, object_t *obj)
 	    pl->forceVisible += 2;
 	    break;
 
-	case OBJ_SHOT:  warn("Player was hit by a shot\n");
 	case OBJ_CANNON_SHOT:
 	    sound_play_sensors(pl->pos, PLAYER_EAT_SHOT_SOUND);
 	    if (!Player_uses_emergency_shield(pl)) {
@@ -1134,7 +1133,6 @@ static void Player_collides_with_killing_shot(player_t *pl, object_t *obj)
 	    Player_hit_armor(pl);
 */
     if( Player_has_armor(pl) )
-      warn("Player had armor\n");
       Player_hit_armor(pl);
     }else {
 	switch (obj->type) {

@@ -378,6 +378,8 @@ void Gui_paint_fastshot(int color, int x, int y)
     if (color == 0)
 	return;
 
+    color = RED;
+
     if (!texturedObjects) {
         int z = shotSize/2;
 
@@ -402,7 +404,7 @@ void Gui_paint_fastshot(int color, int x, int y)
 	int s_size = MIN(shotSize, 16);
 	int z = s_size / 2;
 
-	Bitmap_paint(drawPixmap, BM_BULLET, WINSCALE(x) - z,
+	Bitmap_paint(drawPixmap, BM_BULLET_RED, WINSCALE(x) - z,
 		     WINSCALE(y) - z, s_size - 1);
     }
 }
@@ -730,23 +732,19 @@ static int Gui_calculate_ship_color(int id, other_t *other)
     int ship_color = WHITE;
 
     if (BIT(Setup->mode, TEAM_PLAY)
-	&& eyesId != id
+  && self->id != id 
 	&& other != NULL
 	&& eyeTeam == other->team) {
-	/* Paint teammates and allies ships with last life in teamLWColor */
-	if (BIT(Setup->mode, LIMITED_LIVES)
-	    && (other->life == 0))
-	    ship_color = teamLWColor;
-	else
-	    ship_color = teamShipColor;
-    }
-
+	// Paint teammates and allies as blue
+	    ship_color = BLUE;
+  }
+/*
     if (eyes != NULL
 	&& eyesId != id
 	&& other != NULL
 	&& eyes->alliance != ' '
 	&& eyes->alliance == other->alliance) {
-	/* Paint teammates and allies ships with last life in teamLWColor */
+	// Paint teammates and allies ships with last life in teamLWColor //
 	if (BIT(Setup->mode, LIMITED_LIVES)
 	    && (other->life == 0))
 	    ship_color = teamLWColor;
@@ -760,32 +758,32 @@ static int Gui_calculate_ship_color(int id, other_t *other)
     if (roundDelay > 0 && ship_color == WHITE)
 	ship_color = RED;
 
-    /* Check for team color */
+    // Check for team color //
     if (other && BIT(Setup->mode, TEAM_PLAY)) {
 	int team_color = Team_color(other->team);
 	if (team_color)
 	    return team_color;
     }
 
-    /* Vato color hack start, edited by mara & kps */
+    // Vato color hack start, edited by mara & kps //
     if (BIT(Setup->mode, LIMITED_LIVES)) {
-	/* Paint your ship in selfLWColor when on last life */
+	// Paint your ship in selfLWColor when on last life //
 	if (eyes != NULL
 	    && eyes->id == id
 	    && eyes->life == 0) {
 	    ship_color = selfLWColor;
 	}
-
-	/* Paint enemy ships with last life in enemyLWColor */
-	if (eyes != NULL
-	    && eyes->id != id
+*/
+	// Paint enemy ships with last life in enemyLWColor //
+else if(
+	    self->id != id
 	    && other != NULL
-	    && eyeTeam != other->team
-	    && other->life == 0) {
-	    ship_color = enemyLWColor;
+	    && eyeTeam != other->team ) {
+	    ship_color = RED;
 	}
-    }
-    /* Vato color hack end */
+    
+    // Vato color hack end //
+
 
     return ship_color;
 }
@@ -1018,36 +1016,73 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
 	} else {
       if( ship->num_points == 3 ){
         ship_shape = BM_QUAD;
-        printf( "QUAD\n" );
       }
       else if( !strcmp( ship->name, "quad" ) ){
-        printf( "QUAD\n" );
-        ship_shape = BM_QUAD;
+        if( ship_color == WHITE ){
+          ship_shape = BM_QUAD;
+        }
+        else if( ship_color == RED ){
+          ship_shape = BM_QUAD_ENEMY;
+        }
+        else if( ship_color == BLUE ){
+          ship_shape = BM_QUAD_FRIEND;
+        }
+        else{
+          printf("Unknown quad ship: %d - %d\n", id, ship_color ); 
+        }
       }
       else if( !strcmp( ship->name, "fixed" ) ){
-        #ifdef NOPRINT
-        printf( "FIXED\n" );
-        #endif
-        ship_shape = BM_FIXED;
+        if( ship_color == WHITE ){
+          ship_shape = BM_FIXED;
+        }
+        else if ( ship_color == RED ){
+          ship_shape = BM_FIXED_ENEMY;
+        }
+        else if ( ship_color == BLUE ){
+          ship_shape = BM_FIXED_FRIEND;
+        }
+        else{
+          printf("Unknown fixed ship: %d - %d\n", id, ship_color ); 
+        }
+
       }
       else if( !strcmp( ship->name, "drone_tank" ) ){
-        printf( "TANK\n" );
-        ship_shape = BM_TANK;
+        if( ship_color == WHITE ){
+          ship_shape = BM_TANK;
+        }
+        else if ( ship_color == RED ){
+          ship_shape = BM_TANK_ENEMY;
+        }
+        else if ( ship_color == BLUE ){
+          ship_shape = BM_TANK_FRIEND;
+        }
+        else{
+          printf("Unknown drone_tank ship: %d - %d\n", id, ship_color ); 
+        }
+
       }
       else if( !strcmp( ship->name, "infantry" ) ){
-        printf( "INFANTRY\n" );
-        ship_shape = BM_INFANTRY;
+        if( ship_color == WHITE ){
+          ship_shape = BM_INFANTRY;
+        }
+        else if ( ship_color == RED ){
+          ship_shape = BM_INFANTRY_ENEMY;
+        }
+        else if ( ship_color == BLUE ){
+          ship_shape = BM_INFANTRY_FRIEND;
+        }
+        else{
+          printf("Unknown infantry ship: %d - %d\n", id, ship_color ); 
+        }
+
       }
       else if (ship_color == BLUE){
-        printf( "BM_SHIP_FRIEND\n" );
 		    ship_shape = BM_SHIP_FRIEND;
       }
 	    else if (self != NULL && self->id != id){
-        printf( "BM_SHIP_ENEMY\n" );
 		    ship_shape = BM_SHIP_ENEMY;
       }
 	    else{
-        printf( "BM_SHIP_SELF\n" );
 		    ship_shape = BM_SHIP_SELF;
       }
       #ifdef NOPRINT

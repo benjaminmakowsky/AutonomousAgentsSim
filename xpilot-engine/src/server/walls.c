@@ -120,7 +120,8 @@ int mapx, mapy;
 
 static inline bool can_hit(group_t *gp, const move_t *move)
 {
-    if (gp->hitmask & move->hitmask)
+    
+    if ( gp->hitmask & move->hitmask )
 	return false;
     if (gp->hitfunc == NULL)
 	return true;
