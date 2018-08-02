@@ -22,15 +22,53 @@ typedef struct vertex_status_a
   bool done;
 } vsa_t;
 
+//Given pointers to two vertex_status structures, compares them based on vertex id.
+int vsa_cmp_by_id(const void *a, const void *b)
+{
+  vsa_t *ia = (vsa_t *)a;
+  vsa_t *ib = (vsa_t *)b;
+
+  return ia->v.id - ib->v.id;
+}
+
 //Given a pointer to an array of vertex_status structures and the length of the
 //array, finds the index corresponding to the given id.
 int get_vs_index_a(vsa_t *vsptr, int len, int id)
 {
-  int i = -1;
+  //We'll use l and r to refer to the boundaries of the array chunk we're still
+  //searching, and m will refer to the midpoint of this chunk. Hence, l and r are 
+  //initially 0 and the length of the array, respectively.
+  int l = 0, r = len - 1, m;
 
-  while(++i < len && vsptr[i].v.id != id);
+  while(l <= r)
+  {
+    //Compute the midpoint of the array chunk.
+    m = l + (r - l)/2;
 
-  return i;
+    //If we've found the desired id, return its index.
+    if(vsptr[m].v.id == id)
+    {
+      return m;
+    }
+
+    //If the desired id is too big to be in the left half of the array chunk,
+    //update the left boundary l accordingly.
+    if(vsptr[m].v.id < id)
+    {
+      l = m + 1;
+    }
+    //Conversely, if the desired id is in the left chunk, update the right
+    //boundary r accordingly.
+    else
+    {
+      r = m - 1;
+    }
+  }
+
+  //If we've gotten this far, it must be the case that l > r, meaning the desired
+  //id must not be in the array at all, so returning the length of the array will
+  //indicate an invalid answer.
+  return len;
 }
 
 //Computes the shortest path from the start vertex to the end vertex, using the
@@ -90,6 +128,9 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
       vsptr[i] = (vsa_t) {g.vertices[i], start.id, INT_MAX, INT_MAX, dist, false};
   }
   
+  //Sort the list of vertex_status structures, making searching easier later on.
+  qsort(vsptr, g.num_v, sizeof(vsa_t), vsa_cmp_by_id);
+
   while(!path_found)
   {
     //Loop through every edge in the graph. For each edge, if one of its vertices

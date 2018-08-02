@@ -18,15 +18,53 @@ typedef struct vertex_status_d
   bool done;
 } vsd_t;
 
+//Given pointers to two vertex_status structures, compares them based on vertex id.
+int vsd_cmp_by_id(const void *a, const void *b)
+{
+  vsd_t *ia = (vsd_t *)a;
+  vsd_t *ib = (vsd_t *)b;
+
+  return ia->id - ib->id;
+}
+
 //Given the id of a vertex, finds the index of the vertex_status structure with the
-//same id.
+//same id using an iterative binary search algorithm.
 int get_vs_index_d(vsd_t *vsptr, int len, int id)
 {
-  int i = -1;
+  //We'll use l and r to refer to the boundaries of the array chunk we're still
+  //searching, and m will refer to the midpoint of this chunk. Hence, l and r are 
+  //initially 0 and one less than the length of the array, respectively.
+  int l = 0, r = len - 1, m;
 
-  while(++i < len && vsptr[i].id != id);
-  
-  return i;
+  while(l <= r)
+  {
+    //Compute the midpoint of the array chunk.
+    m = l + (r - l)/2;
+
+    //If we've found the desired id, return its index.
+    if(vsptr[m].id == id)
+    {
+      return m;
+    }
+
+    //If the desired id is too big to be in the left half of the array chunk,
+    //update the left boundary l accordingly.
+    if(vsptr[m].id < id)
+    {
+      l = m + 1;
+    }
+    //Conversely, if the desired id is in the left chunk, update the right
+    //boundary r accordingly.
+    else
+    {
+      r = m - 1;
+    }
+  }
+
+  //If we've gotten this far, it must be the case that l > r, meaning the desired
+  //id must not be in the array at all, so returning the length of the array will
+  //indicate an invalid answer.
+  return len;
 }
 
 //Computes the shortest path from the start vertex to the end vertex, and stores the
@@ -82,6 +120,9 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
       vsptr[i] = (vsd_t) {g.vertices[i].id, -2, INT_MAX, false};
     }
   }
+
+  //Sort the list of vertex_status structures, making searching easier later on.
+  qsort(vsptr, g.num_v, sizeof(vsd_t), vsd_cmp_by_id);
 
   while(!path_found)
   { 
