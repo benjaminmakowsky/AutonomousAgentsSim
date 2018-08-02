@@ -304,6 +304,7 @@ typedef struct {
     u_byte		shield, cloak, eshield;
     u_byte		phased, deflector;
     double fuel, fov;
+    int range;
 } ship_t;
 
 typedef struct {
@@ -467,6 +468,7 @@ extern int		score_object;
 
 extern int      oldServer; /* Compatibility mode for old block-based servers */
 extern ipos_t	selfPos;
+extern int selfRange;
 extern ipos_t	selfVel;
 extern short	heading;
 extern short	nextCheckPoint;
@@ -769,8 +771,9 @@ int Handle_ecm(int x, int y, int size);
 int Handle_trans(int x_1, int y_1, int x_2, int y_2);
 int Handle_paused(int x, int y, int count);
 int Handle_appearing(int x, int y, int id, int count);
-int Handle_radar(int x, int y, int size);
-int Handle_fastradar(int x, int y, int size);
+int Handle_radar(int x, int y, int radarX, int radarY, int size);
+int Old_handle_fastradar(int x, int y, int size);
+int Handle_fastradar(int x, int y, int radarX, int radarY, int size);
 int Handle_vcannon(int x, int y, int type);
 int Handle_vfuel(int x, int y, double fuel);
 int Handle_vbase(int x, int y, int xi, int yi, int type);

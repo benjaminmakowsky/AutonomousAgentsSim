@@ -54,6 +54,7 @@ bool     UpdateRadar = false;   /* radar update because of polystyle changes? */
 int     oldServer;
 ipos_t	selfPos;
 ipos_t	selfVel;
+int selfRange = 0;
 short	heading;
 short	nextCheckPoint;
 
@@ -1790,6 +1791,10 @@ static int predict_self_dir(int received_dir)
     return int_new_dir;
 }
 
+int distanceFormula( int x1, int x2, int y1, int y2 ){
+  return (int) sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
+}
+
 int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
 		int eshield, int phased, int deflector)
 {
@@ -1798,6 +1803,8 @@ int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
     t.x = x;
     t.y = y;
     t.id = id;
+  
+
     if (dirPrediction && self && self->id == id)
         t.dir = predict_self_dir(dir);
     else
@@ -1810,7 +1817,34 @@ int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
     t.fuel = fuelSum;
     t.armor = numItems[ITEM_ARMOR];
     t.fov = numItems[ITEM_FOV];
-    STORE(ship_t, ship_ptr, num_ship, max_ship, t);
+    t.range = numItems[ITEM_RANGE] * 100;
+
+    // See if ship is in range for us to see it
+    if( self && self->id != id ){
+      if( distanceFormula( x, selfPos.x, y, selfPos.y ) > selfRange ){
+        // Remove ship from ship_ptr if it's there
+        int i;
+        for( i = 0; i < max_ship; ++i ){
+            if( ship_ptr[ i ].id == id ){
+              ship_t u;
+              ship_ptr[ i ] = u;
+              return 0;
+            }
+        }
+        STORE(ship_t, ship_ptr, num_ship, max_ship, t);
+      }
+      else{
+        STORE(ship_t, ship_ptr, num_ship, max_ship, t);
+      }
+    }
+    else{
+      STORE(ship_t, ship_ptr, num_ship, max_ship, t);
+    }
+    // Set selfShipPtr if we found ourselves
+    if( !selfRange && self && self->id == id ){
+      selfRange = t.range;
+    }
+ 
 
     /* if we see a ship in the center of the display, we may be watching
      * it, especially if it's us!  consider any ship there to be our eyes
@@ -1827,7 +1861,7 @@ int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
 	    eyeTeam = eyes->team;
 	selfVisible = (self && (id == self->id));
 	//Added an id to Handle_radar
-	return Handle_radar(x, y, 3);
+	return Handle_radar(x, y, x, y, 3);
     }
 
     return 0;
@@ -1994,8 +2028,7 @@ int Handle_appearing(int x, int y, int id, int count)
     return 0;
 }
 
-//Added an id field to radar_t
-int Handle_fastradar(int x, int y, int size)
+int Old_handle_fastradar(int x, int y, int size)
 {
     radar_t t;
     
@@ -2013,13 +2046,70 @@ int Handle_fastradar(int x, int y, int size)
     return 0;
 }
 
+
+
 //Added an id field to radar_t
-int Handle_radar(int x, int y, int size)
+int Handle_fastradar(int x, int y, int radarX, int radarY, int size)
 {
+    /*
+    if( self &&
+        x != selfPos.x &&
+        y != selfPos.y &&
+        distanceFormula( x, selfPos.x, y, selfPos.y ) > selfRange ){
+      return 0;
+    }
+    */
+
+    radar_t t;
+   
+    t.x = radarX;
+    t.y = radarY;
+    t.type = RadarEnemy;
+    
+    if ((size & 0x80) != 0) {
+	t.type = RadarFriend;
+	size &= ~0x80;
+    }
+    
+    t.size = size;
+    if( self && selfPos.x == x && selfPos.y == y ){
+      STORE(radar_t, radar_ptr, num_radar, max_radar, t);
+    }
+    // See if ship is in range for us to see it
+    else if( selfRange && distanceFormula( x, selfPos.x, y, selfPos.y ) > selfRange ){
+      // Remove ship from ship_ptr if it's there
+      int i;
+      for( i = 0; i < max_ship; ++i ){
+        if( ship_ptr[ i ].x == x && ship_ptr[ i ].y == y ){
+          ship_t u;
+          ship_ptr[ i ] = u;
+          return 0;
+        }
+      }
+      //STORE(radar_t, radar_ptr, num_radar, max_radar, t);
+    }
+    else{
+      STORE(radar_t, radar_ptr, num_radar, max_radar, t);
+    }
+
+
+    return 0;
+}
+
+//Added an id field to radar_t
+int Handle_radar(int x, int y, int radarX, int radarY, int size)
+
+{
+  if( x == radarX && y == radarY ){
+    return Old_handle_fastradar( (int)(double)(radarX * RadarWidth / Setup->width + 0.5), (int)(double)(radarY * RadarHeight / Setup->height + 0.5), size );
+  }
+  /*
     return Handle_fastradar
-	((int)((double)(x * RadarWidth) / Setup->width + 0.5),
-	 (int)((double)(y * RadarHeight) / Setup->height + 0.5),
+	(x, y, (int)((double)(radarX * RadarWidth) / Setup->width + 0.5),
+	 (int)((double)(radarY * RadarHeight) / Setup->height + 0.5),
 	 size);
+   */
+    return Handle_fastradar(x, y, radarX, radarY, size);
 }
 
 int Handle_message(char *msg)
