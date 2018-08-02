@@ -279,7 +279,7 @@ static void Frame_radar_buffer_send(connection_t *conn, player_t *pl)
 	}
     }
     else {
-	unsigned char buf[3*256];
+	unsigned char buf[7*256];
 	int buf_index = 0;
 	unsigned fast_count = 0;
 
@@ -291,9 +291,21 @@ static void Frame_radar_buffer_send(connection_t *conn, player_t *pl)
 	    radar_y = (radar_height * p->y) / world->height;
 	    if (radar_y >= 1024)
 		continue;
-	    buf[buf_index++] = (unsigned char)(radar_x);
+      // x position
+      unsigned char b = (p->x >> 8); //high
+	    buf[buf_index++] = b;
+      b = ( p->x & 0xff ); // low 
+	    buf[buf_index++] = b;
+      buf[buf_index++] = (unsigned char)(radar_x);
+      // y position
+      b = (p->y >> 8 ); //high
+  	  buf[buf_index++] = b;
+      b = ( p->y & 0xff ); // low 
+	    buf[buf_index++] = b;
+
 	    buf[buf_index++] = (unsigned char)(radar_y & 0xFF);
 	    buf[buf_index] = (unsigned char)((radar_y >> 2) & 0xC0);
+
 	    if (p->size & 0x80)
 		buf[buf_index] |= (unsigned char)(0x20);
 	    buf[buf_index] |= (unsigned char)(p->size & 0x07);

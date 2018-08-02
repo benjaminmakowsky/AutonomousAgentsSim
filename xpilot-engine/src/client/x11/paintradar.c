@@ -137,11 +137,18 @@ static void Paint_self_radar(double xf, double yf)
     }
 }
 
+//int distanceFormula( int x1, int x2, int y1, int y2 ){
+//  return (int) sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
+//}
+
 static void Paint_objects_radar(void)
 {
     int			i, x, y, xw, yw, color;
 
     for (i = 0; i < num_radar; i++) {
+      if( radar_ptr[i].x == 0 && radar_ptr[i].y == 0 ){
+        continue;
+      }
 	int rs = radar_ptr[i].size;
 	unsigned s = (rs <= 0 ? 1 : radar_ptr[i].size);
 
@@ -182,7 +189,7 @@ static void Paint_objects_radar(void)
 					     x - xw, y - yw, s, s);
 	    }
 	}
-	/*XSetForeground(dpy, radarGC, colors[WHITE].pixel);*/
+	//XSetForeground(dpy, radarGC, colors[WHITE].pixel);
     }
     if (num_radar)
 	RELEASE(radar_ptr, num_radar, max_radar);

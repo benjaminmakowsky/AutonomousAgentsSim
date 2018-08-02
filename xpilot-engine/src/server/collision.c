@@ -203,7 +203,7 @@ static void PlayerCollision(void)
 	    continue;
 
 	/* Player - player */
-	if (BIT(world->rules->mode, CRASH_WITH_PLAYER | BOUNCE_WITH_PLAYER)) {
+	if ( BIT(world->rules->mode, CRASH_WITH_PLAYER | BOUNCE_WITH_PLAYER)) {
 	    for (j = i + 1; j < NumPlayers; j++) {
 		player_t *pl_j = Player_by_index(j);
 		double range;

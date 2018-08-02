@@ -347,7 +347,7 @@ typedef struct player {
     int idxInRole;       /* Turn to spawn relative to units in role */ 
     int idxInShape;       /* Turn to spawn relative to units in shape */ 
     bool flying;         /* If true, has no wall collision */
-    double sight_range;  /* Modifier for unit sight range */
+    int sight_range;  /* Modifier for unit sight range. Range = sight_range * 100 pixels */
     double fov;       /* Unit's directional FOV in degrees */
     int		privs;			/* Player privileges */
 

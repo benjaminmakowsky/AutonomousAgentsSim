@@ -316,8 +316,8 @@ void Compute_sensor_range(player_t *pl)
 
     //pl->sensor_range = pl->fuel.sum * EnergyRangeFactor;
     //pl->sensor_range *= (1.0 + ((double)pl->item[ITEM_SENSOR] * 0.25));
-    LIMIT(pl->sight_range,
-	  options.minVisibilityDistance, options.maxVisibilityDistance);
+    //LIMIT(pl->sight_range,
+	  //options.minVisibilityDistance, options.maxVisibilityDistance);
 }
 
 /*
@@ -499,6 +499,9 @@ void Player_init_items(player_t *pl )
   else if( i == ITEM_FOV ){
     pl->item[i] = pl->fov;
   }
+  else if( i == ITEM_RANGE ){
+    pl->item[i] = pl->sight_range;
+  }
 	else
 	    pl->item[i] = world->items[i].initial;
     }
@@ -543,7 +546,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->armor = 2;
       //pl->maxturnsps = 255;
       pl->shots = 2;
-      pl->sight_range = 4;
+      pl->sight_range = 15;
       pl->mass = 75;
       pl->emptymass = 5;
       pl->fuel.max = 4000;
@@ -565,7 +568,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->armor = 1;
       //pl->maxturnsps = 180;
       pl->shots = 1;
-      pl->sight_range = 7;
+      pl->sight_range = 20;
       pl->mass = 50;
       pl->emptymass = 5;
       pl->fuel.max = 2500;
@@ -587,7 +590,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->armor = 5;
       //pl->maxturnsps = 100;
       pl->shots = 5;
-      pl->sight_range = 2;
+      pl->sight_range = 3;
       pl->mass = 150;
       pl->emptymass = 5;
       pl->fuel.max = 9999;
@@ -609,7 +612,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->armor = 2;
       //pl->maxturnsps = 255;
       pl->shots = 3;
-      pl->sight_range = 2;
+      pl->sight_range = 10;
       pl->mass = 100;
       pl->emptymass = 5;
       pl->fuel.max = 9999;
@@ -630,7 +633,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->power = pl->power_s = MAX_PLAYER_POWER;
       pl->shots = 2;
       pl->armor = 1;
-      pl->sight_range = 2;
+      pl->sight_range = 15;
       pl->mass = options.shipMass;
       pl->emptymass = options.shipMass;
       pl->fuel.max = 9999;

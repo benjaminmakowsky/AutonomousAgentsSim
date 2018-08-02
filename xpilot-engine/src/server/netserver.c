@@ -1984,18 +1984,18 @@ int Send_fastradar(connection_t *connp, unsigned char *buf, unsigned n)
 	return 0;
     }
     avail = w->size - w->len - SOCKBUF_WRITE_SPARE - 3;
-    if ((int)n * 3 >= avail) {
-	if (avail > 3)
-	    n = (avail - 2) / 3;
+    if ((int)n * 7 >= avail) {
+	if (avail > 7)
+	    n = (avail - 2) / 7;
 	else
 	    return 0;
     }
     w->buf[w->len++] = PKT_FASTRADAR;
     w->buf[w->len++] = (unsigned char)(n & 0xFF);
-    memcpy(&w->buf[w->len], buf, (size_t)n * 3);
-    w->len += n * 3;
+    memcpy(&w->buf[w->len], buf, (size_t)n * 7);
+    w->len += n * 7;
 
-    return (2 + (n * 3));
+    return (2 + (n * 7));
 }
 
 int Send_damaged(connection_t *connp, int damaged)

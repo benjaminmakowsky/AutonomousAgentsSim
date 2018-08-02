@@ -1628,8 +1628,8 @@ int Receive_ship(void)
     phased = ((flags & 8) != 0);
     deflector = ((flags & 0x10) != 0);
 
-    if ((n = Handle_ship(x, y, id, dir, shield,
-			 cloak, eshield, phased, deflector)) == -1)
+			if((n = Handle_ship( x, y, id, dir, shield,
+              cloak, eshield, phased, deflector)) == -1)
 	return -1;
     return 1;
 }
@@ -1883,7 +1883,7 @@ int Receive_radar(void)
     if ((n = Packet_scanf(&rbuf, "%c%hd%hd%c", &ch, &x, &y, &size)) <= 0)
 	return n;
 
-    if ((n = Handle_radar(x, y, size)) == -1)
+    if ((n = Handle_radar(x, y, x, y, size)) == -1)
 	return -1;
     return 1;
 }
@@ -1891,7 +1891,7 @@ int Receive_radar(void)
 int Receive_fastradar(void)
 {
     int			n, i, r = 1;
-    int			x, y, size;
+    int			x, radarX, y, radarY, size;
     unsigned char	*ptr;
 
     rbuf.ptr++;	/* skip PKT_FASTRADAR packet id */
@@ -1899,22 +1899,27 @@ int Receive_fastradar(void)
     if (rbuf.ptr - rbuf.buf >= rbuf.len)
 	return 0;
     n = (*rbuf.ptr++ & 0xFF);
-    if (rbuf.ptr - rbuf.buf + (n * 3) > rbuf.len)
+    if (rbuf.ptr - rbuf.buf + (n * 7) > rbuf.len)
 	return 0;
     ptr = (unsigned char *) rbuf.ptr;
     for (i = 0; i < n; i++) {
-	x = *ptr++;
-	y = *ptr++;
-	y |= (*ptr & 0xC0) << 2;
+	x = (*ptr++) << 8;
+  x |= *ptr++;
+  radarX = *ptr++;
+	y = ( *ptr++ ) << 8;
+  y |= *ptr++;
+  radarY = *ptr++;
+	radarY |= (*ptr & 0xC0) << 2;
 	size = (*ptr & 0x07);
 	if (*ptr & 0x20)
 	    size |= 0x80;
 	ptr++;
-	r = Handle_fastradar(x, y, size);
+  
+	r = Handle_fastradar(x, y, radarX, radarY, size);
 	if (r == -1)
 	    break;
     }
-    rbuf.ptr += n * 3;
+    rbuf.ptr += n * 7;
 
     return (r == -1) ? -1 : 1;
 }
