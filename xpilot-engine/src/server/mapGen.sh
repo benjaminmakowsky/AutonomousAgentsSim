@@ -1,4 +1,7 @@
 #!/bin/bash
+# script to run the map-generator in ../../xpilot-ng-temp/c/
+# (it would be nice if we could do ALL the map generation from
+#  scripts in this server directory)
 
 cd ../../xpilot-ng-temp/c/
 ./buildMapgen.sh

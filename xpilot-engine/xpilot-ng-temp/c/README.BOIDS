@@ -1,0 +1,25 @@
+Matthew Coffman - August 2018
+
+How to run our boids simulator:
+
+=======================================================
+First, from the xpilot-engine/src/server/ directory,
+run a server using the following:
+
+./pvp_base_defense_server
+
+Then, go to xpilot-engine/xpilot-ng-temp/c/ in another
+terminal and perform the following:
+
+./buildBoids.sh
+export LD_LIBRARY_PATH=.
+./runBoids.sh <n>
+
+where n is some natural number indicating the number of 
+drones to have on each team.
+=======================================================
+
+This should produce 2*n separate windows and consoles, 
+one for each drone spawned, though hopefully we will
+eventually have a spectator mode in which just a single
+window is generated.

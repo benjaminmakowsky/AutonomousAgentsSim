@@ -566,7 +566,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
     else if( !strcmp( ship->name,"fixed" ) ){
       pl->power = 0.5;
       pl->armor = 1;
-      //pl->maxturnsps = 180;
+      pl->maxturnsps = 10;
       pl->shots = 1;
       pl->sight_range = 20;
       pl->mass = 50;

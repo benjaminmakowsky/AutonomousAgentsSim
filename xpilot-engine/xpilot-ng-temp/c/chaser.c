@@ -1,7 +1,7 @@
 //Matthew Coffman - May 2018
 //Compile: ./buildChaser.sh && export LD_LIBRARY_PATH=.
-//Run: ./runChaser.sh <n> <filename> for some natural number n (defaults to 1) 
-//  and the name of a file containing map information
+//Run:     ./runChaser.sh <n> <filename> for some natural number n (defaults to 1) 
+//         and the name of a file containing map information
 #include "cAI.h"
 #include <sys/time.h>
 #include <stdarg.h>
@@ -26,24 +26,16 @@
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define SIGN(X) ((X) > 0 ? 1 : ((X) < 0 ? -1 : 0))
-#define FAST thrust(1);
-#define STOP thrust(0);
-#define SLOW (frameCount % 5 < 2) ? thrust(1) : thrust(0)
 
 //global constants
-#define ALIGNMENT_RADIUS 400
 #define BUFFER_SIZE 255
-#define COHESION_RADIUS 400
-#define CORNER_LOOK_AHEAD 75
 #define EPSILON 1E-6
 #define MAX_DEG 360
 #define NUM_AVOIDPTS 10
 #define NUM_FOLLOWERS 20
 #define NUM_LEADERS 20
 #define PAST_INFO_NUM 10
-#define POINT_PRECISION 50
-#define SEPARATION_RADIUS 100
-#define WALL_LOOK_AHEAD 100
+#define POINT_PRECISION 100
 
 //function prototypes
 int vertex_cmp_by_id(const void *a, const void *b);
@@ -58,12 +50,13 @@ void pathToPointXY(int, graph_t, int, int, int *);
 void goToXY(int, graph_t, int, int);
 void goToId(int, graph_t, int);
 void goToRandom(int, graph_t);
+void interruptPath();
 void runAway();
 void wallAvoidance();
 void cohesion();
 void separation();
 void alignment();
-bool nearCornerPeek();
+bool nearCornerPoint();
 void noEnemyFlying();
 void updateEnemyPast(int, int, int, double, int);
 void updateAim(int);
@@ -118,27 +111,40 @@ typedef struct movementInfo
 } moveInfo_t;
 
 //global variables
-bool init = false, isLeader = false;				
-int state = STATE_INIT, frameCount = 0;				
-int mapWidth, mapHeight, halfMapWidth, halfMapHeight;
-int degToAim, turnLock = 0;
-int wallAvoidVector = -1, pathVector = -1, leaderVector = -1;
-int cohesionVector = -1, separationVector = -1, alignmentVector = -1;
-int interPointId = -1, *corners_list = NULL;
-int preserving = 0, stealthy = 1, mobile = 1, cautious = 0, focused = 1, avoidant = 0;
-char *pastMsg = "dummy", *thisMsg = "dummy";
-int aWeight = 0, sWeight = 0, cWeight = 0;
-int fov = 60, rov = 500;
-int *leaders = NULL, *followers = NULL;
-char talkMsgs[][10] = {"leader ", "died "};
-graph_t map, safeMap;
-moveInfo_t pastMovement;
-avoidpt_t dangerPoints[NUM_AVOIDPTS];
+bool init = false;		//whether we have initialized
+bool isLeader = false;		//whether we are a leader
+int state = STATE_INIT;		//what state we're in (enumerated above)
+int frameCount = 0;		//enables us to keep track of time
+int mapWidth;			//dimensions of the map
+int mapHeight;
+int degToAim;			//the angle we want to be going
+int turnLock = 0;		//how long before we can turn again (prevents
+				//turning too often, getting disoriented)
+int wallAvoidVector = -1;	//the direction we must go to avoid walls
+int pathVector = -1;		//the direction to follow a path to some destination
+int interPointId = -1; 		//if we're following a path in focused flying, this
+				//stores the id of the next point in the path
+int *corners_list = NULL;	//list of corner points for cautious flying
+int preserving = 0;		//run away from enemies
+int stealthy = 1;		//"cloak" when enemies spotted
+int mobile = 1;			//whether we move at all; as opposed to anchored
+int cautious = 0;		//go slow around corner points
+int focused = 0;		//fly directly to some point, rather than aimlessly
+int avoidant = 1;		//avoid marked "dangerous" points
+char *currMsg = "dummy";	//most recent message in the buffer
+int fov = 60;			//field of vision (degrees away from current heading)
+int rov = 500;			//range of vision
+int *leaders = NULL;		//list of leaders on one's team
+int *followers = NULL;		//list of one's followers
+graph_t map;			//internal representation of the map
+graph_t safeMap;		//representation of map with dangerous edges removed
+moveInfo_t pastMovement;	//keeps track of closest enemy's past movement info
+avoidpt_t dangerPoints[NUM_AVOIDPTS];	//keeps track of points on the map to avoid
 
 //argv params
-int idx;
-int tot_idx;
-char *filename;
+int idx;			//this drone's id
+int tot_idx;			//the total number of drones on my team 
+char *filename;			//file containing all the points and edges in the map
 
 
 /*****************************************************************************
@@ -309,8 +315,6 @@ void initialize()
   //Get the map dimensions for later use.
   mapWidth = getMapWidth();
   mapHeight = getMapHeight();
-  halfMapWidth = mapWidth / 2;
-  halfMapHeight = mapHeight / 2;
 
   //Set up leader/follower arrays (not really being used right now).
   leaders = malloc(sizeof(int) * tot_idx);
@@ -330,8 +334,6 @@ void initialize()
   {
     dangerPoints[i] = (avoidpt_t) {-1, -1, -1};
   }
-  dangerPoints[0] = (avoidpt_t) {1820, 3780, 500};
-  dangerPoints[1] = (avoidpt_t) {2835, 2870, 300};
 
   //Generate the "safe map" for avoidant behavior.
   modMap();
@@ -399,7 +401,7 @@ int cpIndexXY(graph_t g, int x, int y)
   {
     tempX = g.vertices[i].x;
     tempY = g.vertices[i].y;
-    tempDist = distForm(x, tempX, y,tempY);
+    tempDist = computeDistance(x, tempX, y,tempY);
 
     if(tempDist < minDist)
     {
@@ -450,8 +452,8 @@ void pathToPointId(int alg, graph_t g, int id, int *path)
       break;
 
     //This extended Dijkstra's algorithm allows a drone to go from one point to
-    //another, stopping at an indefinite number of points along the way. How those
-    //intermediate points are chosen is still a work in progress.
+    //another, stopping at an indefinite number of points along the way. 
+    //TODO: Figure out how best to determine intermediate points.
     case(ALG_DIJKSTRA_EXT):
       angleToDest = selfAngleToXY(v2.x, v2.y); 
       tempHead = modm(angleToDest + 60, MAX_DEG);
@@ -463,44 +465,30 @@ void pathToPointId(int alg, graph_t g, int id, int *path)
       x = v3.x + 1500 * cos(degToRad(tempHead));
       y = v3.y + 1500 * sin(degToRad(tempHead));
       v4 = g.vertices[cpIndexXY(g, x, y)];
-/*      
-      v3 = g.vertices[rand() % g.num_v];
-      deg = getAngle(v3.x, v2.x, v3.y, v2.y);
-      r = rand() % 40 - 20;
-      x = v3.x + (rand() % 1000) - 500;
-      y = v3.y + (rand() % 1000) - 500;
-      v4 = g.vertices[cpIndexXY(g, x, y)];
-*/
       printf("MIDPOINTS: %3d %3d\n", v3.id, v4.id);
       dijkstraN(g, v1, v2, path, 2, v3, v4);
       break; 
   }
  
   //Print the path found.
+  if(path[0] == '\0')
+  {
+    puts("NO PATH FOUND");
+  }
+
   print_path(path);
-}
-
-
-//Finds a path from this drone's current location to the given XY point, using
-//the given path-finding algorithm.
-void pathToPointXY(int alg, graph_t g, int x, int y, int *path)
-{
-  int id = g.vertices[cpIndexXY(g, x, y)].id;
-  pathToPointId(alg, g, id, path);
 }
 
 
 //Establishes a path to the given XY point using the given path algorithm, and
 //sets the pathVector value so the drone can fly there.
-void goToXY(int alg, graph_t g, int x, int y)
+void goToId(int alg, graph_t g, int id)
 {
   static int *path = NULL;
-  static bool atDest = true;
-  static int interX = -1, interY = -1, pathIndex = 0;
-  bool badPath, edgeNotFound; 
-  graph_t tg;
-  int i;
-  vertex_t v1, v2;
+  static int destId = -1;
+  static int interX = -1;
+  static int interY = -1;
+  static int pathIndex = 0;
 
   //Allocate memory for the path variable, if that hasn't been done already.
   if(!path)
@@ -512,63 +500,64 @@ void goToXY(int alg, graph_t g, int x, int y)
       abort();
     }
   }
- 
-  //Allow a mechanism for overriding the path currently being traced.
-  //FIXME: Path-updating doesn't seem to be working very well, they seem to 
-  //calculate the same path as before, even if the safe map has been changed.
-  if(x == -1 || y == -1)
+
+  //We're using -1 to represent a "null" id. If we're told to fly to an id of -1,
+  //just update the destination id accordingly and return. We can use this "null" 
+  //value to effectively interrupt or cancel the path in progress, enabling more
+  //adaptability and dynamic path-finding.
+  if(id == -1)
   {
-    atDest = true;
+    destId = id;
+    return;
   }
-  
-  //If we are supposedly at the destination, meaning we aren't currently
-  //following a path.
-  if(atDest)
+
+  //If our target id has been changed, whether to -1 or some other valid vertex id,
+  //update the destination id and plot our new course.
+  if(id != destId)
   {
-    //Check that we really are at the destination, and if so return.
-    if(distForm(selfX(), x, selfY(), y) < POINT_PRECISION)
-    {
-      return;
-    }
-    
-    //If we aren't really at the destination yet, we need to get there. If we
-    //are avoidant, use the safe map to generate a path that avoids dangerous
-    //points.
+    destId = id;
+
+    //If we're using the avoidant behavior, plot our new path using the "safe"
+    //version of the map that removes all edges through "dangerous" points.
     if(avoidant)
     {
-      pathToPointXY(alg, safeMap, x, y, path);
+      pathToPointId(alg, safeMap, destId, path);
     }
-    //Otherwise, just pick the most direct route to the destination.
+    //Otherwise, just use the given map to plot our course.
     else
     {
-      pathToPointXY(alg, g, x, y, path);
+      pathToPointId(alg, g, destId, path);
     }
 
-    //Having generated a path and stored it to our static path variable, indicate
-    //that we aren't at the destination, and prime the drone to be looking toward
-    //the first point in the new path.
-    atDest = false;    
     pathIndex = 0;
     interPointId = path[pathIndex];
     interX = g.vertices[getMPIndex(g, interPointId)].x;
-    interY = g.vertices[getMPIndex(g, interPointId)].y;    
+    interY = g.vertices[getMPIndex(g, interPointId)].y;
+    return;
   }
 
-  //If we're within a short distance of the next intermediate point, start looking
-  //at the next intermediate vertex.
-  if(distForm(selfX(), interX, selfY(), interY) < POINT_PRECISION 
-     && pathIndex < length(path)-1)
+  if(wallBetween(selfX(), selfY(), interX, interY, 1, 1))
+  {
+    interruptPath();
+    return;
+  }  
+
+ 
+  //If we're close to the next intermediate point, and if that point happens to be
+  //the destination, then return.
+  if(computeDistance(selfX(), interX, selfY(), interY) < POINT_PRECISION
+     && interPointId == destId)
+  {
+    return;
+  }
+
+  //If we're within a short distance of the next intermediate point, but that point
+  //is not the destination, just update the intermediate vertex.
+  else if(computeDistance(selfX(), interX, selfY(), interY) < POINT_PRECISION)
   {
     interPointId = path[++pathIndex];
     interX = g.vertices[getMPIndex(g, interPointId)].x;
     interY = g.vertices[getMPIndex(g, interPointId)].y;
-  }
-  //If we're close to the final point in the path, say we're done with the path
-  //and return.
-  else if(distForm(selfX(), interX, selfY(), interY) < POINT_PRECISION)
-  {
-    atDest = true;
-    return;
   }
 
   //If we've made it this far, we must still have some distance to go toward our
@@ -578,12 +567,9 @@ void goToXY(int alg, graph_t g, int x, int y)
 
 
 //Go to the map vertex with the given id.
-void goToId(int alg, graph_t g, int id)
+void goToXY(int alg, graph_t g, int x, int y)
 {
-  int x = g.vertices[getMPIndex(g, id)].x;
-  int y = g.vertices[getMPIndex(g, id)].y;
-
-  goToXY(alg, g, x, y);
+  goToId(alg, g, g.vertices[cpIndexXY(g, x, y)].id);
 }
 
 
@@ -605,7 +591,7 @@ void goToRandom(int alg, graph_t g)
 //to fly to (-1, -1), which goToXY() will recognize as a termination pattern.
 void interruptPath()
 {
-  goToXY(-1, map, -1, -1);
+  goToId(-1, map, -1);
 }
 
 
@@ -616,13 +602,26 @@ void interruptPath()
 //Provides a mechanism for drones to spot walls ahead and steer away from them.
 void wallAvoidance()
 {
+  //Static variables: to avoid magic numbers!
+  static int wallLookAhead = 100;
+  static int cornerLookAhead = 75;
+  static int minLookAside = 50;
+  static int dummyVal = 1;
+  static int lookAngle = 15;
+  static int lookRight = 0;
+  static int lookUp = 90;
+  static int lookLeft = 180;
+  static int lookDown = 270;
+  static int turnLeft = 90;
+  static int turnRight = -90;
+  static int lockNum = 5;
+
   double currHeadingRad;
-  int currHeadingDeg;
+  int currHeadingDeg, currHeadingDegDiv90;
   int currX, currY, newX, newY, delX, delY;
   int lHead, rHead;
   bool seeWallX, seeWallY, seeWallAhead;
-  bool seeWallL, seeWallR, cornerClose;
-  int r;
+  bool seeWallL, seeWallR, closeToCorner;
 
   //Get the current heading, in degrees and radians, and current position info. 
   currHeadingRad = selfHeadingRad();
@@ -630,88 +629,143 @@ void wallAvoidance()
   currX = selfX();
   currY = selfY(); 
 
-  //Check if we will crash into a wall if we carry on the current course for some
-  //distance.
-  delX = (int)(WALL_LOOK_AHEAD * cos(currHeadingRad)); 
-  delX = SIGN(delX) * MAX(abs(delX), 50);
-  delY = (int)(WALL_LOOK_AHEAD * sin(currHeadingRad)); 
-  delY = SIGN(delY) * MAX(abs(delY), 50);
+  //We want to look ahead some number of pixels (given by wallLookAhead) in some
+  //direction (that being our current heading). Split up this vector into its x-
+  //and y-components.
+  delX = (int)(wallLookAhead * cos(currHeadingRad)); 
+  delY = (int)(wallLookAhead * sin(currHeadingRad)); 
   
+  //Now that we've computed two vectors corresponding to the x- and y-components
+  //of our look-ahead vector, make sure that the magnitude of these two vectors
+  //is at least some minimum value. Even if we're flying at a heading of 0 degrees
+  //(meaning the y-component vector should be 0), we still want to check for walls
+  //in the y direction a little bit, so our wings don't accidentally clip walls as
+  //we fly by. 
+  delX = SIGN(delX) * MAX(abs(delX), minLookAside);
+  delY = SIGN(delY) * MAX(abs(delY), minLookAside);
+  
+  //Having generated x- and y-component vectors, add these to our current position
+  //to get the x- and y-coordinates of the point where we're now looking.
   newX = currX + delX;
   newY = currY + delY;
 
-  //Check straight in front, and then check the x and y directions individually.
-  seeWallAhead = wallBetween(currX, currY, newX, newY, 1, 1);
-  seeWallX = wallBetween(currX, currY, newX, currY, 1, 1);
-  seeWallY = wallBetween(currX, currY, currX, newY, 1, 1);
+  //Using the new x- and y-coordinates generated above, check straight in front, 
+  //and then check the x and y directions individually.
+  seeWallAhead = wallBetween(currX, currY, newX, newY, dummyVal, dummyVal);
+  seeWallX = wallBetween(currX, currY, newX, currY, dummyVal, dummyVal);
+  seeWallY = wallBetween(currX, currY, currX, newY, dummyVal, dummyVal);
 
-  //Check 15 degrees to the left and right of the current heading.
-  lHead = modm(currHeadingDeg + 15, MAX_DEG);
-  seeWallL = wallFeeler(WALL_LOOK_AHEAD, lHead, 1, 1);
-  rHead = modm(currHeadingDeg - 15, MAX_DEG);
-  seeWallR = wallFeeler(WALL_LOOK_AHEAD, rHead, 1, 1);
- 
-  //Finally, check if we are close to one of the corners of the map.
-  cornerClose = (wallFeeler(CORNER_LOOK_AHEAD, 0, 1, 1) 
-                   || wallFeeler(CORNER_LOOK_AHEAD, 180, 1, 1)) 
-                && 
-                (wallFeeler(CORNER_LOOK_AHEAD, 90, 1, 1) 
-                   || wallFeeler(CORNER_LOOK_AHEAD, 270, 1, 1));
+  //As well as checking straight in front, check also a little to the left and to
+  //the right of our current heading. This incorporates the fact that we don't ever 
+  //just look directly in front of us, we have a field of view that catches objects
+  //some number of degrees off from where we're really looking.
+  lHead = modm(currHeadingDeg + lookAngle, MAX_DEG);
+  seeWallL = wallFeeler(wallLookAhead, lHead, dummyVal, dummyVal);
+  rHead = modm(currHeadingDeg - lookAngle, MAX_DEG);
+  seeWallR = wallFeeler(wallLookAhead, rHead, dummyVal, dummyVal);
+  
+  //Determine if we see a corner ahead, by checking up/down and left/right depending
+  //on our current heading.
+  currHeadingDegDiv90 = currHeadingDeg / 90;
+  switch(currHeadingDegDiv90)
+  {
+    //If we have a current heading of 0 <= theta < 90, look right and up.
+    case(0):
+      closeToCorner = wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal)
+                      && wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal);
+      break;
+
+    //If we have a current heading of 90 <= theta < 180, look up and left.
+    case(1):
+      closeToCorner = wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal)
+                      && wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal);
+      break;
+
+    //If we have a current heading of 180 <= theta < 270, look left and down.
+    case(2):
+      closeToCorner = wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal)
+                      && wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal);
+      break;
+
+    //If we have a current heading of 270 <= theta < 360, look down and right.
+    case(3):
+      closeToCorner = wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal)
+                      && wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal);
+      break;
+
+    //Our current heading should be between 0 <= theta < 360, but if somehow that's
+    //not the case, print an error statement, and indicate no wall avoidance.
+    default:
+      printf("ERROR: something's weird with the current heading\n");
+      wallAvoidVector = -1;
+      return;
+  }
 
   //If turnLock is off, we are allowed to set a new turn angle.
   if(!turnLock)
   {
-    //If we are close to a corner...
-    if(cornerClose)
+    if(closeToCorner)
     {
-      //Turn somewhere between 65 and 115 degrees from the current heading.
-      r = 0; //(rand() % 50) - 25;
-      wallAvoidVector = modm(currHeadingDeg + 90 + r, MAX_DEG);
+      //Turn some number of degrees to the left of the current heading.
+      wallAvoidVector = modm(currHeadingDeg + turnLeft, MAX_DEG);
 
-      //Set a turnLock of X frames: we will not be able to set a new wall avoidance
-      //angle for X frames, whatever X happens to be.
-      turnLock = 5;
-      SLOW;
+      //Set a turn lock of some number of frames, so that we don't adjust our turn
+      //angle too frequently and just end up turning back and forth endlessly.
+      turnLock = lockNum;
+
+      //Go slow as long as we're near a corner by thrusting only twice every 5 frames,
+      //so we don't crash into the corners as we turn.
+      if(frameCount % 5 < 2)
+      {
+        thrust(1);
+      }
+      else
+      {
+        thrust(0);
+      }
     }
 
-    //If we see a vertical wall, mirror our heading on the y-axis, and set a turnLock
-    //of 5 frames.
+    //If we see a vertical wall, mirror our heading on the y-axis, and set a turn
+    //lock of some number of frames.
     else if(seeWallX)
     {
       wallAvoidVector = modm(180 - currHeadingDeg, MAX_DEG);
-      turnLock = 5;
+      turnLock = lockNum;
     }
 
-    //If we see a horizontal wall, mirror our heading on the x-axis, and set a turnLock
-    //of 5 frames.
+    //If we see a horizontal wall, mirror our heading on the x-axis, and set a turn
+    //lock of some number of frames.
     else if(seeWallY)
     {
       wallAvoidVector = modm(-currHeadingDeg, MAX_DEG);
-      turnLock = 5;
+      turnLock = lockNum;
     }
     
-    //If the wall isn't perfectly horizontal or vertical, turn a little bit
-    //(note that this solution is not optimal, still bumps into walls occasionally),
-    //and set a turnLock of 5 frames.
+    //If we see a wall that's directly in front of us or a little to the right, turn
+    //left a bit, and set a turn lock.
     else if(seeWallAhead || seeWallR)
     {
-      wallAvoidVector = modm(currHeadingDeg + 90, MAX_DEG);
-      turnLock = 5;      
+      wallAvoidVector = modm(currHeadingDeg + turnLeft, MAX_DEG);
+      turnLock = lockNum; 
     }
-
+ 
+    //Similarly, if we see a wall that's just a little to the left of us, turn right
+    //a little, and set a turn lock.
     else if(seeWallL)
     {
-      wallAvoidVector = modm(currHeadingDeg - 90, MAX_DEG);
-      turnLock = 5;
+      wallAvoidVector = modm(currHeadingDeg + turnRight, MAX_DEG);
+      turnLock = lockNum;
     }
 
-    //If we see no walls at all, indicate this by a value of -1 for wall avoidance.
+    //If we see no walls at all, indicate this by returning a value of -1.
     else
     {
       wallAvoidVector = -1;
     }
   }
-  //If there's a turnLock on, count down.
+  
+  //Finally, if there's a turn lock on, we aren't supposed to turn for some number of
+  //frames still. So, just decrement the turn lock counter.
   else
   {
     turnLock--;
@@ -720,96 +774,55 @@ void wallAvoidance()
 
 
 //Check if we are near a designated corner point, and return a boolean value.
-bool nearCornerPeek()
+bool nearCornerPoint()
 {
+  int x, y;
+
+  //Check first that we are currently following some direct path, and that we are
+  //headed for a valid intermediate vertex.
   if(interPointId != -1)
   {
-    int x = map.vertices[getMPIndex(map, interPointId)].x;
-    int y = map.vertices[getMPIndex(map, interPointId)].y;
+    x = map.vertices[getMPIndex(map, interPointId)].x;
+    y = map.vertices[getMPIndex(map, interPointId)].y;
+
+    //If the given intermediate point is a corner point, and if we are within
+    //some specified distance of that corner, return true.
     if(found_in_array(corners_list, interPointId) 
-       && distForm(selfX(), x, selfY(), y) < 200)
+       && computeDistance(selfX(), x, selfY(), y) < 2 * POINT_PRECISION)
     {
       return true;
     }
   }
  
+  //Otherwise, we are not near a corner, so return false.
   return false;
 }
 
 
 /*****************************************************************************
- * Friendly Cohesion
- * ***************************************************************************/
-
-//Compute the angle toward the average location of all friends within a certain radius.
-void cohesion()
-{
-  int avgFriendX = averageFriendRadarX(COHESION_RADIUS, fov);
-  int avgFriendY = averageFriendRadarY(COHESION_RADIUS, fov);
- 
-  if(avgFriendX != -1 && avgFriendY != -1)
-  {
-    cohesionVector = getAngle(selfX(), avgFriendX, selfY(), avgFriendY);
-  }
-  else
-  {
-    cohesionVector = -1;
-  }
-}
-
-
-/*****************************************************************************
- * Enemy Separation
- * ***************************************************************************/
-
-//Compute the angle to stay away from the average position of all friends nearby.
-void separation()
-{
-  int avgFriendX = averageFriendRadarX(SEPARATION_RADIUS, fov);
-  int avgFriendY = averageFriendRadarY(SEPARATION_RADIUS, fov);
-  int sepVec = getAngle(selfX(), avgFriendX, selfY(), avgFriendY);
-
-  if(avgFriendX != -1 && avgFriendY != -1)
-  {
-    separationVector = modm(sepVec + 180, 360);
-  }
-  else
-  {
-    separationVector = -1;
-  }
-}
-
-
-/*****************************************************************************
- * Friendly Alignment 
- * ***************************************************************************/
-
-//Compute the angle to stay aligned with all friends within a certain radius.
-void alignment()
-{
-  alignmentVector = avgFriendlyDir(ALIGNMENT_RADIUS, fov); 
-}
- 
-
-/*****************************************************************************
  * No Enemy Flying (Controller)
  * ***************************************************************************/
 
-//TODO: find a way to balance wa ll avoidance, neighbor cohesion, and other vectors
 void noEnemyFlying()
 {
+  static int destPoints[] = {94, 9};
+  static int i = 0;
   int numVec = 0, totalVec = 0;
 
   wallAvoidance();
-  cohesion();
-  separation();  
-  alignment();
 
   //If the drone is focused, compute the shortest path from some point to another.
   //Otherwise, the drone will just fly aimlessly.
   if(focused)
   {
-    goToRandom(ALG_ASTAR, map);
+    //Oscillate between the two destination points, with ids 9 and 94.
+    vertex_t v = map.vertices[getMPIndex(map, destPoints[i])];
+    if(computeDistance(selfX(), v.x, selfY(), v.y) < POINT_PRECISION)
+    {
+      i = (i + 1) % 2;
+    }
+    
+    goToId(ALG_DIJKSTRA, map, destPoints[i]);
     degToAim = pathVector;
   }
 
@@ -819,37 +832,6 @@ void noEnemyFlying()
   {
     degToAim = wallAvoidVector;
   }
-  //If this drone is a follower rather than a leader, enact boids behavior.
-  else if(!isLeader)
-  { 
-    //Get the alignment vector and weight it.
-    if(alignmentVector != -1)
-    {
-      totalVec += alignmentVector * aWeight;
-      numVec += aWeight;
-    }
-    
-    //Get the separation vector and weight it.
-    if(separationVector != -1)
-    {
-      totalVec += separationVector * sWeight;
-      numVec += sWeight;
-    }
-   
-    //Get the cohesion vector and weight it.
-    if(cohesionVector != -1)
-    {
-      totalVec += cohesionVector * cWeight;
-      numVec += cWeight;
-    }
-
-    //Compute the weighted average of the three vectors above, and point in that
-    //direction.
-    if(numVec > 0)
-    {
-      degToAim = totalVec / numVec;
-    }
-  }
 
   //Whatever direction we've decided to turn to, do so.
   turnToDeg(degToAim);
@@ -858,13 +840,21 @@ void noEnemyFlying()
   if(mobile)
   {
     //If we're cautious and close to a corner, fly slow around the corner.
-    if(cautious && nearCornerPeek())
+    if(cautious && nearCornerPoint())
     {
-      SLOW;
+      //Slow down by thrusting only twice every 5 frames.
+      if(frameCount % 5 < 2)
+      {
+        thrust(1);
+      }
+      else
+      {
+        thrust(0);
+      }
     }
     else
     {
-      FAST;
+      thrust(1);
     }
   }
   //If we're especially anchored, just don't move.
@@ -873,7 +863,7 @@ void noEnemyFlying()
   //and be anchored despite not being perfectly still.
   else
   {
-    STOP;
+    thrust(0);
   }
 }
 
@@ -919,7 +909,7 @@ void updateAim(int dist)
   double aimInRad;
   int enemyHeadingToMe, enemyHeading, headingDiff, distInFront;  
 
-  enemyHeadingToMe = getAngle(pastMovement.x, selfX(), pastMovement.y, selfY());
+  enemyHeadingToMe = getAngleBtwnPoints(pastMovement.x, selfX(), pastMovement.y, selfY());
   enemyHeading = pastMovement.deg;
   headingDiff = abs(enemyHeadingToMe - enemyHeading);
   
@@ -934,11 +924,18 @@ void updateAim(int dist)
   {
     distInFront = 0;
   }
+
+  else if(dist < 100)
+  {
+    distInFront = 0;
+  }
+ 
   //Otherwise, aim some distance in front of the enemy, to try to beat him to
   //wherever he's going.
   else
   {
-    distInFront = MIN(2 * (dist - (dist % 50)), 300);
+    //TODO: fix this distInFront equation: not ideal
+    distInFront = MIN(dist, 500);
   }
 
   //Compute the new target location and turn.
@@ -946,7 +943,17 @@ void updateAim(int dist)
   int newY = pastMovement.y + (distInFront * sin(degToRad(pastMovement.deg)));
 
   aimInRad = atan2(newY - selfY(), newX - selfX());
-  degToAim = radToDeg(aimInRad);
+
+  wallAvoidance();
+
+  if(wallAvoidVector != -1)
+  {
+    degToAim = wallAvoidVector;
+  }
+  else
+  {
+    degToAim = radToDeg(aimInRad);
+  }
 }
 
 
@@ -1050,6 +1057,9 @@ void stealth()
 //Determine what to do if the drone sees an enemy.
 void enemySpotted()
 {
+  //Halt whatever path we were flying on before.
+  interruptPath();
+
   //If this drone really wants to stay alive, run away from the closest enemy.
   if(preserving)
   {
@@ -1065,7 +1075,7 @@ void enemySpotted()
   {
     int x = getNearestEnemyX();
     int y = getNearestEnemyY();
-    int d = distForm(selfX(), x, selfY(), y);
+    int d = computeDistance(selfX(), x, selfY(), y);
     engaging(x, y, d);
   }
 }
@@ -1096,15 +1106,14 @@ void printDangerPoints()
 //Handle whatever messages pop up through the chat feature.
 void handleMsg()
 {
-  if(strcmp(thisMsg, scanMsg(0)))
+  if(strcmp(currMsg, scanMsg(0)))
   {
     char buf[100];
     char *tok = NULL;
 
-    pastMsg = thisMsg;
-    thisMsg = scanMsg(0);
+    currMsg = scanMsg(0);
     
-    strcpy(buf, thisMsg);
+    strcpy(buf, currMsg);
     tok = strtok(buf, " ");
 
     if(!strcmp(tok, "mobile"))
@@ -1131,21 +1140,6 @@ void handleMsg()
     {
       tok = strtok(NULL, " ");
       focused = atoi(tok);
-    }
-    else if(!strcmp(tok, "aweight"))
-    {
-      tok = strtok(NULL, " ");
-      aWeight = atoi(tok);
-    }
-    else if(!strcmp(tok, "sweight"))
-    {
-      tok = strtok(NULL, " ");
-      sWeight = atoi(tok);
-    }
-    else if(!strcmp(tok, "cweight"))
-    {
-      tok = strtok(NULL, " ");
-      cWeight = atoi(tok);
     }
     else if(!strcmp(tok, "fov"))
     {
@@ -1234,16 +1228,10 @@ void handleMsg()
 //which state the chaser is currently in and acts accordingly)
 AI_loop()
 {
+  static int fourSecondsInFrames = 56;
   static int enemySpottedFC = 0;
   char numMsg[4], talkMsg[10];
   char buf[100], *tok = NULL, *tm = NULL;
-
-  if(frameCount == 300 && isLeader)
-  {
-    strcpy(talkMsg, talkMsgs[MSG_LEADER]);
-    sprintf(numMsg, "%d", selfID());
-    talk(strcat(talkMsg, numMsg));
-  }
 
   //by default, don't thrust, and increment the frame counter
   frameCount = (frameCount + 1) % INT_MAX;
@@ -1282,14 +1270,8 @@ AI_loop()
 
     case(STATE_ENEMY_SPOTTED):
       enemySpotted();
-      if(enemySpottedFC == 0)
-      {
-        enemySpottedFC = 56;
-      }
-      else
-      {
-        enemySpottedFC--;
-      }
+      //073118 only possible breaking spot for tomorrow
+      !enemySpottedFC ? enemySpottedFC = fourSecondsInFrames : enemySpottedFC--;
       break;
 
     case(STATE_NOENEMY):

@@ -1,0 +1,40 @@
+Matthew Coffman - August 2018
+
+How to run our chaser simulator:
+
+=================================================================
+First, navigate to the xpilot-engine/src/server/ directory
+and run the following:
+
+./getMapPoints.sh <mapfile>
+
+where mapfile is the server's file for the map you want to
+use. Then, execute
+
+./pvp_base_defense_server
+
+In another terminal, navigate to xpilot-engine/xpilot-ng-temp/c/
+and enter the following:
+
+./buildMapgen.sh
+export LD_LIBRARY_PATH=.
+./runMapgen.sh 1 points.csv
+
+A window and console will pop up while the map generator agent
+generates the map.csv file. When a message pops up saying that
+map generation is complete, quit that drone. Rerun the server
+as before, then in the xpilot-ng-temp/c/ directory perform the
+following:
+
+./buildChaser.sh
+export LD_LIBRARY_PATH=.
+./runChaser.sh <n> map.csv
+
+where n is a natural number representing the number of drones
+you would like to spawn.
+=================================================================
+
+This should spawn n chaser drones, each with a window and a
+console, though hopefully we will eventually have a spectator
+mode in which only one window will be generated for all the
+drones combined.
