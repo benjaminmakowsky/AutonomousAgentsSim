@@ -337,6 +337,7 @@ typedef struct player {
     bool	want_audio;		/* player wants audio from server */
 
     int armor;        /* Player health */
+    int cloak;        /* Whether or not this ship has a cloak (stealth) ability */
     char shapename[MAX_CHARS]; /* ship shape name. Stats are based on this */
     char role[MAX_CHARS]; /* behavioral role this unit plays */
     rallypoint_t rallypoint;   /* Where to head to at start */
@@ -501,8 +502,12 @@ static inline bool Player_has_autopilot(player_t *pl)
  */
 static inline bool Player_has_cloaking_device(player_t *pl)
 {
-    if (BIT(pl->have, HAS_CLOAKING_DEVICE))
-	return true;
+
+    //if (BIT(pl->have, HAS_CLOAKING_DEVICE)){
+    if( pl->item[ITEM_CLOAK] > 0 ){
+      printf("Player has cloaking device\n");
+      return true;
+    }
     return false;
 }
 

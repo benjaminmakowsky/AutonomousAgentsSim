@@ -2937,7 +2937,7 @@ static option_desc opts[] = {
 	"How many missiles players start with.\n",
 	OPT_ORIGIN_ANY | OPT_VISIBLE
     },
-    {
+/*    {
 	"initialCloaks",
 	"initialCloaks",
 	"0",
@@ -2946,7 +2946,7 @@ static option_desc opts[] = {
 	Set_initial_resources,
 	"How many cloaks players start with.\n",
 	OPT_ORIGIN_ANY | OPT_VISIBLE
-    },
+    }, */
     {
 	"initialSensors",
 	"initialSensors",
