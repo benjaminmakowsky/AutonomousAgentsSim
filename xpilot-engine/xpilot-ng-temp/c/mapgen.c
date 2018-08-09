@@ -1,7 +1,7 @@
 //Matthew Coffman - May 2018
 //Compile: ./buildMapgen.sh && export LD_LIBRARY_PATH=.
-//Run: ./runChaser.sh <n> <points_file> for some natural number n (defaults to 1)
-//  and some file containing the needed point information
+//Run:     ./runMapgen.sh <n> <points_file> for some natural number n (defaults to 1)
+//         and some file containing the needed points information
 #include "cAI.h"
 #include <sys/time.h>
 #include <stdarg.h>
@@ -189,7 +189,7 @@ void Compute()
   }
 
   //include a print statement indicating completion of the map.csv file, so the user
-  //can now quit this mapgen drone
+  //knows to quit this mapgen drone
   printf("\n\n\n/****************** MAP GENERATION COMPLETE *******************/\n\n\n");
 }
 

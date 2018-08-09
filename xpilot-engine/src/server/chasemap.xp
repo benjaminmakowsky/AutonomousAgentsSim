@@ -1,9 +1,9 @@
-# Created by ./xpilot-ng-xp-mapedit on Fri Jun  1 12:23:28 2018
+# Created by ./xpilot-ng-xp-mapedit on Wed Aug  1 11:09:57 2018
 
-mapwidth : 32
-mapheight : 32
-mapname : testasciimap
-mapauthor : MC
+mapwidth : 40
+mapheight : 40
+mapname : <New Map>
+mapauthor : <Your Name>
 limitedlives : no
 worldlives : 0
 selfimmunity : no
@@ -183,7 +183,7 @@ initialtractorbeams : 0
 initialautopilots : 0
 initialemergencyshields : 0
 initialmirrors : 0
-initialarmor : 0
+initialarmor : 2
 maxfuel : 10000
 maxtanks : 8
 maxecms : 10
@@ -261,36 +261,44 @@ cannonmaxscore : 100.0
 teamsharescore : no
 
 mapData: \multiline: EndOfMapdata
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x               1              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-x                              x
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+x                                      x
+x                                      x
+x  b                                b  x
+x   1                              b   x
+x    b                       axxxxx    x
+x     b   xxxxxx              axxxx    x
+x      b  xxxxxx               axxx    x
+x       b xxxxxx               baxx    x
+x    x    xxx                 b  ax    x
+x    x    xxx                b    a    x
+x    x    xxx       xxxxxxxxx          x
+x    x    xxx              bx          x
+x    x    xxx             b x          x
+x    x        b          b  x          x
+x    x         b        b   x     x    x
+x    x          b      b    x     x    x
+x    x           xxxxxx     x     x    x
+x    x           xxxxxx     x     x    x
+x    x           xxxxxx     x     x    x
+x    x     x     xxxxxx           x    x
+x    x     x     xxxxxx           x    x
+x    x     x     xxxxxx           x    x
+x    x     x    b      b          x    x
+x    x     x   b        b         x    x
+x          x  b          b        x    x
+x          x b             xxx    x    x
+x          xb              xxx    x    x
+x          xxxxxxxxx       xxx    x    x
+x    w    b                xxx    x    x
+x    xw  b                 xxx    x    x
+x    xxwb               xxxxxx b       x
+x    xxxw               xxxxxx  b      x
+x    xxxxw              xxxxxx   b     x
+x    xxxxxw                       b    x
+x   b                              2   x
+x  b                                b  x
+x                                      x
+x                                      x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 EndOfMapdata
