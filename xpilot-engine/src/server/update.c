@@ -608,8 +608,10 @@ static void Players_turn(void)
 	 */
 	if ((Player_uses_autopilot(pl)
 	     || Player_is_hoverpaused(pl))
-	    && !pl->damaged)
-	    do_Autopilot(pl);
+	    && !pl->damaged){
+        printf("do_Autopilot\n");
+	      do_Autopilot(pl);
+  }
 
 	pl->turnvel += pl->turnacc * timeStep;
 
@@ -709,7 +711,7 @@ static void Use_items(player_t *pl)
 	    Player_add_fuel(pl, ED_PHASING_DEVICE);
 
 	if (Player_is_cloaked(pl))
-	    Player_add_fuel(pl, ED_CLOAKING_DEVICE);
+	    //Player_add_fuel(pl, ED_CLOAKING_DEVICE);
 
 	if (BIT(pl->used, USES_DEFLECTOR))
 	    Player_add_fuel(pl, ED_DEFLECTOR);
@@ -821,10 +823,15 @@ static void Update_visibility(player_t *pl, int ind)
 	    pl->visibility[j].lastChange = frame_loops;
 
 	    if ((rfrac() * (pl->item[ITEM_SENSOR] + 1))
-		> (rfrac() * (pl_j->item[ITEM_CLOAK] + 1)))
-		pl->visibility[j].canSee = true;
-	    else
+		> (rfrac() * (pl_j->item[ITEM_CLOAK] + 1))){
+		    // Commenting this out, what this does is that 
+        // it uses RNG to determine frames in which to reveal cloaked
+        // players to the enemy team
+        //pl->visibility[j].canSee = true;
+    }
+	    else{
 		pl->visibility[j].canSee = false;
+      }
 	}
     }
 }

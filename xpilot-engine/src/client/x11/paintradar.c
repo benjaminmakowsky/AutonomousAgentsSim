@@ -655,6 +655,7 @@ void Paint_world_radar(void)
 	Paint_world_radar_old();
     else
 	Paint_world_radar_new();
+  
 }
 
 void Radar_show_target(int x, int y)

@@ -496,6 +496,12 @@ void Player_init_items(player_t *pl )
       SET_BIT(pl->have, HAS_ARMOR);
     }
   }
+  else if(i == ITEM_CLOAK ){
+    pl->item[i] = pl->cloak;
+    if( pl->cloak > 0 ){
+      SET_BIT(pl->have, HAS_CLOAKING_DEVICE );
+    }
+  }
   else if( i == ITEM_FOV ){
     pl->item[i] = pl->fov;
   }
@@ -542,20 +548,23 @@ int Init_player(int ind, shipshape_t *ship, int type)
     // New code: Give different stats to ship based on the shipshape
     warn( "%s\n", ship->name );
     if( !strcmp( ship->name, "quad" ) ){
+      pl->cloak = 1;
+      
       pl->power = 0.5;
-      pl->armor = 2;
-      //pl->maxturnsps = 255;
+      pl->armor = 2; 
       pl->shots = 2;
       pl->sight_range = 15;
       pl->mass = 75;
       pl->emptymass = 5;
       pl->fuel.max = 4000;
       pl->flying = true;
-      //pl->turnspeed = 50;
       pl->velocity = 3;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
       pl->fov = 60;
+    
+      pl->turnspeed = 5;
+      pl->maxturnsps = 10;
 
       pl->shot_range = 20;
       pl->shot_radius = 10;
@@ -564,20 +573,23 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->shotlife = 6;
     }
     else if( !strcmp( ship->name,"fixed" ) ){
+      pl->cloak = 0;
+      
       pl->power = 0.5;
       pl->armor = 1;
-      pl->maxturnsps = 10;
       pl->shots = 1;
       pl->sight_range = 20;
       pl->mass = 50;
       pl->emptymass = 5;
       pl->fuel.max = 2500;
       pl->flying = true;
-      //pl->turnspeed = 35;
       pl->velocity = 7;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
       pl->fov = 90;
+
+      pl->turnspeed = 1;
+      pl->maxturnsps = 2;
 
       pl->shot_range = 10;
       pl->shot_radius = 10;
@@ -586,20 +598,23 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->shotlife = 4;
     }
     else if( !strcmp( ship->name, "drone_tank" ) ){
+      pl->cloak = 0;
+      
       pl->power = 0.5;
       pl->armor = 5;
-      //pl->maxturnsps = 100;
       pl->shots = 5;
       pl->sight_range = 3;
       pl->mass = 150;
       pl->emptymass = 5;
       pl->fuel.max = 9999;
       pl->flying = false;
-      //pl->turnspeed = 25;
       pl->velocity = 0.1;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
       pl->fov = 130;
+
+      pl->turnspeed = 1;
+      pl->maxturnsps = 1;
 
       pl->shot_range = 10;
       pl->shot_radius = 0;
@@ -608,28 +623,32 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->shotlife = 20;
     }
     else if( !strcmp( ship->name, "infantry" ) ){
+      pl->cloak = 0;
+
       pl->power = 0.5;
       pl->armor = 2;
-      //pl->maxturnsps = 255;
-      pl->shots = 3;
-      pl->sight_range = 10;
-      pl->mass = 100;
+      pl->shots = 5;
+      pl->sight_range = 3;
+      pl->mass = 150;
       pl->emptymass = 5;
       pl->fuel.max = 9999;
       pl->flying = false;
-      //pl->turnspeed = 50;
       pl->velocity = 0.1;
       pl->acc.x = 0.1;
       pl->acc.y = 0.1;
-      pl->fov = 200;
+      pl->fov = 130;
+
+      pl->turnspeed = 25;
+      pl->maxturnsps = 8;
 
       pl->shot_range = 10;
-      pl->shot_radius = 10;
-      pl->addShotSpeed = 10;
+      pl->shot_radius = 0;
+      pl->addShotSpeed = 30;
       pl->shotmass = 0;
-      pl->shotlife = 10;
+      pl->shotlife = 20;
     }
     else{
+      pl->cloak = 0;
       pl->power = pl->power_s = MAX_PLAYER_POWER;
       pl->shots = 2;
       pl->armor = 1;
@@ -651,9 +670,6 @@ int Init_player(int ind, shipshape_t *ship, int type)
 
     }
 
-    pl->turnspeed = MAX_PLAYER_TURNSPEED;
-    pl->maxturnsps = MAX_SERVER_FPS;
-
     Player_init_items(pl);
 
     if (options.allowShipShapes && ship)
@@ -668,7 +684,8 @@ int Init_player(int ind, shipshape_t *ship, int type)
     }
 
 
-    pl->turnspeed = pl->turnspeed_s = MIN_PLAYER_TURNSPEED;
+    //pl->turnspeed = pl->turnspeed_s = MIN_PLAYER_TURNSPEED;
+    pl->turnspeed_s = pl->turnspeed;
     pl->type = OBJ_PLAYER;
     pl->pl_type = type;
     if (type == PL_TYPE_HUMAN)
@@ -688,8 +705,11 @@ int Init_player(int ind, shipshape_t *ship, int type)
     pl->have = DEF_HAVE;
     pl->used = DEF_USED;
 
-    if (pl->item[ITEM_CLOAK] > 0)
-	SET_BIT(pl->have, HAS_CLOAKING_DEVICE);
+    /*
+    if (pl->item[ITEM_CLOAK] > 0){
+	    SET_BIT(pl->have, HAS_CLOAKING_DEVICE);
+    }
+    */
 
     Mods_clear(&pl->mods);
     for (i = 0; i < NUM_MODBANKS; i++)

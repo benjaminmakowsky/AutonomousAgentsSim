@@ -349,6 +349,7 @@ static void Paint_lock(int hud_pos_x, int hud_pos_y)
     }
 }
 
+// This paints those small radar circles that David doesn't like
 static void Paint_hudradar(double hrscale, double xlimit, double ylimit,
 			   int sz)
 {
@@ -568,6 +569,8 @@ void Paint_HUD(void)
 		    (int) (ext_view_width / 2 + 100 * tcos(heading)),
 		    (int) (ext_view_height / 2 - 100 * tsin(heading)));
 
+  // Commenting this out so that the hud radar circles aren't drawn
+  /*
     if (hudRadarEnemyColor || hudRadarOtherColor) {
 	double hudRadarMapScale = (double) Setup->width / (double) 256;
 	Paint_hudradar(
@@ -583,6 +586,7 @@ void Paint_HUD(void)
 		       (double)active_view_height / 2,
 		       SHIP_SZ);
     }
+    */
 
     /* message scan hack by mara and jpv */
     if (Bms_test_state(BmsBall) && msgScanBallColor)

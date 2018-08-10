@@ -230,7 +230,7 @@ void Set_initial_resources(void)
 	LIMIT(world->items[i].cannon_initial, 0, world->items[i].limit);
 
     CLR_BIT(DEF_HAVE,
-	HAS_CLOAKING_DEVICE |
+	//HAS_CLOAKING_DEVICE |
 	HAS_EMERGENCY_THRUST |
 	HAS_EMERGENCY_SHIELD |
 	HAS_PHASING_DEVICE |
@@ -240,10 +240,12 @@ void Set_initial_resources(void)
 	HAS_MIRROR ); 
   //| HAS_ARMOR);
 
+    /*
     if (world->items[ITEM_CLOAK].initial > 0){
 	SET_BIT(DEF_HAVE, HAS_CLOAKING_DEVICE);
 	SET_BIT(DEF_USED, USES_CLOAKING_DEVICE);
 	}
+  */
     if (world->items[ITEM_EMERGENCY_THRUST].initial > 0)
 	SET_BIT(DEF_HAVE, HAS_EMERGENCY_THRUST);
     if (world->items[ITEM_EMERGENCY_SHIELD].initial > 0)
