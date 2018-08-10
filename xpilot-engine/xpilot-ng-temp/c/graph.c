@@ -46,8 +46,12 @@ bool vertex_in_graph(graph_t g, vertex_t v)
   int i;
 
   for(i = 0; i < g.num_v; i++)
+  {
     if(g.vertices[i].id == v.id)
+    {
       return true;
+    }
+  }
 
   return false;
 }
@@ -58,8 +62,12 @@ bool found_in_array(int arr[], int n)
   int i;
 
   for(i = 0; i < length(arr); i++)
+  {
     if(arr[i] == n)
+    {
       return true;
+    }
+  }
 
   return false;
 }
@@ -160,13 +168,17 @@ graph_t remove_edge(graph_t g, vertex_t v1, vertex_t v2)
     int id2 = g.edges[i].v2.id;
 
     if((id1 == v1.id && id2 == v2.id) || (id1 == v2.id && id2 == v1.id))
+    {
       edge_index = i;
+    }
   }
 
   if(edge_index != -1)
   {
     for(i = edge_index + 1; i < g.num_e; i++)
+    {
       g.edges[i-1] = g.edges[i];
+    }
     
     g.num_e--;
   }
@@ -200,10 +212,14 @@ graph_t remove_vertex(graph_t g, vertex_t v)
   for(i = 0; i < temp_g.num_v - 1; i++)
   {
     if(temp_g.vertices[i].id == v.id)
+    {
       vert_index = i;
+    }
 
     if(i >= vert_index)
+    {
       temp_g.vertices[i] = temp_g.vertices[i+1];
+    }
   }
 
   temp_g.num_v--;
@@ -216,11 +232,15 @@ void print_path(int *p)
   int i = 0, l = length(p);
 
   if(l == 0)
+  {
     return;
+  }
 
   printf("Path from %d to %d:  ", p[0], p[l-1]);
   for(i = 0; i < l-1; i++)
+  {
     printf("%d -> ", p[i]);
+  }
   printf("%d\n", p[l-1]);
 }
 
@@ -228,8 +248,11 @@ void print_path(int *p)
 int length(int arr[])
 {
   int count = 0;
+
   while(arr[count] != 0)
+  {
     count++;
+  }
 
   return count;
 }

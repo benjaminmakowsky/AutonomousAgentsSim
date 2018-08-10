@@ -335,7 +335,7 @@ typedef enum {
     RadarEnemy,
     RadarFriend
 } radar_type_t;
-//Added an id field to keep track of id numbers
+
 typedef struct {
     short		x, y, size;
     radar_type_t        type;

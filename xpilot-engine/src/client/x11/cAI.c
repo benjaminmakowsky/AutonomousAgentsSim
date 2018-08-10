@@ -1071,6 +1071,22 @@ int closestFriendRadarY()
 {
   return closestEFRadarY(RadarFriend);
 }
+
+//Returns the distance to the closest friend on the map, using the radar functions
+//above
+int closestFriendDist()
+{
+  int x = closestFriendRadarX();
+  int y = closestFriendRadarY();
+
+  if(x == -1 || y == -1)
+  {
+    return -1;
+  }
+
+  return computeDistance(selfX(), radarToPixelX(x), selfY(), radarToPixelY(y));
+}
+
 //
 //END OF RADAR POSITION (X/Y) FUNCTIONS 
 //
@@ -1956,30 +1972,6 @@ int start(int argc, char *argv[]) {
 
 // BEGINNING OF HELPER FUNCTIONS FOR CHASER.C (MATTHEW COFFMAN - MAY 2018)
 
-//Returns the width of the current map
-int getMapWidth()
-{
-  return Setup->width;
-}
-
-//Returns the height of the current map
-int getMapHeight()
-{
-  return Setup->height;
-}
-
-//Scales a radar x-coordinate (0-256) to the width of the map
-int radarToPixelX(int x)
-{
-  return (int)(x * Setup->width / 256.0);
-}
-
-//Scales a radar y-coordinate (0-256) to the height of the map
-int radarToPixelY(int y)
-{
-  return (int)(y * Setup->height / 256.0);
-}
-
 //Computes the distance between two points, given x- and y-coordinates
 int computeDistance(int x1, int x2, int y1, int y2)
 {
@@ -2005,6 +1997,30 @@ int modm(int n, int m)
   }
 
   return res;
+}
+
+//Returns the width of the current map
+int getMapWidth()
+{
+  return Setup->width;
+}
+
+//Returns the height of the current map
+int getMapHeight()
+{
+  return Setup->height;
+}
+
+//Scales a radar x-coordinate (0-256) to the width of the map
+int radarToPixelX(int x)
+{
+  return (int)(x * Setup->width / 256.0);
+}
+
+//Scales a radar y-coordinate (0-256) to the height of the map
+int radarToPixelY(int y)
+{
+  return (int)(y * Setup->height / 256.0);
 }
 
 //Uses radar to find the x-coordinate of the nearest enemy, give or take a few
@@ -2164,6 +2180,107 @@ bool radarFriendInView(int fov, int rov)
   return radarEFInView(fov, rov, RadarFriend);
 }
 
+
+//Get separation vector, to stay away from friends or enemies
+int getEFSeparation(int r, int fov, int ef)
+{
+  int i, x, y;
+  int efX, efY;
+  double maxDist;
+  double distances[num_radar];
+  double total;
+  int angleTo, angleAway;
+  double finalAngle;
+
+  maxDist = 0.0;
+  total = 0.0;
+  finalAngle = 0.0;
+
+  //Go through all ships on radar
+  for(i = 1; i < num_radar; i++)
+  {
+    efX = radarToPixelX(radar_ptr[i].x);
+    efY = radarToPixelY(radar_ptr[i].y);
+
+    //Check if the ship we're currently looking at is a friend/enemy, as
+    //specified, and whether it's in sight
+    if(radar_ptr[i].type == ef && inSight(efX, efY, fov, r))
+    {
+      //If the above conditions are met, update its entry in the distances
+      //array with the distance from the current ship to myself
+      distances[i] = (double)computeDistance(selfX(), efX, selfY(), efY);
+      //Update the variable containing the distance to the farthest ship, if needed
+      if(distances[i] > maxDist)
+      {
+        maxDist = distances[i];
+      }
+    }
+    //If the above conditions were not met, set the current entry in the
+    //distances array to 0.0
+    else
+    {
+      distances[i] = 0.0;
+    }
+  }
+
+  //Go through each ship on radar
+  for(i = 1; i < num_radar; i++)
+  {
+    //For each ship on radar that we care about, apply an inverse square relation-
+    //ship between how far away it is and how much we want to get away from it
+    if(distances[i])
+    {
+      distances[i] = pow(maxDist / distances[i], 2);
+      //Accumulate the total (modified) distance computed
+      total += distances[i];
+    }
+  }
+
+  //For each (modified) distance value in the distances array, compute the ratio
+  //between it and the total (modified) distance
+  for(i = 1; i < num_radar; i++)
+  {
+    if(distances[i])
+    {
+      distances[i] /= total;
+    }
+  }
+
+  //With the angles to all the nearby friends/enemies appropriately weighted above,
+  //compute the angle we need to go to get away
+  for(i = 1; i < num_radar; i++)
+  {
+    if(distances[i])
+    {
+      efX = radarToPixelX(radar_ptr[i].x);
+      efY = radarToPixelY(radar_ptr[i].y);
+      angleTo = selfAngleToXY(efX, efY);
+      angleAway = modm(angleTo + 180, 360);
+      finalAngle += distances[i] * angleAway;
+    }
+  }
+
+  //Return the resulting heading, or -1 if no valid heading was computed
+  if(finalAngle)
+  {
+    return (int)finalAngle;
+  }
+   
+  return -1;
+}
+
+//Get friendly separation
+int getFriendSeparation(int r, int fov)
+{
+  getEFSeparation(r, fov, RadarFriend);
+}
+
+//Get enemy separation
+int getEnemySeparation(int r, int fov)
+{
+  getEFSeparation(r, fov, RadarEnemy);
+}
+
 //Returns average x-coordinate (in pixels) of all friends/enemies within 
 //a given radius
 int averageEFRadarX(int r, int fov, int ef) 
@@ -2304,42 +2421,6 @@ int avgFriendlyDir(int r, int fov)
   return modm(radToDeg(atan2(yComp, xComp)), 360);
 }
 
-/*
-//Returns average heading (in deg) of all friends in view
-int avgFriendlyDir(int r, int fov)
-{
-  int i, d, x, y;
-  int num = 0, total = 0;
-
-  for(i = 0; i < num_ship; i++)
-  {
-    //get the coordinates of the current ship
-    x = ship_ptr[i].x;
-    y = ship_ptr[i].y;
-
-    //if this ship is not in exactly the same position as me (ergo not me),
-    //in sight, and a friend (i.e. on my team), include its direction in the average
-    if((x != selfPos.x || y != selfPos.y)
-       && inSight(x, y, fov, r)
-       && enemyTeamId(ship_ptr[i].id) != -1
-       && enemyTeamId(ship_ptr[i].id) == selfTeam())
-    {
-      total += ship_ptr[i].dir;
-      num++;
-    }
-  }
-
-  //if total == 0, we must not have found any friends alive, so return -1
-  if(!total)
-  {
-    return -1;
-  }
-  
-  //compute the average direction and scale it from the units it's in (0 <= theta < 128)
-  //to degrees (0 <= theta < 360) (not sure why it starts off between 0 and 128) - Matthew
-  return total * 360 / 128 / num;
-}
-*/
 
 //Figures out the id of the ship at the given point, or returns -1 if no such ship exists.
 int getIdAtXY(int x, int y)

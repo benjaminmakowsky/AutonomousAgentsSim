@@ -31,10 +31,40 @@ export LD_LIBRARY_PATH=.
 ./runChaser.sh <n> map.csv
 
 where n is a natural number representing the number of drones
-you would like to spawn.
+you would like to spawn. This should spawn n chaser drones, each 
+with a window and a console, though hopefully we will eventually
+have a spectator mode in which only one window will be generated 
+for all the drones combined.
 =================================================================
 
-This should spawn n chaser drones, each with a window and a
-console, though hopefully we will eventually have a spectator
-mode in which only one window will be generated for all the
-drones combined.
+
+Files included in chaser.c:
+
+=================================================================
+Notice that chaser.c includes several files local to this
+xpilot-ng-temp/c/ directory. These files include the following:
+
+  - graph.c
+  - astar.c
+  - bfs.c
+  - dfs.c
+  - dijkstra.c
+
+graph.c contains the structures and functions necessary for an
+abstract representation of a graph as a collection of vertices
+and edges. Vertices consist of an id and an x- and y-coordinate.
+Edges comprise two edges and a weight. The functionality given
+for these graphs includes adding and removing edges and vertices,
+determining whether a particular vertex can be found in a graph,
+and computing the length of an array.
+
+The other four files listed provide implementations of path-
+finding algorithms, useful for our chaser drones to compute the
+(shortest) paths through their internal representations of the
+map. These algorithms include Dijkstra's algorithm, the A*
+algorithm, and breadth-first and depth-first searches.
+
+If chaser.c and its corresponding build and run scripts are ever
+moved, THESE FIVE FILES MUST MOVE WITH THEM. If they do not, the
+drones will be unable to use path-finding.
+=================================================================

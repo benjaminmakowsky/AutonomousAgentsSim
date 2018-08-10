@@ -1,5 +1,6 @@
 //Matthew Coffman - June 2018
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
 #include <string.h>
@@ -62,14 +63,14 @@ int get_vs_index_d(vsd_t *vsptr, int len, int id)
   }
 
   //If we've gotten this far, it must be the case that l > r, meaning the desired
-  //id must not be in the array at all, so returning the length of the array will
+  //id must not be in the array at all, so returning -1 will
   //indicate an invalid answer.
-  return len;
+  return -1;
 }
 
 //Computes the shortest path from the start vertex to the end vertex, and stores the
 //path in the given path variable.
-void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
+int dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
 {
   int i, curr_vsi, min_not_done_vsi, end_vsi;
   int backwards_path[g.num_v+1];
@@ -82,7 +83,7 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   {
     printf("Error: start vertex %d not found in graph.\n", start.id);
     path[0] = '\0';
-    return;
+    return EXIT_FAILURE;
   }
 
   //Likewise, if the end vertex can't be found, throw an error and return.
@@ -90,7 +91,7 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   {
     printf("Error: end vertex %d not found in graph.\n", end.id);
     path[0] = '\0';
-    return;
+    return EXIT_FAILURE;
   }
 
   //In the vacuous case that we're trying to find a path from a vertex to itself,
@@ -99,7 +100,7 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   {
     path[0] = start.id;
     path[1] = '\0';
-    return;
+    return EXIT_SUCCESS;
   }
 
   //After allocating the required memory, clear the memory by setting every byte to 0.
@@ -143,13 +144,16 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
         other_vsi = get_vs_index_d(vsptr, g.num_v, g.edges[i].v1.id);
       }
 
-      //If the total weight of the other vertex is greater than that of the current
-      //vertex plus the edge weight between them, update the other vertex's pred_id
-      //and total weight accordingly.
-      if(vsptr[other_vsi].t_weight > vsptr[curr_vsi].t_weight + g.edges[i].weight)
+      if(other_vsi != -1)
       {
-        vsptr[other_vsi].t_weight = vsptr[curr_vsi].t_weight + g.edges[i].weight;
-        vsptr[other_vsi].pred_id = vsptr[curr_vsi].id;
+        //If the total weight of the other vertex is greater than that of the current
+        //vertex plus the edge weight between them, update the other vertex's pred_id
+        //and total weight accordingly.
+        if(vsptr[other_vsi].t_weight > vsptr[curr_vsi].t_weight + g.edges[i].weight)
+        {
+          vsptr[other_vsi].t_weight = vsptr[curr_vsi].t_weight + g.edges[i].weight;
+          vsptr[other_vsi].pred_id = vsptr[curr_vsi].id;
+        }
       }
     }
 
@@ -205,7 +209,7 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
   {
     printf("Error: no path from %d to %d\n", start.id, end.id);
     path[0] = '\0';
-    return;
+    return EXIT_FAILURE;
   }
 
   i = 0;
@@ -233,6 +237,8 @@ void dijkstra(graph_t g, vertex_t start, vertex_t end, int *path)
 
   //Put a null character at the end of the path, like above.
   path[i] = '\0';
+
+  return EXIT_SUCCESS;
 }
 
 //Generates a path from start to end that first goes through an unspecified

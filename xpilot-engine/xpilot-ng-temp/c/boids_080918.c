@@ -55,9 +55,9 @@ int frameCount = 0;		//how many frames have elapsed
 int degToAim;			//what direction do we want to go
 int turnLock = 0;		//time not allowed to compute new wall avoidance
 int wallVector = -1;		//where to go to avoid crashing into a wall
-int wWeight = 0;		//weight of wall avoidance relative to other vectors
+int wWeight = 5;		//weight of wall avoidance relative to other vectors
 int pVector = -1;		//information on the most recent (past) heading	
-int pWeight = 5;
+int pWeight = 0;
 int aVector = -1; 		//(friend) alignment variables
 int aWeight = 0;
 int aRadius = 400;
@@ -66,10 +66,10 @@ int cWeight = 0;
 int cRadius = 400;	
 int sVector = -1;		//(friend) separation variables
 int sWeight = 0;
-int sRadius = 200;	
+int sRadius = 100;	
 int eVector = -1;		//(enemy) separation variables
-int eWeight = 0;
-int eRadius = 200;
+int eWeight = 5;
+int eRadius = 100;
 int fov = 60;			//field (angle) of vision
 int mobile = 1;			//allows us to completely anchor all drones	
 
@@ -303,7 +303,18 @@ void cohesion()
 //Compute the angle to stay away from the average position of all friends nearby.
 void separation()
 {
-  sVector = getFriendSeparation(sRadius, fov);
+  int avgFriendX = averageFriendRadarX(sRadius, fov);
+  int avgFriendY = averageFriendRadarY(sRadius, fov);
+  int sepVec = getAngleBtwnPoints(selfX(), avgFriendX, selfY(), avgFriendY);
+
+  if(avgFriendX != -1 && avgFriendY != -1)
+  {
+    sVector = modm(sepVec + 180, 360);
+  }
+  else
+  {
+    sVector = -1;
+  }
 }
 
 
@@ -311,10 +322,24 @@ void separation()
  * Enemy Separation
  * ***************************************************************************/
 
-//Compute the angle to stay away from the average position of all enemies  nearby.
+//Compute the angle to stay away from the average position of all friends nearby.
 void enemySeparation()
 {
-  eVector = getEnemySeparation(eRadius, fov);
+  int avgEnemyX = averageEnemyRadarX(eRadius, fov);
+  int avgEnemyY = averageEnemyRadarY(eRadius, fov);
+  int sepVec = getAngleBtwnPoints(selfX(), avgEnemyX, selfY(), avgEnemyY);
+
+  if(avgEnemyX != -1 && avgEnemyY != -1)
+  {
+    if(teamNum == 1)
+      eVector = modm(sepVec + 180, 360);
+    else
+      eVector = sepVec;
+  }
+  else
+  {
+    eVector = -1;
+  }
 }
 
 
@@ -326,11 +351,10 @@ void enemySeparation()
 void noEnemyFlying()
 {
   static int numVec, totalVec;
-  int avgFriendX, avgFriendY, avgFriendDist = -1;
 
   numVec = totalVec = 0;
   
-  if(frameCount % 7 == 0)
+  if(frameCount % 14 == 0)
   {
     pVector = degToAim;
   }
@@ -341,65 +365,55 @@ void noEnemyFlying()
   separation();  
   enemySeparation();
 
-  //If there is a wall nearby, aim away from it. Wall avoidance takes precedence over
-  //all the other vectors below.
-  if(wallVector != -1)
-  {
-    totalVec += wallVector * wWeight;
-    numVec += wWeight;
-  }
-
-  //Get the alignment vector and weight it.
-  if(aVector != -1)
-  {
-    totalVec += aVector * aWeight;
-    numVec += aWeight;
-  }
-  
-  //Get the cohesion vector and weight it.
-  if(cVector != -1)
-  {
-    avgFriendX = averageFriendRadarX();
-    avgFriendY = averageFriendRadarY();
-    
-    if(avgFriendX != -1 && avgFriendY == -1)
+  //If this drone is a follower rather than a leader, enact boids behavior.
+//  else 
+//  { 
+    //If there is a wall nearby, aim away from it. Wall avoidance takes precedence over
+    //all the other vectors below.
+    if(wallVector != -1)
     {
-      avgFriendDist = computeDistance(selfX(), avgFriendX, selfY(), avgFriendY);
+      totalVec += wallVector * wWeight;
+      numVec += wWeight;
     }
 
-    cWeight = pow(1 + avgFriendDist / 100, 2);
+    //Get the alignment vector and weight it.
+    if(aVector != -1)
+    {
+      totalVec += aVector * aWeight;
+      numVec += aWeight;
+    }
+    
+    //Get the cohesion vector and weight it.
+    if(cVector != -1)
+    {
+      totalVec += cVector * cWeight;
+      numVec += cWeight;
+    }
 
-    totalVec += cVector * cWeight;
-    numVec += cWeight;
-  }
+    //Get the friend separation vector and weight it.
+    if(sVector != -1)
+    {
+      totalVec += sVector * sWeight;
+      numVec += sWeight;
+    }
+    
+    //Get the enemy separation vector and weight it.
+    if(eVector != -1)
+    {
+      totalVec += eVector * eWeight;
+      numVec += eWeight;
+    }
+   
+    totalVec += pVector * pWeight;
+    numVec += pWeight; 
 
-  //Get the friend separation vector and weight it.
-  if(sVector != -1)
-  {
-    sWeight = pow(4 - closestFriendDist() / 50, 2);
-
-    totalVec += sVector * sWeight;
-    numVec += sWeight;
-  }
-  
-  //Get the enemy separation vector and weight it.
-  if(eVector != -1)
-  {
-    eWeight = pow(4 - computeDistToNearestEnemy() / 50, 2);
-
-    totalVec += eVector * eWeight;
-    numVec += eWeight;
-  }
- 
-  totalVec += pVector * pWeight;
-  numVec += pWeight; 
-
-  //Compute the weighted average of the four vectors above, and point in that
-  //direction.
-  if(numVec > 0)
-  {
-    degToAim = totalVec / numVec;
-  }
+    //Compute the weighted average of the four vectors above, and point in that
+    //direction.
+    if(numVec > 0)
+    {
+      degToAim = totalVec / numVec;
+    }
+//  }
 
   //Whatever direction we've decided to turn to, do so.
   turnToDeg(degToAim);
@@ -520,9 +534,6 @@ void handleMsg()
 //which state the chaser is currently in and acts accordingly)
 AI_loop()
 {
-//  screenEnemyXId(int idx)
-//  closestEnemyShipId()
- 
   //by default, don't thrust, and increment the frame counter
   frameCount = (frameCount + 1) % INT_MAX;
 
@@ -579,41 +590,3 @@ int main(int argc, char *argv[])
 
   return start(argc, argv);
 }
-
-
-
-
-
-/*
-  Friendly separation: old code
-
-  int avgFriendX = averageFriendRadarX(sRadius, fov);
-  int avgFriendY = averageFriendRadarY(sRadius, fov);
-  int sepVec = getAngleBtwnPoints(selfX(), avgFriendX, selfY(), avgFriendY);
-
-  if(avgFriendX != -1 && avgFriendY != -1)
-  {
-    sVector = modm(sepVec + 180, 360);
-  }
-  else
-  {
-    sVector = -1;
-  }
-*/
-
-/*
-  Enemy separation: old code
-
-  int avgEnemyX = averageEnemyRadarX(eRadius, fov);
-  int avgEnemyY = averageEnemyRadarY(eRadius, fov);
-  int sepVec = getAngleBtwnPoints(selfX(), avgEnemyX, selfY(), avgEnemyY);
-
-  if(avgEnemyX != -1 && avgEnemyY != -1)
-  {
-      eVector = modm(sepVec + 180, 360);
-  }
-  else
-  {
-    eVector = -1;
-  }
-*/

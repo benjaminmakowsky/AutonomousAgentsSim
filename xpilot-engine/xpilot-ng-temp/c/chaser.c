@@ -426,6 +426,7 @@ int cpIndexSelf(graph_t g)
 //to the point with the given id.
 void pathToPointId(int alg, graph_t g, int id, int *path)
 {
+  int path_failure = 0;
   int i, cpToMe = cpIndexSelf(g), x, y, deg, r, angleToDest, tempHead;
   vertex_t v1, v2, v3, v4;
   
@@ -436,7 +437,7 @@ void pathToPointId(int alg, graph_t g, int id, int *path)
   switch(alg)
   {
     case(ALG_ASTAR):
-      astar(g, v1, v2, path);  
+      path_failure = astar(g, v1, v2, path);  
       break;
 
     case(ALG_BFS):
@@ -448,7 +449,7 @@ void pathToPointId(int alg, graph_t g, int id, int *path)
       break;
 
     case(ALG_DIJKSTRA):
-      dijkstra(g, v1, v2, path);
+      path_failure = dijkstra(g, v1, v2, path);
       break;
 
     //This extended Dijkstra's algorithm allows a drone to go from one point to
@@ -469,14 +470,14 @@ void pathToPointId(int alg, graph_t g, int id, int *path)
       dijkstraN(g, v1, v2, path, 2, v3, v4);
       break; 
   }
- 
-  //Print the path found.
-  if(path[0] == '\0')
-  {
-    puts("NO PATH FOUND");
-  }
 
   print_path(path);
+
+  if(path_failure)
+  {
+    interruptPath();
+//    focused = 0;
+  }
 }
 
 
