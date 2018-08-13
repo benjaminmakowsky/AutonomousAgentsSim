@@ -1091,94 +1091,174 @@ int closestFriendDist()
 //END OF RADAR POSITION (X/Y) FUNCTIONS 
 //
 
+//returns x coordinate of closest item on screen -JNE
+int closestItemX() 
+{                
+  int i, x;
+  double best = -1, l = -1;
+ 
+  //go through each item on screen 
+  for(i = 0; i < num_itemtype; i++) 
+  {         
+    //get distance  
+    l = sqrt(pow(itemtype_ptr[i].x - selfPos.x, 2)
+             + pow(itemtype_ptr[i].y - selfPos.y, 2));
 
-int closestItemX() {                //returns x coordinate of closest item on screen -JNE
-    int i, x;
-    double best = -1, l = -1;
-    for (i=0;i<num_itemtype;i++) {          //go through each item on screen
-        l = sqrt(pow(itemtype_ptr[i].x-selfPos.x,2)+pow(itemtype_ptr[i].y-selfPos.y,2));        //get distance
-        if (l < best || best == -1) {           //if distance is smallest yet
-            best = l;                       //update distance
-            x=itemtype_ptr[i].x;            //update x coordinate
-        }
+    //if distance is smallest yet
+    if(l < best || best == -1) 
+    { 
+      best = l;                       //update distance
+      x = itemtype_ptr[i].x;          //update x coordinate
     }
-    if (best==-1)   //if so there are no items on screen
-        return -1;
-    return x;
+  }
+
+  //if so there are no items on screen
+  if(best == -1)
+  {
+    return -1;
+  }
+
+  return x;
 }
-int closestItemY() {                //returns y coordinate of closest item on screen -JNE
-    int i, y;
-    double best = -1, l = -1;
-    for (i=0;i<num_itemtype;i++) {          //go through each item on screen
-        l = sqrt(pow(itemtype_ptr[i].x-selfPos.x,2)+pow(itemtype_ptr[i].y-selfPos.y,2));        //get distance
-        if (l < best || best == -1) {           //if distance is smallest yet
-            best = l;                       //update distance
-            y=itemtype_ptr[i].y;            //update y coordinate
-        }
+
+//returns y coordinate of closest item on screen -JNE
+int closestItemY() 
+{               
+  int i, y;
+  double best = -1, l = -1;
+
+  //go through each item on screen
+  for(i = 0; i < num_itemtype; i++) 
+  {         
+    //get distance 
+    l = sqrt(pow(itemtype_ptr[i].x - selfPos.x,2) 
+                 + pow(itemtype_ptr[i].y - selfPos.y,2));
+
+    //if distance is smallest yet
+    if(l < best || best == -1) 
+    {           
+      best = l;                       //update distance
+      y = itemtype_ptr[i].y;          //update y coordinate
     }
-    if (best==-1)   //if so there are no items on screen
-        return -1;
-    return y;
+  }
+
+  //if so there are no items on screen
+  if(best == -1)   
+  {
+    return -1;
+  }
+
+  return y;
 }
 //End wrap helper functions -JNE
-int closestShipId() {		//returns ID of closest ship on screen -JNE
-	int i, d;
-	double best = -1, l = -1;
-	for (i=0;i<num_ship;i++) {		//go through each ship on screen
-		if (ship_ptr[i].x!=selfPos.x || ship_ptr[i].y!=selfPos.y){		//make sure ship is not player's ship
-			l = sqrt(pow(wrapX(ship_ptr[i].x,selfPos.x)-selfPos.x,2)+pow(wrapY(ship_ptr[i].y,selfPos.y)-selfPos.y,2));		//distance formula
-			if (l < best || best == -1) {		//if distance is smallest yet
-				best = l;			//update distance
-				d = ship_ptr[i].id;		//update id
-			}
-		}
-	}
-	if (best == -1)	//if so there are no ships on screen
-		return -1;
-	return d;
+
+//returns ID of closest ship on screen -JNE
+int closestShipId() 
+{
+  int i, d;
+  double best = -1, l = -1;
+  
+  //go through each ship on screen
+  for(i = 0; i < num_ship; i++) 
+  {		
+    //make sure ship is not player's ship
+    if(ship_ptr[i].x != selfPos.x || ship_ptr[i].y != selfPos.y)
+    {	
+      //distance formula	
+      l = sqrt(pow(wrapX(ship_ptr[i].x, selfPos.x) - selfPos.x, 2)
+               + pow(wrapY(ship_ptr[i].y, selfPos.y) - selfPos.y,2));
+
+      //if distance is smallest yet
+      if(l < best || best == -1) 
+      {		
+        best = l;			//update distance
+        d = ship_ptr[i].id;		//update id
+      }
+    }
+  }
+
+  //if so there are no ships on screen
+  if(best == -1)
+  {
+    return -1;
+  }
+
+  return d;
 }
 
-int closestFriendlyShipId() {
-	int i, d;
-	double best = -1, l = -1;
-	for (i=0;i<num_ship;i++) {		//go through each ship on screen
-		if ( ( ship_ptr[i].x!=selfPos.x || ship_ptr[i].y!=selfPos.y ) && enemyTeamId( ship_ptr[i].id ) != -1 &&  enemyTeamId( ship_ptr[i].id ) == selfTeam() ){		//make sure ship is not player's ship
-			l = sqrt(pow(wrapX(ship_ptr[i].x,selfPos.x)-selfPos.x,2)+pow(wrapY(ship_ptr[i].y,selfPos.y)-selfPos.y,2));		//distance formula
-			if (l < best || best == -1) {		//if distance is smallest yet
-				best = l;			//update distance
-				d = ship_ptr[i].id;		//update id
-			}
-		}
-	}
-	if (best == -1)	//if so there are no ships on screen
-		return -1;
-	return d;
-
-}
-
-int closestEnemyShipId() {
+//get the id of the closest friendly ship on screen
+int closestFriendlyShipId() 
+{
   int i, d;
   double best = -1, l = -1;
 
-  for (i=0;i<num_ship;i++) {		//go through each ship on screen
-    if((ship_ptr[i].x!=selfPos.x || ship_ptr[i].y!=selfPos.y) 
-        && enemyTeamId(ship_ptr[i].id) != -1 
-        && enemyTeamId(ship_ptr[i].id) != selfTeam()){		//make sure ship is not player's ship
+  //go through each ship on screen
+  for(i = 0; i < num_ship; i++) 
+  {
+    //make sure ship is not player's ship   
+    if((ship_ptr[i].x != selfPos.x || ship_ptr[i].y != selfPos.y) 
+        && enemyTeamId(ship_ptr[i].id) != -1
+        && enemyTeamId(ship_ptr[i].id) == selfTeam())
+    {
+      //distance formula
+      l = sqrt(pow(wrapX(ship_ptr[i].x, selfPos.x) - selfPos.x, 2)
+               + pow(wrapY(ship_ptr[i].y, selfPos.y) - selfPos.y,2));
 
-      l = sqrt(pow(wrapX(ship_ptr[i].x,selfPos.x)-selfPos.x,2)+pow(wrapY(ship_ptr[i].y,selfPos.y)-selfPos.y,2));		//distance formula
-      if (l < best || best == -1) {		//if distance is smallest yet
+      //if distance is smallest yet
+      if(l < best || best == -1) 
+      {
+        best = l;			//update distance
+        d = ship_ptr[i].id;		//update id
+      }
+    }
+  }
+
+  //if so there are no ships on screen
+  if(best == -1)
+  {
+    return -1;
+  }
+
+  return d;
+}
+
+//get the id of the closest enemy ship on screen
+int closestEnemyShipId() 
+{
+  int i, d;
+  double best = -1, l = -1;
+
+  //go through each ship on screen
+  for(i = 0; i < num_ship; i++) 
+  {
+    //make sure ship is not player's ship	
+    if((ship_ptr[i].x != selfPos.x || ship_ptr[i].y != selfPos.y) 
+        && enemyTeamId(ship_ptr[i].id) != -1 
+        && enemyTeamId(ship_ptr[i].id) != selfTeam())
+    {
+      //distance formula
+      l = sqrt(pow(wrapX(ship_ptr[i].x, selfPos.x) - selfPos.x, 2)
+               + pow(wrapY(ship_ptr[i].y, selfPos.y) - selfPos.y, 2));
+
+      //if distance is smallest yet 
+      if(l < best || best == -1) 
+      {	
         best = l;			//update distance
 	d = ship_ptr[i].id;		//update id
       }
     }
   }
 
-  if (best == -1)	//if so there are no ships on screen
+  //if so there are no ships on screen
+  if (best == -1)
+  {	
     return -1;
+  }
+
   return d;
 }
-
 //End closest functions -JNE
+
 //ID functions -JNE
 double enemySpeedId(int id) {	//returns velocity (in pixels per frame) of an enemy with a particular ID -JNE
 	int i, j;
