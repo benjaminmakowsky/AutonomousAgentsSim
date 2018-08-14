@@ -129,7 +129,7 @@ int preserving = 0;		//run away from enemies
 int stealthy = 1;		//"cloak" when enemies spotted
 int mobile = 1;			//whether we move at all; as opposed to anchored
 int cautious = 0;		//go slow around corner points
-int focused = 0;		//fly directly to some point, rather than aimlessly
+int focused = 1;		//fly directly to some point, rather than aimlessly
 int avoidant = 1;		//avoid marked "dangerous" points
 char *currMsg = "dummy";	//most recent message in the buffer
 int fov = 60;			//field of vision (degrees away from current heading)
@@ -561,6 +561,8 @@ void goToId(int alg, graph_t g, int id)
     interY = g.vertices[getMPIndex(g, interPointId)].y;
   }
 
+  printf("%d\n", interPointId);
+
   //If we've made it this far, we must still have some distance to go toward our
   //next point in the path, so set the pathVector to point in that direction.
   pathVector = selfAngleToXY(interX, interY);
@@ -578,13 +580,18 @@ void goToXY(int alg, graph_t g, int x, int y)
 void goToRandom(int alg, graph_t g)
 {
   static int destX, destY;
+  static vertex_t v;
 
-  //Pick a random x and y coordinate.
-  destX = rand() % mapWidth;
-  destY = rand() % mapHeight;
+  if((!destX && !destY) || computeDistance(selfX(), v.x, selfY(), v.y) < 100)
+  {
+    //Pick a random x and y coordinate.
+    destX = rand() % mapWidth;
+    destY = rand() % mapHeight;
+    v = g.vertices[cpIndexXY(g, destX, destY)];
+  }
  
   //Go to that x and y coordinate pair.
-  goToXY(alg, g, destX, destY);
+  goToId(alg, g, v.id);
 }
 
 
@@ -822,8 +829,8 @@ void noEnemyFlying()
     {
       i = (i + 1) % 2;
     }
-    
-    goToId(ALG_DIJKSTRA, map, destPoints[i]);
+    goToRandom(ALG_DIJKSTRA, map);
+    //goToId(ALG_DIJKSTRA, map, destPoints[i]);
     degToAim = pathVector;
   }
 

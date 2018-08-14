@@ -1,4 +1,4 @@
-//Matthew Coffman - July 2018
+//Matthew Coffman - May 2018
 #include "cAI.h"
 #include <sys/time.h>
 #include <stdarg.h>
@@ -19,8 +19,14 @@
 #include "dfs.c"
 #include <sys/time.h>
 
+//macros
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define SIGN(X) ((X) > 0 ? 1 : ((X) < 0 ? -1 : 0))
+
 //global constants
+#define CORNER_LOOK_AHEAD 75
 #define MAX_DEG 360
+#define WALL_LOOK_AHEAD 100
 
 //function prototypes
 void initialize();
@@ -28,11 +34,9 @@ void wallAvoidance();
 void alignment();
 void cohesion();
 void separation();
-void flocking();
-void cWeightAdjustByDistance();
-void sWeightAdjustByDistance();
-void eWeightAdjustByDistance();
-void handleMsgBuffer();
+bool nearCornerPeek();
+void noEnemyFlying();
+void handleMsg();
 
 //enumeration of drone states
 enum State
@@ -69,12 +73,11 @@ int eWeight = 0;
 int eRadius = 200;
 int fov = 60;			//field (angle) of vision
 int mobile = 1;			//allows us to completely anchor all drones
-bool isLeader = false;		//whether this drone is a leader
-int *leaders = NULL;		//array of leader id's
-int numLeaders = 0;		//how many leaders on our team
-bool leaderMode = true;		//whether we care just about leaders for flocking
-bool distanceWeighting = false;	//simple averaging vs factoring in distance
-
+bool isLeader = false;
+int *leaders = NULL;
+int numLeaders = 0;
+bool leaderMode = false;
+bool advancedWeighting = false;
 
 /*****************************************************************************
  * Initialization
@@ -83,19 +86,15 @@ bool distanceWeighting = false;	//simple averaging vs factoring in distance
 //Declares initialization complete and switches to the NOENEMY state
 void initialize()
 {
-  //turn to the default random angle
   turnToDeg(degToAim);
 
-  //check if we want to follow the leader, or if this is just normal boids
   if(leaderMode)
   {
-    //Determine, by some criterion, whether I'm a leader
     if(selfID() % tot_idx == 1)
     {
       isLeader = true;
     }
   
-    //Allocate space for an array of all the leader id's for later use
     leaders = malloc(sizeof(int) * tot_idx);
     if(!leaders)
     {
@@ -107,7 +106,7 @@ void initialize()
   //Declare initialized and set state to no enemies.
   init = true;
   state = STATE_FLYING;
-  thrust(1); 
+  thrust(1);
 }
 
 
@@ -156,8 +155,8 @@ void wallAvoidance()
   //(meaning the y-component vector should be 0), we still want to check for walls
   //in the y direction a little bit, so our wings don't accidentally clip walls as
   //we fly by.
-  delX = sign(delX) * max(abs(delX), minLookAside);
-  delY = sign(delY) * max(abs(delY), minLookAside);
+  delX = SIGN(delX) * MAX(abs(delX), minLookAside);
+  delY = SIGN(delY) * MAX(abs(delY), minLookAside);
   
   //Having generated x- and y- component vectors, add these to our current position
   //to get the x- and y-coordinates of the point where we're now looking.
@@ -185,32 +184,26 @@ void wallAvoidance()
   currHeadingDegDiv90 = currHeadingDeg / 90;
   switch(currHeadingDegDiv90)
   {
-    //0 <= heading < 90
     case(0):
       closeToCorner = wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal)
                       && wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal);
       break;
   
-    //90 <= heading < 180
     case(1):
       closeToCorner = wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal)
                       && wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal);
       break;
 
-    //180 <= heading < 270
     case(2):
       closeToCorner = wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal)
                       && wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal);
       break;
     
-    //270 <= heading < 360
     case(3):
       closeToCorner = wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal)
                       && wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal);
       break;
-  
-    //If heading < 0 or heading >= 360, print an error statement and return no wall
-    //avoidance. 
+   
     default:
       printf("ERROR: something's weird with the current heading\n");
       wallVector = -1;
@@ -296,12 +289,10 @@ void wallAvoidance()
 //Compute the angle to stay aligned with all friends within a certain radius.
 void alignment()
 {
-  //If we're in leader mode, just get the average heading of all leaders nearby.
   if(leaderMode)
   {
     aVector = avgFriendlyDirWithLeader(aRadius, fov, leaders, numLeaders);
   }
-  //Otherwise, get the average direction of ALL friends nearby.
   else
   {
     aVector = avgFriendlyDir(aRadius, fov);
@@ -318,23 +309,18 @@ void cohesion()
 {
   int avgFriendX = -1, avgFriendY = -1;
 
-  //If we're in leader mode, try getting the average position of all leaders nearby.
   if(leaderMode)
   {
     avgFriendX = averageLeaderX(cRadius, fov, leaders, numLeaders);
     avgFriendY = averageLeaderY(cRadius, fov, leaders, numLeaders);
   }
   
-  //If we aren't in leader mode, or if our leader-mode calculation gave us bad (-1)
-  //values for x or y, get the average position of ALL friends nearby.
   if(avgFriendX == -1 || avgFriendY == -1)
   {
     avgFriendX = averageFriendRadarX(cRadius, fov);
     avgFriendY = averageFriendRadarY(cRadius, fov);
   }
  
-  //If we have valid (i.e. not -1) values for x and y, update the cohesion vector
-  //accordingly. Otherwise, return -1.
   if(avgFriendX != -1 && avgFriendY != -1)
   {
     cVector = getAngleBtwnPoints(selfX(), avgFriendX, selfY(), avgFriendY);
@@ -369,99 +355,95 @@ void enemySeparation()
 
 
 /*****************************************************************************
- * Flocking (Controller)
+ * No Enemy Flying (Controller)
  * ***************************************************************************/
 
-//Generates emergent flocking behavior based on boids algorithm by computing and
-//balancing vectors related to wall avoidance, cohesion, alignment, and friendly
-//and enemy separation.
-void flocking()
+//TODO: find a way to balance wa ll avoidance, neighbor cohesion, and other vectors
+void noEnemyFlying()
 {
-  static int totalWt, newAngle;
+  static int numVec, totalVec;
   static double xComp, yComp;
   int avgFriendX, avgFriendY, avgFriendDist = -1;
 
-  xComp = yComp = 0.0;
-  totalWt = 0;
+  numVec = totalVec = 0;
   
-  //Update the past movement vector
-  pVector = degToAim;
-  
-  //Compute all the aforementioned vectors.
+  //Update the past movement vector every 7 frames (roughly every half-second).
+  if(frameCount % 7 == 0)
+  {
+    pVector = degToAim;
+  }
+
+  //Compute all relevant vectors, like wall avoidance, cohesion, separation, etc.
   wallAvoidance();
   alignment();
   cohesion();
   separation();  
   enemySeparation();
 
-  //Add the past-movement vector, which keeps track of our most recent heading, to
-  //our running total for x-component, y-component, and weight total. We will be adding
-  //to these values as we check wall avoidance, cohesion, alignment, etc. in succession. 
-  scaleVector(pVector, pWeight, &xComp, &yComp, &totalWt);
-
   //If there is a wall nearby, aim away from it.
   if(wallVector != -1)
   {
-    scaleVector(wallVector, wWeight, &xComp, &yComp, &totalWt);
+    totalVec += wallVector * wWeight;
+    numVec += wWeight;
   }
-  
+
   //Get the alignment vector and weight it.
   if(aVector != -1)
   {
-    scaleVector(aVector, aWeight, &xComp, &yComp, &totalWt);
+    totalVec += aVector * aWeight;
+    numVec += aWeight;
   }
   
   //Get the cohesion vector and weight it.
   if(cVector != -1)
   {
-    if(distanceWeighting)
+    if(advancedWeighting)
     {
-      cWeightAdjustByDistance();
+      avgFriendX = averageFriendRadarX();
+      avgFriendY = averageFriendRadarY(); 
+      if(avgFriendX != -1 && avgFriendY == -1)
+      {
+        avgFriendDist = computeDistance(selfX(), avgFriendX, selfY(), avgFriendY);
+      }
+      cWeight = pow(1 + avgFriendDist / 100, 2);
     }
 
-    scaleVector(cVector, cWeight, &xComp, &yComp, &totalWt);
+    totalVec += cVector * cWeight;
+    numVec += cWeight;
   }
 
   //Get the friend separation vector and weight it.
   if(sVector != -1)
   {
-    if(distanceWeighting)
+    if(advancedWeighting)
     {
-      sWeightAdjustByDistance();
+      sWeight = pow(4 - closestFriendDist() / 50, 2);
     }
 
-    scaleVector(sVector, sWeight, &xComp, &yComp, &totalWt);
+    totalVec += sVector * sWeight;
+    numVec += sWeight;
   }
   
   //Get the enemy separation vector and weight it.
   if(eVector != -1)
   {
-    if(distanceWeighting)
+    if(advancedWeighting)
     {
-      eWeightAdjustByDistance();    
+      eWeight = pow(4 - closestEnemyDist() / 50, 2);
     }
 
-    scaleVector(eVector, eWeight, &xComp, &yComp, &totalWt);
+    totalVec += eVector * eWeight;
+    numVec += eWeight;
   }
-  
+ 
+  totalVec += pVector * pWeight;
+  numVec += pWeight; 
+
   //Compute the weighted average of the four vectors above, and point in that
   //direction.
-  if(totalWt > 0)
+  if(numVec > 0)
   {
-    //Average the accumulated, weighted x- and y-components.
-    xComp /= totalWt;
-    yComp /= totalWt;
-
-    //Generate a new angle from the resulting x- and y-components, and update
-    //the degree to aim.
-    //Notice that, if the resulting angle is less than 0, we add MAX_DEG - 1 = 359 
-    //to it to get it between 0 and 360. This is because, for some reason, if we
-    //add MAX_DEG = 360 to the angle, at the beginning of the simulation before the
-    //boids start flocking, some of their headings will slowly but steadily taper
-    //to 0 when they should stay constant. This problem corrects itself when we mod
-    //by 359 instead.
-    //TODO: Figure out exactly why modding by 360 doesn't work, but 359 does.
-    degToAim = modm(radToDeg(atan2(yComp, xComp)), MAX_DEG - 1);
+    degToAim = totalVec / numVec;
   }
 
   //Whatever direction we've decided to turn to, do so.
@@ -472,47 +454,10 @@ void flocking()
   {
     thrust(1);
   }
-  //If we're anchored, just don't move.
+  //If we're especially anchored, just don't move.
   else
   {
     thrust(0);
-  }
-}
-
-//Scale the cohesion weight by how far away we are from our friends' center of mass.
-void cWeightAdjustByDistance()
-{
-  int avgFriendX, avgFriendY, avgFriendDist;
-
-  avgFriendX = averageFriendRadarX();
-  avgFriendY = averageFriendRadarY(); 
-
-  if(avgFriendX != -1 && avgFriendY != -1)
-  {
-    avgFriendDist = computeDistance(selfX(), avgFriendX, selfY(), avgFriendY);
-    cWeight = pow(1 + avgFriendDist / 100, 2);
-  }
-}
-
-//Scale the friendly separation weight by how close we are to our closest friend.
-void sWeightAdjustByDistance()
-{
-  int dist = closestFriendDist();
-
-  if(dist != -1)
-  {
-    sWeight = pow(4 - dist / 50, 2);
-  }
-}
-
-//Scale the enemy separation weight by how close we are to our closest enemy.
-void eWeightAdjustByDistance()
-{
-  int dist = closestEnemyDist();
-
-  if(dist != -1)
-  {
-    eWeight = pow(4 - dist / 50, 2);
   }
 }
 
@@ -521,34 +466,21 @@ void eWeightAdjustByDistance()
  * Message Handler (through chat feature) 
  * ***************************************************************************/
 
-//Handle whatever messages pop up through the chat feature. Messages should take
-//the following form:
-//  <team number> <keyword> <new value>
-//For example, a valid message might be "0 aweight 4". The team number allows
-//you to send messages just to one particular team, or else use 0 if you want to
-//broadcast your message to everyone. There is a case for each keyword below, 
-//and in each case the new value is assigned to some global variable defined above.
-void handleMsgBuffer()
+//Handle whatever messages pop up through the chat feature.
+void handleMsg()
 {
   static char buf[100];
   static char *tok = NULL;
-  static char *oldMsg = "";
+  static char *thisMsg = "";
   static int team = 0; 
   static int value = 0;
 
-  //Check if the most recent message available has changed since the last frame.
-  if(strcmp(oldMsg, scanMsg(0)))
+  if(strcmp(thisMsg, scanMsg(0)))
   {
-    //Update the most recent message. Then, copy it into a character buffer and
-    //tokenize it by spaces.
-    oldMsg = scanMsg(0);
-    strcpy(buf, oldMsg);
+    thisMsg = scanMsg(0);
+    strcpy(buf, thisMsg);
     tok = strtok(buf, " ");
 
-    //If the token is not NULL, meaning the message given was not empty, convert
-    //it to an integer and store it as the team number.
-    //TODO: Possibly add more error trapping, in case the first value in the message
-    //is not an integer.
     if(tok)
     {
       team = atoi(tok);
@@ -558,86 +490,75 @@ void handleMsgBuffer()
       team = -1;
     }
 
-    //Check if the given team number matches our team number, or if the message has 
-    //been sent to everyone on the map, 
     if(team == teamNum || team == 0)
     {
-      //Tokenize again, so now our token pointer points to the keyword.
       tok = strtok(NULL, " ");
 
-      //If the keyword-pointing token is not NULL, get the value that follows.
       if(tok)
       {
         value = atoi(strtok(NULL, " "));
       }
 
-      //mobile: toggle mobility on and off
       if(!strcmp(tok, "mobile"))
       {
         mobile = value; 
       }
-      //wall weight: adjust how much we want to get away from walls
       else if(!strcmp(tok, "wweight"))
       {
         wWeight = value; 
       }
-      //alignment weight: adjust how much we want to align with nearby friends
+      //alignment
       else if(!strcmp(tok, "aweight"))
       {
         aWeight = value; 
       }
-      //alignment radius: adjust how far away we check for friends to align with
       else if(!strcmp(tok, "aradius"))
       {
         aRadius = value; 
       }
-      //cohesion weight: adjust how much we want to be close to our friends
+      //cohesion
       else if(!strcmp(tok, "cweight"))
       {
         cWeight = value; 
       }
-      //cohesion radius: adjust how far away we check for friends to cohere with
       else if(!strcmp(tok, "cradius"))
       {
         cRadius = value;
       }
-      //(friendly) separation weight: adjust how much we want to avoid our friends
+      //(friendly) separation
       else if(!strcmp(tok, "sweight"))
       {
         sWeight = value;
       }
-      //(friendly) separation radius: adjust how far away we check for friends to avoid
       else if(!strcmp(tok, "sradius"))
       {
         sRadius = value;
       }
-      //enemy (separation) weight: adjust how much we want to avoid our enemies
+      //enemy (separation)
       else if(!strcmp(tok, "eweight"))
       {
         eWeight = value; 
       }
-      //enemy (separation) radius: adjust how far away we check for enemies to avoid
       else if(!strcmp(tok, "eradius"))
       {
         eRadius = value; 
       }
-      //past direction weight: adjust how much we want to stick to our past direction
+      //past direction
       else if(!strcmp(tok, "pweight"))
       {
         pWeight = value; 
       }
-      //field of vision: adjust how far around us we can see
+      //field of vision
       else if(!strcmp(tok, "fov"))
       {
         fov = value; 
       }
-      //leader: add a leader to the array of leaders to follow, if we're in leader mode
+      //leader id's
       else if(!strcmp(tok, "leader"))
       {
         leaders[value - (teamNum - 1) * tot_idx - 1] = value;
         ++numLeaders;
       }
-      //TODO: possibly add a way to remove leaders from the list
     }
   }
 }
@@ -647,39 +568,44 @@ void handleMsgBuffer()
  * AI Loop
  * ***************************************************************************/
 
-//This AI loop runs every frame, keeps track of what state we're in, and acts
-//accordingly.
+//this is where the magic happens (i.e., this loop fires every frame and decides
+//which state the chaser is currently in and acts accordingly)
 AI_loop()
 {
-  //Increment the frame counter.
+  //by default, don't thrust, and increment the frame counter
   frameCount = (frameCount + 1) % INT_MAX;
 
-  //By default, assume we're just flying around.
+  //also by default, assume no enemy is nearby
   state = STATE_FLYING;
 
-  //If about 300 frames have gone by and we're a leader, broadcast a message that
-  //indicates this, so others on my team can follow me in leader mode.
-  if(frameCount == 300 && isLeader)
+  if(frameCount == 300 + 5 * selfID())
   {
-    broadcastMessage(teamNum, "leader", selfID());
+    if(isLeader)
+    {
+      char leaderMsg[20];
+      char team[5], idNum[5];
+      sprintf(team, "%d", teamNum);
+      sprintf(idNum, "%d", selfID());
+      sprintf(leaderMsg, "%s %s %s", team, "leader", idNum);
+      talk(leaderMsg);     
+    }
   }
 
-  //Check the input message buffer to adjust behavior as necessary.
-  handleMsgBuffer();
+  //check the input buffer to try changes in behavior
+  handleMsg();
 
-  //Check if we are dead.
+  //check if we are dead
   if(!selfAlive())
   {
     state = STATE_DEAD;
   }
 
-  //If we haven't initialized yet, do that.
+  //if we haven't initialized yet
   if(!init)
   {
     state = STATE_INIT;
   }
 
-  //By default, don't thrust. This will change when we enter the flocking state.
   thrust(0);
  
   switch(state)
@@ -689,7 +615,7 @@ AI_loop()
       break;
 
     case(STATE_FLYING):
-      flocking();
+      noEnemyFlying();
       break;
 
     case(STATE_DEAD):
@@ -705,15 +631,52 @@ AI_loop()
 
 int main(int argc, char *argv[]) 
 {
-  //Get info on my idx, tot_idx, and my team number.
+  //get info on my idx and my team number
   idx = strtol(argv[2], NULL, 10);
   tot_idx = strtol(argv[3], NULL, 10);
   teamNum = strtol(argv[4], NULL, 10);
 
-  //Generate a random initial heading.
+  //generate a random initial heading
   srand(time(NULL)); 
   pVector = degToAim = rand() % 360;
 
   return start(argc, argv);
 }
 
+
+
+
+
+/*
+  Friendly separation: old code
+
+  int avgFriendX = averageFriendRadarX(sRadius, fov);
+  int avgFriendY = averageFriendRadarY(sRadius, fov);
+  int sepVec = getAngleBtwnPoints(selfX(), avgFriendX, selfY(), avgFriendY);
+
+  if(avgFriendX != -1 && avgFriendY != -1)
+  {
+    sVector = modm(sepVec + 180, 360);
+  }
+  else
+  {
+    sVector = -1;
+  }
+*/
+
+/*
+  Enemy separation: old code
+
+  int avgEnemyX = averageEnemyRadarX(eRadius, fov);
+  int avgEnemyY = averageEnemyRadarY(eRadius, fov);
+  int sepVec = getAngleBtwnPoints(selfX(), avgEnemyX, selfY(), avgEnemyY);
+
+  if(avgEnemyX != -1 && avgEnemyY != -1)
+  {
+      eVector = modm(sepVec + 180, 360);
+  }
+  else
+  {
+    eVector = -1;
+  }
+*/
