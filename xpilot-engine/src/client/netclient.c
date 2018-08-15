@@ -260,7 +260,11 @@ int Net_setup(void)
 				     &Setup->map_order, Setup->name,
 				     Setup->author);
 		    Setup->width = Setup->x * BLOCK_SZ;
+        printf("Setup->x: %d\n", Setup->x );
+        printf("Setup->y: %d\n", Setup->y );
+        printf("Setup->width: %d\n", Setup->width );
 		    Setup->height = Setup->y * BLOCK_SZ;
+        printf("Setup->height: %d\n", Setup->height );
 		} else {
 		    n = Packet_scanf(&cbuf,
 				     "%ld" "%ld%hd" "%hd%hd" "%hd%s" "%s%S",
