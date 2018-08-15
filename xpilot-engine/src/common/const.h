@@ -65,6 +65,7 @@
 
 #define RES		128
 
+
 #define BLOCK_SZ	35
 
 #define TABLE_SIZE	RES
@@ -194,7 +195,8 @@ do { \
  * The minimum and maximum playing window sizes supported by the server.
  */
 #define MIN_VIEW_SIZE	    384
-#define MAX_VIEW_SIZE	    1024
+//#define MAX_VIEW_SIZE	    1024
+#define MAX_VIEW_SIZE	    2048
 #define DEF_VIEW_SIZE	    768
 
 /*

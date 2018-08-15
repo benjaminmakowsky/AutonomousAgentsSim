@@ -28,7 +28,6 @@
 
 static double 	hrLimitTime = 0.0;
 
-
 void Paint_vcannon(void)
 {
     int	i;

@@ -343,12 +343,21 @@ static void Paint_teamshots(int i, int t_, int x_areas, int y_areas, int areas)
 
 	x = BASE_X(i);
 	y = BASE_Y(i);
+
+  /* Full-screening with the increased window view leads to some 
+   * hiccups, this check can avoid crashes */
+  if( !x || !y || ( x == 768 && y == 18 )){
+    return;
+  }
+
 	/*color = COLOR(i);*/
-	for (j = 0; j < num_fastshot[t_]; j++)
+	for (j = 0; j < num_fastshot[t_]; j++){
 	    Gui_paint_teamshot(x + fastshot_ptr[t_][j].x,
 			       y - fastshot_ptr[t_][j].y);
 	RELEASE(fastshot_ptr[t_], num_fastshot[t_], max_fastshot[t_]);
     }
+
+  }
 }
 
 
