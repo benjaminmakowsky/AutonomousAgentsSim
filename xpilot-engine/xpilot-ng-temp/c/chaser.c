@@ -22,11 +22,6 @@
 #include "dfs.c"
 #include <sys/time.h>
 
-//macros
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define SIGN(X) ((X) > 0 ? 1 : ((X) < 0 ? -1 : 0))
-
 //global constants
 #define BUFFER_SIZE 255
 #define EPSILON 1E-6
@@ -63,9 +58,11 @@ void updateAim(int);
 void engaging(int, int, int);
 void stealth();
 void enemySpotted();
+void handleMsgBuffer();
 void printDangerPoints();
-void handleMsg();
-
+int addDangerPoint(int, int, int);
+int removeDangerPoint(int, int);
+ 
 //enumeration of drone states
 enum State
 {
@@ -131,7 +128,6 @@ int mobile = 1;			//whether we move at all; as opposed to anchored
 int cautious = 0;		//go slow around corner points
 int focused = 1;		//fly directly to some point, rather than aimlessly
 int avoidant = 1;		//avoid marked "dangerous" points
-char *currMsg = "dummy";	//most recent message in the buffer
 int fov = 60;			//field of vision (degrees away from current heading)
 int rov = 500;			//range of vision
 int *leaders = NULL;		//list of leaders on one's team
@@ -139,7 +135,7 @@ int *followers = NULL;		//list of one's followers
 graph_t map;			//internal representation of the map
 graph_t safeMap;		//representation of map with dangerous edges removed
 moveInfo_t pastMovement;	//keeps track of closest enemy's past movement info
-avoidpt_t dangerPoints[NUM_AVOIDPTS];	//keeps track of points on the map to avoid
+avoidpt_t avoidPoints[NUM_AVOIDPTS];	//keeps track of points on the map to avoid
 
 //argv params
 int idx;			//this drone's id
@@ -175,14 +171,14 @@ void getMap()
   tok = strtok(buf, " ");
   num_points = atoi(tok);
 
-  //For each vertex in the map, read it in from the file, make it a vertex_t, and
-  //add it to the global map variable.
+  //Read in each vertex in the given file.
   for(i = 0; i < num_points; i++)
   {
     int j, a[3];
     
     fgets(buf, sizeof(buf), fp);
-    
+   
+    //Load the info for each vertex into an array of three integers. 
     for(j = 0; j < 3; j++)
     {
       if(!j)
@@ -197,6 +193,7 @@ void getMap()
       a[j] = atoi(tok);
     }
 
+    //Using the array of vertex info, cast it to a vertex_t and add it to the map.
     vertex_t v = (vertex_t) {a[0], a[1], a[2]};
     map = add_vertex(map, v);
   }
@@ -210,14 +207,14 @@ void getMap()
   tok = strtok(buf, " ");
   num_edges = atoi(tok);
   
-  //For each edge, read it in, make it two vertex_t's and an integer, and add it
-  //to the global map variable.
+  //Read in each edge in the given file.
   for(i = 0; i < num_edges; i++)
   {
     int j, a[6];
     
     fgets(buf, sizeof(buf), fp);
 
+    //Load the info for each edge into an array of six integers.
     for(j = 0; j < 6; j++)
     {
       if(!j)
@@ -232,6 +229,8 @@ void getMap()
       a[j] = atoi(tok);
     }
 
+    //Using the array of edge info, where the six values represent the info for
+    //two vertices, cast these vertices and add the resulting edge to the map.
     vertex_t v1 = (vertex_t) {a[0], a[1], a[2]};
     vertex_t v2 = (vertex_t) {a[3], a[4], a[5]};
     map = add_edge(map, v1, v2);
@@ -240,13 +239,16 @@ void getMap()
   //Close the file.
   fclose(fp);
 
-  //Find out which points in the map have been specifically labeled corner points
-  //(i.e. they were labeled with 'c's in the ascii map), and keep track of them
-  //for flying slowly around corners as part of the cautious trait.
-  int num_corners = 0;
-  while(map.vertices[num_corners].y 
-          >= map.vertices[num_corners++ + 1].y);
+  //Keep track of all convex "corner points" that were marked with 'c's in the
+  //ASCII map. 
+  //The vertices, now sorted by ID, should be ordered so that all these corner points 
+  //follow the non-corner points, but otherwise they should be sorted in descending 
+  //order by y-coordinate. So, we can identify when the non-corner points show up by
+  //looking for when the y-coordinate increases, as we step through the vertices.
+  int num_corners = -1;
+  while(map.vertices[++num_corners].y >= map.vertices[num_corners + 1].y);
 
+  //Allocate space for this list of corner points, and copy them all into an array.
   corners_list = malloc(sizeof(int) * num_corners);
   for(i = 0; i < num_corners; i++)
   {
@@ -255,9 +257,13 @@ void getMap()
 }
 
 
+/*****************************************************************************
+ * Safe Map Generation
+ * ***************************************************************************/
+
 //Generate a modified "safe map" that removes edges that go through points labeled
 //dangerous that we want to avoid.
-//This function will be called whenever the dangerPoints array is modified, allowing
+//This function will be called whenever the avoidPoints array is modified, allowing
 //drones with the avoidant trait to fly around dangerous areas.
 void modMap()
 {
@@ -270,7 +276,7 @@ void modMap()
   //Initially, the safe map is just the whole map.
   safeMap = map; 
 
-  //For every edge in the map, check if it intersects any of the dangerPoints, and if
+  //For every edge in the map, check if it intersects any of the avoidPoints, and if
   //so remove it from the safe map.
   for(i = 0; i < map.num_e; i++)
   {
@@ -281,7 +287,7 @@ void modMap()
     while(++j < NUM_AVOIDPTS)
     {
       if(lineInCircle(v1.x, v1.y, v2.x, v2.y,
-                      dangerPoints[j].x, dangerPoints[j].y, dangerPoints[j].r))
+                      avoidPoints[j].x, avoidPoints[j].y, avoidPoints[j].r))
       {
         safeMap = remove_edge(safeMap, v1, v2);
         break;
@@ -332,7 +338,7 @@ void initialize()
   //Initialize the map to have points the drones want to avoid.
   for(i = 0; i < NUM_AVOIDPTS; i++)
   {
-    dangerPoints[i] = (avoidpt_t) {-1, -1, -1};
+    avoidPoints[i] = (avoidpt_t) {-1, -1, -1};
   }
 
   //Generate the "safe map" for avoidant behavior.
@@ -345,9 +351,9 @@ void initialize()
 }
 
 
-/*************************************************************************** 
- * Path Generation
- * *************************************************************************/
+/****************************************************************************** 
+ * Utilities for Searching Through Internal Map Representation 
+ * ****************************************************************************/
 
 //Finds the index of the point with the given id, using a binary search on a
 //(presumably) sorted array of vertices.
@@ -422,64 +428,9 @@ int cpIndexSelf(graph_t g)
 }
 
 
-//Using the given algorithm, finds a path from this drone's current location
-//to the point with the given id.
-void pathToPointId(int alg, graph_t g, int id, int *path)
-{
-  int path_failure = 0;
-  int i, cpToMe = cpIndexSelf(g), x, y, deg, r, angleToDest, tempHead;
-  vertex_t v1, v2, v3, v4;
-  
-  v1 = g.vertices[cpToMe];
-  v2 = g.vertices[getMPIndex(g, id)];
-
-  //Switch on the given path-finding algorithm, enumerated globally above.
-  switch(alg)
-  {
-    case(ALG_ASTAR):
-      path_failure = astar(g, v1, v2, path);  
-      break;
-
-    case(ALG_BFS):
-      bfs(g, v1, v2, path);  
-      break;
-
-    case(ALG_DFS):
-      dfs(g, v1, v2, path);  
-      break;
-
-    case(ALG_DIJKSTRA):
-      path_failure = dijkstra(g, v1, v2, path);
-      break;
-
-    //This extended Dijkstra's algorithm allows a drone to go from one point to
-    //another, stopping at an indefinite number of points along the way. 
-    //TODO: Figure out how best to determine intermediate points.
-    case(ALG_DIJKSTRA_EXT):
-      angleToDest = selfAngleToXY(v2.x, v2.y); 
-      tempHead = modm(angleToDest + 60, MAX_DEG);
-      x = selfX() + 1500 * cos(degToRad(tempHead));
-      y = selfY() + 1500 * sin(degToRad(tempHead));
-      v3 = g.vertices[cpIndexXY(g, x, y)];
-      angleToDest = selfAngleToXY(v2.x, v2.y);
-      tempHead = modm(angleToDest + 60, MAX_DEG);
-      x = v3.x + 1500 * cos(degToRad(tempHead));
-      y = v3.y + 1500 * sin(degToRad(tempHead));
-      v4 = g.vertices[cpIndexXY(g, x, y)];
-      printf("MIDPOINTS: %3d %3d\n", v3.id, v4.id);
-      dijkstraN(g, v1, v2, path, 2, v3, v4);
-      break; 
-  }
-
-  print_path(path);
-
-  if(path_failure)
-  {
-    interruptPath();
-//    focused = 0;
-  }
-}
-
+/****************************************************************************** 
+ * Path Generation 
+ * ****************************************************************************/
 
 //Establishes a path to the given XY point using the given path algorithm, and
 //sets the pathVector value so the drone can fly there.
@@ -561,8 +512,6 @@ void goToId(int alg, graph_t g, int id)
     interY = g.vertices[getMPIndex(g, interPointId)].y;
   }
 
-  printf("%d\n", interPointId);
-
   //If we've made it this far, we must still have some distance to go toward our
   //next point in the path, so set the pathVector to point in that direction.
   pathVector = selfAngleToXY(interX, interY);
@@ -595,6 +544,64 @@ void goToRandom(int alg, graph_t g)
 }
 
 
+//Using the given algorithm, finds a path from this drone's current location
+//to the point with the given id.
+void pathToPointId(int alg, graph_t g, int id, int *path)
+{
+  int pathFailure = 0;
+  int i, cpToMe = cpIndexSelf(g), x, y, deg, r, angleToDest, tempHead;
+  vertex_t v1, v2, v3, v4;
+  
+  v1 = g.vertices[cpToMe];
+  v2 = g.vertices[getMPIndex(g, id)];
+
+  //Switch on the given path-finding algorithm, enumerated globally above.
+  switch(alg)
+  {
+    case(ALG_ASTAR):
+      pathFailure = astar(g, v1, v2, path);  
+      break;
+
+    case(ALG_BFS):
+      bfs(g, v1, v2, path);  
+      break;
+
+    case(ALG_DFS):
+      dfs(g, v1, v2, path);  
+      break;
+
+    case(ALG_DIJKSTRA):
+      pathFailure = dijkstra(g, v1, v2, path);
+      break;
+
+    //This extended Dijkstra's algorithm allows a drone to go from one point to
+    //another, stopping at an indefinite number of points along the way. 
+    //TODO: Figure out how best to determine intermediate points.
+    case(ALG_DIJKSTRA_EXT):
+      angleToDest = selfAngleToXY(v2.x, v2.y); 
+      tempHead = modm(angleToDest + 60, MAX_DEG);
+      x = selfX() + 1500 * cos(degToRad(tempHead));
+      y = selfY() + 1500 * sin(degToRad(tempHead));
+      v3 = g.vertices[cpIndexXY(g, x, y)];
+      angleToDest = selfAngleToXY(v2.x, v2.y);
+      tempHead = modm(angleToDest + 60, MAX_DEG);
+      x = v3.x + 1500 * cos(degToRad(tempHead));
+      y = v3.y + 1500 * sin(degToRad(tempHead));
+      v4 = g.vertices[cpIndexXY(g, x, y)];
+      printf("MIDPOINTS: %3d %3d\n", v3.id, v4.id);
+      dijkstraN(g, v1, v2, path, 2, v3, v4);
+      break; 
+  }
+
+  print_path(path);
+
+  if(pathFailure)
+  {
+    interruptPath();
+  }
+}
+
+
 //Terminate the path where the drone is currently flying by telling the drone
 //to fly to (-1, -1), which goToXY() will recognize as a termination pattern.
 void interruptPath()
@@ -610,176 +617,33 @@ void interruptPath()
 //Provides a mechanism for drones to spot walls ahead and steer away from them.
 void wallAvoidance()
 {
-  //Static variables: to avoid magic numbers!
-  static int wallLookAhead = 100;
-  static int cornerLookAhead = 75;
-  static int minLookAside = 50;
-  static int dummyVal = 1;
-  static int lookAngle = 15;
-  static int lookRight = 0;
-  static int lookUp = 90;
-  static int lookLeft = 180;
-  static int lookDown = 270;
-  static int turnLeft = 90;
-  static int turnRight = -90;
+  static int turnLock;
   static int lockNum = 5;
 
-  double currHeadingRad;
-  int currHeadingDeg, currHeadingDegDiv90;
-  int currX, currY, newX, newY, delX, delY;
-  int lHead, rHead;
-  bool seeWallX, seeWallY, seeWallAhead;
-  bool seeWallL, seeWallR, closeToCorner;
-
-  //Get the current heading, in degrees and radians, and current position info. 
-  currHeadingRad = selfHeadingRad();
-  currHeadingDeg = (int)radToDeg(currHeadingRad);
-  currX = selfX();
-  currY = selfY(); 
-
-  //We want to look ahead some number of pixels (given by wallLookAhead) in some
-  //direction (that being our current heading). Split up this vector into its x-
-  //and y-components.
-  delX = (int)(wallLookAhead * cos(currHeadingRad)); 
-  delY = (int)(wallLookAhead * sin(currHeadingRad)); 
-  
-  //Now that we've computed two vectors corresponding to the x- and y-components
-  //of our look-ahead vector, make sure that the magnitude of these two vectors
-  //is at least some minimum value. Even if we're flying at a heading of 0 degrees
-  //(meaning the y-component vector should be 0), we still want to check for walls
-  //in the y direction a little bit, so our wings don't accidentally clip walls as
-  //we fly by. 
-  delX = SIGN(delX) * MAX(abs(delX), minLookAside);
-  delY = SIGN(delY) * MAX(abs(delY), minLookAside);
-  
-  //Having generated x- and y-component vectors, add these to our current position
-  //to get the x- and y-coordinates of the point where we're now looking.
-  newX = currX + delX;
-  newY = currY + delY;
-
-  //Using the new x- and y-coordinates generated above, check straight in front, 
-  //and then check the x and y directions individually.
-  seeWallAhead = wallBetween(currX, currY, newX, newY, dummyVal, dummyVal);
-  seeWallX = wallBetween(currX, currY, newX, currY, dummyVal, dummyVal);
-  seeWallY = wallBetween(currX, currY, currX, newY, dummyVal, dummyVal);
-
-  //As well as checking straight in front, check also a little to the left and to
-  //the right of our current heading. This incorporates the fact that we don't ever 
-  //just look directly in front of us, we have a field of view that catches objects
-  //some number of degrees off from where we're really looking.
-  lHead = modm(currHeadingDeg + lookAngle, MAX_DEG);
-  seeWallL = wallFeeler(wallLookAhead, lHead, dummyVal, dummyVal);
-  rHead = modm(currHeadingDeg - lookAngle, MAX_DEG);
-  seeWallR = wallFeeler(wallLookAhead, rHead, dummyVal, dummyVal);
-  
-  //Determine if we see a corner ahead, by checking up/down and left/right depending
-  //on our current heading.
-  currHeadingDegDiv90 = currHeadingDeg / 90;
-  switch(currHeadingDegDiv90)
-  {
-    //If we have a current heading of 0 <= theta < 90, look right and up.
-    case(0):
-      closeToCorner = wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal)
-                      && wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal);
-      break;
-
-    //If we have a current heading of 90 <= theta < 180, look up and left.
-    case(1):
-      closeToCorner = wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal)
-                      && wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal);
-      break;
-
-    //If we have a current heading of 180 <= theta < 270, look left and down.
-    case(2):
-      closeToCorner = wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal)
-                      && wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal);
-      break;
-
-    //If we have a current heading of 270 <= theta < 360, look down and right.
-    case(3):
-      closeToCorner = wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal)
-                      && wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal);
-      break;
-
-    //Our current heading should be between 0 <= theta < 360, but if somehow that's
-    //not the case, print an error statement, and indicate no wall avoidance.
-    default:
-      printf("ERROR: something's weird with the current heading\n");
-      wallAvoidVector = -1;
-      return;
-  }
-
-  //If turnLock is off, we are allowed to set a new turn angle.
+  //If there's no turn lock on, compute wall avoidance and impose a turn lock
+  //of some number of frames. This will prevent us from computing new turn angles 
+  //too frequently and continually turning back and forth.
   if(!turnLock)
   {
-    if(closeToCorner)
-    {
-      //Turn some number of degrees to the left of the current heading.
-      wallAvoidVector = modm(currHeadingDeg + turnLeft, MAX_DEG);
+    wallAvoidVector = getWallAvoidance();
 
-      //Set a turn lock of some number of frames, so that we don't adjust our turn
-      //angle too frequently and just end up turning back and forth endlessly.
+    if(wallAvoidVector != -1)
+    {
       turnLock = lockNum;
-
-      //Go slow as long as we're near a corner by thrusting only twice every 5 frames,
-      //so we don't crash into the corners as we turn.
-      if(frameCount % 5 < 2)
-      {
-        thrust(1);
-      }
-      else
-      {
-        thrust(0);
-      }
-    }
-
-    //If we see a vertical wall, mirror our heading on the y-axis, and set a turn
-    //lock of some number of frames.
-    else if(seeWallX)
-    {
-      wallAvoidVector = modm(180 - currHeadingDeg, MAX_DEG);
-      turnLock = lockNum;
-    }
-
-    //If we see a horizontal wall, mirror our heading on the x-axis, and set a turn
-    //lock of some number of frames.
-    else if(seeWallY)
-    {
-      wallAvoidVector = modm(-currHeadingDeg, MAX_DEG);
-      turnLock = lockNum;
-    }
-    
-    //If we see a wall that's directly in front of us or a little to the right, turn
-    //left a bit, and set a turn lock.
-    else if(seeWallAhead || seeWallR)
-    {
-      wallAvoidVector = modm(currHeadingDeg + turnLeft, MAX_DEG);
-      turnLock = lockNum; 
-    }
- 
-    //Similarly, if we see a wall that's just a little to the left of us, turn right
-    //a little, and set a turn lock.
-    else if(seeWallL)
-    {
-      wallAvoidVector = modm(currHeadingDeg + turnRight, MAX_DEG);
-      turnLock = lockNum;
-    }
-
-    //If we see no walls at all, indicate this by returning a value of -1.
-    else
-    {
-      wallAvoidVector = -1;
     }
   }
-  
-  //Finally, if there's a turn lock on, we aren't supposed to turn for some number of
-  //frames still. So, just decrement the turn lock counter.
+  //If there's a turn lock on, just decrement the turn lock counter and leave the
+  //wall avoidance vector unchanged.
   else
   {
-    turnLock--;
+    --turnLock;
   }
 }
 
+
+/*****************************************************************************
+ * Corner Point Check for Cautious Behavior 
+ * ***************************************************************************/
 
 //Check if we are near a designated corner point, and return a boolean value.
 bool nearCornerPoint()
@@ -933,6 +797,7 @@ void updateAim(int dist)
     distInFront = 0;
   }
 
+  //If we're close to the enemy, again head directly toward him.
   else if(dist < 100)
   {
     distInFront = 0;
@@ -943,7 +808,7 @@ void updateAim(int dist)
   else
   {
     //TODO: fix this distInFront equation: not ideal
-    distInFront = MIN(dist, 500);
+    distInFront = min(dist, 500);
   }
 
   //Compute the new target location and turn.
@@ -952,8 +817,8 @@ void updateAim(int dist)
 
   aimInRad = atan2(newY - selfY(), newX - selfX());
 
+  //Prioritize wall avoidance, but otherwise chase the enemy.
   wallAvoidance();
-
   if(wallAvoidVector != -1)
   {
     degToAim = wallAvoidVector;
@@ -1093,120 +958,125 @@ void enemySpotted()
  * Message Handler (through chat feature) 
  * ***************************************************************************/
 
-//Prints a list of all the points currently marked dangerous on the map, the
-//points that an avoidant drone would want to stay away from.
-void printDangerPoints()
+//Handle whatever messages pop up through the chat feature. Messages should take
+//the following form:
+//  <keyword> [<new value>]+
+//For an example, a valid message might be "cautious 1" or "avoid 250 1000 100".
+//Each message starts with some keyword, which is followed by one or more values
+//depending on the requirements of the keyword as seen below.
+void handleMsgBuffer()
 {
-  int i;
-  for(i = 0; i < NUM_AVOIDPTS; i++)
+  static char buf[100];
+  static char *tok = NULL;
+  static char *oldMsg = "";
+  int i, r, x, y;
+
+  //Check if the most recent message available has changed since the last frame.
+  if(strcmp(oldMsg, scanMsg(0)))
   {
-    if(dangerPoints[i].x != -1)
-    {
-      printf("%4d %4d %4d\n",
-              dangerPoints[i].x,
-              dangerPoints[i].y,
-              dangerPoints[i].r);
-    }
-  }
-}
-
-
-//Handle whatever messages pop up through the chat feature.
-void handleMsg()
-{
-  if(strcmp(currMsg, scanMsg(0)))
-  {
-    char buf[100];
-    char *tok = NULL;
-
-    currMsg = scanMsg(0);
-    
-    strcpy(buf, currMsg);
+    //Update the most recent message. Then, copy it into a character buffer and
+    //tokenize it by spaces.
+    oldMsg = scanMsg(0); 
+    strcpy(buf, oldMsg);
     tok = strtok(buf, " ");
 
+    //mobile: toggle mobility vs anchored behavior
     if(!strcmp(tok, "mobile"))
     {
       tok = strtok(NULL, " ");
       mobile = atoi(tok);
     }
+    //cautious: toggle cautiously peeking around corners
     else if(!strcmp(tok, "cautious"))
     {
       tok = strtok(NULL, " ");
       cautious = atoi(tok);
     }
+    //preserving: toggle self-preserving enemy-spotted behavior (i.e. run away)
     else if(!strcmp(tok, "preserving"))
     {
       tok = strtok(NULL, " ");
       preserving = atoi(tok);
     }
+    //stealthy: toggle stealthily cloaking from enemies
     else if(!strcmp(tok, "stealthy"))
     {
       tok = strtok(NULL, " ");
       stealthy = atoi(tok);
     }
+    //focused: toggle focused vs aimless flying
     else if(!strcmp(tok, "focused"))
     {
       tok = strtok(NULL, " ");
       focused = atoi(tok);
     }
+    //field of vision: adjust how far around us we can see
     else if(!strcmp(tok, "fov"))
     {
       tok = strtok(NULL, " ");
       fov = atoi(tok);
     }
+    //range of vision: adjust how far ahead we can see
     else if(!strcmp(tok, "rov"))
     {
       tok = strtok(NULL, " ");
       rov = atoi(tok);
     }
+    //avoidant: toggle behavior avoiding dangerous spots on the map
     else if(!strcmp(tok, "avoidant"))
     {
       tok = strtok(NULL, " ");
       avoidant = atoi(tok);
     }
+    //print danger points: display all the points to avoid on the map
     else if(!strcmp(tok, "printdps"))
     {
       printDangerPoints();
     }
+    //avoid: add a dangerous point to avoid on the map
     else if(!strcmp(tok, "avoid"))
     {
-      int x = atoi(strtok(NULL, " "));
-      int y = atoi(strtok(NULL, " "));
-      int r = atoi(strtok(NULL, " "));
-      int i = -1;
-      while(++i < NUM_AVOIDPTS)
+      x = atoi(strtok(NULL, " "));
+      y = atoi(strtok(NULL, " "));
+      r = atoi(strtok(NULL, " "));
+
+      //If the specified point is added to the dangerous points array, or if its
+      //associated radius is updated, perform the following actions.
+      if(addDangerPoint(x, y, r))
       {
-        if(dangerPoints[i].x == -1)
-        {
-          dangerPoints[i].x = x;
-          dangerPoints[i].y = y;
-          dangerPoints[i].r = r;
-          break;
-        }  
+        //Display the updated list of points to avoid.
+        printDangerPoints();
+
+        //Adjust the "safe map" to reflect the change to the dangerous points array.
+        modMap();
+
+        //If we were flying along a specific path through the map, interrupt and 
+        //recompute this map, in case our path is now blocked.
+        interruptPath();
       }
-      printDangerPoints();
-      modMap();
-      interruptPath();
     }
+    //Remove a point to avoid on the map.
     else if(!strcmp(tok, "remavoid"))
     {
-      int x = atoi(strtok(NULL, " "));
-      int y = atoi(strtok(NULL, " "));
-      int i = -1;
-      while(++i < NUM_AVOIDPTS)
+      x = atoi(strtok(NULL, " "));
+      y = atoi(strtok(NULL, " "));
+      
+      //If the specified point is found in the dangerous points array, remove it
+      //and perform the following actions.
+      if(removeDangerPoint(x, y))
       {
-        if(dangerPoints[i].x == x && dangerPoints[i].y == y)
-        {
-          dangerPoints[i].x = -1;
-          dangerPoints[i].y = -1;
-          dangerPoints[i].r = -1;
-          break;
-        }
+        //Display the updated list of points to avoid.
+        printDangerPoints();
+ 
+        //Adjust the "safe map" to reflect the change to the dangerous points array.
+        modMap();
+ 
+        //If we were flying along a specific path through the map, interrupt and 
+        //recompute this path, in case a shorter route has now opened up.
+        interruptPath();
       }
-      printDangerPoints();
-      modMap();
-      interruptPath();
     }
+    //add a leader to the list of leaders we might listen to
     else if(!strcmp(tok, "leader"))
     {
       tok = strtok(NULL, " ");
@@ -1217,14 +1087,107 @@ void handleMsg()
         while(leaders[++i]);
         leaders[i] = atoi(tok);
       }
-/*
-      printf("ALL LEADERS CURRENTLY\n");
-      for(i = 0; i < NUM_LEADERS; i++)
-        if(leaders[i])
-          printf("%d\n", leaders[i]);
-*/
     } 
   }
+}
+
+
+/*****************************************************************************
+ * Points to Avoid: Printing, Adding, Removing
+ * ***************************************************************************/
+
+//Print a list of all the points currently marked to be avoided on the map, the
+//points that an avoidant drone would want to stay away from.
+void printDangerPoints()
+{
+  int i = 0;
+
+  //Loop through the array of points to be avoided, stopping when we've printed
+  //the last such point.
+  while(i < NUM_AVOIDPTS && avoidPoints[i].x != -1)
+  {
+    printf("%4d %4d %4d\n", avoidPoints[i].x, avoidPoints[i].y, avoidPoints[i].r);
+    ++i;
+  }
+}
+
+//Add to the array of points for an avoidant drone to stay away from.
+int addDangerPoint(int x, int y, int r)
+{
+  int i;
+
+  //Go through the array of dangerous points.
+  for(i = 0; i < NUM_AVOIDPTS; i++)
+  {
+    //Check if the current point is the point we're actually looking for.
+    if(avoidPoints[i].x == x && avoidPoints[i].y == y)
+    {
+      //If the entry for this point has the same radius as we're intending it to have,
+      //do nothing and return 0 to indicate no updates.
+      if(avoidPoints[i].r == r)
+      {
+        puts("point with radius already found, no update");
+        return 0;
+      }
+      //Otherwise, update the point's radius and return 1 to indicate an update.
+      else
+      {
+        avoidPoints[i].r = r;
+        puts("radius updated");
+        return 1;
+      }
+    }
+
+    //If we find an array entry with -1's, indicating that it's an available slot,
+    //fill it in with the given coordinates and radius. Return 1 to indicate an update.
+    if(avoidPoints[i].x == -1)
+    {
+      avoidPoints[i] = (avoidpt_t) {x, y, r};
+      return 1;
+    }  
+  }
+
+  //If we did not find the specified point in the array, and we found no open spaces,
+  //indicate that there's no space in the array for a new point.
+  puts("no space for a new point");
+  return 0;
+}
+
+//Remove a point from the list of points to be avoided.
+int removeDangerPoint(int x, int y)
+{
+  int i = -1;
+
+  //Loop through the array until we either find the specified point or hit the end
+  //of the array.
+  while(++i < NUM_AVOIDPTS && !(avoidPoints[i].x == x && avoidPoints[i].y == y));
+
+  //If we ran off the end of the array, indicate that we didn't find the specified
+  //point and return 0.
+  if(i >= NUM_AVOIDPTS)
+  {
+    puts("did not find the specified point, no removal");
+    return 0;
+  }
+
+  //Starting from the point we want to delete, loop through replacing each entry in
+  //the array with the entry to its left. Stop when we reach the last element in the
+  //array or when we find a point with -1 entries, indicating we've found the end of
+  //the list of points to avoid.
+  while(i < NUM_AVOIDPTS - 1 && avoidPoints[i].x != -1)
+  {
+    avoidPoints[i] = avoidPoints[i+1];
+    ++i;
+  }
+  
+  //Clear the entry at the current spot in the array. This will clear the last spot 
+  //in the array if necessary, since after removing a point the last spot in the array
+  //should always be cleared.
+  avoidPoints[i] = (avoidpt_t) {-1, -1, -1};
+
+  //If we removed a point, indicate this by returning 1.
+  puts("point removed");
+  return 1;
 }
 
 
@@ -1232,42 +1195,42 @@ void handleMsg()
  * AI Loop
  * ***************************************************************************/
 
-//this is where the magic happens (i.e., this loop fires every frame and decides
-//which state the chaser is currently in and acts accordingly)
+//This loop fires every frame and decides which state the chaser is currently in
+//and acts accordingly.
 AI_loop()
 {
-  static int fourSecondsInFrames = 56;
-  static int enemySpottedFC = 0;
-  char numMsg[4], talkMsg[10];
-  char buf[100], *tok = NULL, *tm = NULL;
+  static int minEnemySpottedTime = 56;
+  static int enemySpottedRecently = 0;
 
-  //by default, don't thrust, and increment the frame counter
+  //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
-  //also by default, assume no enemy is nearby
+  //Check the input buffer to adjust behavior as necessary.
+  handleMsgBuffer();
+
+  //By default, assume no enemy is nearby.
   state = STATE_NOENEMY;
 
-  //check the input buffer to try changes in behavior
-  handleMsg();
-
-  //if there is an enemy closeby on the map, engage
-  if(radarEnemyInView(fov, rov) || enemySpottedFC)
+  //If there is an enemy closeby on the map, or if we've seen an enemy recently, 
+  //enter/stay in the enemy-spotted state.
+  if(radarEnemyInView(fov, rov) || enemySpottedRecently)
   {
     state = STATE_ENEMY_SPOTTED;
   }
 
-  //check if we are dead
+  //Check if we are dead.
   if(!selfAlive())
   {
     state = STATE_DEAD;
   }
 
-  //if we haven't initialized yet
+  //If we haven't initialized yet, do that.
   if(!init)
   {
     state = STATE_INIT;
   }
 
+  //By default, don't thrust.
   thrust(0);
  
   switch(state)
@@ -1278,8 +1241,14 @@ AI_loop()
 
     case(STATE_ENEMY_SPOTTED):
       enemySpotted();
-      //073118 only possible breaking spot for tomorrow
-      !enemySpottedFC ? enemySpottedFC = fourSecondsInFrames : enemySpottedFC--;
+      if(!enemySpottedRecently)
+      {
+        enemySpottedRecently = minEnemySpottedTime;
+      }
+      else
+      {
+        --enemySpottedRecently;
+      }
       break;
 
     case(STATE_NOENEMY):

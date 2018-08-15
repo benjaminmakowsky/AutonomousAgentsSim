@@ -49,7 +49,7 @@ int teamNum;			//what team do we belong to
 bool init = false;		//have we initialized yet
 int state = STATE_INIT;		//what state are we in (usually STATE_FLYING)
 int frameCount = 0;		//how many frames have elapsed
-int degToAim;			//what direction do we want to go
+int degToAim = -1;			//what direction do we want to go
 int turnLock = 0;		//time not allowed to compute new wall avoidance
 int wallVector = -1;		//where to go to avoid crashing into a wall
 int wWeight = 0;		//weight of wall avoidance relative to other vectors
@@ -72,8 +72,8 @@ int mobile = 1;			//allows us to completely anchor all drones
 bool isLeader = false;		//whether this drone is a leader
 int *leaders = NULL;		//array of leader id's
 int numLeaders = 0;		//how many leaders on our team
-bool leaderMode = true;		//whether we care just about leaders for flocking
-bool distanceWeighting = false;	//simple averaging vs factoring in distance
+bool leaderMode = false;	//whether we care just about leaders for flocking
+bool distanceWeighting = true;	//simple averaging vs factoring in distance
 
 
 /*****************************************************************************
@@ -83,19 +83,25 @@ bool distanceWeighting = false;	//simple averaging vs factoring in distance
 //Declares initialization complete and switches to the NOENEMY state
 void initialize()
 {
-  //turn to the default random angle
+  //Generate a random initial heading.
+  if(degToAim < 0)
+  {
+    pVector = degToAim = rand() % 360;
+  }
+  
+  //Turn to the random initial angle.
   turnToDeg(degToAim);
 
-  //check if we want to follow the leader, or if this is just normal boids
+  //Check if we want to follow the leader, or if this is just normal boids.
   if(leaderMode)
   {
-    //Determine, by some criterion, whether I'm a leader
+    //Determine, by some criterion, whether I'm a leader.
     if(selfID() % tot_idx == 1)
     {
       isLeader = true;
     }
   
-    //Allocate space for an array of all the leader id's for later use
+    //Allocate space for an array of all the leader id's for later use.
     leaders = malloc(sizeof(int) * tot_idx);
     if(!leaders)
     {
@@ -104,10 +110,10 @@ void initialize()
     }
   }
 
-  //Declare initialized and set state to no enemies.
+  //Declare initialized and set state to typical flying.
   init = true;
   state = STATE_FLYING;
-  thrust(1); 
+  thrust(0); 
 }
 
 
@@ -118,173 +124,26 @@ void initialize()
 //Provides a mechanism for drones to spot walls ahead and steer away from them.
 void wallAvoidance()
 {
-  static int wallLookAhead = 100;
-  static int cornerLookAhead = 75;
-  static int minLookAside = 50;
-  static int dummyVal = 1;
-  static int lookAngle = 15;
-  static int lookRight = 0;
-  static int lookUp = 90;
-  static int lookLeft = 180;
-  static int lookDown = 270;
-  static int turnLeft = 90;
-  static int turnRight = -90;
+  static int turnLock;
   static int lockNum = 5;
 
-  double currHeadingRad;
-  int currHeadingDeg, currHeadingDegDiv90;
-  int currX, currY, newX, newY, delX, delY;
-  int lHead, rHead;
-  bool seeWallX, seeWallY, seeWallAhead;
-  bool seeWallL, seeWallR, closeToCorner;
-
-  //Get the current heading, in degrees and radians, and current position info. 
-  currHeadingRad = selfHeadingRad();
-  currHeadingDeg = (int)radToDeg(currHeadingRad);
-  currX = selfX();
-  currY = selfY(); 
-
-  //We want to look ahead some number of pixels (given by wallLookAhead) in some
-  //direction (that being our current heading). Split up this vector into its x-
-  //and y-components.
-  delX = (int)(wallLookAhead * cos(currHeadingRad)); 
-  delY = (int)(wallLookAhead * sin(currHeadingRad)); 
-  
-  //Now that we've computed two vectors corresponding to the x- and y-components
-  //of our look-ahead vector, make sure that the magnitude of these two vectors
-  //is at least some minimum value. Even if we're flying at a heading of 0 degrees
-  //(meaning the y-component vector should be 0), we still want to check for walls
-  //in the y direction a little bit, so our wings don't accidentally clip walls as
-  //we fly by.
-  delX = sign(delX) * max(abs(delX), minLookAside);
-  delY = sign(delY) * max(abs(delY), minLookAside);
-  
-  //Having generated x- and y- component vectors, add these to our current position
-  //to get the x- and y-coordinates of the point where we're now looking.
-  newX = currX + delX;
-  newY = currY + delY;
-
-  //using the new x- and y-coordinates generated above, check straight in front,
-  //and then check the x and y directions individually.
-  seeWallAhead = wallBetween(currX, currY, newX, newY, dummyVal, dummyVal);
-  seeWallX = wallBetween(currX, currY, newX, currY, dummyVal, dummyVal);
-  seeWallY = wallBetween(currX, currY, currX, newY, dummyVal, dummyVal);
-
-  //As well as checking straight in front, check also a little to the left and to
-  //the right of our current heading. This incorporates the fact that we don't ever
-  //just look directly in front of us, we have a field of view that catches objects
-  //some number of degrees off from where we're really looking.
-  lHead = modm(currHeadingDeg + lookAngle, MAX_DEG);
-  seeWallL = wallFeeler(wallLookAhead, lHead, dummyVal, dummyVal);
-  rHead = modm(currHeadingDeg - lookAngle, MAX_DEG);
-  seeWallR = wallFeeler(wallLookAhead, rHead, dummyVal, dummyVal);
- 
-  //Finally, check if we are close to one of the corners of the map. Depending on
-  //which direction we're pointing, check up, down, left, or right as necessary to
-  //determine whether there's a corner close by.
-  currHeadingDegDiv90 = currHeadingDeg / 90;
-  switch(currHeadingDegDiv90)
-  {
-    //0 <= heading < 90
-    case(0):
-      closeToCorner = wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal)
-                      && wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal);
-      break;
-  
-    //90 <= heading < 180
-    case(1):
-      closeToCorner = wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal)
-                      && wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal);
-      break;
-
-    //180 <= heading < 270
-    case(2):
-      closeToCorner = wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal)
-                      && wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal);
-      break;
-    
-    //270 <= heading < 360
-    case(3):
-      closeToCorner = wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal)
-                      && wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal);
-      break;
-  
-    //If heading < 0 or heading >= 360, print an error statement and return no wall
-    //avoidance. 
-    default:
-      printf("ERROR: something's weird with the current heading\n");
-      wallVector = -1;
-      return;
-  }
-
-  //If turnLock is off, we are allowed to set a new turn angle.
+  //If there's no turn lock on, compute wall avoidance and impose a turn lock
+  //of some number of frames. This will prevent us from computing new turn angles 
+  //too frequently and continually turning back and forth.
   if(!turnLock)
   {
-    //If we are close to a corner...
-    if(closeToCorner)
-    {
-      //Turn some number of degrees to the left of the current heading.
-      wallVector = modm(currHeadingDeg + turnLeft, MAX_DEG);
+    wallVector = getWallAvoidance();
 
-      //Set a turn lock of some number of frames, so that we don't adjust our turn
-      //angle too frequently and just end up turning back and forth endlessly.
+    if(wallVector != -1)
+    {
       turnLock = lockNum;
-
-      //Go slow as long as we're near a corner, so we don't crash into it as we turn.
-      if(frameCount % 5 < 2)
-      {
-        thrust(1);
-      }
-      else
-      {
-        thrust(0);
-      }
-    }
-
-    //If we see a vertical wall, mirror our heading on the y-axis, and set a turn
-    //lock of some number of frames.
-    else if(seeWallX)
-    {
-      wallVector = modm(180 - currHeadingDeg, MAX_DEG);
-      turnLock = lockNum;
-    }
-
-    //If we see a horizontal wall, mirror our heading on the x-axis, and set a turn
-    //lock of some number of frames.
-    else if(seeWallY)
-    {
-      wallVector = modm(-currHeadingDeg, MAX_DEG);
-      turnLock = lockNum;
-    }
-    
-    //If we see a wall that's directly in front of us or a little to the right, turn
-    //left a bit, and set a turn lock.
-    else if(seeWallAhead || seeWallR)
-    {
-      wallVector = modm(currHeadingDeg + turnLeft, MAX_DEG);
-      turnLock = lockNum;
-    }
-
-    //Similarly, if we see a wall that's just a little to the left of us, turn right
-    //a little, and set a turn lock.
-    else if(seeWallL)
-    {
-      wallVector = modm(currHeadingDeg - turnRight, MAX_DEG);
-      turnLock = lockNum;
-    }
-
-    //If we see no walls at all, indicate this by a value of -1.
-    else
-    {
-      wallVector = -1;
     }
   }
-  
-  //Finally, if there's a turn lock on, we aren't supposed to turn for some number of
-  //frames still. So, just decrement the turn lock counter.
+  //If there's a turn lock on, just decrement the turn lock counter and leave the
+  //wall avoidance vector unchanged.
   else
   {
-    turnLock--;
+    --turnLock;
   }
 }
 
@@ -479,6 +338,11 @@ void flocking()
   }
 }
 
+
+/*****************************************************************************
+ * Scaling Cohesion and (Enemy/Friendly) Separation
+ * ***************************************************************************/
+
 //Scale the cohesion weight by how far away we are from our friends' center of mass.
 void cWeightAdjustByDistance()
 {
@@ -654,9 +518,6 @@ AI_loop()
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
-  //By default, assume we're just flying around.
-  state = STATE_FLYING;
-
   //If about 300 frames have gone by and we're a leader, broadcast a message that
   //indicates this, so others on my team can follow me in leader mode.
   if(frameCount == 300 && isLeader)
@@ -666,6 +527,9 @@ AI_loop()
 
   //Check the input message buffer to adjust behavior as necessary.
   handleMsgBuffer();
+
+  //By default, assume we're just flying around.
+  state = STATE_FLYING;
 
   //Check if we are dead.
   if(!selfAlive())
@@ -678,9 +542,6 @@ AI_loop()
   {
     state = STATE_INIT;
   }
-
-  //By default, don't thrust. This will change when we enter the flocking state.
-  thrust(0);
  
   switch(state)
   {
@@ -710,10 +571,10 @@ int main(int argc, char *argv[])
   tot_idx = strtol(argv[3], NULL, 10);
   teamNum = strtol(argv[4], NULL, 10);
 
-  //Generate a random initial heading.
+  //Seed the random number generator.
   srand(time(NULL)); 
-  pVector = degToAim = rand() % 360;
 
+  //Start the AI loop.
   return start(argc, argv);
 }
 

@@ -2190,6 +2190,19 @@ int max(int x, int y)
   }
 }
 
+//Returns the minimum of two integers.
+int min(int x, int y)
+{
+  if(x < y)
+  {
+    return x;
+  }
+  else
+  {
+    return y;
+  }
+}
+
 //Returns the sign of the given number.
 int sign(int x)
 {
@@ -2749,9 +2762,9 @@ bool lineInCircle(int xa, int ya, int xb, int yb, int xc, int yc, int r)
       swapPoints(&x1, &y1, &x2, &y2);
     }
 
-    //check every point on the line segment between (xa, ya) and (xb, yb) by
+    //check points on the line segment between (xa, ya) and (xb, yb) by
     //starting at the smaller x-value and incrementing to the larger value
-    for(x = x1; x <= x2; x++)
+    for(x = x1; x <= x2; x += max(1, (x2 - x1) / 10))
     {
       //given x, compute y using the formula for the line between the two points
       y = (int)((double)(y2 - y1) / (x2 - x1) * (x - x1) + y1);
@@ -2779,9 +2792,9 @@ bool lineInCircle(int xa, int ya, int xb, int yb, int xc, int yc, int r)
     //assign the constant value of x
     x = x1;
 
-    //start at the smaller y-value and increment to the larger value to check every
-    //point between (xa, ya) and (ya, yb)
-    for(y = y1; y <= y2; y++)
+    //start at the smaller y-value and increment to the larger value to check
+    //points between (xa, ya) and (ya, yb)
+    for(y = y1; y <= y2; y += max(1, (y2 - y1) / 10))
     {
       //if the current (x,y) is within the given circle, return true
       if(pow(x - xc, 2) + pow(y - yc, 2) <= pow(r, 2))
@@ -2816,5 +2829,149 @@ void broadcastMessage(int teamNum, int keyword, int newVal)
 }
 
 
+//Determines whether we're close to a concave corner.
+bool closeToConcaveCorner(int headingDeg)
+{ 
+  int headingQuadrant;
+  int cornerLookAhead = 75;
+  int dummyVal = 1;
+  int lookRight = 0;
+  int lookUp = 90;
+  int lookLeft = 180;
+  int lookDown = 270;
 
+  //Determine if we see a corner ahead, by checking up/down and left/right depending
+  //on our current heading.
+  headingQuadrant = headingDeg / 90;
+  switch(headingQuadrant)
+  {
+    //If we have a current heading of 0 <= theta < 90, look right and up. 
+    case(0):
+      return wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal)
+             && wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal);
+
+    //If we have a current heading of 90 <= theta < 180, look right and up. 
+    case(1):
+      return wallFeeler(cornerLookAhead, lookUp, dummyVal, dummyVal)
+             && wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal);
+
+    //If we have a current heading of 180 <= theta < 270, look right and up. 
+    case(2):
+      return wallFeeler(cornerLookAhead, lookLeft, dummyVal, dummyVal)
+             && wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal);
+
+    //If we have a current heading of 270 <= theta < 360, look right and up. 
+    case(3):
+      return wallFeeler(cornerLookAhead, lookDown, dummyVal, dummyVal)
+             && wallFeeler(cornerLookAhead, lookRight, dummyVal, dummyVal);
+
+    //Our current heading should be between 0 <= theta < 360, but if somehow that's
+    //not the case, print an error statement, and indicate no wall avoidance.
+    default:
+      printf("ERROR: something's weird with the current heading\n");
+      return false;
+  }
+} 
+
+
+//Provides a mechanism for drones to spot walls ahead and steer away from them.
+int getWallAvoidance()
+{
+  int wallLookAhead = 100;
+  int minLookAside = 50;
+  int dummyVal = 1;
+  int lookAngle = 15;
+  int turnLeft = 90;
+  int turnRight = -90;
+  int maxDeg = 360;
+
+  double currHeadingRad;
+  int currHeadingDeg;
+  int currX, currY, newX, newY, delX, delY;
+  int lHead, rHead;
+  bool seeWallX, seeWallY, seeWallAhead;
+  bool seeWallL, seeWallR, closeToCorner;
+
+  //Get the current heading, in degrees and radians, and current position info.
+  currHeadingRad = selfHeadingRad();
+  currHeadingDeg = (int)radToDeg(currHeadingRad);
+  currX = selfX();
+  currY = selfY();
+
+  //We want to look ahead some number of pixels (given by wallLookAhead) in some
+  //direction (that being our current heading). Split up this vector into its x-
+  //and y-components.
+  delX = (int)(wallLookAhead * cos(currHeadingRad));
+  delY = (int)(wallLookAhead * sin(currHeadingRad));
+
+  //Now that we've computed two vectors corresponding to the x- and y-components
+  //of our look-ahead vector, make sure that the magnitude of these two vectors
+  //is at least some minimum value. Even if we're flying at a heading of 0 degrees
+  //(meaning the y-component vector should be 0), we still want to check for walls
+  //in the y direction a little bit, so our wings don't accidentally clip walls as
+  //we fly by.
+  delX = sign(delX) * max(abs(delX), minLookAside);
+  delY = sign(delY) * max(abs(delY), minLookAside);
+
+  //Having generated x- and y-component vectors, add these to our current position
+  //to get the x- and y-coordinates of the point where we're now looking.
+  newX = currX + delX;
+  newY = currY + delY;
+
+  //Using the new x- and y-coordinates generated above, check straight in front, 
+  //and then check the x and y directions individually.
+  seeWallAhead = wallBetween(currX, currY, newX, newY, dummyVal, dummyVal);
+  seeWallX = wallBetween(currX, currY, newX, currY, dummyVal, dummyVal);
+  seeWallY = wallBetween(currX, currY, currX, newY, dummyVal, dummyVal);
+
+  //As well as checking straight in front, check also a little to the left and to
+  //the right of our current heading. This incorporates the fact that we don't ever 
+  //just look directly in front of us, we have a field of view that catches objects
+  //some number of degrees off from where we're really looking.
+  lHead = modm(currHeadingDeg + lookAngle, maxDeg);
+  seeWallL = wallFeeler(wallLookAhead, lHead, dummyVal, dummyVal);
+  rHead = modm(currHeadingDeg - lookAngle, maxDeg);
+  seeWallR = wallFeeler(wallLookAhead, rHead, dummyVal, dummyVal);
+
+
+  //Turn some number of degrees to the left of the current heading.
+  if(closeToConcaveCorner(currHeadingDeg))
+  {
+    return modm(currHeadingDeg + turnLeft, maxDeg);
+  }    
+
+  //If we see a vertical wall, mirror our heading on the y-axis and set a turn
+  //lock of some number of frames.
+  else if(seeWallX)
+  {
+    return modm(180 - currHeadingDeg, maxDeg);
+  }
+
+  //If we see a horizontal wall, mirror our heading on the x-axis and set a turn
+  //lock of some number of frames.
+  else if(seeWallY)
+  {
+    return modm(-currHeadingDeg, maxDeg);
+  }
+
+  //If we see a wall that's directly in front of us or a little to the right, turn
+  //left a bit, and set a turn lock.
+  else if(seeWallAhead || seeWallR)
+  {
+    return modm(currHeadingDeg + turnLeft, maxDeg);
+  }
+
+  //Similarly, if we see a wall that's just a little to the left of us, turn right
+  //a little and set a turn lock.
+  else if(seeWallL)
+  {
+    return modm(currHeadingDeg + turnRight, maxDeg);
+  }
+
+  //If we see no walls at all, indicate this by returning a value of -1.
+  else
+  {
+    return -1;
+  }
+}
 
