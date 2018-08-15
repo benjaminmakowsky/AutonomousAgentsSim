@@ -1,17 +1,18 @@
 //Matthew Coffman - June 2018
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <limits.h>
 
 //vertex_status structure: during the execution of the A* algorithm, we will need
-//information on every vertex, including the following:
-//its id, 
+//the following information on every vertex:
+//its own id and information,
 //the id of its predecessor,
 //the smallest known distance between it and the start (g), 
 //the estimated distance between it and the end (h),
 //the sum of these two values (f),
-//and a marker to indicate whether we are done looking at this vertex
+//and a marker to indicate whether we are done looking at this vertex.
 typedef struct vertex_status_a
 {
   vertex_t v;
@@ -66,15 +67,14 @@ int get_vs_index_a(vsa_t *vsptr, int len, int id)
   }
 
   //If we've gotten this far, it must be the case that l > r, meaning the desired
-  //id must not be in the array at all, so returning the length of the array will
-  //indicate an invalid answer.
-  return len;
+  //id must not be in the array at all, so returning -1 will indicate an invalid answer.
+  return -1;
 }
 
 //Computes the shortest path from the start vertex to the end vertex, using the
 //distance formula as a heuristic to guess how far away the goal is, and stores
 //the path in the given path variable.
-void astar(graph_t g, vertex_t start, vertex_t end, int *path)
+int astar(graph_t g, vertex_t start, vertex_t end, int *path)
 {
   int i, curr_vsi, min_not_done_vsi, end_vsi;
   int backwards_path[g.num_v+1];
@@ -87,7 +87,7 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
   {
     printf("Error: start vertex %d not found in graph\n", start.id);
     path[0] = '\0';
-    return;
+    return EXIT_FAILURE;
   }
   
   //Likewise, if the end vertex can't be found in the graph, throw an error.
@@ -95,7 +95,7 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
   {
     printf("Error: end vertex %d not found in graph\n", end.id);
     path[0] = '\0';
-    return;
+    return EXIT_FAILURE;
   }
 
   //In the degenerate case where the path starts and ends at the same spot, no
@@ -104,7 +104,7 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
   {
     path[0] = start.id;
     path[1] = '\0';
-    return;
+    return EXIT_SUCCESS;
   }
 
   //Otherwise, wipe clean the chunk of memory we'll be using for our vertex_status
@@ -112,7 +112,7 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
   memset(vsptr, 0, sizeof(vsa_t) * g.num_v);
   for(i = 0; i < g.num_v; i++)
   {
-    //Compute the distance from each point to the end. This is the "heuristic" value.
+    //Compute the distance from each point to the end. This is the heuristic value.
     int dist = distance_formula(g.vertices[i].x, g.vertices[i].y, end.x, end.y);
 
     //For the start vertex, let its predecessor be -1 and have its g value be 0,
@@ -125,7 +125,9 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
     //Otherwise, assume initially that there's infinite (INT_MAX) distance from
     //the point to the end, meaning the f and g fields are all INT_MAX.
     else
+    {
       vsptr[i] = (vsa_t) {g.vertices[i], start.id, INT_MAX, INT_MAX, dist, false};
+    }
   }
   
   //Sort the list of vertex_status structures, making searching easier later on.
@@ -150,7 +152,7 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
         other_vsi = get_vs_index_a(vsptr, g.num_v, g.edges[i].v1.id);
       }
 
-      if(other_vsi != -1 && other_vsi != g.num_v)
+      if(other_vsi != -1)
       {
         //If the other vertex has a g value bigger than the current vertex's g
         //value plus the weight of the edge between it and the current vertex,
@@ -201,7 +203,9 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
   }
   
   for(i = 0; i < g.num_v + 1; i++)
+  { 
     backwards_path[i] = '\0';
+  }
 
   //Find the entry in the vertex_status array corresponding to the end vertex. Step
   //backwards through predecessors to retrace the path from end to start, copying it
@@ -222,4 +226,6 @@ void astar(graph_t g, vertex_t start, vertex_t end, int *path)
     path[i] = backwards_path[length(backwards_path)-i-1];
   }
   path[i] = '\0';
+
+  return EXIT_SUCCESS;
 }

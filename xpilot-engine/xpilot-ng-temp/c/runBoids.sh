@@ -7,7 +7,7 @@ do
     idx=$val
     name="fixed"
     name="$name$idx"
-    echo "./chaser 0 $idx $1 $name"
+    echo "./boids 0 $idx $1 $name"
     konsole -e ./boids 0 $idx $1 $teamnum -team $teamnum -color0 "#23221f" -join -name $name -shipShape fixed
     sleep 1
 done
@@ -18,7 +18,7 @@ do
     idx=$(($1+$val))
     name="fixed"
     name="$name$idx"
-    echo "./chaser 0 $idx $1 $name"
+    echo "./boids 0 $idx $1 $name"
     konsole -e ./boids 0 $idx $1 $teamnum -team $teamnum -color0 "#23221f" -color7 "#ff8000" -color5 "#750eee" -color6 "#ffffff" -join -name $name -shipShape fixed
     sleep 1
 done

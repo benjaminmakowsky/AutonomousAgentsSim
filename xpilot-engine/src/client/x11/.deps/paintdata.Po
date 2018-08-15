@@ -3,10 +3,10 @@ paintdata.o: paintdata.c /usr/include/stdc-predef.h xpclient_x11.h \
  ../../../config.h /usr/include/stdio.h /usr/include/features.h \
  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
- /usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include/stddef.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stddef.h \
  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
- /usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include/stdarg.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdarg.h \
  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
  /usr/include/bits/stdio.h /usr/include/sys/types.h /usr/include/time.h \
  /usr/include/endian.h /usr/include/bits/endian.h \
@@ -20,7 +20,7 @@ paintdata.o: paintdata.c /usr/include/stdc-predef.h xpclient_x11.h \
  /usr/include/string.h /usr/include/xlocale.h /usr/include/bits/string.h \
  /usr/include/bits/string2.h /usr/include/strings.h \
  /usr/include/inttypes.h \
- /usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include/stdint.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/wchar.h /usr/include/unistd.h \
  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
  /usr/include/bits/confname.h /usr/include/getopt.h /usr/include/assert.h \
@@ -38,9 +38,9 @@ paintdata.o: paintdata.c /usr/include/stdc-predef.h xpclient_x11.h \
  /usr/include/bits/sigthread.h /usr/include/sys/time.h \
  /usr/include/fcntl.h /usr/include/bits/fcntl.h \
  /usr/include/bits/fcntl-linux.h \
- /usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include/float.h \
- /usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include-fixed/limits.h \
- /usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include-fixed/syslimits.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/float.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/limits.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/syslimits.h \
  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
  /usr/include/bits/posix2_lim.h /usr/include/pwd.h /usr/include/setjmp.h \
@@ -75,15 +75,16 @@ paintdata.o: paintdata.c /usr/include/stdc-predef.h xpclient_x11.h \
  ../../../src/common/rules.h ../../../src/common/setup.h \
  ../../../src/common/shipshape.h ../../../src/common/wreckshape.h \
  ../../../src/common/xpmap.h ../../../src/common/keys.h \
- /usr/include/zlib.h /usr/include/zconf.h ../../../src/client/client.h \
- ../../../src/common/shipshape.h ../../../src/client/connectparam.h \
- ../../../src/client/option.h ../../../src/client/clientcommand.h \
- ../../../src/client/clientrank.h ../../../src/client/configure.h \
- ../../../src/client/datagram.h ../../../src/client/gfx2d.h \
- ../../../src/client/guimap.h ../../../src/client/guiobjects.h \
- ../../../src/client/meta.h ../../../src/client/netclient.h \
- ../../../src/client/paint.h ../../../src/client/recordfmt.h \
- ../../../src/client/talk.h /usr/include/X11/X.h /usr/include/X11/Xlib.h \
+ /usr/local/include/zlib.h /usr/local/include/zconf.h \
+ ../../../src/client/client.h ../../../src/common/shipshape.h \
+ ../../../src/client/connectparam.h ../../../src/client/option.h \
+ ../../../src/client/clientcommand.h ../../../src/client/clientrank.h \
+ ../../../src/client/configure.h ../../../src/client/datagram.h \
+ ../../../src/client/gfx2d.h ../../../src/client/guimap.h \
+ ../../../src/client/guiobjects.h ../../../src/client/meta.h \
+ ../../../src/client/netclient.h ../../../src/client/paint.h \
+ ../../../src/client/recordfmt.h ../../../src/client/talk.h \
+ /usr/include/X11/X.h /usr/include/X11/Xlib.h \
  /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h \
  /usr/include/X11/Xos.h /usr/include/X11/Xarch.h /usr/include/X11/Xutil.h \
  /usr/include/X11/keysym.h /usr/include/X11/keysymdef.h \
@@ -113,7 +114,7 @@ xpclient_x11.h:
 
 /usr/include/gnu/stubs-64.h:
 
-/usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include/stddef.h:
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stddef.h:
 
 /usr/include/bits/types.h:
 
@@ -125,7 +126,7 @@ xpclient_x11.h:
 
 /usr/include/wchar.h:
 
-/usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include/stdarg.h:
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdarg.h:
 
 /usr/include/bits/stdio_lim.h:
 
@@ -183,7 +184,7 @@ xpclient_x11.h:
 
 /usr/include/inttypes.h:
 
-/usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include/stdint.h:
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/stdint.h:
 
 /usr/include/stdint.h:
 
@@ -257,11 +258,11 @@ xpclient_x11.h:
 
 /usr/include/bits/fcntl-linux.h:
 
-/usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include/float.h:
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/float.h:
 
-/usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include-fixed/limits.h:
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/limits.h:
 
-/usr/local/lib/gcc/x86_64-unknown-linux-gnu/4.9.2/include-fixed/syslimits.h:
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include/syslimits.h:
 
 /usr/include/limits.h:
 
@@ -407,9 +408,9 @@ xpclient_x11.h:
 
 ../../../src/common/keys.h:
 
-/usr/include/zlib.h:
+/usr/local/include/zlib.h:
 
-/usr/include/zconf.h:
+/usr/local/include/zconf.h:
 
 ../../../src/client/client.h:
 

@@ -588,9 +588,10 @@ int Init_player(int ind, shipshape_t *ship, int type)
       pl->acc.y = 0.1;
       pl->fov = 90;
 
-      pl->turnspeed = 1;
-      pl->maxturnsps = 2;
-
+      pl->turnresistance = 0.5;
+      pl->turnspeed = 5;
+      pl->maxturnsps = 14;
+      
       pl->shot_range = 10;
       pl->shot_radius = 10;
       pl->addShotSpeed = 0;
