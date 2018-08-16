@@ -2819,7 +2819,7 @@ void scaleVector(int angle, int weight, double *x, double *y, int *totalWt)
 
 //Given a team number, a keyword, and a new value, produces and broadcasts the
 //desired message.
-void broadcastMessage(int teamNum, int keyword, int newVal)
+void broadcastMessage(int teamNum, char *keyword, int newVal)
 {
   char team[5], msg[20], value[5];
   sprintf(team, "%d", teamNum);

@@ -169,3 +169,58 @@
 	extern int connectorX1(); //Returns the connector's X Position -JRA
 	extern int connectorY0(); //Returns the connector's Y Position -JRA
 	extern int connectorY1(); //Returns the connector's Y Position -JRA
+
+//Radar/Closest Functions
+	extern int closestEFRadarXorY(int efFlag, int xyFlag);
+	extern int closestEnemyRadarX();
+	extern int closestFriendRadarX();
+	extern int closestEnemyRadarY();
+	extern int closestFriendRadarY();
+	extern int closestEFDist(int efFlag);
+	extern int closestEnemyDist();
+	extern int closestFriendDist();
+//Helper Functions for Chaser and Boids
+	extern int computeDistance(int x1, int x2, int y1, int y2);
+	extern double secantLine(int x1, int x2, int y1, int y2);
+	extern int modm(int n, int m);
+	extern int max(int x, int y);
+	extern int min(int x, int y);
+	extern int sign(int x);
+	extern int getMapWidth();
+	extern int getMapHeight();
+	extern int radarToPixelX(int x);
+	extern int radarToPixelY(int y);
+	extern int getNearestEnemyX();
+	extern int getNearestEnemyY();
+	extern int getAngleBtwnPoints(int x1, int x2, int y1, int y2);
+	extern int selfAngleToXY(int x, int y);
+/*
+	extern bool withinROV(int x, int y, int rov);
+	extern bool withinFOV(int x, int y, int fov);
+	extern bool inSight(int x, int y, int fov, int rov);
+	extern bool radarEFInView(int fov, int rov, int ef);
+	extern bool radarEnemyInView(int fov, int rov);
+	extern bool radarFriendInView(int fov, int rov);
+*/
+	extern int getEFSeparation(int r, int fov, int ef);
+	extern int getEnemySeparation(int r, int fov);
+	extern int getFriendSeparation(int r, int fov);
+	extern int averageEFRadarXorY(int r, int fov, int efFlag, int xyFlag);
+	extern int averageEnemyRadarX(int r, int fov);
+	extern int averageFriendRadarX(int r, int fov);
+	extern int averageEnemyRadarY(int r, int fov);
+	extern int averageFriendRadarY(int r, int fov);
+//	extern bool foundInArray(int *arr, int length, int target);
+	extern int averageLeaderXorY(int r, int fov, int *leaders, int num_leaders, int xyFlag);
+	extern int averageLeaderX(int r, int fov, int *leaders, int num_leaders);
+	extern int averageLeaderY(int r, int fov, int *leaders, int num_leaders);
+	extern int avgFriendlyDirWithLeader(int r, int fov, int *leaders, int num_leaders);
+	extern int avgFriendlyDir(int r, int fov);
+	extern int getIdAtXY(int x, int y);
+	extern void swapPoints(int *x1ptr, int *y1ptr, int *x2ptr, int *y2ptr);
+//	extern bool lineInCircle(int xa, int ya, int xb, int yb, int xc, int yc, int r);
+	extern void scaleVector(int angle, int weight, double *x, double *y, int *totalWt);
+	extern void broadcastMessage(int teamNum, char *keyword, int newVal);
+//	extern bool closeToConcaveCorner(int headingDeg);
+	extern int getWallAvoidance();
+

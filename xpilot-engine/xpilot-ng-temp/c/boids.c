@@ -73,7 +73,7 @@ bool isLeader = false;		//whether this drone is a leader
 int *leaders = NULL;		//array of leader id's
 int numLeaders = 0;		//how many leaders on our team
 bool leaderMode = false;	//whether we care just about leaders for flocking
-bool distanceWeighting = true;	//simple averaging vs factoring in distance
+bool distanceWeighting = false;	//simple averaging vs factoring in distance
 
 
 /*****************************************************************************
@@ -96,7 +96,7 @@ void initialize()
   if(leaderMode)
   {
     //Determine, by some criterion, whether I'm a leader.
-    if(selfID() % tot_idx == 1)
+    if(idx % tot_idx == 1)
     {
       isLeader = true;
     }
@@ -158,7 +158,14 @@ void alignment()
   //If we're in leader mode, just get the average heading of all leaders nearby.
   if(leaderMode)
   {
-    aVector = avgFriendlyDirWithLeader(aRadius, fov, leaders, numLeaders);
+    if(!isLeader)
+    {
+      aVector = avgFriendlyDirWithLeader(aRadius, fov, leaders, numLeaders);
+    }
+    else
+    {
+      aVector = -1;
+    }
   }
   //Otherwise, get the average direction of ALL friends nearby.
   else
@@ -186,7 +193,7 @@ void cohesion()
   
   //If we aren't in leader mode, or if our leader-mode calculation gave us bad (-1)
   //values for x or y, get the average position of ALL friends nearby.
-  if(avgFriendX == -1 || avgFriendY == -1)
+  else //if(avgFriendX == -1 || avgFriendY == -1)
   {
     avgFriendX = averageFriendRadarX(cRadius, fov);
     avgFriendY = averageFriendRadarY(cRadius, fov);
@@ -194,7 +201,7 @@ void cohesion()
  
   //If we have valid (i.e. not -1) values for x and y, update the cohesion vector
   //accordingly. Otherwise, return -1.
-  if(avgFriendX != -1 && avgFriendY != -1)
+  if(avgFriendX != -1 && avgFriendY != -1 && (!leaderMode || !isLeader))
   {
     cVector = getAngleBtwnPoints(selfX(), avgFriendX, selfY(), avgFriendY);
   }
@@ -233,7 +240,9 @@ void enemySeparation()
 
 //Generates emergent flocking behavior based on boids algorithm by computing and
 //balancing vectors related to wall avoidance, cohesion, alignment, and friendly
-//and enemy separation.
+//and enemy separation. For each of these vectors, splits it into its x- and y-
+//components and takes a weighted average of each of these components, then uses
+//arctangent to get the resulting angle.
 void flocking()
 {
   static int totalWt, newAngle;
@@ -348,13 +357,13 @@ void cWeightAdjustByDistance()
 {
   int avgFriendX, avgFriendY, avgFriendDist;
 
-  avgFriendX = averageFriendRadarX();
-  avgFriendY = averageFriendRadarY(); 
+  avgFriendX = averageFriendRadarX(cRadius, fov);
+  avgFriendY = averageFriendRadarY(cRadius, fov); 
 
   if(avgFriendX != -1 && avgFriendY != -1)
   {
     avgFriendDist = computeDistance(selfX(), avgFriendX, selfY(), avgFriendY);
-    cWeight = pow(1 + avgFriendDist / 100, 2);
+    cWeight = pow(avgFriendDist / 100, 2);
   }
 }
 
@@ -365,7 +374,7 @@ void sWeightAdjustByDistance()
 
   if(dist != -1)
   {
-    sWeight = pow(4 - dist / 50, 2);
+    sWeight = pow(4 - dist / 75, 2);
   }
 }
 
