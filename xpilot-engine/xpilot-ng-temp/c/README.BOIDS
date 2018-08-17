@@ -21,3 +21,79 @@ separate windows and consoles, one for each drone
 spawned, though hopefully we will eventually have a 
 spectator mode in which just a single window is generated.
 ===========================================================
+
+
+How to send commands to drones in boids:
+
+===========================================================
+This boids simulator comes equipped with a message handler
+that accepts commands to change the drones' behavior, using
+XPilot's built-in chat feature. To send a command, open the 
+chat feature by pressing the 'm' key. Then, type your
+message and press Enter/Return.
+
+The following are all the values you can modify through
+this message handler:
+
+mobile - whether or not drone's move at all (can be 0 or 1)
+wweight - the weight of the wall avoidance vector
+aweight - the weight of the alignment vector
+cweight - the weight of the cohesion vector
+sweight - the weight of the friendly separation vector
+sradius - the radius a drone checks for friendly neighbors
+            to stay away from (in pixels)
+eweight - the weight of the enemy separation vector
+eradius - the radius a drone checks for enemies to stay
+            away from (in pixels)
+pweight - the weight of the past movement vector (i.e. how
+            much a drone wants to hold its present course)
+fov - a drone's field of view (i.e. how many degrees the
+        drone can see away from its current heading in
+        either direction)
+
+To modify the above values, essages should take the 
+following form:
+
+  <team number> <keyword> <new value>
+
+The team number allows you to send messages just to one 
+particular team, or else use 0 if you want to broadcast 
+your message to everyone. The keywords are listed above.
+Finally, provide a new value to update the specified
+keyword. Examples of valid commands are given below:
+
+0 mobile 1
+1 cweight 2
+2 fov 90
+0 sradius 75
+
+Two exceptions to the standard message format given above
+are the "beginboids" and "endboids" commands, which are
+preceded by a team number but require no new value. While
+you can adjust each of the boids values (alignment, 
+cohesion, etc.) individually using the keywords listed,
+"beginboids" sets all the values at once so that you can
+go from aimless flying to flocking in just one command.
+"endboids" returns the drones to aimless flying.
+
+From my own experience, the following boids values yield
+fairly good flocking behavior (and these values are
+consequently used to implement the "beginboids" command).
+
+0 eradius 200
+0 eweight 5
+0 sradius 100
+0 sweight 5
+0 aweight 4
+0 cweight 2
+0 fov 180
+===========================================================
+
+
+
+
+
+
+
+
+

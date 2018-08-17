@@ -68,3 +68,70 @@ If chaser.c and its corresponding build and run scripts are ever
 moved, THESE FIVE FILES MUST MOVE WITH THEM. If they do not, the
 drones will be unable to use path-finding.
 =================================================================
+
+
+How to send messages to drones:
+
+=================================================================
+This chaser simulator uses the XPilot chat feature and a message
+handler to accept a limited number of commands, so you can change
+the behavior of drones on the fly. To use the message handler,
+press 'm' to open the chat feature, type your command, and press
+Enter/Return.
+
+There are a number of behaviors that can be toggled on or off
+or have their values modified. These are enumerated below:
+
+mobile - drones can be either mobile or anchored in place
+cautious - makes drones fly cautiously around corners
+preserving - causes drones to run away from enemies rather than
+               engaging
+stealthy - causes drones to "hide" when they spot enemies
+focused - drones can either fly aimlessly or toward a particular
+            destination
+avoidant - makes drone's avoid certain spots on the map when
+             they fly with focused behavior on
+fov - a drone's field of vision (i.e. how many degrees away from
+        their current heading the drones can see)
+rov - a drone's range of vision (distance in pixels)
+leader - drones can be marked as leaders (this behavior won't
+           have any effect as of 08/17/18: this is more looking
+           forward to future functionality)
+
+To modify the above values, messages should take the following 
+form:
+
+  <keyword> <new value>
+
+The keywords are listed above. The new value will be 0 or 1 for
+all the behaviors that can be toggled on or off. For field and
+range of vision, the new value for "fov" should be an angle in 
+degrees between 0 and 180, and for "rov" the distance can be 
+any nonnegative value. For "leader", the new value should be
+the ID of the drone that you want to make a leader. Examples of
+valid commands are given below.
+
+fov 60
+stealthy 1
+mobile 0
+avoidant 1
+rov 300
+
+In addition to the commands listed above, there are also commands
+that allow you to mark certain points on the map as "dangerous"
+so that drones avoid them when they're focused and avoidant. Such
+danger points can be added, removed, or displayed as shown below:
+
+avoid <x-value> <y-value> <radius-around-point-to-stay-away>
+remavoid <x-value> <y-value>
+printdps
+
+where all the values required above are in pixels. Examples of
+these commands in use would be:
+
+avoid 200 250 150
+avoid 630 4025 300
+remavoid 200 250
+printdps 
+=================================================================
+
