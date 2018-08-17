@@ -70,10 +70,12 @@ int eRadius = 200;
 int fov = 60;			//field (angle) of vision
 int mobile = 1;			//allows us to completely anchor all drones
 bool isLeader = false;		//whether this drone is a leader
-int *leaders = NULL;		//array of leader id's
+int leaders[10];
+//int *leaders = NULL;		//array of leader id's
 int numLeaders = 0;		//how many leaders on our team
-bool leaderMode = false;	//whether we care just about leaders for flocking
-bool distanceWeighting = false;	//simple averaging vs factoring in distance
+int leaderMode = 1;		//whether we care just about leaders for flocking
+int distanceWeighting = 0;	//simple averaging vs factoring in distance
+int oppositesAttract = 0;
 
 
 /*****************************************************************************
@@ -96,18 +98,21 @@ void initialize()
   if(leaderMode)
   {
     //Determine, by some criterion, whether I'm a leader.
-    if(idx % tot_idx == 1)
+    //if(idx % tot_idx == 1)
+    if(idx < 3)
     {
       isLeader = true;
     }
-  
+  //FIXME: figure out why dynamic allocation doesn't work
+  /*
     //Allocate space for an array of all the leader id's for later use.
-    leaders = malloc(sizeof(int) * tot_idx);
+    leaders = (int *)malloc(sizeof(int) * tot_idx);
     if(!leaders)
     {
       perror("couldn't allocate leaders memory");
       exit(EXIT_FAILURE);
     }
+  */
   }
 
   //Declare initialized and set state to typical flying.
@@ -191,9 +196,8 @@ void cohesion()
     avgFriendY = averageLeaderY(cRadius, fov, leaders, numLeaders);
   }
   
-  //If we aren't in leader mode, or if our leader-mode calculation gave us bad (-1)
-  //values for x or y, get the average position of ALL friends nearby.
-  else //if(avgFriendX == -1 || avgFriendY == -1)
+  //If we aren't in leader mode, get the average position of ALL friends nearby.
+  else 
   {
     avgFriendX = averageFriendRadarX(cRadius, fov);
     avgFriendY = averageFriendRadarY(cRadius, fov);
@@ -219,7 +223,14 @@ void cohesion()
 //Compute the angle to stay away from the average position of all friends nearby.
 void separation()
 {
-  sVector = getFriendSeparation(sRadius, fov);
+  if(!isLeader)
+  {
+    sVector = getFriendSeparation(sRadius, fov);
+  }
+  else
+  {
+    sVector = -1;
+  }
 }
 
 
@@ -227,10 +238,21 @@ void separation()
  * Enemy Separation
  * ***************************************************************************/
 
-//Compute the angle to stay away from the average position of all enemies  nearby.
+//Compute the angle to stay away from the average position of all enemies nearby.
 void enemySeparation()
 {
-  eVector = getEnemySeparation(eRadius, fov);
+  int sepVec = getEnemySeparation(eRadius, fov);
+
+  //If opposites attract behavior is on, rotate the angle 180 degrees, so you're
+  //going toward the enemy instead of away.
+  if(sepVec != -1 && oppositesAttract)
+  {
+    eVector = modm(sepVec + 180, MAX_DEG);
+  } 
+  else
+  {
+    eVector = sepVec;   
+  }
 }
 
 
@@ -510,10 +532,25 @@ void handleMsgBuffer()
       //leader: add a leader to the array of leaders to follow, if we're in leader mode
       else if(!strcmp(tok, "leader"))
       {
-        leaders[value - (teamNum - 1) * tot_idx - 1] = value;
-        ++numLeaders;
+        leaders[numLeaders++] = value;
       }
+      //toggle leader: only align/cohere with specified leaders
+      else if(!strcmp(tok, "toggleleader"))
+      {
+        leaderMode = value;
+      }
+      //toggle weighting: adjust weighting of coherence/separation based on distance
+      else if(!strcmp(tok, "toggleWeighting"))
+      {
+        distanceWeighting = value;
+      }
+      //opposites attract: toggle running away from vs going toward enemies
+      else if(!strcmp(tok, "oppositesattract"))
+      {
+        oppositesAttract = value;
+      } 
       //TODO: possibly add a way to remove leaders from the list
+      //start a generic boids simulation
       else if(!strcmp(tok, "beginboids"))
       {
         eRadius = 200;
@@ -524,6 +561,7 @@ void handleMsgBuffer()
         cWeight = 2;
         fov = 180;
       }
+      //return to aimless flying
       else if(!strcmp(tok, "endboids"))
       {
         eWeight = 0;
@@ -550,7 +588,7 @@ AI_loop()
 
   //If about 300 frames have gone by and we're a leader, broadcast a message that
   //indicates this, so others on my team can follow me in leader mode.
-  if(frameCount == 300 && isLeader)
+  if(frameCount == 350 && isLeader)
   {
     broadcastMessage(teamNum, "leader", selfID());
   }
