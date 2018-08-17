@@ -2603,7 +2603,9 @@ int averageLeaderXorY(int r, int fov, int *leaders, int num_leaders, int xyFlag)
     //its x- or y-coordinate
     if((x != selfPos.x || y != selfPos.y) 
        && inSight(x, y, fov, r)
-       && (foundInArray(leaders, num_leaders, ship_ptr[i].id)))
+       && enemyTeamId(ship_ptr[i].id) != -1
+       && enemyTeamId(ship_ptr[i].id) == selfTeam()
+       && foundInArray(leaders, num_leaders, ship_ptr[i].id))
     {
       //an xy flag of 0 indicates we want to accumulate the x-coordinate
       if(xyFlag == 0)
@@ -2616,7 +2618,7 @@ int averageLeaderXorY(int r, int fov, int *leaders, int num_leaders, int xyFlag)
         total += y;
       }
 
-      //kee
+      //keep track of how many leaders we've found nearby
       ++count;
     }
   }
@@ -2649,7 +2651,7 @@ int averageLeaderY(int r, int fov, int *leaders, int num_leaders)
 //the average heading of just one's leaders
 int avgFriendlyDirWithLeader(int r, int fov, int *leaders, int num_leaders)
 {
-  int i, d, x, y, deg, num = 0;
+  int i, x, y, deg, num = 0;
   double rad;
   double xComp = 0.0, yComp = 0.0; 
 

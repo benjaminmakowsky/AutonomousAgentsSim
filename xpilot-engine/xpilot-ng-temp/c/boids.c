@@ -401,6 +401,8 @@ void eWeightAdjustByDistance()
 //you to send messages just to one particular team, or else use 0 if you want to
 //broadcast your message to everyone. There is a case for each keyword below, 
 //and in each case the new value is assigned to some global variable defined above.
+//Note: the only exceptions to the standard message form shown above are the
+//keywords "beginboids" and "endboids", which take no new value.
 void handleMsgBuffer()
 {
   static char buf[100];
@@ -439,7 +441,8 @@ void handleMsgBuffer()
       tok = strtok(NULL, " ");
 
       //If the keyword-pointing token is not NULL, get the value that follows.
-      if(tok)
+      //FIXME
+      if(tok && strcmp(tok, "beginboids") && strcmp(tok, "endboids"))
       {
         value = atoi(strtok(NULL, " "));
       }
@@ -511,6 +514,24 @@ void handleMsgBuffer()
         ++numLeaders;
       }
       //TODO: possibly add a way to remove leaders from the list
+      else if(!strcmp(tok, "beginboids"))
+      {
+        eRadius = 200;
+        eWeight = 5;
+        sRadius = 100;
+        sWeight = 5;
+        aWeight = 4;
+        cWeight = 2;
+        fov = 180;
+      }
+      else if(!strcmp(tok, "endboids"))
+      {
+        eWeight = 0;
+        sWeight = 0;
+        aWeight = 0;
+        cWeight = 0;
+        fov = 60;
+      }
     }
   }
 }
