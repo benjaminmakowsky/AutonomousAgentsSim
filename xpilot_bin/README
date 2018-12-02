@@ -1,0 +1,9 @@
+##### server #####
+xpilot-ng-server: XPilot's server, run these before you run any clients. The server has a timeout of about 2 minutes, if nobody connects in that time, it exits.
+
+##### client #####
+xpilot-ng-x11: XPilot client, if you run it by itself
+
+##### map_editor #####
+xpilot-ng-mapedit: Visual GUI-based map editor. Use it to make new custom maps. Note: This map editor doesn't add any of the additional "toppings" like corners or
+points of interest that we use for path-finding.

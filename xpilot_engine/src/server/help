@@ -1,0 +1,1341 @@
+  Copyright © 1991-2005 by Bjørn Stabell, Ken Ronny Schouten, Bert Gijsbers, Dick Balaska, Uoti Urpala, Juha Lindström, Kristian Söderblom and Erik Andersson.
+  XPilot NG 4.7.3 comes with ABSOLUTELY NO WARRANTY; for details see the
+  provided COPYING file.
+
+Usage: xpilot-ng-server [ options ]
+
+Option flags specify where an option can be used and whether it
+is visible or not.  Default flags are "any" if not otherwise
+specified by one or more of these keywords:
+
+command       May be specified on the command-line.
+passwordfile  May be specified in the password file.
+defaults      May be specified in the defaults file.
+any           May be specified in the map file, defaults file,
+              or on the command line.
+invisible     Is not displayed when a list of options is
+              requested from the server by an operator.
+
+The possible options include:
+
+    -help 
+	Print out this help message.
+
+    -version 
+	Print version information.
+
+    -dump 
+	Print all options and their default values in defaultsfile format.
+
+    -expand <list>
+	Expand a comma separated list of predefined settings.
+	These settings can be defined in either the defaults file
+	or in a map file using the "define:" operator.
+	[ Flags: command, invisible ]
+
+    -gravity <real>
+	Gravity strength.
+
+    -shipMass <real>
+	Mass of fighters.
+
+    -ballMass <real>
+	Mass of balls.
+
+    -minItemMass <real>
+	The minimum mass per item when carried by a ship.
+
+    -shotMass <real>
+	Mass of bullets.
+
+    -shotSpeed <real>
+	Maximum speed of bullets.
+
+    -shotLife <real>
+	Life of bullets in ticks.
+
+    -/+treasureCollisionKills or treasureKills 
+	Does a player die when hitting a ballarea?
+
+    -ballCollisionFuelDrain or ballFuelDrain <real>
+	How much fuel does a ball collision cost?
+
+    -playerCollisionFuelDrain or playerFuelDrain <real>
+	How much fuel does a player collision cost?
+
+    -/+shotHitFuelDrainUsesKineticEnergy or kineticEnergyFuelDrain 
+	Does the fuel drain from shot hits depend on their mass and speed?
+	This should be set to false on Blood's Music maps.
+
+    -fireRepeatRate or fireRepeat <real>
+	Number of ticks per automatic fire (0=off).
+
+    -pulseSpeed <real>
+	Speed of laser pulses.
+
+    -pulseLife <real>
+	Life of laser pulses shot by ships, in ticks.
+
+    -pulseLength <real>
+	Max length of laser pulse.
+
+    -laserRepeatRate or laserRepeat <real>
+	Number of ticks per automatic laser pulse fire (0=off).
+
+    -maxRobots or robots <integer>
+	The maximum number of robots wanted.
+	Adds robots if there are less than maxRobots players.
+
+    -minRobots <integer>
+	The minimum number of robots wanted.
+	At least minRobots robots will be in the game, if there is room.
+
+    -robotFile <string>
+	The file containing parameters for robot details.
+	[ Flags: command, defaults, invisible ]
+
+    -/+robotsTalk 
+	Do robots talk when they kill, die etc.?
+
+    -/+robotsLeave 
+	Do robots leave the game?
+
+    -robotLeaveLife <integer>
+	After how many deaths does a robot want to leave? (0=off).
+
+    -robotTeam <integer>
+	Team to use for robots.
+
+    -/+restrictRobots 
+	Are robots restricted to their own team?
+
+    -/+reserveRobotTeam 
+	Is the robot team only for robots?
+
+    -robotUserName or robotRealName <string>
+	What is the robots' apparent user name?
+
+    -robotHostName <string>
+	What is the robots' apparent host name?
+
+    -tankUserName or tankRealName <string>
+	What is the tanks' apparent user name?
+
+    -tankHostName <string>
+	What is the tanks' apparent host name?
+
+    -tankScoreDecrement or tankDecrement <real>
+	How much lower is the tank's score than the player's?
+
+    -/+selfImmunity 
+	Are players immune to their own weapons?
+
+    -defaultShipShape <string>
+	What is the default ship shape for people who do not have a ship
+	shape defined?
+
+    -tankShipShape <string>
+	What is the ship shape used for tanks?
+
+    -maxPlayerShots or shots <integer>
+	Maximum number of shots visible at the same time per player.
+
+    -/+shotsGravity 
+	Are shots affected by gravity.
+
+    -/+Log 
+	Log major server events to log file?
+
+    -/+idleRun or rawMode 
+	Does server calculate frames and do robots keep on playing even
+	if all human players quit?
+	[ Flags: command, defaults ]
+
+    -/+noQuit 
+	Does the server wait for new human players to show up
+	after all players have left.
+	[ Flags: command, defaults ]
+
+    -/+logRobots 
+	Log the comings and goings of robots.
+	[ Flags: command, defaults ]
+
+    -mapWidth <integer>
+	Width of the world in pixels.
+
+    -mapHeight <integer>
+	Height of the world in pixels.
+
+    -mapFileName or map <string>
+	The filename of the map to use.
+	[ Flags: command, defaults, invisible ]
+
+    -mapName <string>
+	The title of the map.
+
+    -mapAuthor <string>
+	The name of the map author.
+
+    -mapData <string>
+	Block map topology.
+	[ Flags: command, any, invisible ]
+
+    -contactPort or port <integer>
+	The server contact port number.
+	[ Flags: command, defaults ]
+
+    -serverHost <string>
+	The server's fully qualified domain name (for multihomed hosts).
+	[ Flags: command, defaults ]
+
+    -greeting or xpilotGreeting <string>
+	Short greeting string for players when they login to server.
+
+    -/+allowPlayerCrashes 
+	Can players overrun other players?
+
+    -/+allowPlayerBounces 
+	Can players bounce with other players?
+
+    -/+allowPlayerKilling or killings 
+	Should players be allowed to kill one other?
+
+    -/+allowShields or shields 
+	Are shields allowed?
+
+    -/+playerStartsShielded or playerStartShielded 
+	Do players start with shields up?
+
+    -/+shotsWallBounce 
+	Do shots bounce off walls?
+
+    -/+ballsWallBounce 
+	Do balls bounce off walls?
+
+    -/+ballCollisionDetaches or ballHitDetaches 
+	Does a ball get freed by a collision with a player?
+
+    -/+ballCollisions 
+	Can balls collide with other objects?
+
+    -/+ballSparkCollisions 
+	Can balls be blown around by exhaust? (Needs ballCollisions too)
+
+    -/+minesWallBounce 
+	Do mines bounce off walls?
+
+    -/+itemsWallBounce 
+	Do items bounce off walls?
+
+    -/+missilesWallBounce 
+	Do missiles bounce off walls?
+
+    -/+sparksWallBounce 
+	Do thrust spark particles bounce off walls to give reactive 
+	thrust?
+
+    -/+debrisWallBounce 
+	Do explosion debris particles bounce off walls?
+
+    -/+asteroidsWallBounce 
+	Do asteroids bounce off walls?
+
+    -/+pulsesWallBounce 
+	Do laser pulses bounce off walls?
+
+    -/+cloakedExhaust 
+	Do engines of cloaked ships generate exhaust?
+
+    -maxObjectWallBounceSpeed or maxObjectBounceSpeed <real>
+	The maximum allowed speed for objects to bounce off walls.
+
+    -maxSparkWallBounceSpeed or maxSparkBounceSpeed <real>
+	The maximum allowed speed for sparks to bounce off walls.
+
+    -maxShieldedWallBounceSpeed or maxShieldedBounceSpeed <real>
+	The max allowed speed for a shielded player to bounce off walls.
+
+    -maxUnshieldedWallBounceSpeed or maxUnshieldedBounceSpeed <real>
+	Max allowed speed for an unshielded player to bounce off walls.
+
+    -playerWallBounceType or wallBounceType <integer>
+	What kind of ship wall bounces to use.
+	
+	A value of 0 gives the old XPilot wall bounces, where the ship
+	velocity in the direction perpendicular to the wall is reversed
+	after which the velocity is multiplied by the value of the
+	playerWallBounceBrakeFactor option.
+	
+	A value of 1 gives the "separate multipliers" implementation.
+	
+	A value of 2 causes Mara's suggestion for the speed change in the
+	direction parallel to the wall to be used.
+	Vtangent2 = (1-Vnormal1/Vtotal1*wallfriction)*Vtangent1
+	
+	A value of 3 causes Uau's suggestion to be used:
+	change the parallel one by
+	MIN(C1*perpendicular_change, C2*parallel_speed)
+	if you assume the wall has a coefficient of friction C1.
+	.
+
+    -playerWallBounceBrakeFactor or playerWallBrake <real>
+	Factor to slow down ship in direction perpendicular to the wall
+	when a wall is hit (0 to 1).
+
+    -playerBallBounceBrakeFactor or playerBallBrake <real>
+	Elastic or inelastic properties of the player-ball collision
+	1 means fully elastic, 0 fully inelastic.
+
+    -playerWallFriction or wallFriction <real>
+	Player-wall friction (0 to 1).
+
+    -objectWallBounceBrakeFactor or objectWallBrake <real>
+	Factor to slow down objects when they hit the wall (0 to 1).
+
+    -objectWallBounceLifeFactor <real>
+	Factor to reduce the life of objects after bouncing (0 to 1).
+
+    -afterburnerPowerMult or afterburnerPower <real>
+	Multiplication factor for afterburner power.
+
+    -wallBounceDestroyItemProb <real>
+	The probability for each item a player owns to get destroyed
+	when the player bounces against a wall.
+
+    -/+reportToMetaServer or reportMeta 
+	Keep the meta server informed about our game?
+	[ Flags: command, defaults ]
+
+    -metaUpdateMaxSize <integer>
+	Maximum size of meta update messages.
+
+    -/+searchDomainForXPilot 
+	Search the local domain for the existence of xpilot.domain?
+	[ Flags: command, defaults ]
+
+    -denyHosts <string>
+	List of network addresses of computers which are denied service.
+	Addresses may be followed by a slash and a network mask.
+	[ Flags: command, defaults ]
+
+    -/+limitedVisibility 
+	Should the players have a limited visibility?
+
+    -minVisibilityDistance or minVisibility <real>
+	Minimum block distance for limited visibility, 0 for default.
+
+    -maxVisibilityDistance or maxVisibility <real>
+	Maximum block distance for limited visibility, 0 for default.
+
+    -/+limitedLives 
+	Should players have limited lives?
+	See also worldLives.
+
+    -worldLives or lives <integer>
+	Number of lives each player has (no sense without limitedLives).
+
+    -/+reset 
+	Does the world reset when the end of round is reached?
+	When true all mines, missiles, shots and explosions will be
+	removed from the world and all players including the winner(s)
+	will be transported back to their homebases.
+	This option is only effective when limitedLives is turned on.
+
+    -resetOnHuman or humanReset <integer>
+	Normally, new players have to wait until a round is finished
+	before they can start playing. With this option, the first N
+	human players to enter will cause the round to be restarted.
+	In other words, if this option is set to 0, nothing special
+	happens and you have to wait as usual until the round ends (if
+	there are rounds at all, otherwise this option doesn't do
+	anything). If it is set to 1, the round is ended when the first
+	human player enters. This is useful if the robots have already
+	started a round and you don't want to wait for them to finish.
+	If it is set to 2, this also happens for the second human player.
+	This is useful when you got bored waiting for another player to
+	show up and have started playing against the robots. When someone
+	finally joins you, they won't have to wait for you to finish the
+	round before they can play too. For higher numbers it works the
+	same. So this option gives the last human player for whom the
+	round is restarted. Anyone who enters after that does have to
+	wait until the round is over.
+
+    -/+allowAlliances or alliances 
+	Are alliances between players allowed?
+	Alliances are like teams, except they can be formed and dissolved
+	at any time. Notably, teamImmunity works for alliances too.
+	To manage alliances, use the '/ally' talk command:
+	'/ally invite <player name>' to invite another player to join you.
+	'/ally cancel' to cancel such an invitation.
+	'/ally refuse <player name>' to decline an invitation from a player.
+	'/ally refuse' to decline all the invitations you received.
+	'/ally accept <player name>' to join the other player.
+	'/ally accept' to accept all the invitations you received.
+	'/ally leave' to leave the alliance you are currently in.
+	'/ally list' lists the members of your current alliance.
+	If members from different alliances join, all their allies do so.
+
+    -/+announceAlliances 
+	Are changes in alliances made public?
+	If this option is on, changes in alliances are sent to all players
+	and all alliances are shown in the score list. Invitations for
+	alliances are never sent to anyone but the invited players.
+
+    -/+teamPlay or teams 
+	Is the map a team play map?
+
+    -/+lockOtherTeam 
+	Can you watch opposing players when rest of your team is 
+	still alive?
+
+    -/+teamFuel 
+	Do fuelstations belong to teams?
+
+    -/+teamCannons 
+	Do cannons belong to teams?
+
+    -cannonSmartness <integer>
+	0: dumb (straight ahead),
+	1: default (random direction),
+	2: good (small error),
+	3: accurate (aims at predicted player position).
+	Also influences use of weapons.
+
+    -/+cannonsPickupItems 
+	Do cannons pick up items?
+
+    -/+cannonFlak or cannonAAA 
+	Do cannons fire flak or normal bullets?
+
+    -cannonDeadTicks <real>
+	How many ticks do cannons stay dead?
+	Replaces option cannonDeadTime.
+
+    -cannonShotSpeed <real>
+	Speed of cannon shots.
+
+    -minCannonShotLife <real>
+	Minimum life of cannon shots, measured in ticks.
+	If this is set to a value greater than maxCannonShotLife, then
+	maxCannonShotLife will be set to that same value.
+
+    -maxCannonShotLife <real>
+	Maximum life of cannon shots, measured in ticks.
+	If this is set to a value less than minCannonShotLife, then
+	minCannonShotLife will be set to that same value.
+
+    -cannonInitialFuel <integer>
+	How much fuel cannons start with.
+
+    -cannonInitialTanks <integer>
+	How many tanks cannons start with.
+
+    -cannonInitialECMs <integer>
+	How many ECMs cannons start with.
+
+    -cannonInitialArmor or cannonInitialArmors <integer>
+	How much armor cannons start with.
+
+    -cannonInitialMines <integer>
+	How many mines cannons start with.
+
+    -cannonInitialMissiles <integer>
+	How many missiles cannons start with.
+
+    -cannonInitialCloaks <integer>
+	How many cloaks cannons start with.
+
+    -cannonInitialSensors <integer>
+	How many sensors cannons start with.
+
+    -cannonInitialWideangles <integer>
+	How many wideangles cannons start with.
+
+    -cannonInitialRearshots <integer>
+	How many rearshots cannons start with.
+
+    -cannonInitialAfterburners <integer>
+	How many afterburners cannons start with.
+
+    -cannonInitialTransporters <integer>
+	How many transporters cannons start with.
+
+    -cannonInitialMirrors <integer>
+	How many mirrors cannons start with.
+
+    -cannonInitialDeflectors <integer>
+	How many deflectors cannons start with.
+
+    -cannonInitialHyperJumps <integer>
+	How many hyperjumps cannons start with.
+
+    -cannonInitialPhasings <integer>
+	How many phasing devices cannons start with.
+
+    -cannonInitialLasers <integer>
+	How many lasers cannons start with.
+
+    -cannonInitialEmergencyThrusts <integer>
+	How many emergency thrusts cannons start with.
+
+    -cannonInitialTractorBeams <integer>
+	How many tractor/pressor beams cannons start with.
+
+    -cannonInitialAutopilots <integer>
+	How many autopilots cannons start with.
+
+    -cannonInitialEmergencyShields <integer>
+	How many emergency shields cannons start with.
+
+    -/+keepShots 
+	Do shots, mines and missiles remain after their owner leaves?
+
+    -/+teamImmunity 
+	Should other team members be immune to various shots thrust etc.?
+	This works for alliances too.
+
+    -/+ecmsReprogramMines 
+	Is it possible to reprogram mines with ECMs?
+
+    -/+ecmsReprogramRobots 
+	Are robots reprogrammed by ECMs instead of blinded?
+
+    -/+targetKillTeam 
+	Do team members die when their last target explodes?
+
+    -/+targetTeamCollision or targetCollision 
+	Do team members collide with their own target or not.
+
+    -/+targetSync 
+	Do all the targets of a team reappear/repair at the same time?
+
+    -targetDeadTicks <real>
+	How many ticks do targets stay destroyed?
+	Replaces option targetDeadTime.
+
+    -/+treasureKillTeam 
+	Do team members die when their treasure is destroyed?
+
+    -/+captureTheFlag or ctf 
+	Does a team's treasure have to be safe before enemy balls can be
+	cashed?
+
+    -specialBallTeam or specialBall <integer>
+	Balls that belong to this team are 'special' balls that score
+	against all other teams.
+
+    -/+treasureCollisionDestroys or treasureCollisionDestroy 
+	Are balls destroyed when a player touches it?
+
+    -ballConnectorSpringConstant <real>
+	What is the spring constant for connectors?
+
+    -ballConnectorDamping <real>
+	What is the damping force on connectors?
+
+    -maxBallConnectorRatio <real>
+	How much longer or shorter can a connecter get before it breaks?
+
+    -ballConnectorLength <real>
+	How long is a normal connector string?
+
+    -/+connectorIsString 
+	Can the connector get shorter?
+
+    -ballRadius <real>
+	What radius, measured in pixels, the treasure balls have on
+	the server. In traditional XPilot, the ball was treated as a
+	point (radius = 0), but visually appeared on the client with
+	a radius of 10 pixels.
+
+    -/+multipleConnectors or multipleBallConnectors 
+	Can a player connect to multiple balls or just to one?
+
+    -/+treasureCollisionMayKill or treasureUnshieldedCollisionKills 
+	Does a ball kill a player when the player touches it unshielded?
+
+    -/+wreckageCollisionMayKill or wreckageUnshieldedCollisionKills 
+	Can ships be destroyed when hit by wreckage?
+
+    -/+asteroidCollisionMayKill or asteroidUnshieldedCollisionKills 
+	Can ships be destroyed when hit by an asteroid?
+
+    -/+ignore20MaxFPS 
+	Ignore client maxFPS request if it is 20 (old default, too low).
+	[ Flags: command, defaults ]
+
+    -/+tagGame or tag 
+	Are we going to play a game of tag?
+	One player is 'it' (is worth more points when killed than the
+	others). After this player is killed, the one who killed them
+	becomes 'it', and so on.
+
+    -tagKillItScoreMult or tagKillItMult <real>
+	Score multiplier for killing 'it' (tagGame must be on).
+
+    -tagItKillScoreMult or tagItKillMult <real>
+	Score multiplier when 'it' kills an enemy player
+	(tagGame must be on).
+
+    -/+timing or race 
+	Enable race mode?
+
+    -/+ballrace 
+	Is timing done for balls (on) or players (off)?
+	Only used if timing is on.
+
+    -/+ballraceConnected 
+	Should a player be connected to a ball to pass a checkpoint?
+	Only used if timing and ballrace are both on.
+
+    -/+edgeWrap 
+	Do objects wrap when they cross the edge of the Universe?.
+
+    -/+edgeBounce 
+	Do objects bounce when they hit the edge of the Universe?.
+
+    -/+extraBorder 
+	Give map an extra border of wall blocks?.
+
+    -gravityPoint <position>
+	If the gravity is a point source where does that gravity originate?
+	Specify the point in the form: x,y.
+
+    -gravityAngle <real>
+	If gravity is along a uniform line, at what angle is that line?
+
+    -/+gravityPointSource 
+	Is gravity originating from a single point?
+
+    -/+gravityClockwise 
+	If the gravity is a point source, is it clockwise?
+
+    -/+gravityAnticlockwise 
+	If the gravity is a point source, is it anticlockwise?
+
+    -/+gravityVisible 
+	Are gravity mapsymbols visible to players?
+
+    -/+wormholeVisible 
+	Are wormhole mapsymbols visible to players?
+
+    -/+itemConcentratorVisible 
+	Are itemconcentrator mapsymbols visible to players?
+
+    -/+asteroidConcentratorVisible 
+	Are asteroidconcentrator mapsymbols visible to players?
+
+    -wormholeStableTicks <real>
+	Number of ticks wormholes will keep the same destination.
+
+    -defaultsFileName or defaults <string>
+	The filename of the defaults file to read on startup.
+	[ Flags: command, invisible ]
+
+    -passwordFileName <string>
+	The filename of the password file to read on startup.
+	[ Flags: command, defaults, invisible ]
+
+    -motdFileName or motd <string>
+	The filename of the MOTD file to show to clients when they join.
+	[ Flags: command, defaults, invisible ]
+
+    -scoreTableFileName or scoretable <string>
+	The filename for the score table to be dumped to.
+	This is a placeholder option which doesn't do anything.
+	[ Flags: command, defaults, invisible ]
+
+    -adminMessageFileName or adminMessage <string>
+	The name of the file where player messages for the
+	server administrator will be saved.  For the messages
+	to be saved the file must already exist.  Players can
+	send these messages by writing to god.
+	[ Flags: command, defaults, invisible ]
+
+    -adminMessageFileSizeLimit or adminMessageLimit <integer>
+	The maximum size in bytes of the admin message file.
+	[ Flags: command, defaults, invisible ]
+
+    -rankFileName <string>
+	The filename for the XML file to hold server ranking data.
+	To reset the ranking, delete this file.
+	[ Flags: command, defaults, invisible ]
+
+    -rankWebpageFileName or rankWebpage <string>
+	The filename for the webpage with the server ranking list.
+	[ Flags: command, defaults, invisible ]
+
+    -rankWebpageCSS or rankCSS <string>
+	The URL of an optional style sheet for the ranking webpage.
+	[ Flags: command, defaults, invisible ]
+
+    -framesPerSecond or FPS <integer>
+	The number of frames per second the server should strive for.
+
+    -gameSpeed <real>
+	Rate at which game events happen. The gameSpeed specifies how
+	many ticks of game time elapse each second. A value of 0 means
+	that the value of gameSpeed should be equal to the value of FPS.
+
+    -/+allowSmartMissiles or allowSmarts 
+	Should smart missiles be allowed?
+
+    -/+allowHeatSeekers or allowHeats 
+	Should heatseekers be allowed?
+
+    -/+allowTorpedoes or allowTorps 
+	Should torpedoes be allowed?
+
+    -/+allowNukes or nukes 
+	Should nuclear weapons be allowed?
+
+    -/+allowClusters or clusters 
+	Should cluster weapons be allowed?
+
+    -/+allowModifiers or modifiers 
+	Should the weapon modifiers be allowed?
+
+    -/+allowLaserModifiers or lasermodifiers 
+	Can lasers be modified to be a different weapon?
+
+    -/+allowShipShapes or ShipShapes 
+	Are players allowed to define their own ship shape?
+
+    -/+playersOnRadar or playersRadar 
+	Are players visible on the radar.
+
+    -/+missilesOnRadar or missilesRadar 
+	Are missiles visible on the radar.
+
+    -/+minesOnRadar or minesRadar 
+	Are mines visible on the radar.
+
+    -/+nukesOnRadar or nukesRadar 
+	Are nukes visible or highlighted on the radar.
+
+    -/+treasuresOnRadar or treasuresRadar 
+	Are treasure balls visible or highlighted on the radar.
+
+    -/+asteroidsOnRadar or asteroidsRadar 
+	Are asteroids visible on the radar.
+
+    -/+distinguishMissiles 
+	Are different types of missiles distinguished (by length).
+
+    -maxMissilesPerPack <integer>
+	The number of missiles gotten by picking up one missile item.
+
+    -maxMinesPerPack <integer>
+	The number of mines gotten by picking up one mine item.
+
+    -/+identifyMines 
+	Are mine owner's names displayed.
+
+    -/+shieldedItemPickup or shieldItem 
+	Can items be picked up while shields are up?
+
+    -/+shieldedMining or shieldMine 
+	Can mines be thrown and placed while shields are up?
+
+    -/+laserIsStunGun or stunGun 
+	Is the laser weapon a stun gun weapon?
+
+    -nukeMinSmarts <integer>
+	The minimum number of missiles needed to fire one nuclear missile.
+
+    -nukeMinMines <integer>
+	The minimum number of mines needed to make a nuclear mine.
+
+    -nukeClusterDamage <real>
+	How much each cluster debris does damage wise from a nuke mine.
+	This helps to reduce the number of particles caused by nuclear mine
+	explosions, which improves server response time for such explosions.
+
+    -nukeDebrisLife <real>
+	Life of nuke debris, in ticks.
+
+    -mineFuseTicks <real>
+	Number of ticks after which owned mines become deadly (0=never).
+
+    -mineLife <real>
+	Life of mines in ticks.
+
+    -minMineSpeed <real>
+	Minimum speed of mines.
+
+    -missileLife <real>
+	Life of missiles in ticks.
+
+    -baseMineRange <real>
+	Minimum distance from base mines may be used (unit is blocks).
+
+    -mineShotDetonateDistance <real>
+	How close must a shot be to detonate a mine?
+	Set this to 0 to turn it off.
+
+    -shotKillScoreMult <real>
+	Multiplication factor to scale score for shot kills.
+
+    -torpedoKillScoreMult <real>
+	Multiplication factor to scale score for torpedo kills.
+
+    -smartKillScoreMult <real>
+	Multiplication factor to scale score for smart missile kills.
+
+    -heatKillScoreMult <real>
+	Multiplication factor to scale score for heatseeker kills.
+
+    -clusterKillScoreMult <real>
+	Multiplication factor to scale score for cluster debris kills.
+
+    -laserKillScoreMult <real>
+	Multiplication factor to scale score for laser kills.
+
+    -tankKillScoreMult <real>
+	Multiplication factor to scale score for tank kills.
+
+    -runoverKillScoreMult <real>
+	Multiplication factor to scale score for player runovers.
+
+    -ballKillScoreMult <real>
+	Multiplication factor to scale score for ball kills.
+
+    -explosionKillScoreMult <real>
+	Multiplication factor to scale score for explosion kills.
+
+    -shoveKillScoreMult <real>
+	Multiplication factor to scale score for shove kills.
+
+    -crashScoreMult <real>
+	Multiplication factor to scale score for player crashes.
+
+    -mineScoreMult <real>
+	Multiplication factor to scale score for mine hits.
+
+    -selfKillScoreMult <real>
+	Multiplication factor to scale score for killing yourself.
+
+    -selfDestructScoreMult <real>
+	Multiplication factor to scale score for self-destructing.
+
+    -unownedKillScoreMult <real>
+	Multiplication factor to scale score for being killed by asteroids
+	or other objects without an owner.
+
+    -cannonKillScoreMult <real>
+	Multiplication factor to scale score for being killed by cannons.
+
+    -movingItemProb <real>
+	Probability for an item to appear as moving.
+
+    -randomItemProb <real>
+	Probability for an item to appear random.
+	Random items change their appearance every frame, so players
+	cannot tell what item they have until they get it.
+
+    -dropItemOnKillProb <real>
+	Probability for dropping an item (each item) when you are killed.
+
+    -detonateItemOnKillProb <real>
+	Probability for undropped items to detonate when you are killed.
+
+    -destroyItemInCollisionProb <real>
+	Probability for items (some items) to be destroyed in a collision.
+
+    -asteroidItemProb <real>
+	Probability for an asteroid to release items when it breaks.
+
+    -asteroidMaxItems <integer>
+	The maximum number of items a broken asteroid can release.
+
+    -itemProbMult or itemProbFact <real>
+	Item Probability Factor scales all item probabilities.
+
+    -cannonItemProbMult <real>
+	Average number of items a cannon gets per minute.
+
+    -maxItemDensity <real>
+	Maximum density for items (max items per block).
+
+    -asteroidProb <real>
+	Probability for an asteroid to appear.
+
+    -maxAsteroidDensity <real>
+	Maximum density [0.0-1.0] for asteroids (max asteroids per block.
+
+    -itemConcentratorRadius or itemConcentratorRange <real>
+	Range within which an item concentrator can create an item.
+	Sensible values are in the range 1.0 to 20.0 (unit is 35 pixels).
+	If there are no item concentrators, items might popup anywhere.
+	Some clients draw item concentrators as three rotating triangles.
+
+    -itemConcentratorProb <real>
+	The chance for an item to appear near an item concentrator.
+	If this is less than 1.0 or there are no item concentrators,
+	items may also popup where there is no concentrator nearby.
+
+    -asteroidConcentratorRadius or asteroidConcentratorRange <real>
+	Range within which an asteroid concentrator can create an asteroid.
+	Sensible values are in the range 1.0 to 20.0 (unit is 35 pixels).
+	If there are no such concentrators, asteroids can popup anywhere.
+	Some clients draw these concentrators as three rotating squares.
+
+    -asteroidConcentratorProb <real>
+	The chance for an asteroid to appear near an asteroid concentrator.
+	If this is less than 1.0 or there are no asteroid concentrators,
+	asteroids may also appear where there is no concentrator nearby.
+
+    -rogueHeatProb <real>
+	Probability that unclaimed missile packs will go rogue.
+
+    -rogueMineProb <real>
+	Probability that unclaimed mine items will activate.
+
+    -itemEnergyPackProb <real>
+	Probability for an energy pack to appear.
+
+    -itemTankProb <real>
+	Probability for an extra tank to appear.
+
+    -itemECMProb <real>
+	Probability for an ECM item to appear.
+
+    -itemArmorProb <real>
+	Probability for an armor item to appear.
+
+    -itemMineProb <real>
+	Probability for a mine item to appear.
+
+    -itemMissileProb <real>
+	Probability for a missile item to appear.
+
+    -itemCloakProb <real>
+	Probability for a cloak item to appear.
+
+    -itemSensorProb <real>
+	Probability for a sensor item to appear.
+
+    -itemWideangleProb <real>
+	Probability for a wideangle item to appear.
+
+    -itemRearshotProb <real>
+	Probability for a rearshot item to appear.
+
+    -itemAfterburnerProb <real>
+	Probability for an afterburner item to appear.
+
+    -itemTransporterProb <real>
+	Probability for a transporter item to appear.
+
+    -itemMirrorProb <real>
+	Probability for a mirror item to appear.
+
+    -itemDeflectorProb <real>
+	Probability for a deflector item to appear.
+
+    -itemHyperJumpProb <real>
+	Probability for a hyperjump item to appear.
+
+    -itemPhasingProb <real>
+	Probability for a phasing item to appear.
+
+    -itemLaserProb <real>
+	Probability for a Laser item to appear.
+
+    -itemEmergencyThrustProb <real>
+	Probability for an Emergency Thrust item to appear.
+
+    -itemTractorBeamProb <real>
+	Probability for a Tractor Beam item to appear.
+
+    -itemAutopilotProb <real>
+	Probability for an Autopilot item to appear.
+
+    -itemEmergencyShieldProb <real>
+	Probability for an Emergency Shield item to appear.
+
+    -initialFuel <integer>
+	How much fuel players start with.
+
+    -initialTanks <integer>
+	How many tanks players start with.
+
+    -initialECMs <integer>
+	How many ECMs players start with.
+
+    -initialArmor or initialArmors <integer>
+	How much armor players start with.
+
+    -initialMines <integer>
+	How many mines players start with.
+
+    -initialMissiles <integer>
+	How many missiles players start with.
+
+    -initialCloaks <integer>
+	How many cloaks players start with.
+
+    -initialSensors <integer>
+	How many sensors players start with.
+
+    -initialWideangles <integer>
+	How many wideangles players start with.
+
+    -initialRearshots <integer>
+	How many rearshots players start with.
+
+    -initialAfterburners <integer>
+	How many afterburners players start with.
+
+    -initialTransporters <integer>
+	How many transporters players start with.
+
+    -initialMirrors <integer>
+	How many mirrors players start with.
+
+    -initialDeflectors <integer>
+	How many deflectors players start with.
+
+    -initialHyperJumps <integer>
+	How many hyperjumps players start with.
+
+    -initialPhasings <integer>
+	How many phasing devices players start with.
+
+    -initialLasers <integer>
+	How many lasers players start with.
+
+    -initialEmergencyThrusts <integer>
+	How many emergency thrusts players start with.
+
+    -initialTractorBeams <integer>
+	How many tractor/pressor beams players start with.
+
+    -initialAutopilots <integer>
+	How many autopilots players start with.
+
+    -initialEmergencyShields <integer>
+	How many emergency shields players start with.
+
+    -maxFuel <integer>
+	Upper limit on the amount of fuel per player.
+
+    -maxTanks <integer>
+	Upper limit on the number of tanks per player.
+
+    -maxECMs <integer>
+	Upper limit on the number of ECMs per player.
+
+    -maxMines <integer>
+	Upper limit on the number of mines per player.
+
+    -maxMissiles <integer>
+	Upper limit on the number of missiles per player.
+
+    -maxCloaks <integer>
+	Upper limit on the number of cloaks per player.
+
+    -maxSensors <integer>
+	Upper limit on the number of sensors per player.
+
+    -maxWideangles <integer>
+	Upper limit on the number of wides per player.
+
+    -maxRearshots <integer>
+	Upper limit on the number of rearshots per player.
+
+    -maxAfterburners <integer>
+	Upper limit on the number of afterburners per player.
+
+    -maxTransporters <integer>
+	Upper limit on the number of transporters per player.
+
+    -maxArmor or maxArmors <integer>
+	Upper limit on the amount of armor per player.
+
+    -maxMirrors <integer>
+	Upper limit on the number of mirrors per player.
+
+    -maxDeflectors <integer>
+	Upper limit on the number of deflectors per player.
+
+    -maxPhasings <integer>
+	Upper limit on the number of phasing devices per players.
+
+    -maxHyperJumps <integer>
+	Upper limit on the number of hyperjumps per player.
+
+    -maxEmergencyThrusts <integer>
+	Upper limit on the number of emergency thrusts per player.
+
+    -maxLasers <integer>
+	Upper limit on the number of lasers per player.
+
+    -maxTractorBeams <integer>
+	Upper limit on the number of tractorbeams per player.
+
+    -maxAutopilots <integer>
+	Upper limit on the number of autopilots per player.
+
+    -maxEmergencyShields <integer>
+	Upper limit on the number of emergency shields per player.
+
+    -gameDuration or time <real>
+	The duration of the game in minutes (aka. pizza mode).
+
+    -/+baselessPausing 
+	Should paused players keep their bases?
+	Can only be used on teamplay maps for now.
+
+    -survivalScore <real>
+	Multiplicator for quadratic score increase over time 
+	survived with lowered shield
+
+    -pauseTax <real>
+	How many points to subtract from pausing players each second.
+
+    -friction <real>
+	Fraction of velocity ship loses each frame.
+
+    -blockFriction <real>
+	Fraction of velocity ship loses each frame when it is in friction 
+	blocks.
+
+    -/+blockFrictionVisible 
+	Are friction blocks visible?
+	If true, friction blocks show up as decor; if false, they don't 
+	show up at all.
+
+    -coriolis <real>
+	The clockwise angle (in degrees) a ship's velocity turns each 
+	time unit.
+
+    -checkpointRadius <real>
+	How close you have to be to a checkpoint to register - in blocks.
+
+    -raceLaps <integer>
+	How many laps per race.
+
+    -/+loseItemDestroys 
+	Destroy item that player drops. Otherwise drop it.
+
+    -/+useDebris 
+	Are debris particles created where appropriate?
+	Value affect ship exhaust sparks and cluster debris.
+	To disallow cluster weapons but not sparks, set allowClusters off.
+
+    -/+useWreckage 
+	Do destroyed ships leave wreckage?
+
+    -maxOffensiveItems <integer>
+	How many offensive items a player can carry.
+
+    -maxDefensiveItems <integer>
+	How many defensive items a player can carry.
+
+    -maxRoundTime <integer>
+	The maximum duration of each round, in seconds.
+
+    -roundsToPlay or numRounds <integer>
+	The number of rounds to play.  Unlimited if 0.
+
+    -maxVisibleObject or maxVisibleObjects <integer>
+	What is the maximum number of objects a player can see.
+
+    -/+pLockServer 
+	Whether the server is prevented from being swapped out of memory.
+	[ Flags: command, defaults ]
+
+    -/+sound 
+	Does the server send sound events to players that request sound.
+
+    -timerResolution <integer>
+	If set to nonzero xpilots will requests signals from the OS at
+	1/timerResolution second intervals.  The server will then compute
+	a new frame FPS times out of every timerResolution signals.
+	[ Flags: command, defaults ]
+
+    -password <string>
+	The password needed to obtain operator privileges.
+	If specified on the command line, on many systems other
+	users will be able to see the password.  Therefore, using
+	the password file instead is recommended.
+	[ Flags: command, passwordfile, defaults, invisible ]
+
+    -clientPortStart <integer>
+	Use UDP ports clientPortStart - clientPortEnd (for firewalls)
+	[ Flags: command, defaults ]
+
+    -clientPortEnd <integer>
+	Use UDP ports clientPortStart - clientPortEnd (for firewalls)
+	[ Flags: command, defaults ]
+
+    -maxPauseTime <integer>
+	The maximum time a player can stay paused for, in seconds.
+	After being paused this long, the player will be kicked off.
+	Setting this option to 0 disables the feature.
+
+    -maxIdleTime <integer>
+	The maximum time a player can stay idle, in seconds.
+	After having idled this long, the player will be paused.
+	Setting this option to 0 disables the feature.
+
+    -maxClientsPerIP or maxPerIP <integer>
+	Maximum number of clients per IP address allowed to connect.
+	This prevents unfriendly players from occupying all the bases, 
+	effectively "kicking" paused players and denying other players
+	to join.
+	Setting this to 0 means any number of clients from the same IP
+	address can join.
+	[ Flags: command, defaults ]
+
+    -playerLimit <integer>
+	Allow playerLimit players to enter at once.
+	If set to 0, allow 10 more players than there are bases.
+	(If baselessPausing is off, more than bases cannot enter.)
+	During game, cannot be set higher than the starting value.
+
+    -recordMode <integer>
+	If this is set to 1 when the server starts, the game is saved
+	in the file specified by recordFileName. If set to 2 at startup,
+	the server replays the recorded game. Joining players are
+	spectators who can watch the recorded game from anyone's
+	viewpoint. Can be set to 0 in the middle of a game to stoprecording.
+	[ Flags: command, defaults, invisible ]
+
+    -recordFileName or recordFile <string>
+	Name of the file where server recordings are saved.
+	[ Flags: command, defaults, invisible ]
+
+    -recordFlushInterval or recordWait <integer>
+	If set to a nonzero value x, the server will flush all recording
+	data in memory to the record file at least once every x seconds.
+	This is useful if you want to replay the game on another server
+	while it is still being played. There is a small overhead
+	(some dozens of bytes extra recording file size) for each flush.
+
+    -/+constantScoring 
+	Whether the scores given from various things are fixed.
+
+    -/+zeroSumScoring or zeroSum 
+	Use Zero sum scoring?
+	[ Flags: command ]
+
+    -/+elimination 
+	Race mode where the last player drops out each lap.
+
+    -dataURL <string>
+	URL where the client can get extra data for this map.
+
+    -/+polygonMode 
+	Force use of polygon protocol when communicating with clients?
+	(useful for debugging if you want to see the polygons created
+	in the blocks to polygons conversion function).
+
+    -/+fastAim 
+	When calculating a frame, turn the ship before firing.
+	This means you can change aim one frame faster.
+	Added this option to see how much difference changing the order
+	would make.
+
+    -/+ngControls 
+	Enable improved precision steering and aiming of main gun.
+
+    -/+legacyMode 
+	Try to emulate classic xpilot behavior.
+
+    -constantSpeed or oldThrust <real>
+	Make ship move forward at a constant speed when thrust key is held
+	down, in addition to the normal acceleration. The constant speed
+	is proportional to the product of the acceleration of the ship
+	(varying with ship mass and afterburners) and the value of this
+	option. Note that this option is quite unphysical and can using it
+	can cause weird effects (with bounces for example).
+	Low values close to 0.5 (maybe in the range 0.3 to 1) for this
+	option can be used if you want to increase ship agility without
+	increasing speeds otherwise. This can improve gameplay for example
+	on the Blood's Music map. Higher values make the ship behaviour
+	visibly weird.
+
+    -turnPushPersistence or pushPersist <real>
+	How much of the turnpush to remain as player velocity. (0.0-1.0)
+
+    -turnGrip or turnPushGrip <real>
+	How much of of the turnPush should pull the ship sideways by
+	gripping to the friction of the wall?. (0.0-1.0)
+
+    -thrustWidth or sprayWidth <real>
+	Width of thrust spark spray 0.0-1.0 where 1.0 means 180 degrees.
+
+    -thrustMass or sparkWeight <real>
+	Weight of thrust sparks.
+
+    -sparkSpeed or sparkVel <real>
+	Multiplier affecting avg. speed (relative ship) of thrust sparks.
+
+    -/+ballStyles 
+	Send ball styles to clients.
+
+    -/+ignoreMaxFPS 
+	Ignore client maxFPS requests and always send all frames.
+	This is a hack for demonstration purposes to allow changing
+	the server FPS when there are old clients with broken maxFPS
+	handling. Those clients could be better dealt with separately.
+	This option will be removed in the future (hopefully).
+
+    -pausedFramesPerSecond or pausedFPS <integer>
+	Maximum FPS shown to paused players. 0 means full framerate.
+	Can be used to reduce server bandwidth consumption.
+
+    -waitingFramesPerSecond or waitingFPS <integer>
+	Maximum FPS shown to players in waiting state.
+	0 means full framerate. Can be used to limit bandwidth used.
+	Waiting players are those that have just joined a game and have to
+	wait until next round starts. Note that in clients, a W is shown
+	next to waiting players' names in the score list.
+
+    -deadFramesPerSecond or deadFPS <integer>
+	Maximum FPS shown to players in dead state.
+	0 means full framerate. Can be used to limit bandwidth used.
+	This option should only be used if pausedFPS and waitingFPS
+	options don't limit bandwidth usage enough.
+	Dead players are those that have played this round but have run
+	out of lives. Note that in clients, a D is shown next to dead
+	players' names in the score list.
+
+    -/+teamcup 
+	Is this a teamcup match?.
+	[ Flags: command, any, invisible ]
+
+    -teamcupName <string>
+	The name of the teamcup (used only if teamcup is true).
+	[ Flags: command, any, invisible ]
+
+    -teamcupMailAddress <string>
+	The mail address where players should send match results.
+	[ Flags: command, any, invisible ]
+
+    -teamcupScoreFileNamePrefix <string>
+	First part of file name for teamcup score files.
+	The whole filename will be this followed by the match number.
+	[ Flags: command, any, invisible ]
+
+    -teamcupMatchNumber or match <integer>
+	The number of the teamcup match.
+	[ Flags: command ]
+
+    -mainLoopTime <real>
+	Duration of last Main_loop() function call (in milliseconds).
+	This option is read only.
+	[ Flags: command ]
+
+    -cellGetObjectsThreshold or cellThreshold <integer>
+	Use Cell_get_objects if there is this many objects or more.
+
+    
+    The probabilities are in the range [0.0-1.0] and they refer to the
+    probability that an event will occur in a block per second.
+    Boolean options are turned off by using +<option>.
+    
+    Please refer to the manual pages, xpilot-ng-server(6),
+    xpilot-ng-x11(6) and xpilot-ng-sdl(6) for more specific help.

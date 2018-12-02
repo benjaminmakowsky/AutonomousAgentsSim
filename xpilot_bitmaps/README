@@ -1,0 +1,12 @@
+The shipshapes.txt file in the shipshapes folder designates the available 
+player units that *can* be spawned.
+
+Shipshapes.txt is parsed by the Xpilot server during runtime, and will 
+cross-reference the file contents whenever a client requests a 
+particular shipShape ( unit ).
+
+The bitmaps folder contains the bitmaps ( sprite ) that will be drawn
+on the client-screen. <unit>.ppm is the default ( white ) player unit.
+<unit>_f.ppm is the friendly ( blue ) player unit. <unit>_e.ppm is the 
+enemy ( red ) player unit. Any new entries or changes to the bitmap files
+need to be reflected in the client code @ xpilot_engine/src/client/x11/bitmaps.c
