@@ -3,7 +3,7 @@ Matthew Coffman - August 2018
 How to run our chaser simulator:
 
 =================================================================
-First, navigate to the xpilot-engine/src/server/ directory
+First, navigate to the xpilot_bin/server directory
 and run the following:
 
 ./getMapPoints.sh <mapfile>
@@ -13,7 +13,7 @@ use. Then, execute
 
 ./pvp_base_defense_server
 
-In another terminal, navigate to xpilot-engine/xpilot-ng-temp/c/
+In another terminal, navigate to xpilot_ai/c/
 and enter the following:
 
 ./buildMapgen.sh
@@ -42,7 +42,7 @@ Files included in chaser.c:
 
 =================================================================
 Notice that chaser.c includes several files local to this
-xpilot-ng-temp/c/ directory. These files include the following:
+xpilot_ai/c/ directory. These files include the following:
 
   - graph.c
   - astar.c

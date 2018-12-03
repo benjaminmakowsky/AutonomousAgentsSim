@@ -3,12 +3,12 @@ Matthew Coffman - August 2018
 How to run our boids simulator:
 
 ===========================================================
-First, from the xpilot-engine/src/server/ directory,
+First, from the xpilot_bin/server/ directory,
 run a server using the following:
 
 ./pvp_base_defense_server
 
-Then, go to xpilot-engine/xpilot-ng-temp/c/ in another
+Then, go to xpilot_ai/c/ in another
 terminal and perform the following:
 
 ./buildBoids.sh
