@@ -148,48 +148,48 @@ Here's a run-down / documentation of how `defender.c` works. The code is fairly 
 
 1. main
 Parse the command-line arguments. If you ran the run.. scripts, these should get populated on their own.
-  1.a gridMovement. 
-  If enabled, the unit will spawn with the WIP ground-movement restrictions.
-
-  1.b isLeader
-  If enabled, the unit will spawn with the WIP leader abilities. The leader is able to order other 
-  units to cover his rally-point while he is away.
-
-  1.c rallyx & rallyy calculation. 
-  Each unit will be assigned a different index value based on the order in which they are spawned.
-  These index ( idx ) is used to determine their rally position in the circular formation protecting
-  the objective.
-  The rallypoint ( rallyx, rallyy ) are calculated using the formula:
-  xCircumferenceCoordinate = xCenter + radius * cos theta
-  yCircumferenceCoordinate = yCenter + radius * sin theta
-
-  1.d start
-  Once this is executed, the robot is marked as *ready* and its AI_loop function will be executed on every 
-  frame by the server.
+    1.a gridMovement. 
+    If enabled, the unit will spawn with the WIP ground-movement restrictions.
+  
+    1.b isLeader
+    If enabled, the unit will spawn with the WIP leader abilities. The leader is able to order other 
+    units to cover his rally-point while he is away.
+  
+    1.c rallyx & rallyy calculation. 
+    Each unit will be assigned a different index value based on the order in which they are spawned.
+    These index ( idx ) is used to determine their rally position in the circular formation protecting
+    the objective.
+    The rallypoint ( rallyx, rallyy ) are calculated using the formula:
+    xCircumferenceCoordinate = xCenter + radius * cos theta
+    yCircumferenceCoordinate = yCenter + radius * sin theta
+  
+    1.d start
+    Once this is executed, the robot is marked as *ready* and its AI_loop function will be executed on every 
+    frame by the server.
 
 2. AI_loop
-  2.a thrust
-  When called with a parameter of 1, the unit will move in the direction it is looking at.
-  When called with a parameter of 0, it will turn off the thrusters.
-
-  2.b talk_frames
-  Is used by the leader unit. Once the leader engages an enemy unit, it sends his current coordinates 
-  on the next frame, followed by a message saying he is moving towards the enemy in the next one.
-
-  2.c talk
-  Function that writes the given string to the chat-box and sends it.
-
-  2.d refuel
-  When called with a parameter of 1, the unit will extract fuel from a nearby fuel station ( if there is any ).
-  When called with a parameter of 0, the unit will stop extracting fuel.
-
-  2.e pl_fuel
-  An *approximate* estimate of the amount of fuel in the current unit.
-
-  2.f screenEnemyXId, screenEnemyYId
-  Function that return the coordinates of an enemy of screen with the given id.
-  "Screen" meaning that they appear on the default Xpilot screen, as in you can see them
-  without enlarging the borders of the xpilot window.
+    2.a thrust
+    When called with a parameter of 1, the unit will move in the direction it is looking at.
+    When called with a parameter of 0, it will turn off the thrusters.
+  
+    2.b talk_frames
+    Is used by the leader unit. Once the leader engages an enemy unit, it sends his current coordinates 
+    on the next frame, followed by a message saying he is moving towards the enemy in the next one.
+  
+    2.c talk
+    Function that writes the given string to the chat-box and sends it.
+  
+    2.d refuel
+    When called with a parameter of 1, the unit will extract fuel from a nearby fuel station ( if there is any ).
+    When called with a parameter of 0, the unit will stop extracting fuel.
+  
+    2.e pl_fuel
+    An *approximate* estimate of the amount of fuel in the current unit.
+  
+    2.f screenEnemyXId, screenEnemyYId
+    Function that return the coordinates of an enemy of screen with the given id.
+    "Screen" meaning that they appear on the default Xpilot screen, as in you can see them
+    without enlarging the borders of the xpilot window.
 
 3. Initialize
   Spawns a thread that executes lose_fuel, calculates the rally-point for the unit.
@@ -217,5 +217,5 @@ Parse the command-line arguments. If you ran the run.. scripts, these should get
   Moves towards the closest enemy unit and shoots.
   If gridMovement is enabled, it will move to the gridPoint that is closest to said enemy.
 
--Rene Sanchez ( 12/02/2018 )
--Daniel (Dec. 2018)
+- Rene Sanchez ( 12/02/2018 )
+- Daniel (Dec. 2018)
