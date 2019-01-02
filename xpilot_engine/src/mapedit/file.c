@@ -187,7 +187,7 @@ int SaveMap(char *file)
 	case POSFLOAT:
 	case COORD:
 
-	    if (strlen(prefs[n].charvar) != (int) NULL)
+	    if (strlen(prefs[n].charvar) != (long) NULL)
 		fprintf(ofile, "%s : %s\n", prefs[n].name,
 			prefs[n].charvar);
 	    break;
@@ -772,7 +772,7 @@ int ParseLine(FILE * ifile)
 /*    value                                                                */
 /* Purpose :                                                               */
 /***************************************************************************/
-int AddOption(char *name, char *value)
+int AddOption(char *name, const char *value)
 {
     int option, i;
     char *tmp;
@@ -843,7 +843,7 @@ int AddOption(char *name, char *value)
 /*   val                                                                   */
 /* Purpose :                                                               */
 /***************************************************************************/
-int YesNo(char *val)
+int YesNo(const char *val)
 {
     if ((tolower(val[0]) == 'y') || (tolower(val[0]) == 't'))
 	return 1;
@@ -858,7 +858,7 @@ int YesNo(char *val)
 /*   type                                                                  */
 /* Purpose :                                                               */
 /***************************************************************************/
-char *StrToNum(char *string, int len, int type)
+char *StrToNum(const char *string, int len, int type)
 {
     char *returnval;
 
@@ -897,7 +897,7 @@ char *StrToNum(char *string, int len, int type)
 /*   value                                                                 */
 /* Purpose :                                                               */
 /***************************************************************************/
-int LoadMapData(char *value)
+int LoadMapData(const char *value)
 {
     int x = 0, y = 0;
 
