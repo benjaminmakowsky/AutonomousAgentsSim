@@ -133,7 +133,7 @@ void T_PopButton(Window win, int x, int y, int width,
 void T_DrawTextButton(Window win, int x, int y, int width,
 		      int height, int zheight, char *string);
 void T_DrawString(Window win, int x, int y, int width,
-		  int height, GC gc, char *string, int justify,
+		  int height, GC gc, const char *string, int justify,
 		  int crop, int cursorpos);
 void T_DrawText(Window win, int x, int y, int width, int height,
 		GC gc, char *text);

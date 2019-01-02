@@ -107,10 +107,10 @@ void toeol(FILE * ifile);
 char skipspace(FILE * ifile);
 char *getMultilineValue(char *delimiter, FILE * ifile);
 int ParseLine(FILE * ifile);
-int AddOption(char *name, char *value);
-int YesNo(char *val);
-char *StrToNum(char *string, int len, int type);
-int LoadMapData(char *value);
+int AddOption(char *name, const char *value);
+int YesNo(const char *val);
+char *StrToNum(const char *string, int len, int type);
+int LoadMapData(const char *value);
 
 /* prototypes for round.c */
 int RoundMapArea(HandlerInfo_t info);
