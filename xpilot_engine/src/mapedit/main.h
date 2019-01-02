@@ -310,8 +310,8 @@ typedef struct {
 
 /* RTT */
 typedef struct {
-    const char *name;
-    const char *value;
+    char *name;
+    char *value;
 } charlie;
 /* RTT */
 
