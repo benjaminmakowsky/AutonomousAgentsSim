@@ -22,8 +22,8 @@ the original build location for the executables are:
 ## Building And Running
 
 ```
-## How to build Xpilot-engine:
-$ cd ./xpilot-engine
+## How to build Xpilot_engine:
+$ cd ./xpilot_engine
 $ ./build.sh
 
 ## How to run the server( do this before running a client )
