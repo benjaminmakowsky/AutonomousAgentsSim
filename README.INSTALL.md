@@ -2,7 +2,7 @@
 
 These versions of XPilot use the (slightly) more modern GNU Autoconf system to 
 generate the Makefiles, run the automated build shell script in the root of the
-source tree (`xpilot-engine/build.sh`). This script runs configure which
+source tree (`xpilot_engine/build.sh`). This script runs configure which
 automatically detects your system type and attempt to determine what libraries,
 includes, and dependancies are available (and will stop if a critical component
 is missing). After that's done, it will run 'make'; this usually takes a few 
