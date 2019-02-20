@@ -118,23 +118,23 @@ void BuildPrefsForm(void)
     t = (PREF_BTN_HEIGHT - 20) / 2;
 
     T_FormButton(prefwin, "MapInfo", 10, 10, w - 1, h - 1, "Map Info",
-		 OpenMapInfoPopup);
+		 (handler_t)OpenMapInfoPopup);
     T_FormButton(prefwin, "Robots", 10, 10 + h, w - 1, h - 1,
-		 "Robots, Bounce...", OpenRobotsPopup);
+		 "Robots, Bounce...", (handler_t)OpenRobotsPopup);
     T_FormButton(prefwin, "Visibility", 10, 10 + h * 2, w - 1, h - 1,
-		 "Visibility, Teams...", OpenVisibilityPopup);
+		 "Visibility, Teams...", (handler_t)OpenVisibilityPopup);
     T_FormButton(prefwin, "Cannons", 10, 10 + h * 3, w - 1, h - 1,
-		 "Cannons, Mines, Missiles...", OpenCannonsPopup);
+		 "Cannons, Mines, Missiles...", (handler_t)OpenCannonsPopup);
     T_FormButton(prefwin, "Rounds", 10, 10 + h * 4, w - 1, h - 1,
-		 "Rounds, Connection...", OpenRoundsPopup);
+		 "Rounds, Connection...", (handler_t)OpenRoundsPopup);
     T_FormButton(prefwin, "InitItems", 10, 10 + h * 5, w - 1, h - 1,
-		 "Initial Items", OpenInitItemsPopup);
+		 "Initial Items", (handler_t)OpenInitItemsPopup);
     T_FormButton(prefwin, "MaxItems", 10, 10 + h * 6, w - 1, h - 1,
-		 "Max. Items", OpenMaxItemsPopup);
+		 "Max. Items", (handler_t)OpenMaxItemsPopup);
     T_FormButton(prefwin, "Probs", 10, 10 + h * 7, w - 1, h - 1,
-		 "Probabilities", OpenProbsPopup);
+		 "Probabilities", (handler_t)OpenProbsPopup);
     T_FormButton(prefwin, "Scoring", 10, 10 + h * 8, w - 1, h - 1,
-		 "Scoring", OpenScoringPopup);
+		 "Scoring", (handler_t)OpenScoringPopup);
 
     mapinfo = T_PopupCreate(PREF_X, PREF_Y, PREF_WIDTH, PREF_HEIGHT,
 			    "Map Info");
