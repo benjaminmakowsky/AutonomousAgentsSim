@@ -1,5 +1,8 @@
+# Ignore untracked files by default, new files must be added explicitly
+*
+
+# File Extensions
 *.o
 *.so
 *.swp
 *.swo
-recon

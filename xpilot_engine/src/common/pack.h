@@ -152,7 +152,7 @@
 
 #define	MAX_STR_LEN		4096
 #define	MAX_DISP_LEN		80
-#define	MAX_NAME_LEN		16
+#define	MAX_NAME_LEN		32
 #define	MAX_HOST_LEN		64
 
 /*
