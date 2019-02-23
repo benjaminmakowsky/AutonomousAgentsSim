@@ -91,7 +91,7 @@ AUTOMAKE = ${SHELL} /home/sanchezri1/EPiC/xpilot-le/xpilot_engine/config/missing
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2
+CFLAGS = -lpthread -lsqlite3 -g -O2
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo

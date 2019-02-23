@@ -21,6 +21,7 @@ xpilot_ng_server_SOURCES = \
 	tag.c target.c target.h teamcup.h teamcup.c tuner.c tuner.h \
 	treasure.c update.c \
 	walls.c walls.h wormhole.c wormhole.h \
-	xp2map.c xpmap.c xpserver.h
+	xp2map.c xpmap.c xpserver.h \
+	sqlite_wrapper.c sqlite_wrapper.h
 
 xpilot_ng_server_LDADD =  $(top_builddir)/src/common/libxpcommon.a @X_EXTRA_LIBS@ @W32_LIBS@
