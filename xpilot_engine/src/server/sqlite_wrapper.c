@@ -25,6 +25,13 @@ static _Bool db_open()
 	// open database
 	sqlite3_open(DB_DEFAULT_FILE, &db.db);
 
+  /*
+   *  The sqlite3 library has functions available for error handling 
+   *  ( sqlite3_errmsg() ), use those for more detailed / comprehensive error 
+   *  messasges. Uses after basically *any* sqlite3 function, including
+   *  sqlite3_open & close
+   */
+
 	if (db.db == NULL)
 	{
 		warn("sqlite_wrapper: sqlite3_open() failed\n");
@@ -33,12 +40,22 @@ static _Bool db_open()
 
 	xpinfo("sqlite_wrapper: sqlite3_open() successful\n");
 
+  /*
+   *  Naming the databases based on their timestamp is OK for now, but lets think 
+   *  about how we can categorize these in the future
+   */
+
 	// set timestamp and name for the table
 	asprintf(&db.timestamp, "%lu", (unsigned long) time(NULL));
 	asprintf(&db.tablename, "db_%s", db.timestamp);
 
 	// create table for this run
 	asprintf(&db.query, DB_COLUMN_TYPES, db.tablename);
+
+  /*
+   *  You always want to check the return value of sqlite3_prepare_v2 before
+   *  continuing. Make sure that the prepare functions return SQLITE_OK
+   */
 	sqlite3_prepare_v2(db.db, db.query, strlen(db.query), &db.stmt, NULL);
 
 	if (sqlite3_step(db.stmt) != SQLITE_DONE) {
@@ -48,10 +65,21 @@ static _Bool db_open()
 
 	xpinfo("sqlite_wrapper: db_open() successful\n");
 
+  /*
+   *  You should finalize db.stmt here
+   */
+
 	free(db.query);
 
-	return db.isInit = 1;
+  /*
+   *  ==
+   */
+	return db.isInit == 1;
 } 
+
+/*
+ *  Remove this
+ */
 
 static void db_create()
 {
@@ -63,9 +91,19 @@ void db_close()
 		return;
 
 	sqlite3_finalize(db.stmt);
-	sqlite3_close(db.db);
+
+  /* 
+   *  Add error handling here, closing a db with outstanding prepared statements
+   *  leads to errors
+   */
+  
+  sqlite3_close(db.db);
 
 	xpinfo("sqlite_wrapper: db_close() successful\n");
+
+  /*
+   *  Do we have to free these? 
+   */
 
 	free(db.tablename);
 	//free(db.path);
@@ -104,6 +142,10 @@ void db_log(player_t *pl)
 	if (db_open() == 0)
 		return;
 
+  /*
+   *  Remove these comments
+   */
+
 	//asprintf(&db.query, "insert into %s (name, dir) values ('%s', %d);", db.tablename, pl->name, pl->dir);
 	//asprintf(&db.query, DB_TERRIBLE, db.tablename, DB_COLUMN_ARG);
 
@@ -115,6 +157,10 @@ void db_log(player_t *pl)
 		return;
 	}
 
+  /*
+   *  Finalize db.stmt
+   */
+
 	free(db.query);
 
 	return;
@@ -124,6 +170,10 @@ _Bool db_quantum()
 {
 	unsigned long currtime = (unsigned long) time(NULL);
 
+  /*
+   *   Add documentation here. I'm not fully understanding what's going on here
+   */
+
 	if (currtime ^ db.lastLog != 0 && currtime >= db.lastLog + DB_FREQ)
 	{
 		db.lastLog = currtime;
@@ -131,6 +181,10 @@ _Bool db_quantum()
 	}
 	return 0;
 }
+
+/*
+ *  Why are these two functions commented out?
+ */
 
 static char *db_setFilename(char *filename)
 {
