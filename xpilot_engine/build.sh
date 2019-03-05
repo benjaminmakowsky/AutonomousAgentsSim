@@ -3,7 +3,7 @@
 ./configure --bindir=$PWD/../xpilot_bin --prefix=$PWD --silent
 
 #base build
-make CC='gcc -fPIC' --silent
+make CC='gcc -lpthread -lsqlite3 -fPIC' --silent
 make install --silent
 
 #install bitmaps & shipshapes
