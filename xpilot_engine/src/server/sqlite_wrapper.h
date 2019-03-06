@@ -11,11 +11,13 @@
 #include <sqlite3.h>
 
 /*
- * DB_FREQ sets the frequency that we log data in units of seconds.
- * e.g. - `#define DB_FREQ 1' means we log every second.
+ * DB_LOG_DELTA sets how often that we log data in units of seconds.
+ * DB_CLOSE_TIMEOUT sets how many seconds we wait before logging an error.
+ * e.g. - `#define DB_LOG_DELTA 1' means we log every second.
  */
 
-#define DB_FREQ 1
+#define DB_LOG_DELTA 1
+#define DB_CLOSE_TIMEOUT 10
 #define DB_DEFAULT_FILE "demo.db"
 
 #define DB_COLUMN_TYPES "CREATE TABLE %s (kills SMALLINT, deaths SMALLINT, \
@@ -51,10 +53,6 @@ struct dbStruct
     unsigned long lastLog;   // last time we completed a write to db
 };
 
-/*
- *  
- */
-
 static struct dbStruct db = {.isInit = 0, .db = NULL, .stmt = NULL, \
                              .path = NULL, .filename = NULL, .timestamp = 0, \
                              .query = NULL, .lastLog = 0};
@@ -64,7 +62,7 @@ static struct dbStruct db = {.isInit = 0, .db = NULL, .stmt = NULL, \
  */
 
 void dbLog();
-_Bool dbQuantum();
+_Bool dbActiveLogWindow();
 void dbTrxnStart();
 void dbTrxnEnd();
 void dbClose();

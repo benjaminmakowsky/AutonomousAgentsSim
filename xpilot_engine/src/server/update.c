@@ -1181,7 +1181,7 @@ void Update_objects(void)
      * the UI to hang.
      */
 
-    if (dbInterval() == 1) {
+    if (dbActiveLogWindow() == 1) {
         pthread_t thread_id;
         pthread_create(&thread_id, NULL, dbLogger, NULL);
         pthread_detach(thread_id);

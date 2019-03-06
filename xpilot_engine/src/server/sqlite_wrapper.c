@@ -18,7 +18,6 @@
 
 static _Bool dbOpen()
 {
-
     if (db.isInit == 1)
         return db.isInit;
 
@@ -27,11 +26,9 @@ static _Bool dbOpen()
 
     if (db.db == NULL)
     {
-        warn("sqlite_wrapper: sqlite3_open() failed: %s\n", sqlite3_errmsg(db.db));
+        warn("sqlite_wrapper: dbOpen() open: %s\n", sqlite3_errmsg(db.db));
         return 0;
     }
-
-    xpinfo("sqlite_wrapper: sqlite3_open() successful\n");
 
     /*
      *  Naming the databases based on their timestamp is OK for now, but lets think 
@@ -48,19 +45,18 @@ static _Bool dbOpen()
     if (sqlite3_prepare_v2(db.db, db.query, strlen(db.query), &db.stmt, NULL) != SQLITE_OK) {
         warn("sqlite_wrapper: dbOpen() prepare: %s\n", sqlite3_errmsg(db.db));
         return 0;
-    }
-
-    if (sqlite3_step(db.stmt) != SQLITE_DONE) {
-        warn("sqlite_wrapper: dbOpen() failed: %s\n", sqlite3_errmsg(db.db));
+    } else if (sqlite3_step(db.stmt) != SQLITE_DONE) {
+        warn("sqlite_wrapper: dbOpen() step: %s\n", sqlite3_errmsg(db.db));
         return 0;
+    } else {
+        db.isInit = 1;
+        xpinfo("sqlite_wrapper: dbOpen() successful\n");
     }
-
-    xpinfo("sqlite_wrapper: dbOpen() successful\n");
 
     sqlite3_finalize(db.stmt);
     free(db.query);
 
-    return db.isInit = 1;
+    return 1;
 } 
 
 void dbClose()
@@ -68,12 +64,16 @@ void dbClose()
     if (db.isInit == 0)
         return;
 
-    while (sqlite3_finalize(db.stmt) != SQLITE_OK){
-        warn("sqlite_wrapper: dbClose(): %s\n", sqlite3_errmsg(db.db));
-    }
-
-    if (sqlite3_close(db.db) != SQLITE_OK) {
-        warn("sqlite_wrapper: dbClose(): %s\n", sqlite3_errmsg(db.db));
+    /*
+     * Make sure we have written everything to file before killing server
+     */
+    int i;
+    for (i = 0; sqlite3_close(db.db) != SQLITE_OK; i++) {
+        if (i > DB_CLOSE_TIMEOUT) {
+            warn("sqlite_wrapper: dbClose() failed to close after \
+                  DB_CLOSE_TIMEOUT seconds: %s\n", sqlite3_errmsg(db.db));
+            return;
+        }
     }
 
     xpinfo("sqlite_wrapper: dbClose() successful\n");
@@ -117,10 +117,11 @@ void dbLog(player_t *pl)
 
     if (sqlite3_prepare_v2(db.db, db.query, strlen(db.query), &db.stmt, NULL) != SQLITE_OK) {
         warn("sqlite_wrapper: dbLog() prepare: %s\n", sqlite3_errmsg(db.db));
+        return;
     }
 
     if (sqlite3_step(db.stmt) != SQLITE_DONE) {
-        warn("ERROR sqlite_wrapper.c inserting data: %s", sqlite3_errmsg(db.db));
+        warn("sqlite_wrapper: dbLog() step: %s\n", sqlite3_errmsg(db.db));
         return;
     }
 
@@ -132,21 +133,21 @@ void dbLog(player_t *pl)
     return;
 }
 
-_Bool dbInterval()
+_Bool dbActiveLogWindow()
 {
     unsigned long currtime = (unsigned long) time(NULL);
 
     /*
      * We want to initiate logging when two conditions are met:
      * (1) - Current time is different from when we last logged,
-     * (2) - DB_FREQ seconds have elapsed since we last logged. 
+     * (2) - DB_LOG_DELTA seconds have elapsed since we last logged. 
      *
      * Since we call our logging function in `update()' which runs on each frame
      * (read: many times per second) we require condition (1) to make sure we 
      * don't log multiple times during a single second.
      */
 
-    if (currtime != db.lastLog && currtime >= db.lastLog + DB_FREQ)
+    if (currtime != db.lastLog && currtime >= db.lastLog + DB_LOG_DELTA)
     {
         db.lastLog = currtime;
         return 1;
