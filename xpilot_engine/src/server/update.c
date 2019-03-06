@@ -27,6 +27,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include <pthread.h>
 
 #include "xpserver.h"
 
@@ -1132,6 +1133,24 @@ static void Update_players(void)
 }
 
 /********** **********
+ * logger
+ */
+void *dbLogger()
+{
+    int i;
+    player_t *pl;
+
+    dbTrxnStart();
+
+    for (i = 0; i < NumPlayers; i++) {
+        pl = Player_by_index(i);
+        dbLog(pl);
+    }
+
+    dbTrxnEnd();
+}
+
+/********** **********
  * Updating objects and the like.
  */
 void Update_objects(void)
@@ -1154,6 +1173,19 @@ void Update_objects(void)
     }
 
     Robot_update(tick);
+
+    /*
+     * Logging:
+     * Here we log info about the players. We do this using a detached pthread
+     * so that we don't take a performance hit in update() which would cause
+     * the UI to hang.
+     */
+
+    if (dbActiveLogWindow() == 1) {
+        pthread_t thread_id;
+        pthread_create(&thread_id, NULL, dbLogger, NULL);
+        pthread_detach(thread_id);
+    }
 
     /*
      * Fast aim:
