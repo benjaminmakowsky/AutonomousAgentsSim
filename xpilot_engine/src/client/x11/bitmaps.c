@@ -37,11 +37,16 @@ xp_pixmap_t object_pixmaps[] = {
     XP_PIXMAP_INITIALIZER("ship_red2.ppm", 128),  // 5
     XP_PIXMAP_INITIALIZER("bullet.ppm", -16),
     XP_PIXMAP_INITIALIZER("bullet_blue.ppm", -16),
-    XP_PIXMAP_INITIALIZER("base_down.ppm", 1),
-    XP_PIXMAP_INITIALIZER("base_left.ppm", 1),
-    XP_PIXMAP_INITIALIZER("base_up.ppm", 1),      // 10
-    XP_PIXMAP_INITIALIZER("base_right.ppm", 1),
-    XP_PIXMAP_INITIALIZER("fuelcell.ppm", 1),
+    //XP_PIXMAP_INITIALIZER("base_down.ppm", 1),
+    XP_PIXMAP_INITIALIZER("hive.ppm", 1),
+    //XP_PIXMAP_INITIALIZER("base_left.ppm", 1),
+    XP_PIXMAP_INITIALIZER("hive.ppm", 1),
+    //XP_PIXMAP_INITIALIZER("base_up.ppm", 1),      // 10
+    XP_PIXMAP_INITIALIZER("hive.ppm", 1),
+    //XP_PIXMAP_INITIALIZER("base_right.ppm", 1),
+    XP_PIXMAP_INITIALIZER("hive.ppm", 1),
+    //XP_PIXMAP_INITIALIZER("fuelcell.ppm", 1),
+    XP_PIXMAP_INITIALIZER("honeycombs.ppm", 1),
     XP_PIXMAP_INITIALIZER("fuel2.ppm", -16),
     XP_PIXMAP_INITIALIZER("allitems.ppm", -30),
     XP_PIXMAP_INITIALIZER("cannon_down.ppm", 1),  // 15
@@ -74,7 +79,8 @@ xp_pixmap_t object_pixmaps[] = {
     XP_PIXMAP_INITIALIZER("meter.ppm", -2),
     XP_PIXMAP_INITIALIZER("asteroidconcentrator.ppm", 32),
     XP_PIXMAP_INITIALIZER("ball_gray16.ppm", -16),
-    XP_PIXMAP_INITIALIZER("quad.ppm", 128),        // 45
+    //XP_PIXMAP_INITIALIZER("quad.ppm", 128),        // 45
+    XP_PIXMAP_INITIALIZER("bee.ppm", 128),        // 45
     XP_PIXMAP_INITIALIZER("quad_f.ppm", 128),        
     XP_PIXMAP_INITIALIZER("quad_e.ppm", 128),        
     XP_PIXMAP_INITIALIZER("fixed.ppm", 128),       
