@@ -1,9 +1,10 @@
 #! /bin/bash
 # configure
-./configure --bindir=$PWD/../xpilot_bin --prefix=$PWD --silent
+./configure --bindir=$PWD/../xpilot_bin --prefix=$PWD --silent LIBS='-lpthread -lsqlite3'
 
 #base build
-make CC='gcc -lpthread -lsqlite3 -fPIC' --silent
+#make CC='gcc -lpthread -lsqlite3 -fPIC' --silent
+make CC='gcc -fPIC' --silent
 make install --silent
 
 #install bitmaps & shipshapes
