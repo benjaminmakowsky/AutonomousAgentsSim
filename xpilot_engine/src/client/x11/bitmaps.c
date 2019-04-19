@@ -81,8 +81,10 @@ xp_pixmap_t object_pixmaps[] = {
     XP_PIXMAP_INITIALIZER("ball_gray16.ppm", -16),
     //XP_PIXMAP_INITIALIZER("quad.ppm", 128),        // 45
     XP_PIXMAP_INITIALIZER("bee.ppm", 128),        // 45
-    XP_PIXMAP_INITIALIZER("quad_f.ppm", 128),        
-    XP_PIXMAP_INITIALIZER("quad_e.ppm", 128),        
+    //XP_PIXMAP_INITIALIZER("quad_f.ppm", 128),        
+    XP_PIXMAP_INITIALIZER("bee_f.ppm", 128),        
+    //XP_PIXMAP_INITIALIZER("quad_e.ppm", 128),        
+    XP_PIXMAP_INITIALIZER("bee_e.ppm", 128),        
     XP_PIXMAP_INITIALIZER("fixed.ppm", 128),       
     XP_PIXMAP_INITIALIZER("fixed_f.ppm", 128),       
     XP_PIXMAP_INITIALIZER("fixed_e.ppm", 128),     // 50      
