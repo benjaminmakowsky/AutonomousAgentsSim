@@ -234,6 +234,7 @@ int                 num_wormholes, max_wormholes;
 int                 num_playing_teams = 0;
 long		    time_left = -1;
 long		    start_loops, end_loops;
+int         this_player_team;
 
 static fuelstation_t *Fuelstation_by_pos(int x, int y)
 {
@@ -1376,9 +1377,16 @@ int Handle_player(int id, int player_team, int mychar,
 	}
 	self = other;
     }
+
+    // Global *this* player's team variable
+    if( self == other ){
+      this_player_team = player_team;
+    }
+
     memset(other, 0, sizeof(other_t));
     other->id = id;
-    other->team = player_team;
+    other->team = player_team; 
+
     other->mychar = mychar;
     strlcpy(other->nick_name, nick_name, sizeof(other->nick_name));
     strlcpy(other->user_name, user_name, sizeof(other->user_name));

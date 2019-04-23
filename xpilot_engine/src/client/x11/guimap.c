@@ -356,8 +356,10 @@ void Gui_paint_base(int x, int y, int id, int team, int type)
 	}
     }
     else {
+/*
 	switch (type) {
 	case SETUP_BASE_UP:
+      
 	    Bitmap_paint(drawPixmap, BM_BASE_DOWN, WINSCALE(X(x)),
 			 WINSCALE(Y(y + BLOCK_SZ)), 0);
 	    break;
@@ -377,6 +379,15 @@ void Gui_paint_base(int x, int y, int id, int team, int type)
 	    warn("Bad base dir.");
 	    return;
 	}
+  */
+      if( team == this_player_team ){
+        Bitmap_paint(drawPixmap, BM_BASE_DOWN, WINSCALE(X(x)),
+			  WINSCALE(Y(y + BLOCK_SZ)), 0);
+      }
+      else{
+        Bitmap_paint(drawPixmap, BM_BASE_ENEMY, WINSCALE(X(x)),
+			  WINSCALE(Y(y + BLOCK_SZ)), 0);
+      }
     }
 
     /* only draw base teams if base naming is on, Mara 01/12/14  */

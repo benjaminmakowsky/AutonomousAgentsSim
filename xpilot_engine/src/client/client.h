@@ -445,6 +445,7 @@ typedef struct {
 /* typedefs end */
 
 extern client_data_t	clData;
+extern int this_player_team;
 
 extern bool		newbie;
 extern char		*geometry;
