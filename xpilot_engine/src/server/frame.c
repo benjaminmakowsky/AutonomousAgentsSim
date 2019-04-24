@@ -901,15 +901,15 @@ static void Frame_ships(connection_t *conn, player_t *pl)
 	    fuel_t *fs = Fuel_by_index(pl_i->fs);
 
 	    if (clpos_inview(&cv, fs->pos))
-		Send_refuel(conn, fs->pos, pl_i->pos);
+		    Send_refuel(conn, fs->pos, pl_i->pos);
 	}
 
 	if (Player_is_repairing(pl_i)) {
 	    target_t *targ = Target_by_index(pl_i->repair_target);
 
 	    if (clpos_inview(&cv, targ->pos))
-		/* same packet as refuel */
-		Send_refuel(conn, pl_i->pos, targ->pos);
+		    /* same packet as refuel */
+		    Send_refuel(conn, pl_i->pos, targ->pos);
 	}
 
 	if (Player_uses_tractor_beam(pl_i)) {

@@ -272,6 +272,7 @@ static void Player_change_home(player_t *pl)
 static void Player_refuel(player_t *pl)
 {
     int i;
+    // dist is the global refuel range
     double l, dist = 1e19;
 
     if (!BIT(pl->have, HAS_REFUEL))
@@ -283,8 +284,7 @@ static void Player_refuel(player_t *pl)
 
 	l = Wrap_length(pl->pos.cx - fs->pos.cx,
 			pl->pos.cy - fs->pos.cy);
-	if (!Player_is_refueling(pl)
-	    || l < dist) {
+	if (!Player_is_refueling(pl) || l < dist) {
 	    SET_BIT(pl->used, USES_REFUEL);
 	    pl->fs = i;
 	    dist = l;

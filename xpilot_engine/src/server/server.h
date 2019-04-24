@@ -237,9 +237,16 @@ void Item_damage(player_t *pl, double prob);
 
 void Add_fuel(pl_fuel_t *ft, double fuel);
 
+void Remove_fuel(pl_fuel_t *ft, double fuel);
+
 static inline void Player_add_fuel(player_t *pl, double amount)
 {
     Add_fuel(&(pl->fuel), amount);
+}
+
+static inline void Player_remove_fuel(player_t *pl, double amount)
+{
+    Remove_fuel(&(pl->fuel), amount);
 }
 
 void Place_item(player_t *pl, int type);

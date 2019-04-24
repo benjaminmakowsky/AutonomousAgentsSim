@@ -301,8 +301,8 @@ int Target_alive(int x, int y, double *damage)
 int Handle_fuel(int ind, double fuel)
 {
     if (ind < 0 || ind >= num_fuels) {
-	warn("Bad fuelstation index (%d)", ind);
-	return -1;
+	    warn("Bad fuelstation index (%d)", ind);
+	    return -1;
     }
     fuels[ind].fuel = fuel;
     return 0;
@@ -1099,7 +1099,7 @@ static int init_blockmap(void)
 	case 1: num_fuels++; break;
 	case 2: num_cannons++; break;
 	case 3: num_targets++; break;
-	case 4: num_bases++; break;
+	case 4: num_bases++; num_fuels++; break;
 	case 5: num_checks++; break;
 	default: break;
 	}
@@ -1173,6 +1173,10 @@ static int init_blockmap(void)
 	    bases[num_bases].appeartime = 0;
 	    num_bases++;
 	    Setup->map_data[i] = type - (type % 10);
+
+      bases[num_bases].fuelReserve.pos = i;
+      bases[num_bases].fuelReserve.fuel = MAX_STATION_FUEL;
+      num_fuels++;
 	    break;
 	case 5:
 	    checks[type - SETUP_CHECK].pos = i;

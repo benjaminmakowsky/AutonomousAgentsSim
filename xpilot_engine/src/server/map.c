@@ -144,8 +144,11 @@ int World_place_fuel(clpos_t pos, int team)
     t.fuel = START_STATION_FUEL;
     t.conn_mask = ~0;
     t.last_change = frame_loops;
-    t.team = team;
+    t.team = -1;
+    t.isBase = 0;
     Arraylist_add(world->fuels, &t);
+
+    printf("fuel station index: %d\n", ind );
 
     return ind;
 }
@@ -188,6 +191,22 @@ int World_place_base(clpos_t pos, int dir, int team, int order)
     for (i = 0; i < NUM_ITEMS; i++)
 	t.initial_items[i] = -1;
     Arraylist_add(world->bases, &t);
+
+    // Add fuel-cell like functionality to the "hive"
+    fuel_t f_t;
+    int f_ind = Num_fuels();
+
+    f_t.pos = pos;
+    f_t.fuel = START_STATION_FUEL;
+    f_t.conn_mask = ~0;
+    f_t.last_change = frame_loops;
+    f_t.team = team;
+    f_t.isBase = 1;
+    Arraylist_add(world->fuels, &f_t);
+
+    t.fuelReserve = f_t;
+
+    printf("Base fuel station index: %d\n", f_ind );
 
     return ind;
 }

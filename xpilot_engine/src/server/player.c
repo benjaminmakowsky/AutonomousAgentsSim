@@ -426,21 +426,22 @@ void Player_set_mass(player_t *pl)
  */
 static void Player_init_fuel(player_t *pl )
 {
-    double fuel = pl->fuel.max;
+    // Start the ships with a fraction of their fuel capacity
+    double initFuel = ( pl->fuel.max ) / 4;
     int i;
 
     pl->fuel.num_tanks  = 0;
     pl->fuel.current    = 0;
     //pl->fuel.max	= TANK_CAP(0);
-    pl->fuel.sum	= pl->fuel.max;
-    pl->fuel.tank[0]	= pl->fuel.max;
+    pl->fuel.sum	= initFuel;
+    pl->fuel.tank[0]	= initFuel;
     pl->item[ITEM_TANK]	= pl->fuel.num_tanks;
 
-    fuel -= pl->fuel.sum;
+    //initFuel -= pl->fuel.sum;
 
     for (i = 1; i <= world->items[ITEM_TANK].initial; i++) {
-	Player_add_tank(pl, fuel);
-	fuel -= pl->fuel.tank[i];
+	    Player_add_tank(pl, initFuel);
+	    initFuel -= pl->fuel.tank[i];
     }
 }
 

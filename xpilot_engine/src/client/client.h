@@ -228,6 +228,7 @@ typedef struct {
     irec_t	bounds;		/* Location on map */
     int		type;		/* orientation */
     long	appeartime;	/* For base warning */
+    fuelstation_t fuelReserve;
 } homebase_t;
 
 typedef struct {

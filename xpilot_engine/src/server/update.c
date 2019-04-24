@@ -735,30 +735,43 @@ static void Do_refuel(player_t *pl)
 	    && fs->team != pl->team)) {
 	CLR_BIT(pl->used, USES_REFUEL);
     } else {
-	int n = pl->fuel.num_tanks;
-	int ct = pl->fuel.current;
+	    int n = pl->fuel.num_tanks;
+	    int ct = pl->fuel.current;
 
-	do {
-	    if (fs->fuel > REFUEL_RATE * timeStep) {
-		fs->fuel -= REFUEL_RATE * timeStep;
-		fs->conn_mask = 0;
-		fs->last_change = frame_loops;
-		Player_add_fuel(pl, REFUEL_RATE * timeStep);
-	    } else {
-		Player_add_fuel(pl, fs->fuel);
-		fs->fuel = 0;
-		fs->conn_mask = 0;
-		fs->last_change = frame_loops;
-		CLR_BIT(pl->used, USES_REFUEL);
-		break;
-	    }
-	    if (pl->fuel.current == pl->fuel.num_tanks)
-		pl->fuel.current = 0;
-	    else
-		pl->fuel.current += 1;
-	} while (n--);
-	pl->fuel.current = ct;
-    }
+	    do {
+	        if (fs->fuel > REFUEL_RATE * timeStep) {
+            if( fs->isBase && fs->team == pl->team ){
+              fs->fuel += REFUEL_RATE * timeStep;
+              Player_remove_fuel(pl, REFUEL_RATE * timeStep);
+            }
+            else{
+		          fs->fuel -= REFUEL_RATE * timeStep;
+		          Player_add_fuel(pl, REFUEL_RATE * timeStep);
+            }
+		        fs->conn_mask = 0;
+		        fs->last_change = frame_loops;
+        } else {
+          if( fs->team == pl->team ){
+            Player_remove_fuel(pl, fs->fuel);
+          }
+          else{
+		        Player_add_fuel(pl, fs->fuel);
+          }
+		      fs->fuel = 0;
+		      fs->conn_mask = 0;
+		      fs->last_change = frame_loops;
+		      CLR_BIT(pl->used, USES_REFUEL);
+		      break;
+	      }
+	  
+        if (pl->fuel.current == pl->fuel.num_tanks)
+		      pl->fuel.current = 0;
+	      else
+		      pl->fuel.current += 1;
+	  } while (n--);
+	  
+  pl->fuel.current = ct;
+  }
 }
 
 /*

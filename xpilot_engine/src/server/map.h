@@ -86,6 +86,7 @@ typedef struct fuel {
     uint32_t	conn_mask;
     long	last_change;
     int		team;
+    int   isBase;
 } fuel_t;
 
 typedef struct grav {
@@ -101,6 +102,7 @@ typedef struct base {
     int		team;
     int		order;
     int		initial_items[NUM_ITEMS];
+    fuel_t fuelReserve;
 } base_t;
 
 typedef struct rallypoint {

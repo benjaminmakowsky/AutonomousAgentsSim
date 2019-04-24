@@ -282,6 +282,21 @@ void Add_fuel(pl_fuel_t *ft, double fuel)
     ft->tank[ft->current] += fuel;
 }
 
+/*
+ * Remove fuel from fighter's tanks.
+ * Maybe use more than one of tank to store the fuel.
+ */
+void Remove_fuel(pl_fuel_t *ft, double fuel)
+{
+    if (ft->sum < fuel)
+	    fuel = ft->sum;
+    
+    ft->sum -= fuel;
+    ft->tank[ft->current] -= fuel;
+}
+
+
+
 
 /*
  * Move fuel from add-on tanks to main tank,
