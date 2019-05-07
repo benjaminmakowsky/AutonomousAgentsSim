@@ -252,7 +252,8 @@ static fuelstation_t *Fuelstation_by_pos(int x, int y)
     }
     if (lo == hi && pos == fuels[lo].pos)
 	return &fuels[lo];
-    warn("No fuelstation at (%d,%d)", x, y);
+    // TODO: Figure out why this is getting called
+    //warn("No fuelstation at (%d,%d)", x, y);
     return NULL;
 }
 
@@ -1580,8 +1581,24 @@ int Handle_end(long server_loops)
     end_loops = server_loops;
     snooping = (self && eyesId != self->id) ? true : false;
     update_timing();
-    if(!headless) //HEADLESS
-    Paint_frame();
+    if(!headless){ //HEADLESS
+      Paint_frame();
+    }
+    else {
+      // Update the teams, needed for AI lib to work properly.
+      struct team_score team[ MAX_TEAMS ], *team_order[ MAX_TEAMS];
+      other_t *other, **order;
+      if( ( order = (other_t**)malloc(num_others*sizeof(other_t*)) ) == NULL ){
+        error( "No memory for score" );
+        return;
+      }
+
+      if( BIT( Setup->mode, TEAM_PLAY | TIMING ) == TEAM_PLAY ){
+        memset( &team[0], 0, sizeof team );
+      }
+      
+      Headless_init( order, team_order, team );
+    }
 #ifdef SOUND
     audioUpdate();
 #endif

@@ -477,12 +477,13 @@ void Paint_score_entry(int entry_num, other_t* other, bool is_team)
     }
 }
 
-
+/*
 struct team_score {
     double	score;
     int		life;
     int		playing;
 };
+*/
 
 static void Paint_clock(bool redraw)
 {

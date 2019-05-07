@@ -410,7 +410,7 @@ int Pick_team(int pick_for_type)
 	return TEAM_NOT_SET;
 
     for (i = 0; i < MAX_TEAMS; i++) {
-	free_bases[i] = world->teams[i].NumBases - world->teams[i].NumMembers;
+	free_bases[i] = world->teams[i].NumBases;
 	playing[i] = 0;
 	team_score[i] = 0;
 	available_teams[i] = 0;

@@ -1056,11 +1056,13 @@ static int Handle_login(connection_t *connp, char *errmsg, size_t errsize)
 
     if (pl->rectype < 2) {
 	if (BIT(world->rules->mode, TEAM_PLAY) && pl->team == TEAM_NOT_SET) {
+      printf("Player is paused\n");
 	    Player_set_state(pl, PL_STATE_PAUSED);
 	    pl->home_base = NULL;
 	    pl->team = 0;
 	}
 	else {
+      printf("Picking startpos\n");
 	    Pick_startpos(pl);
 	    Go_home(pl);
 	}

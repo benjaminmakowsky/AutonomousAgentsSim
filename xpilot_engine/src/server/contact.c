@@ -719,9 +719,7 @@ void Queue_loop(void)
 
 	/* slow down the rate at which players enter the game. */
 	if (last_unqueued_loops + 2 + (FPS >> 2) < main_loops) {
-	    int lim = (int)MIN(options.playerLimit,
-			       options.baselessPausing
-			       ? 1e6 : Num_bases());
+	    int lim = options.playerLimit;
 
 	    /* is there a homebase available? */
 	    if (NumPlayers - NumPseudoPlayers + login_in_progress < lim
@@ -737,9 +735,7 @@ void Queue_loop(void)
 			if (game_lock ||
 			    (qp->team == options.robotTeam
 			     && options.reserveRobotTeam) ||
-			    (world->teams[qp->team].NumMembers
-			     >= world->teams[qp->team].NumBases &&
-			     !Kick_robot_players(qp->team) &&
+			    (!Kick_robot_players(qp->team) &&
 			     !Kick_paused_players(qp->team)))
 			    qp->team = TEAM_NOT_SET;
 		    }

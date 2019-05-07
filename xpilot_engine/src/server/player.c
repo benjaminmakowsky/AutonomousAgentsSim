@@ -86,17 +86,6 @@ void Pick_startpos(player_t *pl)
 	}
     }
 
-    for (i = 0; i < NumPlayers; i++) {
-	player_t *pl_i = Player_by_index(i);
-
-	if (pl_i->id != pl->id
-	    && !Player_is_tank(pl_i)
-	    && pl_i->home_base
-	    && free_bases[pl_i->home_base->ind]) {
-	    free_bases[pl_i->home_base->ind] = 0;	/* occupado */
-	}
-    }
-
     /* find out the lowest order of all free bases */
     for (i = 0; i < Num_bases(); i++) {
 	if (free_bases[i] != 0) {
@@ -131,11 +120,6 @@ void Pick_startpos(player_t *pl)
 	}
     }
 
-    if (i == Num_bases()) {
-	error("Can't pick startpos (ind=%d,num=%d,free=%d,pick=%d,seen=%d)",
-	      ind, Num_bases(), num_free, pick, seen);
-	End_game();
-    } else {
 	pl->home_base = Base_by_index(i);
 	if (ind < NumPlayers) {
 	    for (i = 0; i < spectatorStart + NumSpectators; i++) {
@@ -154,7 +138,6 @@ void Pick_startpos(player_t *pl)
 		|| Player_is_dead(pl))
 		Go_home(pl);
 	}
-    }
 }
 
 void Set_rallypoint(player_t *pl)

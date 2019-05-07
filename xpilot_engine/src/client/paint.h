@@ -128,6 +128,12 @@ static inline int WINSCALE(int x)
  * Prototypes from the paint*.c files.
  */
 
+typedef struct team_score {
+  double score;
+  int life;
+  int playing;
+} team_score;
+
 int Paint_init(void);
 void Paint_cleanup(void);
 void Paint_shots(void);
@@ -162,5 +168,7 @@ void Play_beep(void);
 int Check_view_dimensions(void);
 void Store_hud_options(void);
 void Store_paintradar_options(void);
+void Headless_init( other_t**, struct team_score*[], struct team_score[] );
+
 
 #endif

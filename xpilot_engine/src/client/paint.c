@@ -138,14 +138,6 @@ void Paint_frame_start(void)
     }
 }
 
-
-struct team_score {
-    double	score;
-    int		life;
-    int		playing;
-};
-
-
 static void Determine_team_order(struct team_score *team_order[],
 				 struct team_score team[])
 {
@@ -230,6 +222,16 @@ static void Determine_order(other_t **order, struct team_score team[])
     }
     return;
 }
+
+void Headless_init( other_t **order,
+          struct team_score *team_order[],
+          struct team_score team[])
+{
+  Determine_order( order, team );
+  Determine_team_order( team_order, team );
+}
+
+
 
 #define TEAM_PAUSEHACK 100
 
