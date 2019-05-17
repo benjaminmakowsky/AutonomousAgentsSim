@@ -70,6 +70,7 @@
 	extern void refuel(int flag); // Refuels the ship -JRA
 // other options -JNE
   extern double selfFuel(); // Returns the ship current fuelSum
+  extern double selfBaseFuel(); // Returns the ship base's current fuelReserve
 	extern void keyHome(); // Changes the ship's Home Base or respawn location -JRA
 	extern void selfDestruct(); // Triggers the ship's Self Destruct mechanism //Do not repeatedly press or the ship will not self destruct, it works as a toggle and has a timer -JRA
 	extern void pauseAI(); // Pauses the game for the ship, does not affect other ships -JRA

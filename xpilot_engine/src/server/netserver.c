@@ -1535,6 +1535,7 @@ int Send_self(connection_t *connp,
 		      "%c%c%c"
 		      "%hd%hd%c%c"
 		      "%c%hd%hd"
+          "%hd"
 		      "%hd%hd%c"
 		      "%c%c"
 		      ,
@@ -1552,18 +1553,23 @@ int Send_self(connection_t *connp,
 		      (int)(pl->fuel.sum + 0.5),
 		      (int)(pl->fuel.max + 0.5),
 
+          (int)(pl->home_base->fuelReserve->fuel),
+
 		      connp->view_width, connp->view_height,
 		      connp->debris_colors,
 
 		      (uint8_t)status,
 		      autopilotlight
 	);
-    if (n <= 0)
-	return n;
+
+    if (n <= 0){
+	    return n;
+    }
 
     n = Send_self_items(connp, pl);
-    if (n <= 0)
-	return n;
+    if (n <= 0){
+	    return n;
+    }
 
     return Send_modifiers(connp, mods);
 }

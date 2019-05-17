@@ -7,6 +7,6 @@ do
     teamnum=$((($idx-1)%2+1))
     myname="fixed"$idx
     echo "./boids 0 $idx $1 $myname $teamnum"
-    konsole -e "./boids 0 $idx $1 $teamnum -team $teamnum -join -name $myname -shipShape fixed" &
-    sleep 1
+    ./boids 0 $idx $1 $teamnum -team $teamnum -join -name $myname -shipShape quad &
+    sleep 3
 done

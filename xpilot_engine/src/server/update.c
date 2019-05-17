@@ -441,16 +441,31 @@ static void Fuel_update(void)
     for (i = 0; i < Num_fuels(); i++) {
 	fuel_t *fs = Fuel_by_index(i);
 
-	if (fs->fuel == MAX_STATION_FUEL)
-	    continue;
-	if ((fs->fuel += fuel) >= MAX_STATION_FUEL)
-	    fs->fuel = MAX_STATION_FUEL;
-	else if (fs->last_change + frames_per_update > frame_loops)
-	    /*
+  // If this the fuel reserver for a player's base, in this case
+  // the station has negative fuel regeneration
+  if( fs->isBase ){
+    if( fs->fuel == 0 ){
+      continue;
+    }
+    if((fs->fuel -= fuel ) <= 0 ){
+      fs->fuel = 0;
+    }
+    else if( fs->last_change + frames_per_update > frame_loops){
+      continue;
+    }
+  }
+  else{
+	  if (fs->fuel == MAX_STATION_FUEL)
+	      continue;
+	  if ((fs->fuel += fuel) >= MAX_STATION_FUEL)
+	      fs->fuel = MAX_STATION_FUEL;
+	  else if (fs->last_change + frames_per_update > frame_loops)
+	     /*
 	     * We don't send fuelstation info to the clients every frame
 	     * if it wouldn't change their display.
 	     */
 	    continue;
+  }
 
 	fs->conn_mask = 0;
 	fs->last_change = frame_loops;

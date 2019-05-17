@@ -1462,7 +1462,7 @@ int Receive_self(void)
 {
     int		n;
     short	x, y, vx, vy, lockId, lockDist,
-		sFuelSum, sFuelMax, sViewWidth, sViewHeight;
+		sFuelSum, sFuelMax, sBaseFuel, sViewWidth, sViewHeight;
     u_byte	ch, sNumSparkColors, sHeading, sPower, sTurnSpeed,
 		sTurnResistance, sNextCheckPoint, lockDir, sAutopilotLight,
 		currentTank, sStat;
@@ -1477,22 +1477,26 @@ int Receive_self(void)
 		     &x, &y, &vx, &vy, &sHeading,
 		     &sPower, &sTurnSpeed, &sTurnResistance,
 		     &lockId, &lockDist, &lockDir, &sNextCheckPoint);
-    if (n <= 0)
-	return n;
+    if (n <= 0){
+      printf("Failed to parse self\n");
+	    return n;
+    }
 
     memset(num_items, 0, sizeof num_items);
 
     n = Packet_scanf(&rbuf,
-		     "%c%hd%hd"
+		     "%c%hd%hd%hd"
 		     "%hd%hd%c"
 		     "%c%c",
 
-		     &currentTank, &sFuelSum, &sFuelMax,
+		     &currentTank, &sFuelSum, &sFuelMax, &sBaseFuel,
 		     &sViewWidth, &sViewHeight, &sNumSparkColors,
 		     &sStat, &sAutopilotLight
 		     );
-    if (n <= 0)
-	return n;
+    if (n <= 0){
+      printf("Failed to parse items\n");
+	    return n;
+    }
 
     /*
      * These assignments are done here because the server_display
@@ -1516,8 +1520,8 @@ int Receive_self(void)
 		lockId, lockDist, lockDir,
 		sNextCheckPoint, sAutopilotLight,
 		num_items,
-		currentTank, (double)sFuelSum, (double)sFuelMax, rbuf.len,
-		(int)sStat);
+		currentTank, (double)sFuelSum, (double)sFuelMax, (double)sBaseFuel,
+    rbuf.len, (int)sStat);
 
 #ifdef _WINDOWS
     received_self = TRUE;
