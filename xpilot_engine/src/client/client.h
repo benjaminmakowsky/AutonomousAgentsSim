@@ -50,45 +50,45 @@
 #endif
 
 typedef struct {
-    bool	talking;	/* Some talk window is open? */
-    bool	pointerControl;	/* Pointer (mouse) control is on? */
-    bool	restorePointerControl;
-				/* Pointer control should be restored later? */
-    bool	quitMode;	/* Client is in quit mode? */
-    double	clientLag;
-    double	scaleFactor;
-    double	scale;
-    float	fscale;
-    double	altScaleFactor;
+	bool	talking;	/* Some talk window is open? */
+	bool	pointerControl;	/* Pointer (mouse) control is on? */
+	bool	restorePointerControl;
+	/* Pointer control should be restored later? */
+	bool	quitMode;	/* Client is in quit mode? */
+	double	clientLag;
+	double	scaleFactor;
+	double	scale;
+	float	fscale;
+	double	altScaleFactor;
 } client_data_t;
 
 typedef struct {
-    bool clientRanker;
-    bool clockAMPM;
-    bool filledDecor;
-    bool filledWorld;
-    bool outlineDecor;
-    bool outlineWorld;
-    bool showDecor;
-    bool showItems;
-    bool showLivesByShip;
-    bool showMessages;
-    bool showMyShipShape;
-    bool showNastyShots;
-    bool showShipShapes;
-    bool showShipShapesHack;
-    bool slidingRadar;
-    bool texturedDecor;
-    bool texturedWalls;
+	bool clientRanker;
+	bool clockAMPM;
+	bool filledDecor;
+	bool filledWorld;
+	bool outlineDecor;
+	bool outlineWorld;
+	bool showDecor;
+	bool showItems;
+	bool showLivesByShip;
+	bool showMessages;
+	bool showMyShipShape;
+	bool showNastyShots;
+	bool showShipShapes;
+	bool showShipShapesHack;
+	bool slidingRadar;
+	bool texturedDecor;
+	bool texturedWalls;
 } instruments_t;
 
 typedef struct {
-    bool help;
-    bool version;
-    bool text;
-    bool list_servers; /* list */
-    bool auto_connect; /* join */
-    char shutdown_reason[MAX_CHARS]; /* shutdown reason */
+	bool help;
+	bool version;
+	bool text;
+	bool list_servers; /* list */
+	bool auto_connect; /* join */
+	char shutdown_reason[MAX_CHARS]; /* shutdown reason */
 } xp_args_t;
 
 #define PACKET_LOSS		0
@@ -138,13 +138,13 @@ typedef struct {
  * while not wasting too much memory because of over-allocation.
  */
 #define STORE(T,P,N,M,V)						\
-    if (N >= M && ((M <= 0)						\
-	? (P = (T *) malloc((M = 1) * sizeof(*P)))			\
-	: (P = (T *) realloc(P, (M += M) * sizeof(*P)))) == NULL) {	\
-	error("No memory");						\
-	exit(1);							\
-    } else								\
-	(P[N++] = V)
+	if (N >= M && ((M <= 0)						\
+				? (P = (T *) malloc((M = 1) * sizeof(*P)))			\
+				: (P = (T *) realloc(P, (M += M) * sizeof(*P)))) == NULL) {	\
+		error("No memory");						\
+		exit(1);							\
+	} else								\
+(P[N++] = V)
 /*
  * Macro to make room in a given dynamic array for new elements.
  * P is the pointer to the array memory.
@@ -156,119 +156,119 @@ typedef struct {
  * while not wasting too much memory because of over-allocation.
  */
 #define EXPAND(P,N,M,T,E)						\
-    if ((N) + (E) > (M)) {						\
-	if ((M) <= 0) {							\
-	    M = (E) + 2;						\
-	    P = (T *) malloc((M) * sizeof(T));				\
-	    N = 0;							\
-	} else {							\
-	    M = ((M) << 1) + (E);					\
-	    P = (T *) realloc(P, (M) * sizeof(T));			\
-	}								\
-	if (P == NULL) {						\
-	    error("No memory");						\
-	    N = M = 0;							\
-	    return;	/* ! */						\
-	}								\
-    }
+	if ((N) + (E) > (M)) {						\
+		if ((M) <= 0) {							\
+			M = (E) + 2;						\
+			P = (T *) malloc((M) * sizeof(T));				\
+			N = 0;							\
+		} else {							\
+			M = ((M) << 1) + (E);					\
+			P = (T *) realloc(P, (M) * sizeof(T));			\
+		}								\
+		if (P == NULL) {						\
+			error("No memory");						\
+			N = M = 0;							\
+			return;	/* ! */						\
+		}								\
+	}
 
 #define UNEXPAND(P,N,M)							\
-    if ((N) < ((M) >> 2)) {						\
-	free(P);							\
-	M = 0;								\
-    }									\
-    N = 0;
+	if ((N) < ((M) >> 2)) {						\
+		free(P);							\
+		M = 0;								\
+	}									\
+N = 0;
 
 #ifndef PAINT_FREE
 # define PAINT_FREE	1
 #endif
 #if PAINT_FREE
 # define RELEASE(P, N, M)					\
-do {								\
-	if (!(N)) ; else (free(P), (M) = 0, (N) = 0);		\
-} while (0)
+	do {								\
+		if (!(N)) ; else (free(P), (M) = 0, (N) = 0);		\
+	} while (0)
 #else
 # define RELEASE(P, N, M)	((N) = 0)
 #endif
 
 
 typedef struct {
-    double	score;
-    short	id;
-    uint16_t	team;
-    short	check;
-    short	round;
-    long	timing_loops;
-    short	timing;
-    short	life;
-    short	mychar;
-    short	alliance;
-    short	name_width;	/* In pixels */
-    short	name_len;	/* In bytes */
-    short	max_chars_in_names;	/* name_width was calculated
+	double	score;
+	short	id;
+	uint16_t	team;
+	short	check;
+	short	round;
+	long	timing_loops;
+	short	timing;
+	short	life;
+	short	mychar;
+	short	alliance;
+	short	name_width;	/* In pixels */
+	short	name_len;	/* In bytes */
+	short	max_chars_in_names;	/* name_width was calculated
 					   for this value of maxCharsInNames */
-    short	ignorelevel;
-    shipshape_t	*ship;
-    char	nick_name[MAX_CHARS];
-    char	user_name[MAX_CHARS];
-    char	host_name[MAX_CHARS];
-    char	id_string[MAX_CHARS];
+	short	ignorelevel;
+	shipshape_t	*ship;
+	char	nick_name[MAX_CHARS];
+	char	user_name[MAX_CHARS];
+	char	host_name[MAX_CHARS];
+	char	id_string[MAX_CHARS];
 } other_t;
 
 typedef struct {
-    int		pos;		/* Block index */
-    double	fuel;		/* Amount of fuel available */
-    irec_t	bounds;		/* Location on map */
+	int		pos;		/* Block index */
+	double	fuel;		/* Amount of fuel available */
+	irec_t	bounds;		/* Location on map */
 } fuelstation_t;
 
 typedef struct {
-    int		pos;		/* Block index */
-    short	id;		/* Id of owner or -1 */
-    uint16_t	team;		/* Team this base belongs to */
-    irec_t	bounds;		/* Location on map */
-    int		type;		/* orientation */
-    long	appeartime;	/* For base warning */
-    fuelstation_t fuelReserve;
+	int		pos;		/* Block index */
+	short	id;		/* Id of owner or -1 */
+	uint16_t	team;		/* Team this base belongs to */
+	irec_t	bounds;		/* Location on map */
+	int		type;		/* orientation */
+	long	appeartime;	/* For base warning */
+	fuelstation_t fuelReserve;
 } homebase_t;
 
 typedef struct {
-    int		pos;		/* Block index */
-    short	dead_time,	/* Frames inactive */
+	int		pos;		/* Block index */
+	short	dead_time,	/* Frames inactive */
 		dot;		/* Draw dot if inactive */
 } cannontime_t;
 
 typedef struct {
-    int		pos;		/* Block index */
-    short	dead_time;	/* Frames inactive */
-    double	damage;		/* Damage to target */
+	int		pos;		/* Block index */
+	short	dead_time;	/* Frames inactive */
+	double	damage;		/* Damage to target */
 } target_t;
 
 typedef struct {
-    int		pos;		/* Block index */
-    irec_t	bounds;		/* Location on map */
+	int		pos;		/* Block index */
+	irec_t	bounds;		/* Location on map */
 } checkpoint_t;
 
 typedef struct {
-    int width;			/* Line width, -1 means no line */
-    unsigned long color;	/* Line color */
-    int rgb;			/* RGB values corresponding to color */
-    int style;			/* 0=LineSolid, 1=LineOnOffDash, 2=LineDoubleDash */
+	int width;			/* Line width, -1 means no line */
+	unsigned long color;	/* Line color */
+	int rgb;			/* RGB values corresponding to color */
+	int style;			/* 0=LineSolid, 1=LineOnOffDash, 2=LineDoubleDash */
 } edge_style_t;
 
 typedef struct {
-    unsigned long color;	/* The color if drawn in filled mode */
-    int rgb;			/* RGB values corresponding to color */
-    int texture;		/* The texture if drawn in texture mode */
-    int flags;			/* Flags about this style (see draw.h) */
-    int def_edge_style;		/* The default style for edges */
+	unsigned long color;	/* The color if drawn in filled mode */
+	int rgb;			/* RGB values corresponding to color */
+	int texture;		/* The texture if drawn in texture mode */
+	int flags;			/* Flags about this style (see draw.h) */
+	int def_edge_style;		/* The default style for edges */
 } polygon_style_t;
 
 typedef struct {
-    ipos_t *points;		/* points[0] is absolute, rest are relative */
-    int num_points;		/* number of points */
-    irec_t bounds;		/* bounding box for the polygon */
-    int *edge_styles;		/* optional array of indexes to edge_styles */
-    int style;			/* index to polygon_styles array */
+	ipos_t *points;		/* points[0] is absolute, rest are relative */
+	int num_points;		/* number of points */
+	irec_t bounds;		/* bounding box for the polygon */
+	int *edge_styles;		/* optional array of indexes to edge_styles */
+	int style;			/* index to polygon_styles array */
 } xp_polygon_t;
 
 
@@ -277,118 +277,118 @@ typedef struct {
  */
 
 typedef struct {
-    short		x0, y0, x1, y1;
+	short		x0, y0, x1, y1;
 } refuel_t;
 
 typedef struct {
-    short		x0, y0, x1, y1;
-    u_byte		tractor;
+	short		x0, y0, x1, y1;
+	u_byte		tractor;
 } connector_t;
 
 typedef struct {
-    unsigned char	color, dir;
-    short		x, y, len;
+	unsigned char	color, dir;
+	short		x, y, len;
 } laser_t;
 
 typedef struct {
-    short		x, y, dir;
-    unsigned char	len;
+	short		x, y, dir;
+	unsigned char	len;
 } missile_t;
 
 typedef struct {
-    short		x, y, id;
-    u_byte		style;
+	short		x, y, id;
+	u_byte		style;
 } ball_t;
 
 typedef struct {
-    short		x, y, id, dir, armor;
-    u_byte		shield, cloak, eshield;
-    u_byte		phased, deflector;
-    double fuel, fov, baseFuel;
-    int range;
+	short		x, y, id, dir, armor;
+	u_byte		shield, cloak, eshield;
+	u_byte		phased, deflector;
+	double fuel, fov, baseFuel;
+	int range;
 } ship_t;
 
 typedef struct {
-    short		x, y, teammine, id;
+	short		x, y, teammine, id;
 } mine_t;
 
 typedef struct {
-    short		x, y, type;
+	short		x, y, type;
 } itemtype_t;
 
 typedef struct {
-    short		x, y, size;
+	short		x, y, size;
 } ecm_t;
 
 typedef struct {
-    short		x1, y1, x2, y2;
+	short		x1, y1, x2, y2;
 } trans_t;
 
 typedef struct {
-    short		x, y, count;
+	short		x, y, count;
 } paused_t;
 
 typedef struct {
-    short		x, y, id, count;
+	short		x, y, id, count;
 } appearing_t;
 
 typedef enum {
-    RadarEnemy,
-    RadarFriend
+	RadarEnemy,
+	RadarFriend
 } radar_type_t;
 
 typedef struct {
-    short		x, y, size;
-    radar_type_t        type;
+	short		x, y, size;
+	radar_type_t        type;
 } radar_t;
 
 typedef struct {
-    short		x, y, type;
+	short		x, y, type;
 } vcannon_t;
 
 typedef struct {
-    short		x, y;
-    double		fuel;
+	short		x, y;
+	double		fuel;
 } vfuel_t;
 
 typedef struct {
-    short		x, y, xi, yi, type;
+	short		x, y, xi, yi, type;
 } vbase_t;
 
 typedef struct {
-    u_byte		x, y;
+	u_byte		x, y;
 } debris_t;
 
 typedef struct {
-    short		x, y, xi, yi, type;
+	short		x, y, xi, yi, type;
 } vdecor_t;
 
 typedef struct {
-    short		x, y;
-    u_byte		wrecktype, size, rotation;
+	short		x, y;
+	u_byte		wrecktype, size, rotation;
 } wreckage_t;
 
 typedef struct {
-    short		x, y;
-    u_byte		type, size, rotation;
+	short		x, y;
+	u_byte		type, size, rotation;
 } asteroid_t;
 
 typedef struct {
-    short		x, y;
+	short		x, y;
 } wormhole_t;
 
 
 /*#define SCORE_OBJECT_COUNT	100*/
 typedef struct {
-    double	score,
+	double	score,
 		life_time;
-    int		x,
-		y,
-		hud_msg_len,
-		hud_msg_width,
-		msg_width,
-		msg_len;
-    char	msg[10],
+	int		x,
+			y,
+			hud_msg_len,
+			hud_msg_width,
+			msg_width,
+			msg_len;
+	char	msg[10],
 		hud_msg[MAX_CHARS+10];
 } score_object_t;
 
@@ -405,43 +405,43 @@ typedef struct {
  * a selection (text, string indices, state,...)
  */
 typedef struct {
-    /* a selection in the talk window */
-    struct {
-        bool    state;	/* current state of the selection */
-        size_t  x1;	/* string indices */
-        size_t  x2;
-        bool    incl_nl;/* include a '\n'? */
-    } talk ;
-    /* a selection in the draw window */
-    struct {
-        bool    state;
-        int     x1;	/* string indices (for TalkMsg[].txt) */
-        int     x2;	/* they are modified when the emphasized area */
-        int     y1;	/* is scrolled down by new messages coming in */
-        int     y2;
-    } draw;
-    char	*txt;   /* allocated when needed */
-    size_t	txt_size;	/* size of txt buffer */
-    size_t	len;
-    /* when a message 'jumps' from talk window to the player messages: */
-    bool	keep_emphasizing;
+	/* a selection in the talk window */
+	struct {
+		bool    state;	/* current state of the selection */
+		size_t  x1;	/* string indices */
+		size_t  x2;
+		bool    incl_nl;/* include a '\n'? */
+	} talk ;
+	/* a selection in the draw window */
+	struct {
+		bool    state;
+		int     x1;	/* string indices (for TalkMsg[].txt) */
+		int     x2;	/* they are modified when the emphasized area */
+		int     y1;	/* is scrolled down by new messages coming in */
+		int     y2;
+	} draw;
+	char	*txt;   /* allocated when needed */
+	size_t	txt_size;	/* size of txt buffer */
+	size_t	len;
+	/* when a message 'jumps' from talk window to the player messages: */
+	bool	keep_emphasizing;
 } selection_t;
 
 /* typedefs begin */
 typedef enum {
-    BmsNone = 0,
-    BmsBall,
-    BmsSafe,
-    BmsCover,
-    BmsPop
+	BmsNone = 0,
+	BmsBall,
+	BmsSafe,
+	BmsCover,
+	BmsPop
 } msg_bms_t;
 
 typedef struct {
-    char		txt[MSG_LEN];
-    size_t		len;
-    /*short		pixelLen;*/
-    double		lifeTime;
-    msg_bms_t		bmsinfo;
+	char		txt[MSG_LEN];
+	size_t		len;
+	/*short		pixelLen;*/
+	double		lifeTime;
+	msg_bms_t		bmsinfo;
 } message_t;
 /* typedefs end */
 
@@ -637,10 +637,10 @@ extern vbase_t		*vbase_ptr;
 extern int		 num_vbase, max_vbase;
 extern debris_t		*debris_ptr[DEBRIS_TYPES];
 extern int		 num_debris[DEBRIS_TYPES],
-			 max_debris[DEBRIS_TYPES];
+       max_debris[DEBRIS_TYPES];
 extern debris_t		*fastshot_ptr[DEBRIS_TYPES * 2];
 extern int		 num_fastshot[DEBRIS_TYPES * 2],
-			 max_fastshot[DEBRIS_TYPES * 2];
+       max_fastshot[DEBRIS_TYPES * 2];
 extern vdecor_t		*vdecor_ptr;
 extern int		 num_vdecor, max_vdecor;
 extern wreckage_t	*wreckage_ptr;
@@ -729,8 +729,8 @@ other_t *Other_by_name(const char *name, bool show_error_msg);
 shipshape_t *Ship_by_id(int id);
 int Handle_leave(int id);
 int Handle_player(int id, int team, int mychar,
-		  char *nick_name, char *user_name, char *host_name,
-		  char *shape, int myself);
+		char *nick_name, char *user_name, char *host_name,
+		char *shape, int myself);
 int Handle_team(int id, int pl_team);
 int Handle_score(int id, double score, int life, int mychar, int alliance);
 int Handle_score_object(double score, int x, int y, char *msg);
@@ -745,7 +745,7 @@ int Handle_self(int x, int y, int vx, int vy, int newHeading,
 		int newNextCheckPoint, int newAutopilotLight,
 		u_byte *newNumItems, int newCurrentTank,
 		double newFuelSum, double newFuelMax, double newBaseFuel,
-    int newPacketSize, int status);
+		int newPacketSize, int status);
 int Handle_self_items(u_byte *newNumItems);
 int Handle_modifiers(char *m);
 int Handle_damaged(int dam);
@@ -886,15 +886,15 @@ extern int Query_all(sock_t *sockfd, int port, char *msg, size_t msglen);
  * textinterface.c
  */
 extern int Connect_to_server(int auto_connect, int list_servers,
-			     int auto_shutdown, char *shutdown_reason,
-			     Connect_param_t *conpar);
+		int auto_shutdown, char *shutdown_reason,
+		Connect_param_t *conpar);
 extern int Contact_servers(int count, char **servers,
-			   int auto_connect, int list_servers,
-			   int auto_shutdown, char *shutdown_message,
-			   int find_max, int *num_found,
-			   char **server_addresses, char **server_names,
-			   unsigned *server_versions,
-			   Connect_param_t *conpar);
+		int auto_connect, int list_servers,
+		int auto_shutdown, char *shutdown_message,
+		int find_max, int *num_found,
+		char **server_addresses, char **server_names,
+		unsigned *server_versions,
+		Connect_param_t *conpar);
 
 /*
  * usleep.c

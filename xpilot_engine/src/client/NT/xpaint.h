@@ -60,7 +60,7 @@ extern Display	*kdpy;			/* Keyboard display */
 extern short	about_page;		/* Which page is the player on? */
 extern int	radar_exposures;	/* Is radar window exposed? */
 extern bool     radar_score_mapped;     /* Is the radar and score window mapped */
-					/* windows has 2 sets of item bitmaps */
+/* windows has 2 sets of item bitmaps */
 #define	ITEM_HUD	0		/* one color for the HUD */
 #define	ITEM_PLAYFIELD	1		/* and one color for the playfield */
 #ifdef _WINDOWS
@@ -93,15 +93,15 @@ extern int	maxColors;		/* Max. number of colors to use */
 extern bool	titleFlip;		/* Do special titlebar flipping? */
 
 extern int	(*radarDrawRectanglePtr)/* Function to draw player on radar */
-		(Display *disp, Drawable d, GC gc,
-		 int x, int y, unsigned width, unsigned height);
+	(Display *disp, Drawable d, GC gc,
+	 int x, int y, unsigned width, unsigned height);
 
 extern unsigned long	current_foreground;
 
 static inline void SET_FG(unsigned long fg)
 {
-    if (fg != current_foreground)
-	XSetForeground(dpy, gameGC, current_foreground = fg);
+	if (fg != current_foreground)
+		XSetForeground(dpy, gameGC, current_foreground = fg);
 }
 
 /*
@@ -109,25 +109,25 @@ static inline void SET_FG(unsigned long fg)
  */
 static inline void Check_name_string(other_t *other)
 {
-    if (other && other->max_chars_in_names != maxCharsInNames) {
-	int len;
+	if (other && other->max_chars_in_names != maxCharsInNames) {
+		int len;
 
-	strlcpy(other->id_string, other->nick_name, sizeof(other->id_string));
-	len = strlen(other->id_string);
-	if (maxCharsInNames >= 0 && maxCharsInNames < len)
-	    other->id_string[maxCharsInNames] = '\0';
-	other->name_len = strlen(other->id_string);                 
-	other->name_width
-	    = 2 + XTextWidth(gameFont, other->id_string, other->name_len);
-	other->max_chars_in_names = maxCharsInNames;
-    }
+		strlcpy(other->id_string, other->nick_name, sizeof(other->id_string));
+		len = strlen(other->id_string);
+		if (maxCharsInNames >= 0 && maxCharsInNames < len)
+			other->id_string[maxCharsInNames] = '\0';
+		other->name_len = strlen(other->id_string);                 
+		other->name_width
+			= 2 + XTextWidth(gameFont, other->id_string, other->name_len);
+		other->max_chars_in_names = maxCharsInNames;
+	}
 }
 
 extern void Paint_item_symbol(int type, Drawable d, GC mygc,
-			      int x, int y, int color);
+		int x, int y, int color);
 extern void Paint_item(int type, Drawable d, GC mygc, int x, int y);
 extern void Gui_paint_item_symbol(int type, Drawable d, GC mygc,
-				  int x, int y, int c);
+		int x, int y, int c);
 extern void Gui_paint_item(int type, Drawable d, GC mygc, int x, int y);
 
 extern void Store_xpaint_options(void);

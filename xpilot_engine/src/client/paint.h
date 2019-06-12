@@ -82,38 +82,38 @@ extern bool	players_exposed;
 
 static inline float WINSCALE_f(float x)
 {
-    return x * clData.fscale;
+	return x * clData.fscale;
 }
 
 static inline double WINSCALE_d(double x)
 {
-    return x * clData.scale;
+	return x * clData.scale;
 }
 
 static inline int WINSCALE(int x)
 {
-    bool negative = false;
-    int y, t = x;
-    float f = (float)0.0;
+	bool negative = false;
+	int y, t = x;
+	float f = (float)0.0;
 
-    if (x == 0)
-	return 0;
+	if (x == 0)
+		return 0;
 
-    if (t < 0) {
-	negative = true;
-	t = -t;
-    }
+	if (t < 0) {
+		negative = true;
+		t = -t;
+	}
 
-    f = WINSCALE_f(t);
-    y = (int) (f + (float)0.5);
+	f = WINSCALE_f(t);
+	y = (int) (f + (float)0.5);
 
-    if (y < 1)
-	y = 1;
+	if (y < 1)
+		y = 1;
 
-    if (negative)
-	y = -y;
+	if (negative)
+		y = -y;
 
-    return y;
+	return y;
 }
 
 #define	UWINSCALE(x)	((unsigned)WINSCALE(x))
@@ -129,9 +129,9 @@ static inline int WINSCALE(int x)
  */
 
 typedef struct team_score {
-  double score;
-  int life;
-  int playing;
+	double score;
+	int life;
+	int playing;
 } team_score;
 
 int Paint_init(void);

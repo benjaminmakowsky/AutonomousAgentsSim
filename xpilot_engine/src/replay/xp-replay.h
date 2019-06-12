@@ -43,14 +43,14 @@
 #define RED                 3
 
 enum MemTypes {
-    MEM_STRING,
-    MEM_FRAME,
-    MEM_SHAPE,
-    MEM_POINT,
-    MEM_GC,
-    MEM_MISC,
-    MEM_UI,
-    NUM_MEMTYPES
+	MEM_STRING,
+	MEM_FRAME,
+	MEM_SHAPE,
+	MEM_POINT,
+	MEM_GC,
+	MEM_MISC,
+	MEM_UI,
+	NUM_MEMTYPES
 };
 
 void *MyMalloc(size_t, enum MemTypes);

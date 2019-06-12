@@ -25,8 +25,8 @@
 #define BUTTONS_H
 
 union button_image {
-    const char		*string;
-    Pixmap		icon;
+	const char		*string;
+	Pixmap		icon;
 };
 
 typedef struct button *Button;
@@ -42,11 +42,11 @@ typedef struct button *Button;
  */
 
 void SetGlobalButtonAttributes(unsigned long, unsigned long,
-			       unsigned long, unsigned long);
+		unsigned long, unsigned long);
 
 Button CreateButton(Display *, Window, int, int, unsigned int, unsigned int,
-		    union button_image, unsigned int, unsigned int,
-		    unsigned long, void (*)(void *), void *, int, int);
+		union button_image, unsigned int, unsigned int,
+		unsigned long, void (*)(void *), void *, int, int);
 int CheckButtonEvent(XEvent *);
 void RedrawButton(Button);
 void EnableButton(Button);

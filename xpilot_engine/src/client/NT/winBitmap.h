@@ -25,10 +25,10 @@
 #include "../gfx2d.h"
 #include "bitmaps.h"
 extern void PaintBitmap(Drawable d, int type, int x, int y,
-			int width, int height, int number);
+		int width, int height, int number);
 
 void Bitmap_set_pixel(xp_pixmap_t * xp_pixmap, int image,
-			    int x, int y, RGB_COLOR color);
+		int x, int y, RGB_COLOR color);
 void Bitmap_paint(Drawable d, int img, int x, int y, int bmp);
 int Bitmap_create_begin(Drawable d, xp_pixmap_t * pm, int bmp);
 int Bitmap_create_end(Drawable d);

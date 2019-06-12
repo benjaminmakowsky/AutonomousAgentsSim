@@ -99,11 +99,11 @@ extern void Draw_score_table(void);
 extern void Resize(Window w, unsigned width, unsigned height);
 
 extern int DrawShadowText(Display*, Window, GC,
-			  int x_border, int start_y, const char *str,
-			  unsigned long fg, unsigned long bg);
+		int x_border, int start_y, const char *str,
+		unsigned long fg, unsigned long bg);
 extern void ShadowDrawString(Display*, Window, GC,
-			     int x, int start_y, const char *str,
-			     unsigned long fg, unsigned long bg);
+		int x, int start_y, const char *str,
+		unsigned long fg, unsigned long bg);
 /*
  * about.c
  */

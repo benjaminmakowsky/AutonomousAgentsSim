@@ -22,8 +22,8 @@
  */
 
 /***************************************************************************\
-*  winAudio.c - XPilotNT Windoze audio interface module						*
-\***************************************************************************/
+ *  winAudio.c - XPilotNT Windoze audio interface module						*
+ \***************************************************************************/
 #ifdef SOUND
 
 #include "windows.h"
@@ -41,46 +41,46 @@ static HANDLE hPlayEvent = 0;
 
 static DWORD Win32PlaySounds(LPVOID Arg)
 {
-    while (1) {
-	if (WAIT_OBJECT_0 == WaitForSingleObject(hPlayEvent, 100000)) {
-	    char *pFileName = SndQ;
-	    ResetEvent(hPlayEvent);
-	    SndQ = NULL;
-	    PlaySound(pFileName, NULL,
-		      SND_SYNC | SND_FILENAME | SND_NODEFAULT);
+	while (1) {
+		if (WAIT_OBJECT_0 == WaitForSingleObject(hPlayEvent, 100000)) {
+			char *pFileName = SndQ;
+			ResetEvent(hPlayEvent);
+			SndQ = NULL;
+			PlaySound(pFileName, NULL,
+					SND_SYNC | SND_FILENAME | SND_NODEFAULT);
+		}
 	}
-    }
-    return 0;
+	return 0;
 }
 
 static long Win32GetFileSize(const char *filename)
 {
-    int fd = _open(filename, O_BINARY | O_RDONLY);
-    long fileSize = -1L;
-    if (fd >= 0) {
-	fileSize = _filelength(fd);
-	close(fd);
-    }
-    return fileSize;
+	int fd = _open(filename, O_BINARY | O_RDONLY);
+	long fileSize = -1L;
+	if (fd >= 0) {
+		fileSize = _filelength(fd);
+		close(fd);
+	}
+	return fileSize;
 }
 
 int audioDeviceInit(char *display)
 {
-    DWORD ThreadId;
-    HANDLE hThread;
+	DWORD ThreadId;
+	HANDLE hThread;
 
-    hPlayEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-    if (hPlayEvent == 0)
-	return -1;
+	hPlayEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	if (hPlayEvent == 0)
+		return -1;
 
-    if ((hThread =
-	 CreateThread(NULL, 1000, (LPTHREAD_START_ROUTINE) Win32PlaySounds,
-		      NULL, 0, &ThreadId)) == NULL) {
-	CloseHandle(hPlayEvent);
-	return -1;
-    }
-    SetThreadPriority(hThread, THREAD_PRIORITY_LOWEST);
-    return 0;
+	if ((hThread =
+				CreateThread(NULL, 1000, (LPTHREAD_START_ROUTINE) Win32PlaySounds,
+					NULL, 0, &ThreadId)) == NULL) {
+		CloseHandle(hPlayEvent);
+		return -1;
+	}
+	SetThreadPriority(hThread, THREAD_PRIORITY_LOWEST);
+	return 0;
 }
 
 void audioDeviceEvents()
@@ -89,17 +89,17 @@ void audioDeviceEvents()
 
 void audioDevicePlay(char *filename, int type, int volume, void **private)
 {
-    if (SndQ == NULL) {
-	SndQ = filename;
-	SndSize = Win32GetFileSize(filename);
-    } else {
-	long size = Win32GetFileSize(filename);
-	if (size > SndSize) {
-	    SndQ = filename;
-	    SndSize = size;
+	if (SndQ == NULL) {
+		SndQ = filename;
+		SndSize = Win32GetFileSize(filename);
+	} else {
+		long size = Win32GetFileSize(filename);
+		if (size > SndSize) {
+			SndQ = filename;
+			SndSize = size;
+		}
 	}
-    }
-    SetEvent(hPlayEvent);
+	SetEvent(hPlayEvent);
 }
 
 

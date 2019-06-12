@@ -32,7 +32,7 @@
 int recording = False;		/* Are we recording or not. */
 
 extern void paintItemSymbol(unsigned char type, Drawable drawable, GC mygc,
-			    int x, int y, int color);
+		int x, int y, int color);
 
 static void Dummy_newFrame(void)
 {
@@ -45,21 +45,21 @@ static void Dummy_endFrame(void)
  * X windows drawing
  */
 static struct recordable_drawing Xdrawing = {
-    Dummy_newFrame,
-    Dummy_endFrame,
-    XDrawArc,
-    XDrawLines,
-    XDrawLine,
-    XDrawRectangle,
-    XDrawString,
-    XFillArc,
-    XFillPolygon,
-    paintItemSymbol,
-    XFillRectangle,
-    XFillRectangles,
-    XDrawArcs,
-    XDrawSegments,
-    XSetDashes,
+	Dummy_newFrame,
+	Dummy_endFrame,
+	XDrawArc,
+	XDrawLines,
+	XDrawLine,
+	XDrawRectangle,
+	XDrawString,
+	XFillArc,
+	XFillPolygon,
+	paintItemSymbol,
+	XFillRectangle,
+	XFillRectangles,
+	XDrawArcs,
+	XDrawSegments,
+	XSetDashes,
 };
 
 /*
@@ -75,10 +75,10 @@ struct recordable_drawing rd;
  */
 void Record_init(char *filename)
 {
-    rd = Xdrawing;
-    // if (filename != NULL && filename[0] != '\0') {
-    // record_filename = strdup(filename);
-    // }
+	rd = Xdrawing;
+	// if (filename != NULL && filename[0] != '\0') {
+	// record_filename = strdup(filename);
+	// }
 }
 
 void Record_cleanup(void)
@@ -87,7 +87,7 @@ void Record_cleanup(void)
 
 long Record_size(void)
 {
-    return (0L);
+	return (0L);
 }
 
 void Record_toggle(void)

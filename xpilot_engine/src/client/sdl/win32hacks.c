@@ -40,8 +40,8 @@ void _Trace(char *fmt, ...)
 {
 	va_list ap;
 	va_start(ap, fmt);
-    vprintf(fmt, ap);
-    va_end(ap);
+	vprintf(fmt, ap);
+	va_end(ap);
 }
 
 void Progress(char *fmt, ...) {}

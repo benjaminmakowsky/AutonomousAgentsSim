@@ -26,45 +26,45 @@
 /////////////////////////////////////////////////////////////////////////////
 
 class CMainFrame:public CFrameWnd {
-  protected:			// create from serialization only
-    CMainFrame();
-    DECLARE_DYNCREATE(CMainFrame)
-// Attributes
-  public:
+	protected:			// create from serialization only
+		CMainFrame();
+		DECLARE_DYNCREATE(CMainFrame)
+			// Attributes
+	public:
 
-// Operations
-  public:
+			// Operations
+	public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMainFrame)
-  public:
-    virtual BOOL PreCreateWindow(CREATESTRUCT & cs);
-    virtual BOOL PreTranslateMessage(MSG * pMsg);
-    //}}AFX_VIRTUAL
-    virtual void OnPaletteChanged(CWnd * pFocus);
-    virtual BOOL OnQueryNewPalette();
+			// Overrides
+			// ClassWizard generated virtual function overrides
+			//{{AFX_VIRTUAL(CMainFrame)
+	public:
+			virtual BOOL PreCreateWindow(CREATESTRUCT & cs);
+			virtual BOOL PreTranslateMessage(MSG * pMsg);
+			//}}AFX_VIRTUAL
+			virtual void OnPaletteChanged(CWnd * pFocus);
+			virtual BOOL OnQueryNewPalette();
 
-// Implementation
-  public:
-     virtual ~ CMainFrame();
+			// Implementation
+	public:
+			virtual ~ CMainFrame();
 #ifdef _DEBUG
-    virtual void AssertValid() const;
-    virtual void Dump(CDumpContext & dc) const;
+			virtual void AssertValid() const;
+			virtual void Dump(CDumpContext & dc) const;
 #endif
 
-  protected:			// control bar embedded members
-     CStatusBar m_wndStatusBar;
-    CToolBar m_wndToolBar;
+	protected:			// control bar embedded members
+			CStatusBar m_wndStatusBar;
+			CToolBar m_wndToolBar;
 
-// Generated message map functions
-  protected:
-    //{{AFX_MSG(CMainFrame)
-     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    // NOTE - the ClassWizard will add and remove member functions here.
-    //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG
-     DECLARE_MESSAGE_MAP()
+			// Generated message map functions
+	protected:
+			//{{AFX_MSG(CMainFrame)
+			afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+			// NOTE - the ClassWizard will add and remove member functions here.
+			//    DO NOT EDIT what you see in these blocks of generated code!
+			//}}AFX_MSG
+			DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

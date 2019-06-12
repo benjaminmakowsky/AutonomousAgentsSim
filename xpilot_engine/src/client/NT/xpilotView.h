@@ -22,11 +22,11 @@
  */
 
 /***************************************************************************\
-*  xpilotView.h : interface of the CXpilotView class						*
-*																			*
-*  XPilotNT uses the standard MFC doc/view model in an SDI format.			*
-*  						*
-\***************************************************************************/
+ *  xpilotView.h : interface of the CXpilotView class						*
+ *																			*
+ *  XPilotNT uses the standard MFC doc/view model in an SDI format.			*
+ *  						*
+ \***************************************************************************/
 
 #define	WSA_EVENT		WM_USER+300	// from WSAAsyncSelect
 #define	WSA_RESOLVEHOST	WM_USER+301
@@ -36,68 +36,68 @@
 extern "C" const char *GetWSockErrText(int error);
 
 class CXpilotView:public CView {
-  protected:			// create from serialization only
-    CXpilotView();
-    DECLARE_DYNCREATE(CXpilotView)
-// Attributes
-  public:
-    CXpilotDoc * GetDocument();
-    BOOL isVirgin;
-    BOOL shuttingdown;
+	protected:			// create from serialization only
+		CXpilotView();
+		DECLARE_DYNCREATE(CXpilotView)
+			// Attributes
+	public:
+			CXpilotDoc * GetDocument();
+			BOOL isVirgin;
+			BOOL shuttingdown;
 
-//      CPalette                cpal;
-//      LOGPALETTE*             pal;
+			//      CPalette                cpal;
+			//      LOGPALETTE*             pal;
 
-// Operations
-  public:
+			// Operations
+	public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CXpilotView)
-  public:
-     virtual void OnDraw(CDC * pDC);	// overridden to draw this view
-    virtual BOOL PreCreateWindow(CREATESTRUCT & cs);
-    virtual void OnInitialUpdate();
-    virtual BOOL DestroyWindow();
-    virtual void OnSize(UINT, int, int);
-  protected:
-     virtual void OnActivateView(BOOL bActivate, CView * pActivateView,
-				 CView * pDeactiveView);
-    //}}AFX_VIRTUAL
+			// Overrides
+			// ClassWizard generated virtual function overrides
+			//{{AFX_VIRTUAL(CXpilotView)
+	public:
+			virtual void OnDraw(CDC * pDC);	// overridden to draw this view
+			virtual BOOL PreCreateWindow(CREATESTRUCT & cs);
+			virtual void OnInitialUpdate();
+			virtual BOOL DestroyWindow();
+			virtual void OnSize(UINT, int, int);
+	protected:
+			virtual void OnActivateView(BOOL bActivate, CView * pActivateView,
+					CView * pDeactiveView);
+			//}}AFX_VIRTUAL
 
-// Implementation
-  public:
-     virtual ~ CXpilotView();
+			// Implementation
+	public:
+			virtual ~ CXpilotView();
 #ifdef _DEBUG
-    virtual void AssertValid() const;
-    virtual void Dump(CDumpContext & dc) const;
+			virtual void AssertValid() const;
+			virtual void Dump(CDumpContext & dc) const;
 #endif
 
-  protected:
+	protected:
 
-// Generated message map functions
-  protected:
-    //{{AFX_MSG(CXpilotView)
-     afx_msg void OnDestroy();
-    afx_msg void OnFileNew();
-    afx_msg void OnUpdateFileNew(CCmdUI * pCmdUI);
-    afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-    afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
-    //}}AFX_MSG
+			// Generated message map functions
+	protected:
+			//{{AFX_MSG(CXpilotView)
+			afx_msg void OnDestroy();
+			afx_msg void OnFileNew();
+			afx_msg void OnUpdateFileNew(CCmdUI * pCmdUI);
+			afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+			afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+			afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+			afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+			//}}AFX_MSG
 
-    afx_msg LONG OnWSA_EVENT(UINT, LONG);
-    //afx_msg       LONG OnWSA_RESOLVEHOST(UINT, LONG);
-    //afx_msg       LONG OnWSA_CONNECT(UINT, LONG);
-    //afx_msg       LONG OnWSA_EVENT(UINT, LONG);
-     DECLARE_MESSAGE_MAP()
+			afx_msg LONG OnWSA_EVENT(UINT, LONG);
+			//afx_msg       LONG OnWSA_RESOLVEHOST(UINT, LONG);
+			//afx_msg       LONG OnWSA_CONNECT(UINT, LONG);
+			//afx_msg       LONG OnWSA_EVENT(UINT, LONG);
+			DECLARE_MESSAGE_MAP()
 };
 
 #ifndef _DEBUG			// debug version in xpilotView.cpp
 inline CXpilotDoc *CXpilotView::GetDocument()
 {
-    return (CXpilotDoc *) m_pDocument;
+	return (CXpilotDoc *) m_pDocument;
 }
 #endif
 

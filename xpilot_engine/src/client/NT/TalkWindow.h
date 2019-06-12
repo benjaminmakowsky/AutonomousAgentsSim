@@ -28,30 +28,30 @@
 // CTalkWindow dialog
 
 class CTalkWindow:public CDialog {
-// Construction
-  public:
-    CTalkWindow(CWnd * pParent = NULL);	// standard constructor
+	// Construction
+	public:
+		CTalkWindow(CWnd * pParent = NULL);	// standard constructor
 
-// Dialog Data
-    //{{AFX_DATA(CTalkWindow)
-    enum { IDD = IDD_TALKWINDOW };
-    CString m_text;
-    //}}AFX_DATA
+		// Dialog Data
+		//{{AFX_DATA(CTalkWindow)
+		enum { IDD = IDD_TALKWINDOW };
+		CString m_text;
+		//}}AFX_DATA
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CTalkWindow)
-  protected:
-     virtual void DoDataExchange(CDataExchange * pDX);	// DDX/DDV support
-    //}}AFX_VIRTUAL
+		// Overrides
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CTalkWindow)
+	protected:
+		virtual void DoDataExchange(CDataExchange * pDX);	// DDX/DDV support
+		//}}AFX_VIRTUAL
 
-// Implementation
-  protected:
+		// Implementation
+	protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CTalkWindow)
-    // NOTE: the ClassWizard will add member functions here
-    //}}AFX_MSG
-     DECLARE_MESSAGE_MAP()
+		// Generated message map functions
+		//{{AFX_MSG(CTalkWindow)
+		// NOTE: the ClassWizard will add member functions here
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };

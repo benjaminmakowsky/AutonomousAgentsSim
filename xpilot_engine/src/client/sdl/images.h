@@ -24,9 +24,9 @@
 #include "xpclient_sdl.h"
 
 typedef enum {
-    IMG_STATE_UNINITIALIZED,
-    IMG_STATE_ERROR,
-    IMG_STATE_READY
+	IMG_STATE_UNINITIALIZED,
+	IMG_STATE_ERROR,
+	IMG_STATE_READY
 } image_state_e;
 
 /*
@@ -40,18 +40,18 @@ typedef enum {
  * corresponding to width and height respectively.
  */
 typedef struct {
-    GLuint          name;         /* OpenGL texture "name" */
-    char            *filename;    /* the name of the image file */
-    int             num_frames;   /* the number of frames */
-    bool            rotate;       /* should this image be rotated */
-    bool            scale;        /* should this image be scaled to fill data */
-    image_state_e   state;        /* the state of the image */
-    int             width;        /* width of the whole image */
-    int             height;       /* height of the whole image */
-    int             data_width;   /* width of the image data */
-    int             data_height;  /* height of the image data */
-    int             frame_width;  /* width of one image frame */
-    unsigned int    *data;        /* the image data */
+	GLuint          name;         /* OpenGL texture "name" */
+	char            *filename;    /* the name of the image file */
+	int             num_frames;   /* the number of frames */
+	bool            rotate;       /* should this image be rotated */
+	bool            scale;        /* should this image be scaled to fill data */
+	image_state_e   state;        /* the state of the image */
+	int             width;        /* width of the whole image */
+	int             height;       /* height of the whole image */
+	int             data_width;   /* width of the image data */
+	int             data_height;  /* height of the image data */
+	int             frame_width;  /* width of one image frame */
+	unsigned int    *data;        /* the image data */
 } image_t;
 
 #define IMG_HOLDER_FRIEND 0

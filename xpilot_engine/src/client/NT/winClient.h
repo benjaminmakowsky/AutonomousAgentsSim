@@ -22,12 +22,12 @@
  */
 
 /***************************************************************************\
-*  winClient.h - Interface XPilot to the MFC frontend						*
-*																			*
-*  interface from the MFC poo to the xpilot "C" source.						*
-*																			*
-*  						*
-\***************************************************************************/
+ *  winClient.h - Interface XPilot to the MFC frontend						*
+ *																			*
+ *  interface from the MFC poo to the xpilot "C" source.						*
+ *																			*
+ *  						*
+ \***************************************************************************/
 
 #ifndef	_INC_WINDOWS
 #include <windows.h>
@@ -37,29 +37,29 @@
 extern "C" {
 #endif
 
-    extern void xpilotShutdown();
-    extern int main(int argc, char **argv);
-    extern int Net_fd(void);
-    extern int Net_input(void);
-    extern void Paint_frame(void);
-    extern void PaintWinClient();
-    extern HINSTANCE hInstance;
-    extern void Client_cleanup();
+	extern void xpilotShutdown();
+	extern int main(int argc, char **argv);
+	extern int Net_fd(void);
+	extern int Net_input(void);
+	extern void Paint_frame(void);
+	extern void PaintWinClient();
+	extern HINSTANCE hInstance;
+	extern void Client_cleanup();
 
-    extern void InitWinX(HWND m_hWnd);
-    extern void WinXShutdown();
+	extern void InitWinX(HWND m_hWnd);
+	extern void WinXShutdown();
 
-    extern int received_self;
+	extern int received_self;
 
-/* requests from the xpilot "real code" to mfc */
-    extern void _Trace(char *lpszFormat, ...);
-    extern const char *mfcDoTalkWindow();
+	/* requests from the xpilot "real code" to mfc */
+	extern void _Trace(char *lpszFormat, ...);
+	extern const char *mfcDoTalkWindow();
 
 #ifdef	_DEBUG
-    extern void xpmemShutdown();
+	extern void xpmemShutdown();
 #endif
 
-    extern void Progress(const char *s, ...);
+	extern void Progress(const char *s, ...);
 
 #ifdef __cplusplus
 };

@@ -49,50 +49,50 @@
 
 
 typedef enum {
-    PIXMAP_COPY,
-    COLOR_SWITCH,
-    MULTIBUFFER
+	PIXMAP_COPY,
+	COLOR_SWITCH,
+	MULTIBUFFER
 } dbuff_t;
 
 typedef enum {
-    MULTIBUFFER_NONE,
-    MULTIBUFFER_MBX,
-    MULTIBUFFER_DBE
+	MULTIBUFFER_NONE,
+	MULTIBUFFER_MBX,
+	MULTIBUFFER_DBE
 } dbuff_multibuffer_t;
 
 typedef struct {
-    XdbeBackBuffer	dbe_draw;
-    int			dbe_major;
-    int			dbe_minor;
+	XdbeBackBuffer	dbe_draw;
+	int			dbe_major;
+	int			dbe_minor;
 } dbuff_dbe_state_t;
 
 typedef struct {
-    Multibuffer		mbx_draw[2];
-    int			mbx_ev_base;
-    int			mbx_err_base;
+	Multibuffer		mbx_draw[2];
+	int			mbx_ev_base;
+	int			mbx_err_base;
 } dbuff_mbx_state_t;
 
 typedef struct {
-    Display		*display;
-    dbuff_t		type;
-    dbuff_multibuffer_t	multibuffer_type;
-    Colormap		xcolormap;
-    unsigned long	drawing_planes;
-    int			colormap_index;
-    XColor		*colormaps[2];
-    int			colormap_size;
-    unsigned long	drawing_plane_masks[2];
-    unsigned long	*planes;
-    unsigned long	pixel;
-    dbuff_dbe_state_t	dbe;
-    dbuff_mbx_state_t	mbx;
+	Display		*display;
+	dbuff_t		type;
+	dbuff_multibuffer_t	multibuffer_type;
+	Colormap		xcolormap;
+	unsigned long	drawing_planes;
+	int			colormap_index;
+	XColor		*colormaps[2];
+	int			colormap_size;
+	unsigned long	drawing_plane_masks[2];
+	unsigned long	*planes;
+	unsigned long	pixel;
+	dbuff_dbe_state_t	dbe;
+	dbuff_mbx_state_t	mbx;
 } dbuff_state_t;
 
 extern dbuff_state_t   *dbuf_state;    /* Holds current dbuff state */
 
 dbuff_state_t *start_dbuff(Display *display, Colormap cmap,
-			   dbuff_t type,
-			   unsigned num_planes, XColor *colors);
+		dbuff_t type,
+		unsigned num_planes, XColor *colors);
 void dbuff_switch(dbuff_state_t *state);
 void dbuff_init_buffer(dbuff_state_t *state);
 void end_dbuff(dbuff_state_t *state);

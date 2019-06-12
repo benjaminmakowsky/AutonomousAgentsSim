@@ -22,81 +22,81 @@
  */
 
 /***************************************************************************\
-*  winAbout.h : CAboutDlg dialog used for XPilotNT About					*
-*																			*
-*  This file contains the Windows about dialog and scrolling credits box.	*
-*  						*
-\***************************************************************************/
+ *  winAbout.h : CAboutDlg dialog used for XPilotNT About					*
+ *																			*
+ *  This file contains the Windows about dialog and scrolling credits box.	*
+ *  						*
+ \***************************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////
 // CCredits window
 
 class CCredits:public CStatic {
-// Construction
-  public:
-    CCredits();
+	// Construction
+	public:
+		CCredits();
 
-// Attributes
-  public:
-    CFont font;
-    BOOL haveFont;
-    CRect crRect;
-    int scrollofs;
-    CBitmap bm;
-    BOOL timer;
-    BOOL virgin;
+		// Attributes
+	public:
+		CFont font;
+		BOOL haveFont;
+		CRect crRect;
+		int scrollofs;
+		CBitmap bm;
+		BOOL timer;
+		BOOL virgin;
 
-// Operations
-  public:
-    void BuildBitmap(CDC * dc);
+		// Operations
+	public:
+		void BuildBitmap(CDC * dc);
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CCredits)
-  public:
-     virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName,
-			 DWORD dwStyle, const RECT & rect,
-			 CWnd * pParentWnd, UINT nID,
-			 CCreateContext * pContext = NULL);
-    virtual BOOL DestroyWindow();
-    //}}AFX_VIRTUAL
+		// Overrides
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CCredits)
+	public:
+		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName,
+				DWORD dwStyle, const RECT & rect,
+				CWnd * pParentWnd, UINT nID,
+				CCreateContext * pContext = NULL);
+		virtual BOOL DestroyWindow();
+		//}}AFX_VIRTUAL
 
-// Implementation
-  public:
-     virtual ~ CCredits();
+		// Implementation
+	public:
+		virtual ~ CCredits();
 
-    // Generated message map functions
-  protected:
-    //{{AFX_MSG(CCredits)
-     afx_msg void OnPaint();
-    afx_msg void OnTimer(UINT nIDEvent);
-    //}}AFX_MSG
+		// Generated message map functions
+	protected:
+		//{{AFX_MSG(CCredits)
+		afx_msg void OnPaint();
+		afx_msg void OnTimer(UINT nIDEvent);
+		//}}AFX_MSG
 
-     DECLARE_MESSAGE_MAP()
+		DECLARE_MESSAGE_MAP()
 };
 
 ////////////////////////////////////////////////////////////////////////////
 
 class CAboutDlg:public CDialog {
-  public:
-    CAboutDlg();
+	public:
+		CAboutDlg();
 
-// Dialog Data
-    //{{AFX_DATA(CAboutDlg)
-    enum { IDD = IDD_ABOUTBOX };
-    CCredits m_credits;
-    //}}AFX_DATA
+		// Dialog Data
+		//{{AFX_DATA(CAboutDlg)
+		enum { IDD = IDD_ABOUTBOX };
+		CCredits m_credits;
+		//}}AFX_DATA
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAboutDlg)
-  protected:
-     virtual void DoDataExchange(CDataExchange * pDX);	// DDX/DDV support
-    //}}AFX_VIRTUAL
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CAboutDlg)
+	protected:
+		virtual void DoDataExchange(CDataExchange * pDX);	// DDX/DDV support
+		//}}AFX_VIRTUAL
 
-// Implementation
-  protected:
-    //{{AFX_MSG(CAboutDlg)
-     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
-     DECLARE_MESSAGE_MAP()
+		// Implementation
+	protected:
+		//{{AFX_MSG(CAboutDlg)
+		virtual BOOL OnInitDialog();
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };

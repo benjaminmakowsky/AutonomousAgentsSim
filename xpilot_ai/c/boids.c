@@ -583,6 +583,7 @@ void handleMsgBuffer()
 //accordingly.
 AI_loop()
 {
+
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 

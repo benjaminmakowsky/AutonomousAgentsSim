@@ -22,13 +22,13 @@
  */
 
 /***************************************************************************\
-*  winAudio.h - XPilotNT Windoze audio interface module						*
-\***************************************************************************/
+ *  winAudio.h - XPilotNT Windoze audio interface module						*
+ \***************************************************************************/
 #ifdef SOUND
 
 extern int audioDeviceInit(char *display);
 extern void audioDeviceEvents();
 extern void audioDevicePlay(char *filename, int type, int volume,
-			    void **private);
+		void **private);
 
 #endif

@@ -37,10 +37,10 @@
 #define MAX_SUPPORTED_FPS		255
 
 typedef struct {
-    int view_width;
-    int view_height;
-    int spark_rand;
-    int num_spark_colors;
+	int view_width;
+	int view_height;
+	int spark_rand;
+	int num_spark_colors;
 } display_t;
 
 extern int	 receive_window_size;
@@ -49,9 +49,9 @@ extern bool      packetMeasurement;
 extern display_t server_display; /* the servers idea about our display */
 
 typedef struct {
-    int movement;
-    double turnspeed;
-    int id;
+	int movement;
+	double turnspeed;
+	int id;
 } pointer_move_t;
 
 #define MAX_POINTER_MOVES 128

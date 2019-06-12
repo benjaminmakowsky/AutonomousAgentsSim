@@ -22,31 +22,31 @@
  */
 
 /***************************************************************************\
-*  winXThread.h - X11 to Windoze converter									*
-*																			*
-*  XPilot specific:															*
-*  This module is an attempt at running the BitBlt in another thread.		*
-*																			*
-*  					*
-\***************************************************************************/
+ *  winXThread.h - X11 to Windoze converter									*
+ *																			*
+ *  XPilot specific:															*
+ *  This module is an attempt at running the BitBlt in another thread.		*
+ *																			*
+ *  					*
+ \***************************************************************************/
 
 #ifndef WINXTHREAD_H
 #define WINXTHREAD_H
 
 typedef struct {
-    HDC hDC;
-    HDC hBmpDC;
-    RECT rect;
-    HWND hWnd;
-    Window w;
-    int isDrawing;
-    HPALETTE myPal;
+	HDC hDC;
+	HDC hBmpDC;
+	RECT rect;
+	HWND hWnd;
+	Window w;
+	int isDrawing;
+	HPALETTE myPal;
 
 
-    HANDLE eventDraw;
-    HANDLE eventNotDrawing;
-    HANDLE eventKillServerThread;
-    HANDLE eventServerThreadKilled;
+	HANDLE eventDraw;
+	HANDLE eventNotDrawing;
+	HANDLE eventKillServerThread;
+	HANDLE eventServerThreadKilled;
 } _dinfo;
 
 extern _dinfo dinfo;

@@ -105,47 +105,47 @@ void Cannon_set_option(cannon_t *cannon, const char *name, const char *value);
 
 static inline int Cannon_get_smartness(cannon_t *c)
 {
-    if (c->smartness != -1)
-	return c->smartness;
-    return options.cannonSmartness;
+	if (c->smartness != -1)
+		return c->smartness;
+	return options.cannonSmartness;
 }
 
 static inline double Cannon_get_min_shot_life(cannon_t *c)
 {
-    return options.minCannonShotLife;
+	return options.minCannonShotLife;
 }
 
 static inline double Cannon_get_max_shot_life(cannon_t *c)
 {
-    return options.maxCannonShotLife;
+	return options.maxCannonShotLife;
 }
 
 static inline double Cannon_get_shot_life(cannon_t *cannon)
 {
-    double minlife, maxlife, d;
+	double minlife, maxlife, d;
 
-    minlife = Cannon_get_min_shot_life(cannon);
-    maxlife = Cannon_get_max_shot_life(cannon);
-    d = maxlife - minlife;
+	minlife = Cannon_get_min_shot_life(cannon);
+	maxlife = Cannon_get_max_shot_life(cannon);
+	d = maxlife - minlife;
 
-    return minlife + rfrac() * d;
+	return minlife + rfrac() * d;
 }
 
 static inline double Cannon_get_shot_speed(cannon_t *cannon)
 {
-    if (cannon->shot_speed > 0)
-	return cannon->shot_speed;
-    return options.cannonShotSpeed;
+	if (cannon->shot_speed > 0)
+		return cannon->shot_speed;
+	return options.cannonShotSpeed;
 }
 
 static inline cannon_t *Cannon_by_id(int id)
 {
-    int ind;
+	int ind;
 
-    if (id < MIN_CANNON_ID || id > MAX_CANNON_ID)
-	return NULL;
-    ind = id - MIN_CANNON_ID;
-    return Cannon_by_index(ind);
+	if (id < MIN_CANNON_ID || id > MAX_CANNON_ID)
+		return NULL;
+	ind = id - MIN_CANNON_ID;
+	return Cannon_by_index(ind);
 }
 
 #endif

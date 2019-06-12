@@ -48,11 +48,11 @@
 typedef int click_t;
 
 typedef struct {
-    click_t		cx, cy;
+	click_t		cx, cy;
 } clpos_t;
 
 typedef struct {
-    click_t		cx, cy;
+	click_t		cx, cy;
 } clvec_t;
 
 #define CLICK_SHIFT		6
@@ -70,12 +70,12 @@ typedef struct {
  */
 static inline blkpos_t Clpos_to_blkpos(clpos_t pos)
 {
-    blkpos_t bpos;
+	blkpos_t bpos;
 
-    bpos.bx = CLICK_TO_BLOCK(pos.cx);
-    bpos.by = CLICK_TO_BLOCK(pos.cy);
+	bpos.bx = CLICK_TO_BLOCK(pos.cx);
+	bpos.by = CLICK_TO_BLOCK(pos.cy);
 
-    return bpos;
+	return bpos;
 }
 
 #define BLOCK_CENTER(B) ((int)((B) * BLOCK_CLICKS) + BLOCK_CLICKS / 2)
@@ -83,12 +83,12 @@ static inline blkpos_t Clpos_to_blkpos(clpos_t pos)
 /* calculate the clpos of the center of a block */
 static inline clpos_t Block_get_center_clpos(blkpos_t bpos)
 {
-    clpos_t pos;
+	clpos_t pos;
 
-    pos.cx = (bpos.bx * BLOCK_CLICKS) + BLOCK_CLICKS / 2;
-    pos.cy = (bpos.by * BLOCK_CLICKS) + BLOCK_CLICKS / 2;
+	pos.cx = (bpos.bx * BLOCK_CLICKS) + BLOCK_CLICKS / 2;
+	pos.cy = (bpos.by * BLOCK_CLICKS) + BLOCK_CLICKS / 2;
 
-    return pos;
+	return pos;
 }
 
 #endif

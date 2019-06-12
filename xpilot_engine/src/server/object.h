@@ -91,8 +91,8 @@
 #define LOCK_NONE		0x00	/* No lock */
 #define LOCK_PLAYER		0x01	/* Locked on player */
 #define LOCK_VISIBLE		0x02	/* Lock information was on HUD */
-					/* computed just before frame shown */
-					/* and client input checked */
+/* computed just before frame shown */
+/* and client input checked */
 #define LOCKBANK_MAX		4	/* Maximum number of locks in bank */
 
 /*
@@ -100,39 +100,39 @@
  */
 typedef struct cell_node cell_node_t;
 struct cell_node {
-    cell_node_t		*next;
-    cell_node_t		*prev;
+	cell_node_t		*next;
+	cell_node_t		*prev;
 };
 
 
 #define OBJECT_BASE	\
-    short		id;		/* For shots => id of player */	\
-    uint16_t		team;		/* Team of player or cannon */	\
+	short		id;		/* For shots => id of player */	\
+uint16_t		team;		/* Team of player or cannon */	\
 /* Object position pos must only be changed with the proper functions! */ \
-    clpos_t		pos;		/* World coordinates */		\
-    clpos_t		prevpos;	/* previous position */		\
-    clpos_t		extmove;	/* For collision detection */	\
-    float		wall_time;	/* bounce/crash time within frame */ \
-    vector_t		vel;		/* speed in x,y */		\
-    vector_t		acc;		/* acceleration in x,y */	\
-    float		mass;		/* mass in unigrams */		\
-    float		life;		/* No of ticks left to live */	\
-    modifiers_t		mods;		/* Modifiers to this object */	\
-    uint8_t		type;		/* one of OBJ_XXX */		\
-    uint8_t		color;		/* Color of object */		\
-    uint8_t		collmode;	/* collision checking mode */	\
-    uint8_t		missile_dir;	/* missile direction */		\
-    short		wormHoleHit;	\
-    short		wormHoleDest;	\
-    uint16_t		obj_status;	/* gravity, etc. */		\
+clpos_t		pos;		/* World coordinates */		\
+clpos_t		prevpos;	/* previous position */		\
+clpos_t		extmove;	/* For collision detection */	\
+float		wall_time;	/* bounce/crash time within frame */ \
+vector_t		vel;		/* speed in x,y */		\
+vector_t		acc;		/* acceleration in x,y */	\
+float		mass;		/* mass in unigrams */		\
+float		life;		/* No of ticks left to live */	\
+modifiers_t		mods;		/* Modifiers to this object */	\
+uint8_t		type;		/* one of OBJ_XXX */		\
+uint8_t		color;		/* Color of object */		\
+uint8_t		collmode;	/* collision checking mode */	\
+uint8_t		missile_dir;	/* missile direction */		\
+short		wormHoleHit;	\
+short		wormHoleDest;	\
+uint16_t		obj_status;	/* gravity, etc. */		\
 
 /* up to here all object types are the same as all player types. */
 
 #define OBJECT_EXTEND	\
-    cell_node_t		cell;		/* node in cell linked list */	\
-    short		pl_range;	/* distance for collision */	\
-    short		pl_radius;	/* distance for hit */		\
-    float		fuse;		/* ticks until fused */ \
+	cell_node_t		cell;		/* node in cell linked list */	\
+short		pl_range;	/* distance for collision */	\
+short		pl_radius;	/* distance for hit */		\
+float		fuse;		/* ticks until fused */ \
 
 /* up to here all object types are the same. */
 
@@ -143,9 +143,9 @@ struct cell_node {
 typedef struct xp_object object_t;
 struct xp_object {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
 #define OBJ_IND(ind)	(Obj[(ind)])
 #define OBJ_PTR(ptr)	((object_t *)(ptr))
@@ -157,14 +157,14 @@ struct xp_object {
 typedef struct xp_mineobject mineobject_t;
 struct xp_mineobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    float		mine_count;	/* Misc snafus */
-    float		mine_ecm_range;	/* Range from last ecm center */
-    float		mine_spread_left;	/* how much spread time left */
-    short 		mine_owner;		/* Who's object is this ? */
+		float		mine_count;	/* Misc snafus */
+	float		mine_ecm_range;	/* Range from last ecm center */
+	float		mine_spread_left;	/* how much spread time left */
+	short 		mine_owner;		/* Who's object is this ? */
 
 #define MINE_IND(ind)	((mineobject_t *)Obj[(ind)])
 #define MINE_PTR(ptr)	((mineobject_t *)(ptr))
@@ -172,8 +172,8 @@ struct xp_mineobject {
 
 
 #define MISSILE_EXTEND		\
-    float		missile_max_speed;	/* speed limitation */	\
-    float		missile_turnspeed;	/* how fast to turn */
+	float		missile_max_speed;	/* speed limitation */	\
+float		missile_turnspeed;	/* how fast to turn */
 
 
 /* up to here all missiles types are the same. */
@@ -184,11 +184,11 @@ struct xp_mineobject {
 typedef struct xp_missileobject missileobject_t;
 struct xp_missileobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    MISSILE_EXTEND
+		MISSILE_EXTEND
 
 #define MISSILE_IND(ind)	((missileobject_t *)Obj[(ind)])
 #define MISSILE_PTR(ptr)	((missileobject_t *)(ptr))
@@ -201,16 +201,16 @@ struct xp_missileobject {
 typedef struct xp_smartobject smartobject_t;
 struct xp_smartobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    MISSILE_EXTEND
+		MISSILE_EXTEND
 
-    float		smart_ecm_range;	/* Range from last ecm center*/
-    float		smart_count;	/* Misc snafus */
-    short		smart_lock_id;	/* snafu */
-    short		smart_relock_id;	/* smart re-lock id */
+		float		smart_ecm_range;	/* Range from last ecm center*/
+	float		smart_count;	/* Misc snafus */
+	short		smart_lock_id;	/* snafu */
+	short		smart_relock_id;	/* smart re-lock id */
 
 #define SMART_IND(ind)	((smartobject_t *)Obj[(ind)])
 #define SMART_PTR(ptr)	((smartobject_t *)(ptr))
@@ -223,14 +223,14 @@ struct xp_smartobject {
 typedef struct xp_torpobject torpobject_t;
 struct xp_torpobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    MISSILE_EXTEND
+		MISSILE_EXTEND
 
-    float		torp_spread_left;	/* how much spread time left */
-    float		torp_count;	/* Misc snafus */
+		float		torp_spread_left;	/* how much spread time left */
+	float		torp_count;	/* Misc snafus */
 
 #define TORP_IND(ind)	((torpobject_t *)Obj[(ind)])
 #define TORP_PTR(ptr)	((torpobject_t *)(ptr))
@@ -243,14 +243,14 @@ struct xp_torpobject {
 typedef struct xp_heatobject heatobject_t;
 struct xp_heatobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    MISSILE_EXTEND
+		MISSILE_EXTEND
 
-    float		heat_count;	/* Misc snafus */
-    short		heat_lock_id;	/* snafu */
+		float		heat_count;	/* Misc snafus */
+	short		heat_lock_id;	/* snafu */
 
 #define HEAT_IND(ind)	((heatobject_t *)Obj[(ind)])
 #define HEAT_PTR(ptr)	((heatobject_t *)(ptr))
@@ -263,14 +263,14 @@ struct xp_heatobject {
 typedef struct xp_ballobject ballobject_t;
 struct xp_ballobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    double		ball_loose_ticks;
-    treasure_t		*ball_treasure;	/* treasure for ball */
-    short 		ball_owner;	/* Who's object is this ? */
-    short		ball_style;	/* What polystyle to use */
+		double		ball_loose_ticks;
+	treasure_t		*ball_treasure;	/* treasure for ball */
+	short 		ball_owner;	/* Who's object is this ? */
+	short		ball_style;	/* What polystyle to use */
 
 #define BALL_IND(ind)	((ballobject_t *)Obj[(ind)])
 #define BALL_PTR(obj)	((ballobject_t *)(obj))
@@ -283,15 +283,15 @@ struct xp_ballobject {
 typedef struct xp_wireobject wireobject_t;
 struct xp_wireobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    float		wire_turnspeed;	/* how fast to turn */
+		float		wire_turnspeed;	/* how fast to turn */
 
-    uint8_t		wire_type;	/* Type of object */
-    uint8_t		wire_size;	/* Size of object */
-    uint8_t		wire_rotation;	/* Rotation direction */
+	uint8_t		wire_type;	/* Type of object */
+	uint8_t		wire_size;	/* Size of object */
+	uint8_t		wire_rotation;	/* Rotation direction */
 
 #define WIRE_IND(ind)	((wireobject_t *)Obj[(ind)])
 #define WIRE_PTR(obj)	((wireobject_t *)(obj))
@@ -304,13 +304,13 @@ struct xp_wireobject {
 typedef struct xp_pulseobject pulseobject_t;
 struct xp_pulseobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    float		pulse_len;	/* Length of the pulse */
-    uint8_t		pulse_dir;	/* Direction of the pulse */
-    bool		pulse_refl;	/* Pulse was reflected ? */
+		float		pulse_len;	/* Length of the pulse */
+	uint8_t		pulse_dir;	/* Direction of the pulse */
+	bool		pulse_refl;	/* Pulse was reflected ? */
 
 #define PULSE_IND(ind)	((pulseobject_t *)Obj[(ind)])
 #define PULSE_PTR(obj)	((pulseobject_t *)(obj))
@@ -323,12 +323,12 @@ struct xp_pulseobject {
 typedef struct xp_itemobject itemobject_t;
 struct xp_itemobject {
 
-    OBJECT_BASE
+	OBJECT_BASE
 
-    OBJECT_EXTEND
+		OBJECT_EXTEND
 
-    int			item_type;	/* One of ITEM_* */
-    int			item_count;	/* Misc snafus */
+		int			item_type;	/* One of ITEM_* */
+	int			item_count;	/* Misc snafus */
 
 #define ITEM_IND(ind)	((itemobject_t *)Obj[(ind)])
 #define ITEM_PTR(obj)	((itemobject_t *)(obj))
@@ -340,16 +340,16 @@ struct xp_itemobject {
  */
 typedef union xp_anyobject anyobject_t;
 union xp_anyobject {
-    object_t		obj;
-    ballobject_t	ball;
-    mineobject_t	mine;
-    missileobject_t	missile;
-    smartobject_t	smart;
-    torpobject_t	torp;
-    heatobject_t	heat;
-    wireobject_t	wireobj;
-    pulseobject_t	pulse;
-    itemobject_t	item;
+	object_t		obj;
+	ballobject_t	ball;
+	mineobject_t	mine;
+	missileobject_t	missile;
+	smartobject_t	smart;
+	torpobject_t	torp;
+	heatobject_t	heat;
+	wireobject_t	wireobj;
+	pulseobject_t	pulse;
+	itemobject_t	item;
 };
 
 #endif

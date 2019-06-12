@@ -25,19 +25,19 @@
 
 
 class CBSString:public CString {
-  public:
-    CBSString();
-    CBSString(const char *psz);
-     CBSString(const CBSString & stringSrc);
-     CBSString(const CString & stringSrc);
-     CBSString(const CBSString * cbs);
+	public:
+		CBSString();
+		CBSString(const char *psz);
+		CBSString(const CBSString & stringSrc);
+		CBSString(const CString & stringSrc);
+		CBSString(const CBSString * cbs);
 
-    CBSString GetToken();
-    CBSString SkipToken();
-    CBSString SkipSpace();
+		CBSString GetToken();
+		CBSString SkipToken();
+		CBSString SkipSpace();
 
-    int MatchToken(const char *list[]);
-    COLORREF ParseColor();
-    POINT ParsePoint();
-    CRect ParseRect();
+		int MatchToken(const char *list[]);
+		COLORREF ParseColor();
+		POINT ParsePoint();
+		CRect ParseRect();
 };

@@ -74,18 +74,18 @@ extern double		tbl_sin[];
 extern double		tbl_cos[];
 
 #if 0
-  /* The way it was: one table, and always range checking. */
+/* The way it was: one table, and always range checking. */
 # define tsin(x)	(tbl_sin[MOD2(x, TABLE_SIZE)])
 # define tcos(x)	(tbl_sin[MOD2((x)+TABLE_SIZE/4, TABLE_SIZE)])
 #else
 # if 0
-   /* Range checking: find out where the table size is exceeded. */
+/* Range checking: find out where the table size is exceeded. */
 #  define CHK2(x, m)	((MOD2(x, m) != x) ? (printf("MOD %s:%d:%s\n", __FILE__, __LINE__, #x), MOD2(x, m)) : (x))
 # else
-   /* No range checking. */
+/* No range checking. */
 #  define CHK2(x, m)	(x)
 # endif
-  /* New table lookup with optional range checking and no extra calculations. */
+/* New table lookup with optional range checking and no extra calculations. */
 # define tsin(x)	(tbl_sin[CHK2(x, TABLE_SIZE)])
 # define tcos(x)	(tbl_cos[CHK2(x, TABLE_SIZE)])
 #endif
@@ -112,15 +112,15 @@ extern double		tbl_cos[];
 
 /* borrowed from autobook */
 #define XCALLOC(type, num) \
-        ((type *) calloc ((num), sizeof(type)))
+	((type *) calloc ((num), sizeof(type)))
 #define XMALLOC(type, num) \
-        ((type *) malloc ((num) * sizeof(type)))
+	((type *) malloc ((num) * sizeof(type)))
 #define XREALLOC(type, p, num) \
-        ((type *) realloc ((p), (num) * sizeof(type)))
+	((type *) realloc ((p), (num) * sizeof(type)))
 #define XFREE(ptr) \
-do { \
-    if (ptr) { free(ptr);  ptr = NULL; } \
-} while (0)
+	do { \
+		if (ptr) { free(ptr);  ptr = NULL; } \
+	} while (0)
 
 /* Use this to remove unused parameter warning. */
 #define UNUSED_PARAM(x) x = x

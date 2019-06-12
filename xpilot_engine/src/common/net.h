@@ -70,12 +70,12 @@
  * the number of network packets.
  */
 typedef struct {
-    sock_t	sock;		/* socket filedescriptor */
-    char	*buf;		/* i/o data buffer */
-    int		size;		/* size of buffer */
-    int		len;		/* amount of data in buffer (writing/reading) */
-    char	*ptr;		/* current position in buffer (reading) */
-    int		state;		/* read/write/locked/error status flags */
+	sock_t	sock;		/* socket filedescriptor */
+	char	*buf;		/* i/o data buffer */
+	int		size;		/* size of buffer */
+	int		len;		/* amount of data in buffer (writing/reading) */
+	char	*ptr;		/* current position in buffer (reading) */
+	int		state;		/* read/write/locked/error status flags */
 } sockbuf_t;
 
 extern int last_packet_of_frame;

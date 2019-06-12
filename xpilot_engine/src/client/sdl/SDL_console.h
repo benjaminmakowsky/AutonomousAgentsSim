@@ -1,24 +1,24 @@
 /*
-	SDL_console: An easy to use drop-down console based on the SDL library
-	Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Clemens Wacha
-	
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Library General Public
-	License as published by the Free Software Foundation; either
-	version 2 of the License, or (at your option) any later version.
-	
-	This library is distributed in the hope that it will be useful,
-	but WHITOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Library General Public License for more details.
-	
-	You should have received a copy of the GNU Library Generla Public
-	License along with this library; if not, write to the Free
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-	
-	Clemens Wacha
-	reflex-2000@gmx.net
-*/
+SDL_console: An easy to use drop-down console based on the SDL library
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Clemens Wacha
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WHITOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
+
+You should have received a copy of the GNU Library Generla Public
+License along with this library; if not, write to the Free
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+Clemens Wacha
+reflex-2000@gmx.net
+ */
 
 #ifndef SDL_CONSOLE_H
 #define SDL_CONSOLE_H
@@ -33,9 +33,9 @@
 #endif
 
 /*! Number of visible characters in a line. Lines in the history, the commandline, or CON_Out strings cannot be longer
-	than this. Remark that this number does NOT include the '/0' character at the end of a string. So if we create
-	a string we do this char* mystring[CON_CHARS_PER_LINE + 1];
-	*/
+  than this. Remark that this number does NOT include the '/0' character at the end of a string. So if we create
+  a string we do this char* mystring[CON_CHARS_PER_LINE + 1];
+ */
 #define CON_CHARS_PER_LINE   127
 /*! Cursor blink frequency in ms */
 #define CON_BLINK_RATE       500
@@ -62,10 +62,10 @@ extern "C" {
 #endif
 
 	enum {
-	    CON_CLOSED,	/*! The console is closed (and not shown) */
-	    CON_CLOSING,	/*! The console is still open and visible but closing. After it has completely disappeared it changes to CON_CLOSED */
-	    CON_OPENING,	/*! The console is visible and opening but not yet fully open. Changes to CON_OPEN when done */
-	    CON_OPEN	/*! The console is open and visible */
+		CON_CLOSED,	/*! The console is closed (and not shown) */
+		CON_CLOSING,	/*! The console is still open and visible but closing. After it has completely disappeared it changes to CON_CLOSED */
+		CON_OPENING,	/*! The console is visible and opening but not yet fully open. Changes to CON_OPEN when done */
+		CON_OPEN	/*! The console is open and visible */
 	};
 
 	/*! This is a struct for each consoles data */
@@ -107,9 +107,9 @@ extern "C" {
 	} ConsoleInformation;
 
 	/*! Takes keys from the keyboard and inputs them to the console if the console isVisible().
-		If the event was not handled (i.e. WM events or unknown ctrl- or alt-sequences) 
-		the function returns the event for further processing. ***The prototype of this function will change in the next major release to
-		int CON_Events(ConsoleInformation* console, SDL_Event *event) ***/
+	  If the event was not handled (i.e. WM events or unknown ctrl- or alt-sequences) 
+	  the function returns the event for further processing. ***The prototype of this function will change in the next major release to
+	  int CON_Events(ConsoleInformation* console, SDL_Event *event) ***/
 	extern DECLSPEC SDL_Event* SDLCALL CON_Events(SDL_Event *event);
 	/*! Makes the console visible */
 	extern DECLSPEC void SDLCALL CON_Show(ConsoleInformation *console);
@@ -122,11 +122,11 @@ extern "C" {
 	/*! Draws the console to the screen if it is visible (NOT if it isVisible()). It get's drawn if it is REALLY visible ;-) */
 	extern DECLSPEC void SDLCALL CON_DrawConsole(ConsoleInformation *console);
 	/*! Initializes a new console.
-		@param FontName A filename of an image containing the font. Look at the example code for the image contents
-		@param DisplayScreen The VideoSurface we are blitting to. ***This was not a very intelligent move. I will change this in the next major release.
-		CON_DrawConsole will then no more blit the console to this surface but give you a pointer to ConsoleSurface when all updates are done***
-		@param lines The total number of lines in the history
-		@param rect Position and size of the new console */
+	  @param FontName A filename of an image containing the font. Look at the example code for the image contents
+	  @param DisplayScreen The VideoSurface we are blitting to. ***This was not a very intelligent move. I will change this in the next major release.
+	  CON_DrawConsole will then no more blit the console to this surface but give you a pointer to ConsoleSurface when all updates are done***
+	  @param lines The total number of lines in the history
+	  @param rect Position and size of the new console */
 	extern DECLSPEC ConsoleInformation* SDLCALL CON_Init(const char *FontName, SDL_Surface *DisplayScreen, int lines, SDL_Rect rect);
 	/*! Frees DT_DrawText and calls CON_Free */
 	extern DECLSPEC void SDLCALL CON_Destroy(ConsoleInformation *console);
@@ -135,10 +135,10 @@ extern "C" {
 	/*! Function to send text to the console. Works exactly like printf and supports the same format */
 	extern DECLSPEC void SDLCALL CON_Out(ConsoleInformation *console, const char *str, ...);
 	/*! Sets the alpha level of the console to the specified value (0 - transparent,
-		255 - opaque). Use this function also for OpenGL. */
+	  255 - opaque). Use this function also for OpenGL. */
 	extern DECLSPEC void SDLCALL CON_Alpha(ConsoleInformation *console, unsigned char alpha);
 	/*! Internal: Sets the alpha channel of an SDL_Surface to the specified value.
-		Preconditions: the surface in question is RGBA. 0 <= a <= 255, where 0 is transparent and 255 opaque */
+Preconditions: the surface in question is RGBA. 0 <= a <= 255, where 0 is transparent and 255 opaque */
 	extern DECLSPEC void SDLCALL CON_AlphaGL(SDL_Surface *s, int alpha);
 	/*! Sets a background image for the console */
 	extern DECLSPEC int SDLCALL CON_Background(ConsoleInformation *console, const char *image, int x, int y);
@@ -147,31 +147,31 @@ extern "C" {
 	/*! Changes the size of the console */
 	extern DECLSPEC int SDLCALL CON_Resize(ConsoleInformation *console, SDL_Rect rect);
 	/*! Beams a console to another screen surface. Needed if you want to make a Video restart in your program. This
-		function first changes the OutputScreen Pointer then calls CON_Resize to adjust the new size. ***Will disappear in the next major release. Instead
-		i will introduce a new function called CON_ReInit or something that adjusts the internal parameters etc *** */
+	  function first changes the OutputScreen Pointer then calls CON_Resize to adjust the new size. ***Will disappear in the next major release. Instead
+	  i will introduce a new function called CON_ReInit or something that adjusts the internal parameters etc *** */
 	extern DECLSPEC int SDLCALL CON_Transfer(ConsoleInformation* console, SDL_Surface* new_outputscreen, SDL_Rect rect);
 	/*! Give focus to a console. Make it the "topmost" console. This console will receive events
-		sent with CON_Events() ***Will disappear in the next major release. There is no need for such a focus model *** */
+	  sent with CON_Events() ***Will disappear in the next major release. There is no need for such a focus model *** */
 	extern DECLSPEC void SDLCALL CON_Topmost(ConsoleInformation *console);
 	/*! Modify the prompt of the console. If you want a backslash you will have to escape it. */
 	extern DECLSPEC void SDLCALL CON_SetPrompt(ConsoleInformation *console, const char* newprompt);
 	/*! Set the key, that invokes a CON_Hide() after press. default is ESCAPE and you can always hide using
-		ESCAPE and the HideKey (2 keys for hiding). compared against event->key.keysym.sym !! */
+	  ESCAPE and the HideKey (2 keys for hiding). compared against event->key.keysym.sym !! */
 	extern DECLSPEC void SDLCALL CON_SetHideKey(ConsoleInformation *console, int key);
 	/*! Internal: executes the command typed in at the console (called if you press 'Return')*/
 	extern DECLSPEC void SDLCALL CON_Execute(ConsoleInformation *console, char* command);
 	/*! Sets the callback function that is called if a command was typed in. The function you would like to use as the callback will have to
-		look like this: <br>
-		<b> void my_command_handler(ConsoleInformation* console, char* command)</b> <br><br>
-		You will then call the function like this:<br><b> 
-		CON_SetExecuteFunction(console, my_command_handler)</b><br><br>
-		If this is not clear look at the example program */
+	  look like this: <br>
+	  <b> void my_command_handler(ConsoleInformation* console, char* command)</b> <br><br>
+	  You will then call the function like this:<br><b> 
+	  CON_SetExecuteFunction(console, my_command_handler)</b><br><br>
+	  If this is not clear look at the example program */
 	extern DECLSPEC void SDLCALL CON_SetExecuteFunction(ConsoleInformation *console, void(*CmdFunction)(ConsoleInformation *console2, char* command));
 	/*! Sets the callback function that is called if you press the 'Tab' key. The function has to look like this:<br><b> 
-		char* my_tabcompletion(char* command)</b><br><br>
-		The commandline on the left side of the cursor gets passed over to your function. You will then have to make your
-		own tab-complete and return the completed string as return value. If you have nothing to complete you can return
-		NULL or the string you got. ***Will change in the next major release to char* mytabfunction(ConsoleInformation* console, char* command) *** */
+	  char* my_tabcompletion(char* command)</b><br><br>
+	  The commandline on the left side of the cursor gets passed over to your function. You will then have to make your
+	  own tab-complete and return the completed string as return value. If you have nothing to complete you can return
+	  NULL or the string you got. ***Will change in the next major release to char* mytabfunction(ConsoleInformation* console, char* command) *** */
 	extern DECLSPEC void SDLCALL CON_SetTabCompletion(ConsoleInformation *console, char*(*TabFunction)(char* command));
 	/*! Internal: Gets called when TAB was pressed and executes the function you have earlier registered with CON_SetTabCompletion() */
 	extern DECLSPEC void SDLCALL CON_TabCompletion(ConsoleInformation *console);
@@ -189,7 +189,7 @@ extern "C" {
 	extern DECLSPEC char* SDLCALL Default_TabFunction(char* command);
 
 	/*! Internal: draws the commandline the user is typing in to the screen. Called from within CON_DrawConsole() *** Will change in the next major release to
-		void DrawCommandLine(ConsoleInformation* console) *** */
+	  void DrawCommandLine(ConsoleInformation* console) *** */
 	extern DECLSPEC void SDLCALL DrawCommandLine(void);
 
 	/*! Internal: Gets called if you press the LEFT key (move cursor left) */
@@ -197,7 +197,7 @@ extern "C" {
 	/*! Internal: Gets called if you press the RIGHT key (move cursor right) */
 	extern DECLSPEC void SDLCALL Cursor_Right(ConsoleInformation *console);
 	/*! Internal: Gets called if you press the HOME key (move cursor to the beginning
-	of the line */
+	  of the line */
 	extern DECLSPEC void SDLCALL Cursor_Home(ConsoleInformation *console);
 	/*! Internal: Gets called if you press the END key (move cursor to the end of the line*/
 	extern DECLSPEC void SDLCALL Cursor_End(ConsoleInformation *console);
@@ -207,10 +207,10 @@ extern "C" {
 	extern DECLSPEC void SDLCALL Cursor_BSpace(ConsoleInformation *console);
 	/*! Internal: Called if you type in a character (add the char to the command) */
 	extern DECLSPEC void SDLCALL Cursor_Add(ConsoleInformation *console, SDL_Event *event);
-    	
+
 	/* add string to commandline */
 	extern DECLSPEC void SDLCALL Add_String_to_Console(char *text);
-    	
+
 	/*! Internal: Called if you press Ctrl-C (deletes the commandline) */
 	extern DECLSPEC void SDLCALL Clear_Command(ConsoleInformation *console);
 	/*! Internal: Called if the command line has changed (assemles console->Command from LCommand and RCommand */
@@ -223,7 +223,7 @@ extern "C" {
 	/*! Internal: Called if you press DOWN key (switches through recent typed in commands */
 	extern DECLSPEC void SDLCALL Command_Down(ConsoleInformation *console);
 
-/* Ends C function definitions when using C++ */
+	/* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 };
 #endif

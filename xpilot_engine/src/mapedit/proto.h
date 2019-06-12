@@ -46,7 +46,7 @@ void Setup_default_server_options(void);
 void DrawTools(void);
 void DrawMap(int x, int y, int width, int height);
 void DrawMapSection(int x, int y, int width, int height,
-		    int xpos, int ypos);
+		int xpos, int ypos);
 void DrawMapPic(Window win, int x, int y, int picnum, int zoom);
 void DrawSmallMap(void);
 void UpdateSmallMap(int x, int y);

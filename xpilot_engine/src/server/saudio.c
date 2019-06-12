@@ -35,53 +35,53 @@
 
 static inline double sound_range(player_t *pl)
 {
-    return SOUND_DEFAULT_RANGE
-	+ pl->item[ITEM_SENSOR] * SOUND_DEFAULT_RANGE * SOUND_RANGE_FACTOR;
+	return SOUND_DEFAULT_RANGE
+		+ pl->item[ITEM_SENSOR] * SOUND_DEFAULT_RANGE * SOUND_RANGE_FACTOR;
 }
 
 typedef struct AudioQRec {
-    int index, volume;
-    struct AudioQRec *next;
+	int index, volume;
+	struct AudioQRec *next;
 } AudioQRec, *AudioQPtr;
 
 
 static void queue_audio(player_t * pl, int sound_ind, int volume)
 {
-    AudioQPtr a, p, prev;
+	AudioQPtr a, p, prev;
 
-    p = prev = (AudioQPtr) pl->audio;
+	p = prev = (AudioQPtr) pl->audio;
 
-    while (p) {
-	if (p->index == sound_ind) {	/* same sound already in queue */
-	    if (p->volume < volume)	/* weaker version: replace volume */
-		p->volume = volume;
-	    return;
+	while (p) {
+		if (p->index == sound_ind) {	/* same sound already in queue */
+			if (p->volume < volume)	/* weaker version: replace volume */
+				p->volume = volume;
+			return;
+		}
+		prev = p;
+		p = p->next;
 	}
-	prev = p;
-	p = p->next;
-    }
 
-    /* not found in queue: add to end */
-    if (!(a = (AudioQPtr) malloc(sizeof(AudioQRec))))
-	return;
+	/* not found in queue: add to end */
+	if (!(a = (AudioQPtr) malloc(sizeof(AudioQRec))))
+		return;
 
-    a->index = sound_ind;
-    a->volume = volume;
-    a->next = NULL;
+	a->index = sound_ind;
+	a->volume = volume;
+	a->next = NULL;
 
-    if (prev)
-	prev->next = a;
-    else
-	pl->audio = (void *) a;
+	if (prev)
+		prev->next = a;
+	else
+		pl->audio = (void *) a;
 }
 
 int sound_player_init(player_t * pl)
 {
-    SDBG(printf("sound_player_init %p\n", pl));
+	SDBG(printf("sound_player_init %p\n", pl));
 
-    pl->audio = NULL;
+	pl->audio = NULL;
 
-    return 0;
+	return 0;
 }
 
 /*
@@ -90,15 +90,15 @@ int sound_player_init(player_t * pl)
  */
 void sound_player_on(player_t * pl, int on)
 {
-    SDBG(printf("sound_player_on %p, %d\n", pl, on));
+	SDBG(printf("sound_player_on %p, %d\n", pl, on));
 
-    if (on) {
-	if (!pl->want_audio) {
-	    pl->want_audio = true;
-	    sound_play_player(pl, START_SOUND);
-	}
-    } else
-	pl->want_audio = false;
+	if (on) {
+		if (!pl->want_audio) {
+			pl->want_audio = true;
+			sound_play_player(pl, START_SOUND);
+		}
+	} else
+		pl->want_audio = false;
 }
 
 /*
@@ -106,13 +106,13 @@ void sound_player_on(player_t * pl, int on)
  */
 void sound_play_player(player_t * pl, int sound_ind)
 {
-    if (!options.sound)
-	return;
+	if (!options.sound)
+		return;
 
-    SDBG(printf("sound_play_player %p, %d\n", pl, sound_ind));
+	SDBG(printf("sound_play_player %p, %d\n", pl, sound_ind));
 
-    if (pl->want_audio)
-	queue_audio(pl, sound_ind, 100);
+	if (pl->want_audio)
+		queue_audio(pl, sound_ind, 100);
 }
 
 /*
@@ -120,19 +120,19 @@ void sound_play_player(player_t * pl, int sound_ind)
  */
 void sound_play_all(int sound_ind)
 {
-    int i;
+	int i;
 
-    if (!options.sound)
-	return;
+	if (!options.sound)
+		return;
 
-    SDBG(printf("sound_play_all %d\n", sound_ind));
+	SDBG(printf("sound_play_all %d\n", sound_ind));
 
-    for (i = 0; i < NumPlayers; i++) {
-	player_t *pl_i = Player_by_index(i);
+	for (i = 0; i < NumPlayers; i++) {
+		player_t *pl_i = Player_by_index(i);
 
-	if (pl_i->want_audio)
-	    sound_play_player(pl_i, sound_ind);
-    }
+		if (pl_i->want_audio)
+			sound_play_player(pl_i, sound_ind);
+	}
 }
 
 /*
@@ -143,70 +143,70 @@ void sound_play_all(int sound_ind)
  */
 void sound_play_sensors(clpos_t pos, int sound_ind)
 {
-    int i, volume;
-    double dx, dy, range, factor;
-    player_t *pl;
+	int i, volume;
+	double dx, dy, range, factor;
+	player_t *pl;
 
-    if (!options.sound)
-	return;
+	if (!options.sound)
+		return;
 
-    SDBG(printf("sound_play_sensors %d, %d, %d\n", cx, cy, sound_ind));
+	SDBG(printf("sound_play_sensors %d, %d, %d\n", cx, cy, sound_ind));
 
-    for (i = 0; i < NumPlayers; i++) {
-	pl = Player_by_index(i);
+	for (i = 0; i < NumPlayers; i++) {
+		pl = Player_by_index(i);
 
-	if (!pl->want_audio)
-	    continue;
+		if (!pl->want_audio)
+			continue;
 
-	dx = ABS(pl->pos.cx - pos.cx);
-	dy = ABS(pl->pos.cy - pos.cy);
-	range = sound_range(pl);
+		dx = ABS(pl->pos.cx - pos.cx);
+		dy = ABS(pl->pos.cy - pos.cy);
+		range = sound_range(pl);
 
-	if (dx >= 0 && dx <= range && dy >= 0 && dy <= range) {
-	    /*
-	     * scale the volume
-	     */
-	    factor = MAX(dx, dy) / range;
-	    volume =
-		(int) MAX(SOUND_MAX_VOLUME - SOUND_MAX_VOLUME * factor,
-			  SOUND_MIN_VOLUME);
-	    queue_audio(pl, sound_ind, volume);
+		if (dx >= 0 && dx <= range && dy >= 0 && dy <= range) {
+			/*
+			 * scale the volume
+			 */
+			factor = MAX(dx, dy) / range;
+			volume =
+				(int) MAX(SOUND_MAX_VOLUME - SOUND_MAX_VOLUME * factor,
+						SOUND_MIN_VOLUME);
+			queue_audio(pl, sound_ind, volume);
+		}
 	}
-    }
 }
 
 void sound_play_queued(player_t * pl)
 {
-    AudioQPtr p, n;
+	AudioQPtr p, n;
 
-    if (!options.sound)
-	return;
+	if (!options.sound)
+		return;
 
-    SDBG(printf("sound_play_sensors %p\n", pl));
+	SDBG(printf("sound_play_sensors %p\n", pl));
 
-    p = (AudioQPtr) pl->audio;
-    pl->audio = NULL;
+	p = (AudioQPtr) pl->audio;
+	pl->audio = NULL;
 
-    while (p) {
-	n = p->next;
-	Send_audio(pl->conn, p->index, p->volume);
-	free(p);
-	p = n;
-    }
+	while (p) {
+		n = p->next;
+		Send_audio(pl->conn, p->index, p->volume);
+		free(p);
+		p = n;
+	}
 }
 
 void sound_close(player_t * pl)
 {
-    AudioQPtr p, n;
+	AudioQPtr p, n;
 
-    SDBG(printf("sound_close %p\n", pl));
+	SDBG(printf("sound_close %p\n", pl));
 
-    p = (AudioQPtr) pl->audio;
-    pl->audio = NULL;
+	p = (AudioQPtr) pl->audio;
+	pl->audio = NULL;
 
-    while (p) {
-	n = p->next;
-	free(p);
-	p = n;
-    }
+	while (p) {
+		n = p->next;
+		free(p);
+		p = n;
+	}
 }

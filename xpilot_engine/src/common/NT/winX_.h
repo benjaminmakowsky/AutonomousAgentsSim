@@ -22,13 +22,13 @@
  */
 
 /***************************************************************************\
-*  winX.h - X11 to Windoze converter										*
-*																			*
-*  This file is the private interface to the Winodoze -> X11 translator.	*
-*  Here we hide the gory Windoze details from X11							*
-*																			*
-*  							*
-\***************************************************************************/
+ *  winX.h - X11 to Windoze converter										*
+ *																			*
+ *  This file is the private interface to the Winodoze -> X11 translator.	*
+ *  Here we hide the gory Windoze details from X11							*
+ *																			*
+ *  							*
+ \***************************************************************************/
 #ifndef	_WINX__H_
 #define	_WINX__H_
 
@@ -42,57 +42,57 @@
 #define	WINXFILELENGTH	32
 #define	XID_HEAD \
 	int		type; \
-	char	file[WINXFILELENGTH]; \
-	int		line;
+char	file[WINXFILELENGTH]; \
+int		line;
 
 struct XID_HWND {
-    XID_HEAD HDC hBmpDC;	// put this first so we can sneak use it easily
-    HDC hSaveDC;
-    HBITMAP hBmp;
-    HWND hWnd;
-    int drawtype;		// DT_1=0=1 bmp (use hBmpDC), DT_2=1=2 bmps (use hBmpDCa)
+	XID_HEAD HDC hBmpDC;	// put this first so we can sneak use it easily
+	HDC hSaveDC;
+	HBITMAP hBmp;
+	HWND hWnd;
+	int drawtype;		// DT_1=0=1 bmp (use hBmpDC), DT_2=1=2 bmps (use hBmpDCa)
 #define		DT_1	0
 #define		DT_2	1
 
-    long event_mask;		// which events this window cares about 
-    BOOL mouseover;		// used to track which window was "entered"
-    int bgcolor;
-    HDC hBmpDCa[2];
-    HBITMAP hBmpa[2];		// 2 bitmaps for ThreadedDraw
-    BOOL filling;		// which bitmap ThreadedDraw is filling
-    BOOL notmine;		// This window was not created by winX, and shouldn't be destroyed. (like top)
+	long event_mask;		// which events this window cares about 
+	BOOL mouseover;		// used to track which window was "entered"
+	int bgcolor;
+	HDC hBmpDCa[2];
+	HBITMAP hBmpa[2];		// 2 bitmaps for ThreadedDraw
+	BOOL filling;		// which bitmap ThreadedDraw is filling
+	BOOL notmine;		// This window was not created by winX, and shouldn't be destroyed. (like top)
 };
 typedef struct XID_HWND XID_HWND;
 
 struct XID_GC {
-    XID_HEAD int xidhwnd;
-    HFONT hfont;
-    XGCValues xgcv;
+	XID_HEAD int xidhwnd;
+	HFONT hfont;
+	XGCValues xgcv;
 };
 typedef struct XID_GC XID_GC;
 
 struct XID_PIXMAP {
-    XID_HEAD HDC hDC;		// In windows, a Bitmap is useless w/out a DC
-    HBITMAP hbm;
+	XID_HEAD HDC hDC;		// In windows, a Bitmap is useless w/out a DC
+	HBITMAP hbm;
 };
 typedef struct XID_PIXMAP XID_PIXMAP;
 
 struct XID_FONT {
-    XID_HEAD XFontStruct * font;
+	XID_HEAD XFontStruct * font;
 };
 typedef struct XID_FONT XID_FONT;
 
 struct XID_ANY {
-XID_HEAD};
+	XID_HEAD};
 typedef struct XID_ANY XID_ANY;
 
 union XIDTYPE {
-    int type;
-    XID_HWND hwnd;
-    XID_GC hgc;
-    XID_PIXMAP hpix;
-    XID_FONT font;
-    XID_ANY any;
+	int type;
+	XID_HWND hwnd;
+	XID_GC hgc;
+	XID_PIXMAP hpix;
+	XID_FONT font;
+	XID_ANY any;
 };
 typedef union XIDTYPE XIDTYPE;
 
@@ -118,8 +118,8 @@ extern LOGPALETTE *myLogPal;
 extern Window rootWindow;
 
 extern BOOL AngleArc2(HDC hdc, int X, int Y, DWORD dwRadius,
-		      double fStartDegrees, double fSweepDegrees,
-		      BOOL bFilled);
+		double fStartDegrees, double fSweepDegrees,
+		BOOL bFilled);
 
 // Scaling window stuff
 #define	SCALEPREC	100

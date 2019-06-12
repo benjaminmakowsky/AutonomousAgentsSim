@@ -22,13 +22,13 @@
  */
 
 /***************************************************************************\
-*  winXKey.h - X11 to Windoze converter										*
-*																			*
-*  This file contains X11 style kb definitions for Winodoze.				*
-*  These all come from Xutil.h												*
-*																			*
-*  							*
-\***************************************************************************/
+ *  winXKey.h - X11 to Windoze converter										*
+ *																			*
+ *  This file contains X11 style kb definitions for Winodoze.				*
+ *  These all come from Xutil.h												*
+ *																			*
+ *  							*
+ \***************************************************************************/
 #ifndef	_WINXKEY_H_
 #define	_WINXKEY_H_
 
@@ -39,8 +39,8 @@
  * Compose sequence status structure, used in calling XLookupString.
  */
 typedef struct _XComposeStatus {
-    XPointer compose_ptr;	/* state table pointer */
-    int chars_matched;		/* match state */
+	XPointer compose_ptr;	/* state table pointer */
+	int chars_matched;		/* match state */
 } XComposeStatus;
 
 /* lifted from keysymdef.h */
@@ -208,8 +208,8 @@ typedef struct _XComposeStatus {
 
 extern XLookupKeysym(XKeyEvent * key_event, int index);
 extern XLookupString(XKeyEvent * key_event, char *buffer_return,
-		     int bytes_buffer, KeySym * keysym_return,
-		     XComposeStatus * status_in_out);
+		int bytes_buffer, KeySym * keysym_return,
+		XComposeStatus * status_in_out);
 
 
 #endif				/* _WINDOWS */

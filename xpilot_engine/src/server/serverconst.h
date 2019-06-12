@@ -36,21 +36,21 @@
  */
 #define WRAP_XBLOCK(x_)	\
 	(BIT(World.rules->mode, WRAP_PLAY) \
-	    ? ((x_) < 0 \
-		? (x_) + World.x \
-		: ((x_) >= World.x \
-		    ? (x_) - World.x \
-		    : (x_))) \
-	    : (x_))
+	 ? ((x_) < 0 \
+		 ? (x_) + World.x \
+		 : ((x_) >= World.x \
+			 ? (x_) - World.x \
+			 : (x_))) \
+	 : (x_))
 
 #define WRAP_YBLOCK(y_)	\
 	(BIT(World.rules->mode, WRAP_PLAY) \
-	    ? ((y_) < 0 \
-		? (y_) + World.y \
-		: ((y_) >= World.y \
-		    ? (y_) - World.y \
-		    : (y_))) \
-	    : (y_))
+	 ? ((y_) < 0 \
+		 ? (y_) + World.y \
+		 : ((y_) >= World.y \
+			 ? (y_) - World.y \
+			 : (y_))) \
+	 : (y_))
 
 /*
  * Two macros for edge wrap of differences in position.
@@ -59,21 +59,21 @@
  */
 #define WRAP_DX(dx)	\
 	(BIT(World.rules->mode, WRAP_PLAY) \
-	    ? ((dx) < - (World.width >> 1) \
-		? (dx) + World.width \
-		: ((dx) > (World.width >> 1) \
-		    ? (dx) - World.width \
-		    : (dx))) \
-	    : (dx))
+	 ? ((dx) < - (World.width >> 1) \
+		 ? (dx) + World.width \
+		 : ((dx) > (World.width >> 1) \
+			 ? (dx) - World.width \
+			 : (dx))) \
+	 : (dx))
 
 #define WRAP_DY(dy)	\
 	(BIT(World.rules->mode, WRAP_PLAY) \
-	    ? ((dy) < - (World.height >> 1) \
-		? (dy) + World.height \
-		: ((dy) > (World.height >> 1) \
-		    ? (dy) - World.height \
-		    : (dy))) \
-	    : (dy))
+	 ? ((dy) < - (World.height >> 1) \
+		 ? (dy) + World.height \
+		 : ((dy) > (World.height >> 1) \
+			 ? (dy) - World.height \
+			 : (dy))) \
+	 : (dy))
 
 
 #define PSEUDO_TEAM(pl1,pl2)\
@@ -134,12 +134,12 @@
 #define MAX_AFTERBURNER	((1<<LG2_MAX_AFTERBURNER)-1)
 /*#define AFTER_BURN_SPARKS(s,n)  (((s)*(n))>>LG2_MAX_AFTERBURNER)*/
 #define AFTER_BURN_POWER_FACTOR(n) \
- (options.afterburnerPowerMult \
-  * (1.0+(n)*((ALT_SPARK_MASS_FACT-1.0)/(MAX_AFTERBURNER+1.0))))
+	(options.afterburnerPowerMult \
+	 * (1.0+(n)*((ALT_SPARK_MASS_FACT-1.0)/(MAX_AFTERBURNER+1.0))))
 #define AFTER_BURN_POWER(p,n)   \
- ((p)*AFTER_BURN_POWER_FACTOR(n))
+	((p)*AFTER_BURN_POWER_FACTOR(n))
 #define AFTER_BURN_FUEL(f,n)    \
- (((f)*((MAX_AFTERBURNER+1)+(n)*(ALT_FUEL_FACT-1)))/(MAX_AFTERBURNER+1.0))
+	(((f)*((MAX_AFTERBURNER+1)+(n)*(ALT_FUEL_FACT-1)))/(MAX_AFTERBURNER+1.0))
 
 #define THRUST_MASS	     0.7
 #define ARMOR_MASS		(options.shipMass / 14)
@@ -176,7 +176,7 @@
 #define CONFUSED_TIME		3
 #define TORPEDO_SPEED_TIME      (2 * 12)
 #define TORPEDO_ACC		((18.0*SMART_SHOT_MAX_SPEED)/\
-				(12*TORPEDO_SPEED_TIME))
+		(12*TORPEDO_SPEED_TIME))
 #define TORPEDO_RANGE		(MINE_RANGE*0.45)
 
 #define NUKE_SPEED_TIME		(2 * 12)
@@ -227,7 +227,7 @@
 #define TARGET_FUEL_REPAIR_PER_FRAME (TARGET_DAMAGE / (12 * 10))
 #define TARGET_REPAIR_PER_FRAME	(TARGET_DAMAGE / (12 * 600))
 #define TARGET_UPDATE_DELAY	(TARGET_DAMAGE / (TARGET_REPAIR_PER_FRAME \
-				    * BLOCK_SZ))
+			* BLOCK_SZ))
 
 #define ALLIANCE_NOT_SET	(-1)
 

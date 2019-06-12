@@ -142,7 +142,7 @@ PUBLIC int main(int ac, char **av)
 	if (label)
 		ysize = (mapsize + 2 + STRING_HEIGHT) * ycount;
 	else
-	    	ysize = (mapsize + 2) * ycount;
+		ysize = (mapsize + 2) * ycount;
 
 	if (verbose)
 		fprintf(stderr, "Image size: %d x %d\n", xsize, ysize);

@@ -33,28 +33,28 @@
 
 int audioDeviceInit(char *display)
 {
-    printf("debug audio: init\n");
+	printf("debug audio: init\n");
 
-    return 0;
+	return 0;
 }
 
 void audioDevicePlay(char *filename, int type, int volume, void **private)
 {
-    printf("debug audio: play file %s, type %d, vol %d, priv %p\n",
-	    filename, type, volume, (void *)private);
+	printf("debug audio: play file %s, type %d, vol %d, priv %p\n",
+			filename, type, volume, (void *)private);
 }
 
 void audioDeviceEvents(void)
 {
-    /* printf("debug audio: events\n"); */
+	/* printf("debug audio: events\n"); */
 }
 
 void audioDeviceFree(void *private) 
 {
-    printf("debug audio: audioDeviceFree\n");
+	printf("debug audio: audioDeviceFree\n");
 }
 
 void audioDeviceClose() 
 {
-    printf("debug audio: audioDeviceClose\n");
+	printf("debug audio: audioDeviceClose\n");
 }

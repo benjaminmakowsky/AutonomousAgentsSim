@@ -19,26 +19,26 @@
  */
 
 /*
-	SDL_console: An easy to use drop-down console based on the SDL library
-	Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Clemens Wacha
-	
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Library General Public
-	License as published by the Free Software Foundation; either
-	version 2 of the License, or (at your option) any later version.
-	
-	This library is distributed in the hope that it will be useful,
-	but WHITOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	Library General Public License for more details.
-	
-	You should have received a copy of the GNU Library Generla Public
-	License along with this library; if not, write to the Free
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-	
-	Clemens Wacha
-	reflex-2000@gmx.net
-*/
+SDL_console: An easy to use drop-down console based on the SDL library
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Clemens Wacha
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WHITOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
+
+You should have received a copy of the GNU Library Generla Public
+License along with this library; if not, write to the Free
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+Clemens Wacha
+reflex-2000@gmx.net
+ */
 
 
 /*  DT_drawtext.c
@@ -81,7 +81,7 @@ int DT_LoadFont(const char *BitmapName, int flags) {
 	Temp = SDL_LoadBMP(BitmapName);
 #endif
 
-    if(Temp == NULL) {
+	if(Temp == NULL) {
 		PRINT_ERROR("Cannot load file ");
 		printf("%s: %s\n", BitmapName, SDL_GetError());
 		return -1;
@@ -104,7 +104,7 @@ int DT_LoadFont(const char *BitmapName, int flags) {
 	 * as transparent.
 	 */
 	if(flags & TRANS_FONT) {
-	    SDL_SetColorKey((*CurrentFont)->FontSurface, SDL_SRCCOLORKEY | SDL_RLEACCEL, SDL_MapRGB((*CurrentFont)->FontSurface->format, 255, 0, 255));
+		SDL_SetColorKey((*CurrentFont)->FontSurface, SDL_SRCCOLORKEY | SDL_RLEACCEL, SDL_MapRGB((*CurrentFont)->FontSurface->format, 255, 0, 255));
 	}
 	return FontNumber;
 }

@@ -58,7 +58,7 @@ static char **tmpmap;
 #define RT_CANNON (WORMHOLE+8)
 
 static int valid_fuel( x, y )
-int x, y;
+	int x, y;
 {
 	int k;
 
@@ -80,7 +80,7 @@ int x, y;
 }
 
 static int valid_base( x, y )
-int x, y;
+	int x, y;
 {
 	int k;
 
@@ -97,7 +97,7 @@ int x, y;
 }
 
 static int valid_cannon( x, y )
-int x, y;
+	int x, y;
 {
 	if ( GETMAP(map,x,y) != SPACE )
 		return( NOT_VALID );
@@ -127,7 +127,7 @@ int x, y;
 
 /* examine a neighborhood around X,Y */
 static int neigh( X, Y, radius, func )
-int X, Y, radius, (*func)();
+	int X, Y, radius, (*func)();
 {
 	int i, j, x, y, ret;
 
@@ -147,25 +147,25 @@ int X, Y, radius, (*func)();
 }
 
 static int grav_neigh_tst( x, y )
-int x, y;
+	int x, y;
 {
 	return( (GETMAP(map,x,y)==BASE) || (GETMAP(map,x,y)==WORMHOLE) );
 }
 
 static int valid_grav( x, y, type )
-int x, y, type;
+	int x, y, type;
 {
 	return( neigh( x, y, GRAV_RAD, grav_neigh_tst ) ? NOT_VALID : type );
 }
 
 static int worm_neigh_tst( x, y )
-int x, y;
+	int x, y;
 {
 	return( GETMAP(map,x,y) != SPACE );
 }
 
 static int valid_worm( x, y, type )
-int x, y, type;
+	int x, y, type;
 {
 	return( neigh( x, y, WORM_RAD, worm_neigh_tst ) ? NOT_VALID : type );
 }
@@ -188,35 +188,35 @@ typedef struct
 #define MAX_WORMHOLES (-1)
 static Terrain terrain[] =
 {
-{ -1, "mystery", '?', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ FILLED, "filled", 'x', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ NW_FILLED, "nwfilled", 's', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ NE_FILLED, "nefilled", 'a', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ SW_FILLED, "swfilled", 'w', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ SE_FILLED, "sefilled", 'q', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ UP_CANNON, "cannon", 'r', 1800, -1, MAX_CANNONS, valid_cannon,
-	1, 1, 1, 1, },
-{ DN_CANNON, "cannon", 'c', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ LF_CANNON, "cannon", 'd', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ RT_CANNON, "cannon", 'f', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ BASE, "base", '_', 340, 1, MAX_BASES, valid_base, 2, 2, 2, 2, },
-{ SPACE, "space", ' ', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
-{ FUEL, "fuel", '#', 1100, -1, MAX_FUELS, valid_fuel, 0, 0, 0, 0, },
-{ POS_GRAV, "pos_grav", '+', 50, -1, MAX_GRAVS/4, valid_grav,
-	GRAV_RAD, GRAV_RAD, GRAV_RAD, GRAV_RAD, },
-{ NEG_GRAV, "neg_grav", '-', 50, -1, MAX_GRAVS/4, valid_grav,
-	GRAV_RAD, GRAV_RAD, GRAV_RAD, GRAV_RAD, },
-{ ACWISE_GRAV, "acwise_grav", '<', 30, -1, MAX_GRAVS/4, valid_grav,
-	GRAV_RAD, GRAV_RAD, GRAV_RAD, GRAV_RAD, },
-{ CWISE_GRAV, "cwise_grav", '>', 30, -1, MAX_GRAVS/4, valid_grav,
-	GRAV_RAD, GRAV_RAD, GRAV_RAD, GRAV_RAD, },
-{ WORMHOLE, "wormhole", '@', 80, MIN_WORMHOLES, MAX_WORMHOLES, valid_worm,
-	WORM_RAD, WORM_RAD, WORM_RAD, WORM_RAD, },
+	{ -1, "mystery", '?', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ FILLED, "filled", 'x', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ NW_FILLED, "nwfilled", 's', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ NE_FILLED, "nefilled", 'a', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ SW_FILLED, "swfilled", 'w', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ SE_FILLED, "sefilled", 'q', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ UP_CANNON, "cannon", 'r', 1800, -1, MAX_CANNONS, valid_cannon,
+		1, 1, 1, 1, },
+	{ DN_CANNON, "cannon", 'c', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ LF_CANNON, "cannon", 'd', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ RT_CANNON, "cannon", 'f', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ BASE, "base", '_', 340, 1, MAX_BASES, valid_base, 2, 2, 2, 2, },
+	{ SPACE, "space", ' ', -1, -1, -1, (int (*)())0, 0, 0, 0, 0, },
+	{ FUEL, "fuel", '#', 1100, -1, MAX_FUELS, valid_fuel, 0, 0, 0, 0, },
+	{ POS_GRAV, "pos_grav", '+', 50, -1, MAX_GRAVS/4, valid_grav,
+		GRAV_RAD, GRAV_RAD, GRAV_RAD, GRAV_RAD, },
+	{ NEG_GRAV, "neg_grav", '-', 50, -1, MAX_GRAVS/4, valid_grav,
+		GRAV_RAD, GRAV_RAD, GRAV_RAD, GRAV_RAD, },
+	{ ACWISE_GRAV, "acwise_grav", '<', 30, -1, MAX_GRAVS/4, valid_grav,
+		GRAV_RAD, GRAV_RAD, GRAV_RAD, GRAV_RAD, },
+	{ CWISE_GRAV, "cwise_grav", '>', 30, -1, MAX_GRAVS/4, valid_grav,
+		GRAV_RAD, GRAV_RAD, GRAV_RAD, GRAV_RAD, },
+	{ WORMHOLE, "wormhole", '@', 80, MIN_WORMHOLES, MAX_WORMHOLES, valid_worm,
+		WORM_RAD, WORM_RAD, WORM_RAD, WORM_RAD, },
 };
 #define NTERRAIN (sizeof(terrain)/sizeof(terrain[0]))
 
 static char terr2symbol( m )
-int m;
+	int m;
 {
 	int i;
 
@@ -232,7 +232,7 @@ int m;
  * algorithm.
  */
 static int random_distribute( N, type, tstfunc, xmin, ymin, xmax, ymax )
-int N, type, (*tstfunc)(), xmin, ymin, xmax, ymax;
+	int N, type, (*tstfunc)(), xmin, ymin, xmax, ymax;
 {
 	int n, m, M;
 	int x, y;
@@ -255,7 +255,7 @@ int N, type, (*tstfunc)(), xmin, ymin, xmax, ymax;
 	if ( N > M )
 		N = M;
 #if 0
-printf( "Selecting %d sites out of %d for '%c'.\n", N, M, terr2symbol(type) );
+	printf( "Selecting %d sites out of %d for '%c'.\n", N, M, terr2symbol(type) );
 #endif
 	for ( y=ymin ; y<ymax ; y++ )
 		for ( x=xmin ; x<=xmax ; x++ )
@@ -275,15 +275,15 @@ printf( "Selecting %d sites out of %d for '%c'.\n", N, M, terr2symbol(type) );
 }
 
 static void bad_option( arg )
-char *arg;
+	char *arg;
 {
 	fprintf( stderr, "%s: Option %s?\n", progname, arg );
 	exit( 1 );
 }
 
 main( argc, argv )
-int argc;
-char **argv;
+	int argc;
+	char **argv;
 {
 	int i, j, k;
 	int x, y;
@@ -306,29 +306,29 @@ char **argv;
 			case 'm': mapname = &argv[i][2]; break;
 			case 'o': fn = &argv[i][2]; break;
 			case 'g':
-				switch ( argv[i][2] )
-				{
-					case 's': seed_prob = atoi( &argv[i][3] ); break;
-					case 'g': grow_prob = atoi( &argv[i][3] ); break;
-					case 'p': grow_pass = atoi( &argv[i][3] ); break;
-					default: bad_option( argv[i] );
-				}
-				break;
+				  switch ( argv[i][2] )
+				  {
+					  case 's': seed_prob = atoi( &argv[i][3] ); break;
+					  case 'g': grow_prob = atoi( &argv[i][3] ); break;
+					  case 'p': grow_pass = atoi( &argv[i][3] ); break;
+					  default: bad_option( argv[i] );
+				  }
+				  break;
 			case 'd':
-				for ( j=0 ; ; j++ )
-				{
-					if ( j == NTERRAIN )
-						bad_option( argv[i] );
-					if ( terrain[j].density == -1 )
-						continue;
-					if ( strncmp( &argv[i][2], terrain[j].name,
-						strlen(terrain[j].name) ) )
-						continue;
-					terrain[j].density =
-						atoi( &argv[i][2+strlen(terrain[j].name)] );
-					break;
-				}
-				break;
+				  for ( j=0 ; ; j++ )
+				  {
+					  if ( j == NTERRAIN )
+						  bad_option( argv[i] );
+					  if ( terrain[j].density == -1 )
+						  continue;
+					  if ( strncmp( &argv[i][2], terrain[j].name,
+								  strlen(terrain[j].name) ) )
+						  continue;
+					  terrain[j].density =
+						  atoi( &argv[i][2+strlen(terrain[j].name)] );
+					  break;
+				  }
+				  break;
 			default: bad_option( argv[i] );
 		}
 	}
@@ -391,7 +391,7 @@ char **argv;
 						if ( (i == 0) && (j == 0) )
 							continue;
 						if ( (GETMAP(map,x+i,y+j) != FILLED) &&
-							((random() % grow_prob) == 0) )
+								((random() % grow_prob) == 0) )
 							SETMAP( tmpmap, x+i, y+j, FILLED );
 					}
 			}
@@ -443,9 +443,9 @@ char **argv;
 		if ( (terrain[i].nmax != -1) && (terrain[i].n > terrain[i].nmax) )
 			terrain[i].n = terrain[i].nmax;
 		terrain[i].n = random_distribute( terrain[i].n, terrain[i].type,
-			terrain[i].valid,
-			terrain[i].xminborder, terrain[i].yminborder,
-			wd-terrain[i].xmaxborder-1, ht-terrain[i].ymaxborder-1 );
+				terrain[i].valid,
+				terrain[i].xminborder, terrain[i].yminborder,
+				wd-terrain[i].xmaxborder-1, ht-terrain[i].ymaxborder-1 );
 		if ( verbose )
 			printf( "%14s:%4d\n", terrain[i].name, terrain[i].n );
 	}
@@ -454,7 +454,7 @@ char **argv;
 	if ( fp == 0 )
 	{
 		fprintf( stderr, "%s: Can't open '%s' for writing. %s.\n",
-			progname, fn, strerror( errno ) );
+				progname, fn, strerror( errno ) );
 		exit( 1 );
 	}
 	fprintf( fp, "mapWidth:            %d\n", wd );

@@ -28,26 +28,26 @@
 #include "xpcommon.h"
 
 typedef struct {
-    void	*elements;
-    size_t	element_size;
-    size_t	element_padded_size;
-    int 	num_elements;
-    int 	max_elements;
+	void	*elements;
+	size_t	element_size;
+	size_t	element_padded_size;
+	int 	num_elements;
+	int 	max_elements;
 } arraylist_t;
 
 static inline void *Arraylist_get_element_pointer(arraylist_t *alp, int ind)
 {
-    return (uint8_t *)alp->elements + alp->element_padded_size * ind;
+	return (uint8_t *)alp->elements + alp->element_padded_size * ind;
 }
 
 static inline int Arraylist_get_num_elements(arraylist_t *alp)
 {
-    return alp->num_elements;
+	return alp->num_elements;
 }
 
 static inline int Arraylist_get_max_elements(arraylist_t *alp)
 {
-    return alp->max_elements;
+	return alp->max_elements;
 }
 
 arraylist_t *Arraylist_alloc(size_t element_size);
@@ -97,10 +97,10 @@ bool Arraylist_contains(arraylist_t *alp, void *element);
 void Arraylist_sort(arraylist_t *alp, int (*cmp)(const void *, const void *));
 
 typedef struct {
-    uint8_t 	*current_element;
-    int 	current_ind;
-    int 	num_elements;
-    size_t	element_padded_size;
+	uint8_t 	*current_element;
+	int 	current_ind;
+	int 	num_elements;
+	size_t	element_padded_size;
 } arraylist_iterator_t;
 
 

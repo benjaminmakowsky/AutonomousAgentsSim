@@ -40,19 +40,19 @@ typedef uint16_t	modifiers_t;
 #define MODS_LASER_BLIND	(1<<1)
 
 typedef enum {
-    ModsNuclear,	/* 0,  MODS_NUCLEAR, MODS_NUCLEAR|MODS_FULLNUCLEAR */
-    ModsCluster,	/* 0 - MODS_CLUSTER_MAX */
-    ModsImplosion,	/* 0 - MODS_IMPLOSION_MAX */
-    ModsVelocity,	/* 0 - MODS_VELOCITY_MAX */
-    ModsMini,		/* 0 - MODS_MINI_MAX */
-    ModsSpread,		/* 0 - MODS_SPREAD_MAX */
-    ModsPower,		/* 0 - MODS_POWER_MAX */
-    ModsLaser		/* 0,  MODS_LASER_STUN, MODS_LASER_BLIND */
+	ModsNuclear,	/* 0,  MODS_NUCLEAR, MODS_NUCLEAR|MODS_FULLNUCLEAR */
+	ModsCluster,	/* 0 - MODS_CLUSTER_MAX */
+	ModsImplosion,	/* 0 - MODS_IMPLOSION_MAX */
+	ModsVelocity,	/* 0 - MODS_VELOCITY_MAX */
+	ModsMini,		/* 0 - MODS_MINI_MAX */
+	ModsSpread,		/* 0 - MODS_SPREAD_MAX */
+	ModsPower,		/* 0 - MODS_POWER_MAX */
+	ModsLaser		/* 0,  MODS_LASER_STUN, MODS_LASER_BLIND */
 } modifier_t;
 
 static inline void Mods_clear(modifiers_t *mods)
 {
-    *mods = 0;
+	*mods = 0;
 }
 
 void Mods_to_string(modifiers_t mods, char *dst, size_t size);

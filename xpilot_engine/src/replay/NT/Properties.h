@@ -12,36 +12,36 @@
 
 class CProperties : public CDialog
 {
-// Construction
-public:
-	CProperties(CWnd* pParent = NULL);   // standard constructor
-
-// Dialog Data
-	//{{AFX_DATA(CProperties)
-	enum { IDD = IDD_PROPERTIES };
-	CString	m_nickname;
-	CString	m_recorddate;
-	CString	m_serveraddress;
-	CString	m_userhost;
-	CString	m_fps;
-	//}}AFX_DATA
-
-
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CProperties)
+	// Construction
+	public:
+	       CProperties(CWnd* pParent = NULL);   // standard constructor
+	       
+		       // Dialog Data
+		       //{{AFX_DATA(CProperties)
+		       enum { IDD = IDD_PROPERTIES };
+		       CString	m_nickname;
+		       CString	m_recorddate;
+		       CString	m_serveraddress;
+		       CString	m_userhost;
+		       CString	m_fps;
+		       //}}AFX_DATA
+		       
+		       
+		       // Overrides
+		       // ClassWizard generated virtual function overrides
+		       //{{AFX_VIRTUAL(CProperties)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
-
-// Implementation
-protected:
-
-	// Generated message map functions
-	//{{AFX_MSG(CProperties)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+		  //}}AFX_VIRTUAL
+		  
+			  // Implementation
+	protected:
+		  
+			  // Generated message map functions
+			  //{{AFX_MSG(CProperties)
+			  // NOTE: the ClassWizard will add member functions here
+			  //}}AFX_MSG
+			  DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

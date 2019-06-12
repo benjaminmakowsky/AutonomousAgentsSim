@@ -18,12 +18,12 @@
 int micro_delay(unsigned usec)
 {
 #if 0 /* SYSV */
-    poll((struct poll *) 0, (size_t) 0, usec / 1000);	/* ms RES */
+	poll((struct poll *) 0, (size_t) 0, usec / 1000);	/* ms RES */
 #endif
-    struct timeval timeout;
-    timeout.tv_usec = usec % (unsigned long) 1000000;
-    timeout.tv_sec = usec / (unsigned long) 1000000;
-    (void) select(0, NULL, NULL, NULL, &timeout);
+	struct timeval timeout;
+	timeout.tv_usec = usec % (unsigned long) 1000000;
+	timeout.tv_sec = usec / (unsigned long) 1000000;
+	(void) select(0, NULL, NULL, NULL, &timeout);
 
-    return 0;
+	return 0;
 }

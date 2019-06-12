@@ -91,10 +91,10 @@
 #define RADAR_TEXTURE_SIZE 32
 
 typedef struct {
-    Pixmap		bitmap;
-    Pixmap		mask;
-    bbox_t		bbox;
-    int                 rgb; /* the color this image is blended with */
+	Pixmap		bitmap;
+	Pixmap		mask;
+	bbox_t		bbox;
+	int                 rgb; /* the color this image is blended with */
 } xp_bitmap_t;
 
 /* xp_pixmap_t holds all data related to one "logical" image.
@@ -106,13 +106,13 @@ typedef struct {
  * are rotated copies of the original image.
  */
 typedef struct {
-    const char		*filename;     /* the file containing the image */
-    int			count;         /* amount of images (see above) */
-    int			state;         /* the state of the image (BMS_*) */
-    unsigned		width, height; /* the (scaled) dimensions */
-    bool		scalable;      /* should this image be scaled */
-    xp_bitmap_t		*bitmaps;      /* platform dependent image data */
-    xp_picture_t	picture;       /* the image data in RGB format */
+	const char		*filename;     /* the file containing the image */
+	int			count;         /* amount of images (see above) */
+	int			state;         /* the state of the image (BMS_*) */
+	unsigned		width, height; /* the (scaled) dimensions */
+	bool		scalable;      /* should this image be scaled */
+	xp_bitmap_t		*bitmaps;      /* platform dependent image data */
+	xp_picture_t	picture;       /* the image data in RGB format */
 } xp_pixmap_t;
 
 extern xp_pixmap_t *pixmaps;

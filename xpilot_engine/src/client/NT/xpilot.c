@@ -30,21 +30,21 @@ int			Argc;
 
 static void printfile(const char *filename)
 {
-    FILE		*fp;
-    int			c;
+	FILE		*fp;
+	int			c;
 
-    if ((fp = fopen(filename, "r")) == NULL)
-	return;
+	if ((fp = fopen(filename, "r")) == NULL)
+		return;
 
-    while ((c = fgetc(fp)) != EOF)
-	putchar(c);
+	while ((c = fgetc(fp)) != EOF)
+		putchar(c);
 
-    fclose(fp);
+	fclose(fp);
 }
 
 const char *Program_name(void)
 {
-    return "xpilot-ng-x11";
+	return "xpilot-ng-x11";
 }
 
 /*
@@ -52,95 +52,95 @@ const char *Program_name(void)
  */
 int main(int argc, char *argv[])
 {
-    int result, retval = 1;
-    bool auto_shutdown = false;
-    Connect_param_t *conpar = &connectParam;
+	int result, retval = 1;
+	bool auto_shutdown = false;
+	Connect_param_t *conpar = &connectParam;
 
-    /*
-     * --- Output copyright notice ---
-     */
-    printf("  " COPYRIGHT ".\n"
-	   "  " TITLE " comes with ABSOLUTELY NO WARRANTY; "
-	      "for details see the\n"
-	   "  provided COPYING file.\n\n");
-    if (strcmp(Conf_localguru(), PACKAGE_BUGREPORT))
-	printf("  %s is responsible for the local installation.\n\n",
-	       Conf_localguru());
+	/*
+	 * --- Output copyright notice ---
+	 */
+	printf("  " COPYRIGHT ".\n"
+			"  " TITLE " comes with ABSOLUTELY NO WARRANTY; "
+			"for details see the\n"
+			"  provided COPYING file.\n\n");
+	if (strcmp(Conf_localguru(), PACKAGE_BUGREPORT))
+		printf("  %s is responsible for the local installation.\n\n",
+				Conf_localguru());
 
-    Conf_print();
+	Conf_print();
 
-    Argc = argc;
-    Argv = argv;
+	Argc = argc;
+	Argv = argv;
 
-    /*
-     * --- Miscellaneous initialization ---
-     */
-    init_error(argv[0]);
+	/*
+	 * --- Miscellaneous initialization ---
+	 */
+	init_error(argv[0]);
 
-    seedMT( (unsigned)time(NULL) ^ Get_process_id());
+	seedMT( (unsigned)time(NULL) ^ Get_process_id());
 
-    memset(conpar, 0, sizeof(Connect_param_t));
+	memset(conpar, 0, sizeof(Connect_param_t));
 
-    /*
-     * --- Create global option array ---
-     */
-    Store_default_options();
-    Store_X_options();
-    Store_hud_options();
-    Store_paintradar_options();
-    Store_xpaint_options();
-    Store_guimap_options();
-    Store_guiobject_options();
-    Store_talk_macro_options();
-    Store_key_options();
-    Store_record_options();
-    Store_color_options();
+	/*
+	 * --- Create global option array ---
+	 */
+	Store_default_options();
+	Store_X_options();
+	Store_hud_options();
+	Store_paintradar_options();
+	Store_xpaint_options();
+	Store_guimap_options();
+	Store_guiobject_options();
+	Store_talk_macro_options();
+	Store_key_options();
+	Store_record_options();
+	Store_color_options();
 
-    /*
-     * --- Check commandline arguments and resource files ---
-     */
-    memset(&xpArgs, 0, sizeof(xp_args_t));
-    Parse_options(&argc, argv);
-    /*strcpy(clientname,connectParam.nick_name); */
+	/*
+	 * --- Check commandline arguments and resource files ---
+	 */
+	memset(&xpArgs, 0, sizeof(xp_args_t));
+	Parse_options(&argc, argv);
+	/*strcpy(clientname,connectParam.nick_name); */
 
-    Config_init();
-    IFNWINDOWS(Handle_X_options();)
-    
-    /* CLIENTRANK */
-    Init_saved_scores();
+	Config_init();
+	IFNWINDOWS(Handle_X_options();)
 
-    if (xpArgs.list_servers)
-	xpArgs.auto_connect = true;
+		/* CLIENTRANK */
+		Init_saved_scores();
 
-    if (xpArgs.shutdown_reason[0] != '\0') {
-	auto_shutdown = true;
-	xpArgs.auto_connect = true;
-    }
-
-    /*
-     * --- Message of the Day ---
-     */
-    printfile(Conf_localmotdfile());
-
-    if (xpArgs.text || xpArgs.auto_connect || argv[1] || is_this_windows()) {
 	if (xpArgs.list_servers)
-	    printf("LISTING AVAILABLE SERVERS:\n");
+		xpArgs.auto_connect = true;
 
-	result = Contact_servers(argc - 1, &argv[1],
-				 xpArgs.auto_connect, xpArgs.list_servers,
-				 auto_shutdown, xpArgs.shutdown_reason,
-				 0, NULL, NULL, NULL, NULL,
-				 conpar);
-    }
-    else {
-	IFNWINDOWS(result = Welcome_screen(conpar));
-    }
+	if (xpArgs.shutdown_reason[0] != '\0') {
+		auto_shutdown = true;
+		xpArgs.auto_connect = true;
+	}
 
-    if (result == 1)
-	retval = Join(conpar);
-    
-    if (instruments.clientRanker)
-	Print_saved_scores();
+	/*
+	 * --- Message of the Day ---
+	 */
+	printfile(Conf_localmotdfile());
 
-    return retval;
+	if (xpArgs.text || xpArgs.auto_connect || argv[1] || is_this_windows()) {
+		if (xpArgs.list_servers)
+			printf("LISTING AVAILABLE SERVERS:\n");
+
+		result = Contact_servers(argc - 1, &argv[1],
+				xpArgs.auto_connect, xpArgs.list_servers,
+				auto_shutdown, xpArgs.shutdown_reason,
+				0, NULL, NULL, NULL, NULL,
+				conpar);
+	}
+	else {
+		IFNWINDOWS(result = Welcome_screen(conpar));
+	}
+
+	if (result == 1)
+		retval = Join(conpar);
+
+	if (instruments.clientRanker)
+		Print_saved_scores();
+
+	return retval;
 }

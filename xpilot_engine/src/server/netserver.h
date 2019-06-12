@@ -36,21 +36,21 @@ void Conn_change_nick(connection_t *connp, const char *nick);
 void Destroy_connection(connection_t *connp, const char *reason);
 int Check_connection(char *real, char *nick, char *dpy, char *addr);
 int Setup_connection(char *real, char *nick, char *dpy, int team,
-		     char *addr, char *host, unsigned version);
+		char *addr, char *host, unsigned version);
 int Input(void);
 int Send_reply(connection_t *connp, int replyto, int result);
 int Send_self(connection_t *connp, player_t *pl,
-	      int lock_id,
-	      int lock_dist,
-	      int lock_dir,
-	      int autopilotlight,
-	      int status,
-	      char *mods);
+		int lock_id,
+		int lock_dist,
+		int lock_dir,
+		int autopilotlight,
+		int status,
+		char *mods);
 int Send_leave(connection_t *connp, int id);
 int Send_player(connection_t *connp, int id);
 int Send_team(connection_t *connp, int id, int team);
 int Send_score(connection_t *connp, int id, double score,
-	       int life, int mychar, int alliance);
+		int life, int mychar, int alliance);
 int Send_score_object(connection_t *connp, double score, clpos_t pos, const char *string);
 int Send_timing(connection_t *connp, int id, int check, int round);
 int Send_base(connection_t *connp, int id, int num);
@@ -92,7 +92,7 @@ int Send_time_left(connection_t *connp, long sec);
 int Send_eyes(connection_t *connp, int id);
 int Send_trans(connection_t *connp, clpos_t pos1, clpos_t pos2);
 void Get_display_parameters(connection_t *connp, int *width, int *height,
-			    int *debris_colors, int *spark_rand);
+		int *debris_colors, int *spark_rand);
 int Get_player_id(connection_t *connp);
 const char *Player_get_addr(player_t *pl);
 const char *Player_get_dpy(player_t *pl);

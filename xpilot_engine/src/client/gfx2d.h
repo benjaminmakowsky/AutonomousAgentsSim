@@ -32,7 +32,7 @@ extern char     *realTexturePath;       /* Real texture lookup path */
 typedef unsigned int RGB_COLOR;
 
 #define RGB24(r, g, b) \
-((RGB_COLOR)((((b)&255) << 16) | (((g)&255) << 8) | ((r)&255)))
+	((RGB_COLOR)((((b)&255) << 16) | (((g)&255) << 8) | ((r)&255)))
 
 #define RED_VALUE(col) ((col) &255)
 #define GREEN_VALUE(col) (((col) >> 8) &255)
@@ -47,8 +47,8 @@ typedef unsigned int RGB_COLOR;
  * (xmax + 1 - xmin, ymax + 1 - ymin).
  */
 typedef struct {
-    int xmin, ymin;
-    int xmax, ymax;
+	int xmin, ymin;
+	int xmax, ymax;
 } bbox_t;
 
 
@@ -62,11 +62,11 @@ typedef struct {
  */
 
 typedef struct {
-    unsigned	width, height;
-    int		count;
-    RGB_COLOR	**data;
+	unsigned	width, height;
+	int		count;
+	RGB_COLOR	**data;
 
-    bbox_t	*bbox;
+	bbox_t	*bbox;
 } xp_picture_t;
 
 int Picture_init(xp_picture_t *picture, const char *filename, int count);
@@ -74,13 +74,13 @@ int Picture_load( xp_picture_t *picture, const char *path);
 int Picture_rotate(xp_picture_t *picture);
 
 void Picture_set_pixel(xp_picture_t *picture, int image, int x, int y, 
-		       RGB_COLOR color);
+		RGB_COLOR color);
 RGB_COLOR Picture_get_rotated_pixel(const xp_picture_t *picture, 
-				    int x, int y, int image);
+		int x, int y, int image);
 RGB_COLOR Picture_get_pixel(const xp_picture_t *picture, int image,
-			    int x, int y);
+		int x, int y);
 RGB_COLOR Picture_get_pixel_area(const xp_picture_t *picture, int image, 
-				 double x_1, double y_1, double dx, double dy);
+		double x_1, double y_1, double dx, double dy);
 void Picture_get_bounding_box(xp_picture_t *picture);
 
 #endif

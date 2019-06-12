@@ -82,47 +82,47 @@
  * All the player connection state info.
  */
 typedef struct {
-    int                 ind;                    /* index of connection */
-    int			state;			/* state of connection */
-    int			drain_state;		/* state after draining done */
-    unsigned		magic;			/* magic cookie */
-    sockbuf_t		r;			/* input buffer */
-    sockbuf_t		w;			/* output buffer */
-    sockbuf_t		c;			/* reliable data buffer */
-    long		start;			/* time of last state change */
-    long		timeout;		/* time when state timeouts */
-    long		last_send_loops;	/* last update of reliable */
-    long		reliable_offset;	/* amount of data acked */
-    long		reliable_unsent;	/* next unsend reliable byte */
-    long		retransmit_at_loop;	/* next retransmission time */
-    int			rtt_smoothed;		/* smoothed roundtrip time */
-    int			rtt_dev;		/* roundtrip time deviation */
-    int			rtt_retransmit;		/* retransmission time */
-    int			rtt_timeouts;		/* how many timeouts */
-    int			acks;			/* good acknowledgements */
-    int			setup;			/* amount of setup done */
-    int			my_port;		/* server port for this player */
-    int			his_port;		/* client port for this player */
-    int			id;			/* index into GetInd[] or NO_ID */
-    int			team;			/* team of player */
-    unsigned		version;		/* XPilot version of client */
-    long		last_key_change;	/* last keyboard change */
-    long		talk_sequence_num;	/* talk acknowledgement */
-    long		motd_offset;		/* offset into motd or -1 */
-    long		motd_stop;		/* max offset into motd */
-    int			num_keyboard_updates;	/* Keyboards in one packet */
-    int			view_width, view_height;/* Viewable area dimensions */
-    int			debris_colors;		/* Max. debris intensities */
-    int			spark_rand;		/* Sparkling effect */
-    int			last_mouse_pos;		/* value of last pointer pkt */
-    char		*user;			/* user name of player */
-    char		*nick;			/* nickname of player */
-    char		*dpy;			/* display of player */
-    shipshape_t		*ship;			/* ship shape of player */
-    char		*addr;			/* address of players host */
-    char		*host;			/* hostname of players host */
-    int			rectype;		/* normal/saved/spectator */
-    int			features;		/* supported features */
+	int                 ind;                    /* index of connection */
+	int			state;			/* state of connection */
+	int			drain_state;		/* state after draining done */
+	unsigned		magic;			/* magic cookie */
+	sockbuf_t		r;			/* input buffer */
+	sockbuf_t		w;			/* output buffer */
+	sockbuf_t		c;			/* reliable data buffer */
+	long		start;			/* time of last state change */
+	long		timeout;		/* time when state timeouts */
+	long		last_send_loops;	/* last update of reliable */
+	long		reliable_offset;	/* amount of data acked */
+	long		reliable_unsent;	/* next unsend reliable byte */
+	long		retransmit_at_loop;	/* next retransmission time */
+	int			rtt_smoothed;		/* smoothed roundtrip time */
+	int			rtt_dev;		/* roundtrip time deviation */
+	int			rtt_retransmit;		/* retransmission time */
+	int			rtt_timeouts;		/* how many timeouts */
+	int			acks;			/* good acknowledgements */
+	int			setup;			/* amount of setup done */
+	int			my_port;		/* server port for this player */
+	int			his_port;		/* client port for this player */
+	int			id;			/* index into GetInd[] or NO_ID */
+	int			team;			/* team of player */
+	unsigned		version;		/* XPilot version of client */
+	long		last_key_change;	/* last keyboard change */
+	long		talk_sequence_num;	/* talk acknowledgement */
+	long		motd_offset;		/* offset into motd or -1 */
+	long		motd_stop;		/* max offset into motd */
+	int			num_keyboard_updates;	/* Keyboards in one packet */
+	int			view_width, view_height;/* Viewable area dimensions */
+	int			debris_colors;		/* Max. debris intensities */
+	int			spark_rand;		/* Sparkling effect */
+	int			last_mouse_pos;		/* value of last pointer pkt */
+	char		*user;			/* user name of player */
+	char		*nick;			/* nickname of player */
+	char		*dpy;			/* display of player */
+	shipshape_t		*ship;			/* ship shape of player */
+	char		*addr;			/* address of players host */
+	char		*host;			/* hostname of players host */
+	int			rectype;		/* normal/saved/spectator */
+	int			features;		/* supported features */
 } connection_t;
 
 #endif

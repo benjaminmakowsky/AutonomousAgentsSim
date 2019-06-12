@@ -146,6 +146,7 @@
  * Use these 10 packet type numbers for
  * experimenting with new packet types.
  */
+#define PKT_BASEFUEL 90
 
 /* status reports: 101 - 102 */
 #define PKT_FAILURE		101

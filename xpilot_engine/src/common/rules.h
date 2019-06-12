@@ -48,7 +48,7 @@
  * Client uses only a subset of them:
  */
 #define CLIENT_RULES_MASK	(WRAP_PLAY|TEAM_PLAY|TIMING|LIMITED_LIVES|\
-				 ALLIANCES)
+		ALLIANCES)
 /*
  * Old player status bits, currently only used in network protocol.
  * The bits that the client needs must fit into a byte,
@@ -59,8 +59,8 @@
 #define OLD_GAME_OVER		(1U<<2)		/* waiting or dead */
 
 typedef struct {
-    int		lives;
-    long	mode;
+	int		lives;
+	long	mode;
 } rules_t;
 
 #endif

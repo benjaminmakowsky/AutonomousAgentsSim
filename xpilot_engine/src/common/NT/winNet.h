@@ -22,10 +22,10 @@
  */
 
 /***************************************************************************\
-*  winNet.h - X11 to Windoze converter										*
-*																			*
-*  					*
-\***************************************************************************/
+ *  winNet.h - X11 to Windoze converter										*
+ *																			*
+ *  					*
+ \***************************************************************************/
 
 #ifndef	_WINNET_H_
 #define	_WINNET_H_
@@ -42,11 +42,11 @@ extern "C" {
 
 #define	EWOULDBLOCK		WSAEWOULDBLOCK
 
-    extern long alarm(long seconds, void (__cdecl * func) (int));
+	extern long alarm(long seconds, void (__cdecl * func) (int));
 
-    extern const char *_GetWSockErrText(int error);
-    extern HWND notifyWnd;
-    extern BOOL *hostnameFound;
+	extern const char *_GetWSockErrText(int error);
+	extern HWND notifyWnd;
+	extern BOOL *hostnameFound;
 
 #define	WM_GETHOSTNAME	(WM_APP+100)
 

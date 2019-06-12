@@ -36,26 +36,26 @@
 //
 
 class CXpilotApp:public CWinApp {
-  public:
-    virtual BOOL PreTranslateMessage(MSG * pMsg);
-    CXpilotApp();
+	public:
+		virtual BOOL PreTranslateMessage(MSG * pMsg);
+		CXpilotApp();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CXpilotApp)
-  public:
-    virtual BOOL InitInstance();
-    virtual int ExitInstance();
-    //}}AFX_VIRTUAL
+		// Overrides
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CXpilotApp)
+	public:
+		virtual BOOL InitInstance();
+		virtual int ExitInstance();
+		//}}AFX_VIRTUAL
 
-// Implementation
+		// Implementation
 
-    //{{AFX_MSG(CXpilotApp)
-    afx_msg void OnAppAbout();
-    // NOTE - the ClassWizard will add and remove member functions here.
-    //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
-     DECLARE_MESSAGE_MAP()
+		//{{AFX_MSG(CXpilotApp)
+		afx_msg void OnAppAbout();
+		// NOTE - the ClassWizard will add and remove member functions here.
+		//    DO NOT EDIT what you see in these blocks of generated code !
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 extern CXpilotApp theApp;

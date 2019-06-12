@@ -22,8 +22,8 @@
  */
 
 /***************************************************************\
-*  winNet.c - X11 to Windoze converter							*
-\***************************************************************/
+ *  winNet.c - X11 to Windoze converter							*
+ \***************************************************************/
 
 #include <windows.h>
 #include "../../common/error.h"
@@ -37,12 +37,12 @@ HWND notifyWnd;			/* Our parent's window */
 long alarm(long seconds, void (__cdecl * func) (int))
 {
 #if 0
-    if (!seconds) {
-	KillTimer(alarmWnd, winalarm);
-    } else {
-	winalarm = SetTimer(alarmWnd, 0, seconds * 1000, (TIMERPROC) func);
-	Trace("Winalarm=%d\n", winalarm);
-    }
+	if (!seconds) {
+		KillTimer(alarmWnd, winalarm);
+	} else {
+		winalarm = SetTimer(alarmWnd, 0, seconds * 1000, (TIMERPROC) func);
+		Trace("Winalarm=%d\n", winalarm);
+	}
 #endif
-    return ((long) winalarm);
+	return ((long) winalarm);
 }

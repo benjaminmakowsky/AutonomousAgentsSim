@@ -26,18 +26,18 @@ int Startup_server_motd(void);
 
 void Play_beep(void)
 {
-    fprintf(stderr, "\aBEEP\n");
+	fprintf(stderr, "\aBEEP\n");
 }
 
 int Startup_server_motd(void)
 {
-    return 0;
+	return 0;
 }
 
 int Handle_motd(long off, char *buf, int len, long filesize) 
 {
-    fwrite(buf + off, 1, len, stdout);
-    return 0;
+	fwrite(buf + off, 1, len, stdout);
+	return 0;
 }
 
 void Raise_window(void) {}

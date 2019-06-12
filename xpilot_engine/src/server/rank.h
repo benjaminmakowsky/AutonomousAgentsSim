@@ -33,21 +33,21 @@
 
 typedef struct ranknode {
 
-    char name[MAX_NAME_LEN];
-    char user[MAX_NAME_LEN];
-    char host[MAX_HOST_LEN];
+	char name[MAX_NAME_LEN];
+	char user[MAX_NAME_LEN];
+	char host[MAX_HOST_LEN];
 
-    time_t timestamp;
+	time_t timestamp;
 
-    int kills, deaths;
-    int rounds, shots;
-    int deadliest;
-    int ballsCashed, ballsSaved;
-    int ballsWon, ballsLost;
-    double bestball;
-    double score;
-    player_t *pl;
-    double max_survival_time;
+	int kills, deaths;
+	int rounds, shots;
+	int deadliest;
+	int ballsCashed, ballsSaved;
+	int ballsWon, ballsLost;
+	double bestball;
+	double score;
+	player_t *pl;
+	double max_survival_time;
 } ranknode_t;
 
 bool Rank_get_stats(const char *name, char *buf, size_t size);
@@ -61,104 +61,104 @@ void Rank_show_ranks(void);
 
 static inline void Rank_add_score(player_t *pl, double points)
 {
-    Add_Score(pl,points);
-    pl->update_score = true;
-    if (pl->rank)
-	pl->rank->score += points;
+	Add_Score(pl,points);
+	pl->update_score = true;
+	if (pl->rank)
+		pl->rank->score += points;
 }
 
 static inline void Rank_set_score(player_t *pl, double points)
 {
-    Set_Score(pl,points);
-    pl->update_score = true;
-    if (pl->rank)
-	pl->rank->score = points;
+	Set_Score(pl,points);
+	pl->update_score = true;
+	if (pl->rank)
+		pl->rank->score = points;
 }
 
 static inline void Rank_fire_shot(player_t *pl)
 {
-    pl->shots++;
-    if (pl->rank)
-	pl->rank->shots++;
+	pl->shots++;
+	if (pl->rank)
+		pl->rank->shots++;
 }
 
 static inline void Rank_add_kill(player_t *pl)
 {
-    pl->kills++;
-    if (pl->rank)
-	pl->rank->kills++;
+	pl->kills++;
+	if (pl->rank)
+		pl->rank->kills++;
 }
 
 static inline void Rank_add_death(player_t *pl)
 {
-    pl->deaths++;
-    if (pl->rank)
-	pl->rank->deaths++;
+	pl->deaths++;
+	if (pl->rank)
+		pl->rank->deaths++;
 }
 
 static inline void Rank_add_round(player_t *pl)
 {
-    if (pl->rank)
-	pl->rank->rounds++;
+	if (pl->rank)
+		pl->rank->rounds++;
 }
 
 static inline void Rank_add_deadliest(player_t *pl)
 {
-    if (pl->rank)
-	pl->rank->deadliest++;
+	if (pl->rank)
+		pl->rank->deadliest++;
 }
 
 static inline void Rank_cashed_ball(player_t *pl)
 {
-    if (pl->rank)
-	pl->rank->ballsCashed++;
+	if (pl->rank)
+		pl->rank->ballsCashed++;
 }
 
 static inline void Rank_saved_ball(player_t *pl)
 {
-    if (pl->rank)
-	pl->rank->ballsSaved++;
+	if (pl->rank)
+		pl->rank->ballsSaved++;
 }
 
 static inline void Rank_won_ball(player_t *pl)
 {
-    if (pl->rank)
-	pl->rank->ballsWon++;
+	if (pl->rank)
+		pl->rank->ballsWon++;
 }
 
 static inline void Rank_lost_ball(player_t *pl)
 {
-    if (pl->rank)
-	pl->rank->ballsLost++;
+	if (pl->rank)
+		pl->rank->ballsLost++;
 }
 
 static inline void Rank_ballrun(player_t *pl, double tim)
 {
-    if (pl->rank) {
-	if (pl->rank->bestball == 0.0 || tim < pl->rank->bestball)
-	    pl->rank->bestball = tim;
-    }
+	if (pl->rank) {
+		if (pl->rank->bestball == 0.0 || tim < pl->rank->bestball)
+			pl->rank->bestball = tim;
+	}
 }
 
 static inline void Rank_survival(player_t *pl, double tim)
 {
-    if (pl->rank) {
-        if (pl->rank->max_survival_time == 0
-            || tim > pl->rank->max_survival_time)
-	    pl->rank->max_survival_time = tim;
-    }
+	if (pl->rank) {
+		if (pl->rank->max_survival_time == 0
+				|| tim > pl->rank->max_survival_time)
+			pl->rank->max_survival_time = tim;
+	}
 }
 
 
 static inline double Rank_get_max_survival_time(player_t *pl)
 {
-    return pl->rank ? pl->rank->max_survival_time : 0;
+	return pl->rank ? pl->rank->max_survival_time : 0;
 }
 
 
 static inline double Rank_get_best_ballrun(player_t *pl)
 {
-    return pl->rank ? pl->rank->bestball : 0.0;
+	return pl->rank ? pl->rank->bestball : 0.0;
 }
 
 static inline void Rank_add_ball_kill(player_t *pl)      { Rank_add_kill(pl); }

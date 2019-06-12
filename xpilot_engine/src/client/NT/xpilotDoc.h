@@ -30,40 +30,40 @@
  * XPilot does not.  This module is required but completely ignored.
  */
 class CXpilotDoc:public CDocument {
-  protected:			// create from serialization only
-    CXpilotDoc();
-    DECLARE_DYNCREATE(CXpilotDoc)
-// Attributes
-  public:
+	protected:			// create from serialization only
+		CXpilotDoc();
+		DECLARE_DYNCREATE(CXpilotDoc)
+			// Attributes
+	public:
 
-// Operations
-  public:
+			// Operations
+	public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CXpilotDoc)
-  public:
-    virtual BOOL OnNewDocument();
-    virtual void Serialize(CArchive & ar);
-    //}}AFX_VIRTUAL
+			// Overrides
+			// ClassWizard generated virtual function overrides
+			//{{AFX_VIRTUAL(CXpilotDoc)
+	public:
+			virtual BOOL OnNewDocument();
+			virtual void Serialize(CArchive & ar);
+			//}}AFX_VIRTUAL
 
-// Implementation
-  public:
-     virtual ~ CXpilotDoc();
+			// Implementation
+	public:
+			virtual ~ CXpilotDoc();
 #ifdef _DEBUG
-    virtual void AssertValid() const;
-    virtual void Dump(CDumpContext & dc) const;
+			virtual void AssertValid() const;
+			virtual void Dump(CDumpContext & dc) const;
 #endif
 
-  protected:
+	protected:
 
-// Generated message map functions
-  protected:
-    //{{AFX_MSG(CXpilotDoc)
-    // NOTE - the ClassWizard will add and remove member functions here.
-    //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
-     DECLARE_MESSAGE_MAP()
+			// Generated message map functions
+	protected:
+			//{{AFX_MSG(CXpilotDoc)
+			// NOTE - the ClassWizard will add and remove member functions here.
+			//    DO NOT EDIT what you see in these blocks of generated code !
+			//}}AFX_MSG
+			DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

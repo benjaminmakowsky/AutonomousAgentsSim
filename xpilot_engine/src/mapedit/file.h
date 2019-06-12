@@ -28,12 +28,12 @@
 enum valType { valInt, valReal, valBool, valIPos, valString };
 
 typedef struct {
-    char *name;
-    char *commandLineOption;
-    char *helpLine;
-    char *defaultValue;
-    void *variable;
-    enum valType type;
+	char *name;
+	char *commandLineOption;
+	char *helpLine;
+	char *defaultValue;
+	void *variable;
+	enum valType type;
 } optionDesc;
 
 extern Window filepromptwin;

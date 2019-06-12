@@ -227,7 +227,7 @@
 /* Evil Windows hacks. Yuck. */
 #ifdef _WINDOWS
 # include "NT/winNet.h"
-  /* need this for printf wrappers. */
+/* need this for printf wrappers. */
 # ifdef	_XPILOTNTSERVER_
 #  include "../server/NT/winServer.h"
 #  include "../server/NT/winSvrThread.h"
@@ -240,7 +240,7 @@ static void Win_show_error(char *errmsg);
 # include <io.h>
 # include <process.h>
 # include "NT/winNet.h"
-  /* Windows needs specific hacks for sockets: */
+/* Windows needs specific hacks for sockets: */
 # undef close
 # define close(x__) closesocket(x__)
 # undef ioctl
@@ -249,7 +249,7 @@ static void Win_show_error(char *errmsg);
 # define read(x__, y__, z__) recv(x__, y__, z__,0)
 # undef write
 # define write(x__, y__, z__) send(x__, y__, z__,0)
-  /* Windows some more hacks: */
+/* Windows some more hacks: */
 # define getpid() _getpid()
 #ifdef _MSC_VER
 typedef int socklen_t;
@@ -290,29 +290,29 @@ typedef int socklen_t;
 
 static inline double timeval_to_seconds(struct timeval *tvp)
 {
-    return (double)tvp->tv_sec + tvp->tv_usec * 1e-6;
+	return (double)tvp->tv_sec + tvp->tv_usec * 1e-6;
 }
 
 static inline struct timeval seconds_to_timeval(double t)
 {
-    struct timeval tv;
+	struct timeval tv;
 
-    tv.tv_sec = (unsigned)t;
-    tv.tv_usec = (unsigned)(((t - (double)tv.tv_sec) * 1e6) + 0.5);
+	tv.tv_sec = (unsigned)t;
+	tv.tv_usec = (unsigned)(((t - (double)tv.tv_sec) * 1e6) + 0.5);
 
-    return tv;
+	return tv;
 }
 
 /* returns 'tv2 - tv1' */
 static inline int timeval_sub(struct timeval *tv2,
-			      struct timeval *tv1)
+		struct timeval *tv1)
 {
-    int s, us;
+	int s, us;
 
-    s = tv2->tv_sec - tv1->tv_sec;
-    us = tv2->tv_usec - tv1->tv_usec;
+	s = tv2->tv_sec - tv1->tv_sec;
+	us = tv2->tv_usec - tv1->tv_usec;
 
-    return 1000000 * s + us;
+	return 1000000 * s + us;
 }
 
 #endif /* XPCOMMON_H */

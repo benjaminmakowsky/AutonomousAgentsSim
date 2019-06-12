@@ -36,17 +36,17 @@
  * When using this, add a final realloc later to free wasted memory
  */
 #define STORE(T,P,N,M,V)						\
-    if (N >= M && ((M <= 0)						\
-	? (P = (T *) malloc((M = 1) * sizeof(*P)))			\
-	: (P = (T *) realloc(P, (M += M) * sizeof(*P)))) == NULL) {	\
-	warn("No memory");						\
-	exit(1);							\
-    } else								\
-	(P[N++] = V)
+	if (N >= M && ((M <= 0)						\
+				? (P = (T *) malloc((M = 1) * sizeof(*P)))			\
+				: (P = (T *) realloc(P, (M += M) * sizeof(*P)))) == NULL) {	\
+		warn("No memory");						\
+		exit(1);							\
+	} else								\
+(P[N++] = V)
 
 typedef struct {
-    char	owner[80];
-    char	host[80];
+	char	owner[80];
+	char	host[80];
 } server_t;
 
 /*
@@ -100,15 +100,15 @@ extern shape_t ball_wire, wormhole_wire, filled_wire;
 
 static inline vector_t World_gravity(clpos_t pos)
 {
-    return world->gravity[CLICK_TO_BLOCK(pos.cx)][CLICK_TO_BLOCK(pos.cy)];
+	return world->gravity[CLICK_TO_BLOCK(pos.cx)][CLICK_TO_BLOCK(pos.cy)];
 }
 
 static inline double SHOT_MULT(object_t *obj)
 {
-    if (Mods_get(obj->mods, ModsNuclear)
-	&& Mods_get(obj->mods, ModsCluster))
-	return options.nukeClusterDamage;
-    return 1.0;
+	if (Mods_get(obj->mods, ModsNuclear)
+			&& Mods_get(obj->mods, ModsCluster))
+		return options.nukeClusterDamage;
+	return 1.0;
 }
 
 #ifndef	_WINDOWS
@@ -156,7 +156,7 @@ void Move_player(player_t *pl);
 void Turn_player(player_t *pl, bool push);
 int is_inside(int x, int y, hitmask_t hitmask, const object_t *obj);
 int shape_is_inside(int cx, int cy, hitmask_t hitmask, const object_t *obj,
-		    shape_t *s, int dir);
+		shape_t *s, int dir);
 int Polys_to_client(unsigned char **);
 void Ball_line_init(void);
 void Player_crash(player_t *pl, int crashtype, int mapobj_ind, int pt);
@@ -241,23 +241,23 @@ void Remove_fuel(pl_fuel_t *ft, double fuel);
 
 static inline void Player_add_fuel(player_t *pl, double amount)
 {
-    Add_fuel(&(pl->fuel), amount);
+	Add_fuel(&(pl->fuel), amount);
 }
 
 static inline void Player_remove_fuel(player_t *pl, double amount)
 {
-    Remove_fuel(&(pl->fuel), amount);
+	Remove_fuel(&(pl->fuel), amount);
 }
 
 void Place_item(player_t *pl, int type);
 int Choose_random_item(void);
 void Tractor_beam(player_t *pl);
 void General_tractor_beam(int id, clpos_t pos,
-			  int items, player_t *victim, bool pressor);
+		int items, player_t *victim, bool pressor);
 void Place_mine(player_t *pl);
 void Place_moving_mine(player_t *pl);
 void Place_general_mine(int id, int team, int status,
-			clpos_t pos, vector_t vel, modifiers_t mods);
+		clpos_t pos, vector_t vel, modifiers_t mods);
 void Detonate_mines(player_t *pl);
 char *Describe_shot(int type, int status, modifiers_t mods, int hit);
 void Fire_ecm(player_t *pl);
@@ -265,8 +265,8 @@ void Fire_general_ecm(int id, int team, clpos_t pos);
 void Update_connector_force(ballobject_t *ball);
 void Fire_shot(player_t *pl, int type, int dir);
 void Fire_general_shot(int id, int team,
-		       clpos_t pos, int type, int dir,
-		       modifiers_t mods, int target_id);
+		clpos_t pos, int type, int dir,
+		modifiers_t mods, int target_id);
 void Fire_normal_shots(player_t *pl);
 void Fire_main_shot(player_t *pl, int type, int dir);
 void Fire_left_shot(player_t *pl, int type, int dir, int gun);
@@ -283,14 +283,14 @@ void Delete_shot(int ind);
 void Do_deflector(player_t *pl);
 void Do_transporter(player_t *pl);
 void Do_general_transporter(int id, clpos_t pos,
-			    player_t *victim, int *item, double *amount);
+		player_t *victim, int *item, double *amount);
 void do_lose_item(player_t *pl);
 void Update_torpedo(torpobject_t *torp);
 void Update_missile(missileobject_t *shot);
 void Update_mine(mineobject_t *mine);
 void Make_item(clpos_t pos,
-	       vector_t vel,
-	       int item, int num_per_pack, int status);
+		vector_t vel,
+		int item, int num_per_pack, int status);
 void Throw_items(player_t *pl);
 void Detonate_items(player_t *pl);
 void add_temp_wormholes(int xin, int yin, int xout, int yout);
@@ -309,29 +309,29 @@ void Obj_repel(object_t *obj1, object_t *obj2, int repel_dist);
 void Update_tanks(pl_fuel_t *ft);
 void Tank_handle_detach(player_t *pl);
 void Make_debris(clpos_t  pos,
-		 vector_t vel,
-		 int      owner_id,
-		 int      owner_team,
-		 int      type,
-		 double   mass,
-		 int      status,
-		 int      color,
-		 int      radius,
-		 int      num_debris,
-		 int      min_dir,    int    max_dir,
-		 double   min_speed,  double max_speed,
-		 double   min_life,   double max_life);
+		vector_t vel,
+		int      owner_id,
+		int      owner_team,
+		int      type,
+		double   mass,
+		int      status,
+		int      color,
+		int      radius,
+		int      num_debris,
+		int      min_dir,    int    max_dir,
+		double   min_speed,  double max_speed,
+		double   min_life,   double max_life);
 void Make_wreckage(clpos_t  pos,
-		   vector_t vel,
-		   int      owner_id,
-		   int      owner_team,
-		   double   min_mass,   double max_mass,
-		   double   total_mass,
-		   int      status,
-		   int      max_wreckage,
-		   int      min_dir,    int    max_dir,
-		   double   min_speed,  double max_speed,
-		   double   min_life,   double max_life);
+		vector_t vel,
+		int      owner_id,
+		int      owner_team,
+		double   min_mass,   double max_mass,
+		double   total_mass,
+		int      status,
+		int      max_wreckage,
+		int      min_dir,    int    max_dir,
+		double   min_speed,  double max_speed,
+		double   min_life,   double max_life);
 void Explode_fighter(player_t *pl);
 
 /*
@@ -348,7 +348,7 @@ void Asteroid_line_init(void);
  */
 void Handle_player_command(player_t *pl, char *cmd);
 player_t *Get_player_by_name(const char *str,
-			     int *errcode, const char **errorstr_p);
+		int *errcode, const char **errorstr_p);
 void Send_info_about_player(player_t *pl);
 void Set_swapper_state(player_t *pl);
 
@@ -453,7 +453,7 @@ void expandKeyword(const char *keyword);
  */
 void Fire_laser(player_t *pl);
 void Fire_general_laser(int id, int team, clpos_t pos,
-			int dir, modifiers_t mods);
+		int dir, modifiers_t mods);
 void Laser_pulse_hits_player(player_t *pl, pulseobject_t *pulse);
 
 /*
@@ -486,7 +486,7 @@ const char *Object_typename(object_t *obj);
  */
 void P_edgestyle(const char *id, int width, int color, int style);
 void P_polystyle(const char *id, int color, int texture_id, int defedge_id,
-		 int flags);
+		int flags);
 void P_bmpstyle(const char *id, const char *filename, int flags);
 void P_start_polygon(clpos_t pos, int style);
 void P_offset(clpos_t offset, int edgestyle);

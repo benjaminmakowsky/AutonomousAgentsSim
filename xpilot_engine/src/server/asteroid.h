@@ -37,7 +37,7 @@
 #define ASTEROID_DUST_FACT	(1 / (1 + 2 / ASTEROID_DUST_MASS))
 /* mass of asteroid size n */
 #define ASTEROID_MASS(size)	(ASTEROID_BASE_MASS \
-				 * pow(2.0 + ASTEROID_DUST_MASS, (size) - 1.0))
+		* pow(2.0 + ASTEROID_DUST_MASS, (size) - 1.0))
 /* maximum angle between asteroids produced by breaking */
 #define ASTEROID_DELTA_DIR	(RES / 8)
 /* lifetime of asteroid before breaking */
@@ -46,7 +46,7 @@
 #define ASTEROID_HITS(size)	(1 << ((size) - 1))
 /* fuel cost to lifetime reduction conversion */
 #define ASTEROID_FUEL_HIT(fuel, size)	(((fuel) * ASTEROID_LIFE) / \
-				(25.0 * ASTEROID_HITS(size)))
+		(25.0 * ASTEROID_HITS(size)))
 /* initial speed of asteroid */
 #define ASTEROID_START_SPEED	(8 + rfrac() * 10)
 /* minimum distance asteroids start away from any player */
@@ -61,18 +61,18 @@ extern shape_t asteroid_wire4;
 
 static inline shape_t *Asteroid_get_shape_by_size(int size)
 {
-    switch (size) {
-    case 1:
-	return &asteroid_wire1;
-    case 2:
-	return &asteroid_wire2;
-    case 3:
-	return &asteroid_wire3;
-    case 4:
-	return &asteroid_wire4;
-    default:
-	return NULL;
-    }
+	switch (size) {
+		case 1:
+			return &asteroid_wire1;
+		case 2:
+			return &asteroid_wire2;
+		case 3:
+			return &asteroid_wire3;
+		case 4:
+			return &asteroid_wire4;
+		default:
+			return NULL;
+	}
 }
 
 #endif

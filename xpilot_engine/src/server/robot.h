@@ -93,16 +93,16 @@
  * function pointer to the robot_type_setups array.
  */
 typedef struct {
-    const char		*name;
-    void		(*robot_round_tick)(void);
-    void		(*robot_create)(player_t *robot, char *str);
-    void		(*robot_go_home)(player_t *robot);
-    void		(*robot_play)(player_t *robot);
-    void		(*robot_set_war)(player_t *victim, int killer);
-    int			(*robot_war_on_player)(player_t *robot);
-    void		(*robot_message)(player_t *robot, const char *str);
-    void		(*robot_destroy)(player_t *robot);
-    void		(*robot_invite)(player_t *robot, player_t *inviter);
+	const char		*name;
+	void		(*robot_round_tick)(void);
+	void		(*robot_create)(player_t *robot, char *str);
+	void		(*robot_go_home)(player_t *robot);
+	void		(*robot_play)(player_t *robot);
+	void		(*robot_set_war)(player_t *victim, int killer);
+	int			(*robot_war_on_player)(player_t *robot);
+	void		(*robot_message)(player_t *robot, const char *str);
+	void		(*robot_destroy)(player_t *robot);
+	void		(*robot_invite)(player_t *robot, player_t *inviter);
 } robot_type_t;
 
 /*
@@ -111,69 +111,69 @@ typedef struct {
  * not by the robot type implementation.
  */
 enum robot_talk_t {
-    ROBOT_TALK_ENTER,
-    ROBOT_TALK_LEAVE,
-    ROBOT_TALK_KILL,
-    ROBOT_TALK_WAR,
-    NUM_ROBOT_TALK_TYPES
+	ROBOT_TALK_ENTER,
+	ROBOT_TALK_LEAVE,
+	ROBOT_TALK_KILL,
+	ROBOT_TALK_WAR,
+	NUM_ROBOT_TALK_TYPES
 };
 
 /*
  * Configuration data for each robot available.
  */
 typedef struct {
-    char	driver[MAX_NAME_LEN];	/* Which code controls robot? */
-    char	name[MAX_NAME_LEN];	/* Name of this robot. */
-    char	config[MAX_CHARS];	/* Attack + defense ~ 100 */
-    unsigned	used;			/* How often has this robot been used */
-    char	shape[2*MSG_LEN];	/* shipshape string definition */
+	char	driver[MAX_NAME_LEN];	/* Which code controls robot? */
+	char	name[MAX_NAME_LEN];	/* Name of this robot. */
+	char	config[MAX_CHARS];	/* Attack + defense ~ 100 */
+	unsigned	used;			/* How often has this robot been used */
+	char	shape[2*MSG_LEN];	/* shipshape string definition */
 } robot_t;
 
 /*
  * Robot manager data for each robot instance.
  */
 typedef struct robot_data {
-    int		robots_ind;		/* index into Robots[] */
-    int		robot_types_ind;	/* index into robot_types[] */
-    void	*private_data;		/* robot type private data */
+	int		robots_ind;		/* index into Robots[] */
+	int		robot_types_ind;	/* index into robot_types[] */
+	void	*private_data;		/* robot type private data */
 } robot_data_t;
 
 /*
  * The private robot instance data for the default robot.
  */
 typedef struct robot_default_data {
-    int		robot_lock;		/* lock mode */
-    int		robot_lock_id;		/* target player if in war mode */
-    int		robot_mode;		/* ultrashort term mode of robot. */
-    int		robot_count;		/* Misc timings, minimizes rand use */
-    int		attack;			/* how aggressive (1-99) */
-    int		defense;		/* how defensive (1-99) */
-    double	robot_normal_speed;
-    double	robot_attack_speed;
-    double	robot_max_speed;
-    int		last_dropped_mine;      /* relative to robot_count */
-    int		last_fired_missile;     /* relative to robot_count */
-    int		last_thrown_ball;	/* relative to robot_count */
-    int		longterm_mode;		/* long term robot mode */
-    double	fuel_l1;		/* Fuel critical level */
-    double	fuel_l2;		/* Fuel warning level */
-    double	fuel_l3;		/* Fuel notify level */
+	int		robot_lock;		/* lock mode */
+	int		robot_lock_id;		/* target player if in war mode */
+	int		robot_mode;		/* ultrashort term mode of robot. */
+	int		robot_count;		/* Misc timings, minimizes rand use */
+	int		attack;			/* how aggressive (1-99) */
+	int		defense;		/* how defensive (1-99) */
+	double	robot_normal_speed;
+	double	robot_attack_speed;
+	double	robot_max_speed;
+	int		last_dropped_mine;      /* relative to robot_count */
+	int		last_fired_missile;     /* relative to robot_count */
+	int		last_thrown_ball;	/* relative to robot_count */
+	int		longterm_mode;		/* long term robot mode */
+	double	fuel_l1;		/* Fuel critical level */
+	double	fuel_l2;		/* Fuel warning level */
+	double	fuel_l3;		/* Fuel notify level */
 } robot_default_data_t;
 
 /*
  * The private robot instance data for the simple ng robot.
  */
 typedef struct robot_suibot_data {
-    int         robot_lock;             /* lock mode */
-    int         robot_lock_id;          /* target player if in war mode */
-    int         robot_mode;             /* ultrashort term mode of robot. */
-    int         robot_count;            /* Misc timings, minimizes rand use */
-    int         attack;                 /* how aggressive (1-99) */
-    int         defense;                /* how defensive (1-99) */
-    int         longterm_mode;          /* long term robot mode */
-    double      fuel_l1;                /* Fuel critical level */
-    double      fuel_l2;                /* Fuel warning level */
-    int last_attacked_player; /* relative to robot_count */
+	int         robot_lock;             /* lock mode */
+	int         robot_lock_id;          /* target player if in war mode */
+	int         robot_mode;             /* ultrashort term mode of robot. */
+	int         robot_count;            /* Misc timings, minimizes rand use */
+	int         attack;                 /* how aggressive (1-99) */
+	int         defense;                /* how defensive (1-99) */
+	int         longterm_mode;          /* long term robot mode */
+	double      fuel_l1;                /* Fuel critical level */
+	double      fuel_l2;                /* Fuel warning level */
+	int last_attacked_player; /* relative to robot_count */
 } robot_suibot_data_t;
 
 

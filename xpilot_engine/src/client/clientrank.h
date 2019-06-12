@@ -27,10 +27,10 @@ extern char clientRankHTMLFile[PATH_MAX];
 extern char clientRankHTMLNOJSFile[PATH_MAX];
 
 typedef struct ScoreNode {
-    char nick[16];
-    int timestamp;
-    unsigned short kills;
-    unsigned short deaths;
+	char nick[16];
+	int timestamp;
+	unsigned short kills;
+	unsigned short deaths;
 } ScoreNode;
 
 void Init_saved_scores(void);

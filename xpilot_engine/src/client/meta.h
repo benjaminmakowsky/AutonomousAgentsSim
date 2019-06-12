@@ -60,23 +60,23 @@
  * of char pointers to reduce the amount of code.
  */
 struct ServerInfo {
-    char *version,
-	*hostname,
-	*users_str,
-	*mapname,
-	*mapsize,
-	*author,
-	*status,
-	*bases_str,
-	*fps_str,
-	*playlist,
-	*sound,
-	*teambases_str,
-	*timing, *ip_str, *freebases, *queue_str, *domain, pingtime_str[5];
-    unsigned port,
-	ip, users, bases, fps, uptime, teambases, queue, pingtime;
-    struct timeval start;
-    unsigned char serial;
+	char *version,
+	     *hostname,
+	     *users_str,
+	     *mapname,
+	     *mapsize,
+	     *author,
+	     *status,
+	     *bases_str,
+	     *fps_str,
+	     *playlist,
+	     *sound,
+	     *teambases_str,
+	     *timing, *ip_str, *freebases, *queue_str, *domain, pingtime_str[5];
+	unsigned port,
+		 ip, users, bases, fps, uptime, teambases, queue, pingtime;
+	struct timeval start;
+	unsigned char serial;
 };
 
 extern list_t server_list;
@@ -93,9 +93,9 @@ typedef struct ServerInfo server_info_t;
 
 
 enum MetaState {
-    MetaConnecting = 0,
-    MetaReadable = 1,
-    MetaReceiving = 2
+	MetaConnecting = 0,
+	MetaReadable = 1,
+	MetaReceiving = 2
 };
 
 /*
@@ -104,10 +104,10 @@ enum MetaState {
  */
 
 struct Meta {
-    char name[MAX_HOST_LEN];
-    char addr[16];
-    sock_t sock;
-    enum MetaState state;       /* connecting, readable, receiving */
+	char name[MAX_HOST_LEN];
+	char addr[16];
+	sock_t sock;
+	enum MetaState state;       /* connecting, readable, receiving */
 };
 
 
