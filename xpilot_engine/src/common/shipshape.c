@@ -308,7 +308,6 @@ static void Grid_print(grid_t *grid_p)
 
 static int shape2wire(char *ship_shape_str, shipshape_t *ship)
 {
-	warn("ship str: %s\n", ship_shape_str );
 	grid_t grid;
 	int i, j, x, y, dx, dy, max, shape_version = 0;
 	ipos_t pt[MAX_SHIP_PTS2], in, old_in, engine, m_gun;
@@ -323,7 +322,6 @@ static int shape2wire(char *ship_shape_str, shipshape_t *ship)
 	memset(ship, 0, sizeof(shipshape_t));
 
 	if (debugShapeParsing)
-		warn("parsing shape: %s", ship_shape_str);
 
 	for (str = ship_shape_str; (str = strchr(str, '(' )) != NULL; ) {
 
@@ -552,8 +550,6 @@ static int shape2wire(char *ship_shape_str, shipshape_t *ship)
 					break;
 
 				case 8:		/* Keyword is 'name' */
-					warn( "at name" );
-					warn( "%s\n", teststr );
 					ship->name = strdup(teststr);
 					/* ship->name[strlen(ship->name)-1] = '\0'; */
 					break;

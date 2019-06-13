@@ -736,8 +736,9 @@ void Queue_loop(void)
 								(qp->team == options.robotTeam
 								 && options.reserveRobotTeam) ||
 								(!Kick_robot_players(qp->team) &&
-								 !Kick_paused_players(qp->team)))
-							qp->team = TEAM_NOT_SET;
+								 !Kick_paused_players(qp->team))){
+							//qp->team = TEAM_NOT_SET;
+            }
 					}
 					if (qp->team == TEAM_NOT_SET) {
 						qp->team = Pick_team(PL_TYPE_HUMAN);
@@ -752,6 +753,7 @@ void Queue_loop(void)
 				}
 
 				/* now get him a decent login port. */
+
 				qp->login_port = Setup_connection(qp->user_name, qp->nick_name,
 						qp->disp_name, qp->team,
 						qp->host_addr, qp->host_name,

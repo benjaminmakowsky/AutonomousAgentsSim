@@ -1005,19 +1005,25 @@ static int Handle_login(connection_t *connp, char *errmsg, size_t errsize)
 	if (BIT(world->rules->mode, TEAM_PLAY)) {
 		if (connp->team < 0 || connp->team >= MAX_TEAMS
 				|| (options.reserveRobotTeam
-					&& (connp->team == options.robotTeam)))
+					&& (connp->team == options.robotTeam))){
 			connp->team = TEAM_NOT_SET;
-		else if (world->teams[connp->team].NumBases <= 0)
+    }
+		else if (world->teams[connp->team].NumBases <= 0){
 			connp->team = TEAM_NOT_SET;
+    }
 		else {
 			Check_team_members(connp->team);
 			if (world->teams[connp->team].NumMembers
 					- world->teams[connp->team].NumRobots
-					>= world->teams[connp->team].NumBases)
-				connp->team = TEAM_NOT_SET;
+					>= world->teams[connp->team].NumBases){
+        // This tries to keep the teams equal, lets turn this off
+				//connp->team = TEAM_NOT_SET;
+      }
 		}
-		if (connp->team == TEAM_NOT_SET)
+		if (connp->team == TEAM_NOT_SET){
+      printf("Team is not set\n");
 			connp->team = Pick_team(PL_TYPE_HUMAN);
+    }
 	} else
 		connp->team = TEAM_NOT_SET;
 
@@ -1062,7 +1068,6 @@ static int Handle_login(connection_t *connp, char *errmsg, size_t errsize)
 			pl->team = 0;
 		}
 		else {
-			printf("Picking startpos\n");
 			Pick_startpos(pl);
 			Go_home(pl);
 		}
@@ -2792,7 +2797,6 @@ const char *Player_get_dpy(player_t *pl)
 static int Receive_shape(connection_t *connp)
 {
 	int n;
-	warn( "Receiving shape" );
 	char ch, str[2*MSG_LEN];
 
 	if ((n = Packet_scanf(&connp->r, "%c%S", &ch, str)) <= 0) {
@@ -2806,7 +2810,6 @@ static int Receive_shape(connection_t *connp)
 		return n;
 	}
 	if (connp->state == CONN_LOGIN && connp->ship == NULL){
-		warn("Parsing shape str");
 		connp->ship = Parse_shape_str(str);
 	}
 	return 1;

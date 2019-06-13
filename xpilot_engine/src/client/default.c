@@ -151,10 +151,12 @@ static const char *Get_hostName(xp_option_t *opt)
 static bool Set_team(xp_option_t *opt, int value)
 {
 	UNUSED_PARAM(opt);
-	if (value >= 0 && value < MAX_TEAMS)
+	if (value >= 0 && value < MAX_TEAMS){
 		connectParam.team = value;
-	else
+  }
+	else{
 		connectParam.team = TEAM_NOT_SET;
+  }
 
 	return true;
 }
