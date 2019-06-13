@@ -321,8 +321,6 @@ static int shape2wire(char *ship_shape_str, shipshape_t *ship)
 
 	memset(ship, 0, sizeof(shipshape_t));
 
-	if (debugShapeParsing)
-
 	for (str = ship_shape_str; (str = strchr(str, '(' )) != NULL; ) {
 
 			str++;

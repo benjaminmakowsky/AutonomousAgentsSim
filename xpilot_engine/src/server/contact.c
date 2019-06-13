@@ -737,6 +737,7 @@ void Queue_loop(void)
 								 && options.reserveRobotTeam) ||
 								(!Kick_robot_players(qp->team) &&
 								 !Kick_paused_players(qp->team))){
+              // Don't want anyone to be kicked
 							//qp->team = TEAM_NOT_SET;
             }
 					}
