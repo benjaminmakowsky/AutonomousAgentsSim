@@ -5,7 +5,7 @@
  *
  * Copyright (C) 1991-2001 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
@@ -790,124 +790,123 @@ static int Lines_check(int msx, int msy, int mdx, int mdy, int *mindone,
 	int lsx, lsy, ldx, ldy, temp, mirror, start, end, i, x, sy, ey, prod;
 	int mbase = mdy >> 1, hit = 0;
 
-	while ( (i = *lines++) != 65535) {
-		if (linet[i].group
-				&& (!can_hit(&groups[linet[i].group], move)))
-			continue;
-		lsx = linet[i].start.cx;
-		lsy = linet[i].start.cy;
-		ldx = linet[i].delta.cx;
-		ldy = linet[i].delta.cy;
+	if(lines != NULL) {
+        while ((i = *lines++) != 65535) {
+            if (linet[i].group
+                && (!can_hit(&groups[linet[i].group], move)))
+                continue;
+            lsx = linet[i].start.cx;
+            lsy = linet[i].start.cy;
+            ldx = linet[i].delta.cx;
+            ldy = linet[i].delta.cy;
 
-		if (chx) {
-			lsx = -lsx;
-			ldx = -ldx;
-		}
-		if (chy) {
-			lsy = -lsy;
-			ldy = -ldy;
-		}
-		if (chxy) {
-			temp = ldx;
-			ldx = ldy;
-			ldy = temp;
-			temp = lsx;
-			lsx = lsy;
-			lsy = temp;
-		}
-		lsx -= msx;
-		lsy -= msy;
-		if (chxy) {
-			lsx = CENTER_YCLICK(lsx);
-			lsy = CENTER_XCLICK(lsy);
-		}
-		else {
-			lsx = CENTER_XCLICK(lsx);
-			lsy = CENTER_YCLICK(lsy);
-		}
-		if (*height < lsy + (ldy < 0 ? ldy : 0))
-			continue;
-		if (0 > lsy + (ldy < 0 ? 0 : ldy))
-			continue;
+            if (chx) {
+                lsx = -lsx;
+                ldx = -ldx;
+            }
+            if (chy) {
+                lsy = -lsy;
+                ldy = -ldy;
+            }
+            if (chxy) {
+                temp = ldx;
+                ldx = ldy;
+                ldy = temp;
+                temp = lsx;
+                lsx = lsy;
+                lsy = temp;
+            }
+            lsx -= msx;
+            lsy -= msy;
+            if (chxy) {
+                lsx = CENTER_YCLICK(lsx);
+                lsy = CENTER_XCLICK(lsy);
+            } else {
+                lsx = CENTER_XCLICK(lsx);
+                lsy = CENTER_YCLICK(lsy);
+            }
+            if (*height < lsy + (ldy < 0 ? ldy : 0))
+                continue;
+            if (0 > lsy + (ldy < 0 ? 0 : ldy))
+                continue;
 
-		mirror = chx ^ chy ^ chxy;
-		if (ldx < 0) {
-			lsx += ldx;
-			ldx = -ldx;
-			lsy += ldy;
-			ldy = -ldy;
-			mirror ^= 1;
-		}
+            mirror = chx ^ chy ^ chxy;
+            if (ldx < 0) {
+                lsx += ldx;
+                ldx = -ldx;
+                lsy += ldy;
+                ldy = -ldy;
+                mirror ^= 1;
+            }
 
-		start = MAX(0, lsx);
-		end = MIN(*mindone + 1, lsx + ldx);
-		if (start > end)
-			continue;
+            start = MAX(0, lsx);
+            end = MIN(*mindone + 1, lsx + ldx);
+            if (start > end)
+                continue;
 
-		sy = LINEY(mdx, mdy, mbase, start);
-		prod = (start - lsx) * ldy - (sy - lsy) * ldx;
+            sy = LINEY(mdx, mdy, mbase, start);
+            prod = (start - lsx) * ldy - (sy - lsy) * ldx;
 
-		if (!prod) {
-			if (!ldx && (lsy + (ldy < 0 ? ldy : 0) > sy ||
-						lsy + (ldy < 0 ? 0 : ldy) < sy))
-				continue;
-			if ( (prod = -lsx * ldy + lsy * ldx) > 0 == mirror || prod == 0)
-				continue;
-			start--;
-		}
-		else {
-			if (prod > 0 == mirror)
-				continue;
-			ey = LINEY(mdx, mdy, mbase, end);
-			if ( ABS(prod) >= ldx
-					&& ABS( (prod = (end - lsx) * ldy - (ey - lsy) * ldx) )
-					>= ldx && prod > 0 != mirror)
-				continue;
-			{
-				int schs, sche;
-				double diff = ((double)(-mbase)/mdx-(double)(lsx)*ldy/ldx+lsy);
-				double diff2 = (double)mdy / mdx - (double)ldy / ldx;
+            if (!prod) {
+                if (!ldx && (lsy + (ldy < 0 ? ldy : 0) > sy ||
+                             lsy + (ldy < 0 ? 0 : ldy) < sy))
+                    continue;
+                if ((prod = -lsx * ldy + lsy * ldx) > 0 == mirror || prod == 0)
+                    continue;
+                start--;
+            } else {
+                if (prod > 0 == mirror)
+                    continue;
+                ey = LINEY(mdx, mdy, mbase, end);
+                if (ABS(prod) >= ldx
+                    && ABS((prod = (end - lsx) * ldy - (ey - lsy) * ldx))
+                       >= ldx && prod > 0 != mirror)
+                    continue;
+                {
+                    int schs, sche;
+                    double diff = ((double) (-mbase) / mdx - (double) (lsx) * ldy / ldx + lsy);
+                    double diff2 = (double) mdy / mdx - (double) ldy / ldx;
 
-				if (ABS(diff2) < 1. / (50000.*50000)) {
-					if (diff > 0 || diff < -1)
-						continue;
-					else {
-						schs = start + 1;
-						sche = end;
-					}
-				}
-				/* Can this float->int conversion cause overflows?
-				 * If so, calculate min/max before conversion. */
-				else if (diff2 < 0) {
-					schs = MAX(start + 1, (int) ((diff + 1) / diff2 + .9));
-					sche = MIN(end, (int) (diff / diff2 + 1.1));
-				}
-				else {
-					schs = MAX(start + 1, (int) (diff / diff2 + .9));
-					sche = MIN(end, (int) ((diff + 1) / diff2 + 1.1));
-				}
+                    if (ABS(diff2) < 1. / (50000. * 50000)) {
+                        if (diff > 0 || diff < -1)
+                            continue;
+                        else {
+                            schs = start + 1;
+                            sche = end;
+                        }
+                    }
+                        /* Can this float->int conversion cause overflows?
+                         * If so, calculate min/max before conversion. */
+                    else if (diff2 < 0) {
+                        schs = MAX(start + 1, (int) ((diff + 1) / diff2 + .9));
+                        sche = MIN(end, (int) (diff / diff2 + 1.1));
+                    } else {
+                        schs = MAX(start + 1, (int) (diff / diff2 + .9));
+                        sche = MIN(end, (int) ((diff + 1) / diff2 + 1.1));
+                    }
 
-				for (x = schs; x <= sche; x++)
-					if ( (prod = (x - lsx) * ldy
-								- (LINEY(mdx, mdy, mbase, x) - lsy) * ldx)
-							>= 0 == mirror || prod == 0)
-						goto found;
-				continue;
-found:
-				start = x - 1;
-			}
-		}
+                    for (x = schs; x <= sche; x++)
+                        if ((prod = (x - lsx) * ldy
+                                    - (LINEY(mdx, mdy, mbase, x) - lsy) * ldx)
+                            >= 0 == mirror || prod == 0)
+                            goto found;
+                    continue;
+                    found:
+                    start = x - 1;
+                }
+            }
 
-		/* delta components can be big, so (float) to avoid overflow */
-		if (start < *mindone
-				|| (start == *mindone && *minline != -1
-					&& SIDE((float)move->delta.cx, (float)move->delta.cy, i) < 0)) {
-			hit = 1;
-			*mindone = start;
-			*minline = i;
-			*height = LINEY(mdx, mdy, mbase, start);
-		}
-	}
+            /* delta components can be big, so (float) to avoid overflow */
+            if (start < *mindone
+                || (start == *mindone && *minline != -1
+                    && SIDE((float) move->delta.cx, (float) move->delta.cy, i) < 0)) {
+                hit = 1;
+                *mindone = start;
+                *minline = i;
+                *height = LINEY(mdx, mdy, mbase, start);
+            }
+        }
+    }
 	return hit;
 }
 

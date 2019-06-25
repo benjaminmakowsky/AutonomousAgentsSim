@@ -3,12 +3,12 @@
  *
  * Copyright (C) 1991-2004 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
  *      Erik Andersson       <maximan@users.sourceforge.net>
- *      Kristian Söderblom   <kps@users.sourceforge.net>
+ *      Kristian Sï¿½derblom   <kps@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
  */
 
 #include "xpclient_x11.h"
+#include "../../../../xpilot_ai/c/boids.h"
+
 
 int hudColor;		/* Color index for HUD drawing, has to be global for windoze */
 static int hudHLineColor;	/* Color index for horiz. HUD line drawing */
@@ -1001,7 +1003,134 @@ void Paint_recording(void)
 	XDrawString(dpy, drawPixmap, gameGC, x, y, buf, len);
 }
 
+void Paint_HUD_values(void)
+{
+    int w, x, y, len, w2, len2, wmax;
+    int lineSep = 20; //Value used to place string 20 units down for spacing
 
+    static char buf[32], buf2[32];
+
+    //Variables for parameters i.e. (alignment and cohesion and separation)
+    static char cbuf1[32], cbuf2[32]; // cRadius, cWeight
+    static char abuf1[32], abuf2[32]; // aRadius, aWeight
+    static char sbuf1[32], sbuf2[32]; // sRadius, sWeight
+    static char fbuf1[32]; // fov
+
+    int lenC1, lenC2, w3, w4, lenA1, lenA2,lenS1, lenS2, lenFOV;
+
+    //friendly cohesion variables
+    extern int cRadius;
+    extern int cWeight;
+
+    //(friend) alignment variables
+    extern int aWeight;
+    extern int aRadius;
+
+    //(friend) separation variables
+    extern int sWeight;
+    extern int sRadius;
+
+
+    //(enemy) separation variables
+    extern int eWeight;
+    extern int eRadius;
+
+    //field (angle) of vision
+    extern int fov;
+
+    if (!hudColor)
+        return;
+
+    SET_FG(colors[hudColor].pixel);
+
+    sprintf(buf,  "FPS    : %.3f", clientFPS);
+    sprintf(buf2, "CL.LAG : %.1f ms", clData.clientLag);
+
+    sprintf(cbuf1, "cRadius : %d", cRadius);
+    sprintf(cbuf2, "cWeight : %d", cWeight);
+    sprintf(abuf1, "aRadius : %d", aRadius);
+    sprintf(abuf2, "aWeight : %d", aWeight);
+    sprintf(sbuf1, "sRadius : %d", sRadius);
+    sprintf(sbuf2, "sWeight : %d", sWeight);
+    sprintf(fbuf1, "fov : %d", fov);
+
+
+
+    //FPS
+    len = strlen(buf);
+    w = XTextWidth(gameFont, buf, len);
+
+    //CL.LAG
+    len2 = strlen(buf2);
+    w2 = XTextWidth(gameFont, buf2, len2);
+
+    //cRadius
+    lenC1 = strlen(cbuf1);
+    //w3 = XTextWidth(gameFont, cbuf1, lenC1);
+
+    //cWeight
+    lenC2 = strlen(cbuf2);
+    //w4 = XTextWidth(gameFont, cbuf2, lenC2);
+
+    //aRadius
+    lenA1 = strlen(abuf1);
+    //w5 = XTextWidth(gameFont, abuf1, lenA1);
+
+    //aWeight
+    lenA2 = strlen(abuf2);
+    //w6 = XTextWidth(gameFont, abuf2, lenA2);
+
+    //sRadius
+    lenS1 = strlen(sbuf1);
+
+    //sWeight
+    lenS2 = strlen(sbuf2);
+
+    //fov
+    lenFOV = strlen(fbuf1);
+
+    wmax = MAX(w, w2);
+    //wmax = MAX(wmax, w3);
+    //wmax = MAX(wmax, w4);
+
+
+    x = WINSCALE(ext_view_width) - 10 - wmax;
+    y = 200 + gameFont->ascent;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, buf, len);
+
+    y += lineSep;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, buf2, len2);
+
+    //cRadius
+    y += lineSep;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, cbuf1, lenC1);
+
+    //cWeight
+    y += lineSep;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, cbuf2, lenC2);
+
+    //aRadius
+    y += lineSep;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, abuf1, lenA1);
+
+    //aWeight
+    y += lineSep;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, abuf2, lenA2);
+
+    //sRadius
+    y += lineSep;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, sbuf1, lenS1);
+
+    //sWeight
+    y += lineSep;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, sbuf2, lenS2);
+
+    //fov
+    y += lineSep;
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, fbuf1, lenFOV);
+
+}
+/*
 void Paint_HUD_values(void)
 {
 	int w, x, y, len, w2, len2, wmax;
@@ -1030,7 +1159,7 @@ void Paint_HUD_values(void)
 	y = 220 + gameFont->ascent;
 	rd.drawString(dpy, drawPixmap, gameGC, x, y, buf2, len2);
 }
-
+*/
 xp_option_t hud_options[] = {
 
 	COLOR_INDEX_OPTION(

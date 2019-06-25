@@ -53,21 +53,21 @@ int degToAim = -1;			//what direction do we want to go
 int turnLock = 0;		//time not allowed to compute new wall avoidance
 int wallVector = -1;		//where to go to avoid crashing into a wall
 int wWeight = 0;		//weight of wall avoidance relative to other vectors
-int pVector = -1;		//information on the most recent (past) heading	
+int pVector = -1;		//information on the most recent (past) heading
 int pWeight = 5;
 int aVector = -1; 		//(friend) alignment variables
-int aWeight = 0;
-int aRadius = 400;
-int cVector = -1; 		//(friend) cohesion variables
-int cWeight = 0; 
-int cRadius = 400;	
+extern int aWeight;
+extern int aRadius;
+int cVector; 		//(friend) cohesion variables
+extern int cWeight;
+extern int cRadius;
 int sVector = -1;		//(friend) separation variables
-int sWeight = 0;
-int sRadius = 200;	
+extern int sWeight;
+extern int sRadius;
 int eVector = -1;		//(enemy) separation variables
-int eWeight = 0;
-int eRadius = 200;
-int fov = 60;			//field (angle) of vision
+extern int eWeight;
+extern int eRadius;
+extern int fov;			//field (angle) of vision
 int mobile = 1;			//allows us to completely anchor all drones
 bool isLeader = false;		//whether this drone is a leader
 int leaders[10];
@@ -570,6 +570,23 @@ void handleMsgBuffer()
         cWeight = 0;
         fov = 60;
       }
+      /*
+       *
+      //TODO: implement search alg for bee and hive - Benjamin Makowsky - 42656E
+      //Begins ai driven search mode
+      else if(!strcmp(tok, "beginsearch"))
+      {
+        eRadius = 200;
+        eWeight = 5;
+        sRadius = 100;
+        sWeight = 5;
+        aWeight = 4;
+        cWeight = 2;
+        fov = 180;
+      }
+       *
+       *
+       */
     }
   }
 }
