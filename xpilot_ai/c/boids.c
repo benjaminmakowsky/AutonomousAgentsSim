@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdarg.h>
+#include <string.h>
 #include <math.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -57,6 +58,7 @@ int wWeight = 0;		//weight of wall avoidance relative to other vectors
 int pVector = -1;		//information on the most recent (past) heading
 int pWeight = 5;
 int aVector = -1; 		//(friend) alignment variables
+extern double fuel;
 extern int aWeight;
 extern int aRadius;
 int cVector; 		//(friend) cohesion variables
@@ -77,6 +79,8 @@ int numLeaders = 0;		//how many leaders on our team
 int leaderMode = 1;		//whether we care just about leaders for flocking
 int distanceWeighting = 0;	//simple averaging vs factoring in distance
 int oppositesAttract = 0;
+extern char bugstring[50];
+bool fueling = false;
 
 
 /*****************************************************************************
@@ -371,6 +375,7 @@ void flocking()
   }
 }
 
+//TODO: Implement search - Benjamin Makowsky -----------------------
 /*****************************************************************************
  * Searching (Controller)
  * ***************************************************************************/
@@ -382,23 +387,59 @@ void flocking()
 
 void searching()
 {
+  /*
+   * Process:
+   *  1. Check for walls
+   *  2. Attempt to attain honey
+   *  3. Check new fuel levels vs past fuel levels
+   *    3a. If new fuel is greater found a supply, if less found a hive
+   *  4. Keep record of supply/hive location
+   */
 
+  //Check fuel levels once a second @ 20fps
+  if(frameCount % (20) == 0) {
+    fuel = selfFuel();
+  }
 
-  //Update vector to for wall avoidance
-  wallAvoidance();
-
-  //If no wall detected keep flying otherwise turn and stop
+  /*
+   * Step 1: Check for walls
+   */
+  wallAvoidance();  //Update vector to for wall avoidance
   if(wallVector != -1){
     turnToDeg(selfHeadingDeg() + 180);
-    thrust(0);
+    //printf("Found Wall");
+  }
+
+  /*
+   * Step 2: Attempt to Attain Honey
+   */
+  int num_seconds = 1;
+  int off_set = 10;
+  if(frameCount % (20 * num_seconds) == 0 && (fueling == false)){
+    strcpy(bugstring, "Start Refuel");
+    refuel(1);
+    fueling = true;
+  }
+  if(((frameCount + off_set) % (20 * num_seconds) == 0) && (fueling == true)){
+    strcpy(bugstring, "Stop Refuel");
+    refuel(0);
+    fueling = false;
+  }
 
 
+  /*
+   * Step 3: Check if fuel levels changed
+   */
+  double new_fuel_level = selfFuel();
+  if(new_fuel_level - fuel > 0){
+    setPower(0);
+    fov -= 1;
   }
 
 
 
   //Now that we've turned, we can decide how much to thrust.
-  (mobile) ? thrust(1) : thrust(0);
+  //(mobile) ? thrust(1) : thrust(0);
 
 }
 
@@ -622,11 +663,6 @@ void handleMsgBuffer()
         aWeight = 0;
         cWeight = 0;
         fov = 180;
-
-        turn(180);
-
-        int current_fuel = selfFuel();
-
 
       }
 
