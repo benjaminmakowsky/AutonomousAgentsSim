@@ -39,7 +39,8 @@ enum State
 {
   STATE_INIT,
   STATE_FLYING,
-  STATE_DEAD
+  STATE_DEAD,
+  STATE_SEARCHING
 };
 
 //global variables
@@ -355,7 +356,8 @@ void flocking()
   }
 
   //Whatever direction we've decided to turn to, do so.
-  turnToDeg(degToAim);
+    turnToDeg(degToAim);
+    //turnToDeg(180);
 
   //Now that we've turned, we can decide how much to thrust.
   if(mobile)
@@ -368,6 +370,38 @@ void flocking()
     thrust(0);
   }
 }
+
+/*****************************************************************************
+ * Searching (Controller)
+ * ***************************************************************************/
+
+//  Provides a mechanism to allow for searching of a hive. Determination of hive
+//  location is done by utilizing the tractor beam to determine if fuels levels
+//  increase or decrease. Increased levels indicate a food source where as
+//  decreasing levels indicate a home base.
+
+void searching()
+{
+
+
+  //Update vector to for wall avoidance
+  wallAvoidance();
+
+  //If no wall detected keep flying otherwise turn and stop
+  if(wallVector != -1){
+    turnToDeg(selfHeadingDeg() + 180);
+    thrust(0);
+
+
+  }
+
+
+
+  //Now that we've turned, we can decide how much to thrust.
+  (mobile) ? thrust(1) : thrust(0);
+
+}
+
 
 
 /*****************************************************************************
@@ -560,6 +594,7 @@ void handleMsgBuffer()
         aWeight = 4;
         cWeight = 2;
         fov = 180;
+        state = STATE_FLYING;
       }
       //return to aimless flying
       else if(!strcmp(tok, "endboids"))
@@ -569,24 +604,32 @@ void handleMsgBuffer()
         aWeight = 0;
         cWeight = 0;
         fov = 60;
+        state = STATE_FLYING;
       }
-      /*
-       *
+
       //TODO: implement search alg for bee and hive - Benjamin Makowsky - 42656E
       //Begins ai driven search mode
-      else if(!strcmp(tok, "beginsearch"))
+      else if(!strcmp(tok, "findhoney"))
       {
-        eRadius = 200;
-        eWeight = 5;
-        sRadius = 100;
-        sWeight = 5;
-        aWeight = 4;
-        cWeight = 2;
+
+        state = STATE_SEARCHING;
+
+        //setPower(0);
+        eRadius = 0;
+        eWeight = 0;
+        sRadius = 0;
+        sWeight = 0;
+        aWeight = 0;
+        cWeight = 0;
         fov = 180;
+
+        turn(180);
+
+        int current_fuel = selfFuel();
+
+
       }
-       *
-       *
-       */
+
     }
   }
 }
@@ -614,8 +657,6 @@ AI_loop()
   //Check the input message buffer to adjust behavior as necessary.
   handleMsgBuffer();
 
-  //By default, assume we're just flying around.
-  state = STATE_FLYING;
 
   //Check if we are dead.
   if(!selfAlive())
@@ -641,6 +682,10 @@ AI_loop()
 
     case(STATE_DEAD):
       state = STATE_FLYING;
+      break;
+
+    case(STATE_SEARCHING):
+      searching();
       break;
   }
 }

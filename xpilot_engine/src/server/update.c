@@ -4,11 +4,11 @@
  * Copyright (C) 2000-2004 by
  *
  *      Uoti Urpala          <uau@users.sourceforge.net>
- *      Kristian Söderblom   <kps@users.sourceforge.net>
+ *      Kristian Sï¿½derblom   <kps@users.sourceforge.net>
  *
  * Copyright (C) 1991-2001 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
@@ -1035,8 +1035,11 @@ static void Update_players(void)
 			}
 
 			/* Decrement fuel */
+			//TODO: Testing fueling
+			/*
 			if (tick)
 				Player_add_fuel(pl, -f);
+			 */
 		} else
 			pl->acc.x = pl->acc.y = 0.0;
 

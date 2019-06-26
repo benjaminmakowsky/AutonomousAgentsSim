@@ -1,7 +1,8 @@
 //Justin Anderson - May 2012
 //extern method declarations -JTO
 	extern int start(int argc, char* argv[]); // Initialize AI interface and start XPilot -JRA
-// Movement methods -JNE
+
+	// Movement methods -JNE
 	extern void turnLeft(int flag); // Turns left -JRA
 	extern void turnRight(int flag); // Turns right -JRA
 	extern void turn(int deg); // Turns to an inputed Speed of Degree -JRA
@@ -13,7 +14,8 @@
 	extern void slowerTurnrate(); //Decreases the ship's Turn Rate -JRA
 	extern void morePower(); //Increases the ship's Thrusting Power -JRA
 	extern void lessPower(); //Decreases the ship's Thrusting Power -JRA
-// Shooting methods -JNE
+
+	// Shooting methods -JNE
 	extern void fireShot(); // Fires a Shot -JRA
 	extern void fireMissile(); // Fires a Missile -JRA
 	extern void fireTorpedo(); // Fires a Torpedo
@@ -22,7 +24,8 @@
 	extern void detachMine(); // Releases a Mine from the ship -JRA
 	extern void detonateMines(); // Detonates released Mines -JRA
 	extern void fireLaser(); // Fires a Laser -JRA
-// Item usage methods -JNE
+
+	// Item usage methods -JNE
 	extern void tankDetach(); // Detaches a fuel tank from the ship -JRA
 	extern void cloak(); // Cloaks the ship -JRA
 	extern void ecm(); // Launches an ECM to temporarily blind opponents -JRA
@@ -40,7 +43,8 @@
 	extern void deflector(); // Uses the deflector item to push everything away from the ship -JRA
 	extern void selectItem(); // Selects the ships item to be dropped -JRA
 	extern void loseItem(); // Drops the ships selected item 
-// Lock methods -JNE
+
+	// Lock methods -JNE
 	extern void lockNext(); // Locks onto the next ship in the ship buffer -JRA
 	extern void lockPrev(); // Locks onto the prev ship in the ship buffer -JRA
 	extern void lockClose(); // Locks onto the closest ship -JRA
@@ -49,7 +53,8 @@
 	extern void loadLock2(); // Load a saved lock-on enemy ship -JRA
 	extern void loadLock3(); // Load a saved lock-on enemy ship -JRA
 	extern void loadLock4(); // Load a saved lock-on enemy ship -JRA
-// Modifier methods -JNE
+
+	// Modifier methods -JNE
 	extern void toggleNuclear(); // Toggles the option to have the ship fire Nuclear weapons instead of regualar weapons, takes up five mines or seven missile -JRA
 	extern void togglePower(); // Toggles the Power of the weapon -JRA
 	extern void toggleVelocity(); // Modifies explosion velocity of mines and missiles -JRA
@@ -64,27 +69,30 @@
 	extern void loadModifiers3(); // Loads Modifiers -JRA
 	extern void loadModifiers4(); // Loads Modifiers -JRA
 	extern void clearModifiers(); // Clears Modifiers -JRA
-// map features -JNE
+
+	// map features -JNE
 	extern void connector(int flag); // Connects the ship to the ball in Capture the Flag Mode -JRA
 	extern void dropBall(); // Drops the ball in Capture the Flag Mode -JRA
 	extern void refuel(int flag); // Refuels the ship -JRA
-// other options -JNE
-  extern double selfFuel(); // Returns the ship current fuelSum
-  extern double selfBaseFuel(); // Returns the ship base's current fuelReserve
-	extern void keyHome(); // Changes the ship's Home Base or respawn location -JRA
-	extern void selfDestruct(); // Triggers the ship's Self Destruct mechanism //Do not repeatedly press or the ship will not self destruct, it works as a toggle and has a timer -JRA
-	extern void pauseAI(); // Pauses the game for the ship, does not affect other ships -JRA
-	extern void swapSettings(); // Swaps between ship Settings for turn rate and thrusting power -JRA 
-	extern void quitAI(); // Quits the game -JRA
-	extern void talkKey(); // Opens up the chat window -JRA
-	extern void toggleCompass(); // Toggles the ship's Compass -JRA
+
+	// other options -JNE
+    extern double selfFuel();       // Returns the ship current fuelSum
+    extern double selfBaseFuel();   // Returns the ship base's current fuelReserve
+	extern void keyHome();          // Changes the ship's Home Base or respawn location -JRA
+	extern void selfDestruct();     // Triggers the ship's Self Destruct mechanism //Do not repeatedly press or the ship will not self destruct, it works as a toggle and has a timer -JRA
+	extern void pauseAI();          // Pauses the game for the ship, does not affect other ships -JRA
+	extern void swapSettings();     // Swaps between ship Settings for turn rate and thrusting power -JRA
+	extern void quitAI();           // Quits the game -JRA
+	extern void talkKey();          // Opens up the chat window -JRA
+	extern void toggleCompass();    // Toggles the ship's Compass -JRA
 	extern void toggleShowMessage(); // Toggles Messages on the HUD on the left side of the screen -JRA 
-	extern void toggleShowItems(); // Toggles Items on the HUD on the left side of the screen -JRA 
-	extern void repair(); // Repairs a target -JRA
-	extern void reprogram(); // Reprogram a modifier or lock bank -JRA
+	extern void toggleShowItems();  // Toggles Items on the HUD on the left side of the screen -JRA
+	extern void repair();           // Repairs a target -JRA
+	extern void reprogram();        // Reprogram a modifier or lock bank -JRA
 	extern void talk(char* talk_str); // Sends a message -JRA
 	extern char* scanMsg(int id); // Returns the specified message -EGG
-// self properties -JNE
+
+	// self properties -JNE
 	extern int selfX(); // Returns the ship's X Position -JRA
 	extern int selfY(); // Returns the ship's Y Position -JRA
 	extern int selfRadarX(); // Returns the ship's X Radar Coordinate -JRA
@@ -112,13 +120,15 @@
 	extern int selfShield(); // Returns the ship's Shield status -JRA
 	extern char* selfName(); // Returns the ship's Name -JRA
 	extern double selfScore(); // Returns the ship's Score -JRA
-// Closest functions -JNE
+
+	// Closest functions -JNE
 	extern int closestRadarX(); // Returns the Closest ship's X Radar Coordinate -JRA
 	extern int closestRadarY(); // Returns the Closest ship's Y Radar Coordinate -JRA
 	extern int closestItemX(); // Returns the Closest Item's X Radar Coordinate -JRA
 	extern int closestItemY(); // Returns the Closest Item's Y Radar Coordinate -JRA
 	extern int closestShipId(); // Returns the Closest ship's ID -JRA
-// ID functions -JNE
+
+	// ID functions -JNE
 	extern double enemySpeedId(int id); // Returns the Speed of the Specified Enemy -JRA
 	extern double enemyTrackingRadId(int id); // Returns the Specified Enemy's Tracking in Radians -JRA
 	extern double enemyTrackingDegId(int id); // Returns the Specified Enemy's Tracking in Degrees -JRA
@@ -133,7 +143,8 @@
 	extern double enemyScoreId(int id); // Returns the Specified Enemy's Score -JRA
 	extern int enemyTeamId(int id); // Returns the Specified Enemy's Team ID -JRA
 	extern double enemyDistanceId(int id); // Returns the Distance between the ship and the Specified Enemy -JRA
-// idx functions, idx is the index in the sorted ship buffer-JNE
+
+	// idx functions, idx is the index in the sorted ship buffer-JNE
 	extern double enemyDistance(int idx);	 // Returns the Distance between the ship and the Specified Enemy -JRA
 	extern double enemySpeed(int idx); // Returns the Speed of the Specified Enemy -JRA
 	extern int enemyReload(int idx); // Returns the Specified Enemy's Reload time remaining -JRA
@@ -155,7 +166,8 @@
 	extern int wallFeeler(int dist, int angle, int flag_wf, int flag_wd); // Returns if there is a wall or not at the Specified Angle within the Specified Distance of the ship -JRA
 	extern int wallFeelerRad(int dist, double a, int flag_wf, int flag_wd); // Returns if there is a wall or not at the Specified Angle within the Specified Distance of the ship -JRA
 	extern int wallBetween(int x1, int y1, int x2, int y2, int flag_wf, int flag_wd); // Returns if there is a wall or not between two Specified Points -JRA
-// Shot functions -JNE
+
+	// Shot functions -JNE
 	extern int shotAlert(int idx); // Returns a Danger Rating of a shot -JRA
 	extern int shotX(int idx); // Returns the X coordinate of a shot -JRA
 	extern int shotY(int idx); // Returns the Y coordinate of a shot -JRA
@@ -163,7 +175,8 @@
 	extern int shotVel(int idx); // Returns the Velocity of a shot -JRA
 	extern int shotVelDir(int idx); // Returns the Direction of the Velocity of a shot -JRA
 	extern int aimdir(int idx); // Returns the Direction that the ship needs to turn to shot the Enemy -JRA
-//Capture the flag functions - Sarah Penrose
+
+	//Capture the flag functions - Sarah Penrose
 	extern int ballX(); //Returns the ball's X Position -JRA
 	extern int ballY(); //Returns the ball's Y Position -JRA
 	extern int connectorX0(); //Returns the connector's X Position -JRA
@@ -171,7 +184,8 @@
 	extern int connectorY0(); //Returns the connector's Y Position -JRA
 	extern int connectorY1(); //Returns the connector's Y Position -JRA
 
-//Radar/Closest Functions
+
+	//Radar/Closest Functions
 	extern int closestEFRadarXorY(int efFlag, int xyFlag);
 	extern int closestEnemyRadarX();
 	extern int closestFriendRadarX();
@@ -180,7 +194,8 @@
 	extern int closestEFDist(int efFlag);
 	extern int closestEnemyDist();
 	extern int closestFriendDist();
-//Helper Functions for Chaser and Boids
+
+	//Helper Functions for Chaser and Boids
 	extern int computeDistance(int x1, int x2, int y1, int y2);
 	extern double secantLine(int x1, int x2, int y1, int y2);
 	extern int modm(int n, int m);

@@ -2881,10 +2881,11 @@ bool closeToConcaveCorner(int headingDeg)
 
 
 //Provides a mechanism for drones to spot walls ahead and steer away from them.
+//@Return: Returns Vector of the wall or -1 if no wall
 int getWallAvoidance()
 {
-	int wallLookAhead = 100;
-	int minLookAside = 50;
+	int wallLookAhead = 100;  //How far to look ahead
+	int minLookAside = 50;    //Value for how far to the side to look for walls
 	int dummyVal = 1;
 	int lookAngle = 15;
 	int turnLeft = 90;
