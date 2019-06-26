@@ -272,6 +272,7 @@ void enemySeparation()
 //arctangent to get the resulting angle.
 void flocking()
 {
+  fuel = selfFuel();
   static int totalWt, newAngle;
   static double xComp, yComp;
   int avgFriendX, avgFriendY, avgFriendDist = -1;
@@ -397,7 +398,7 @@ void searching()
    */
 
   //Check fuel levels once a second @ 20fps
-  if(frameCount % (20) == 0) {
+  if(frameCount % (2) == 0) {
     fuel = selfFuel();
   }
 
@@ -433,8 +434,9 @@ void searching()
   double new_fuel_level = selfFuel();
   if(new_fuel_level - fuel > 0){
     setPower(0);
-    fov -= 1;
   }
+
+
 
 
 
@@ -519,7 +521,7 @@ void handleMsgBuffer()
 
     //If the token is not NULL, meaning the message given was not empty, convert
     //it to an integer and store it as the team number.
-    //TODO: Possibly add more error trapping, in case the first value in the message
+    //TODO: Check if number if not default to 0 - Benjamin Makowsky ---------
     //is not an integer.
     if(tok)
     {
@@ -648,7 +650,7 @@ void handleMsgBuffer()
         state = STATE_FLYING;
       }
 
-      //TODO: implement search alg for bee and hive - Benjamin Makowsky - 42656E
+      //TODO: implement search alg for bee and hive - Benjamin Makowsky ---------
       //Begins ai driven search mode
       else if(!strcmp(tok, "findhoney"))
       {
@@ -723,6 +725,10 @@ AI_loop()
     case(STATE_SEARCHING):
       searching();
       break;
+
+    default:
+      fuel = selfFuel();
+      flocking();
   }
 }
 

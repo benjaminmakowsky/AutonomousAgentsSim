@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1991-2001 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
@@ -140,7 +140,7 @@ extern double		tbl_cos[];
 #define MAX_PLAYER_TURNSPEED	64.0
 #define MIN_PLAYER_TURNSPEED	0.0
 #define MAX_PLAYER_POWER	55.0
-#define MIN_PLAYER_POWER	5.0
+#define MIN_PLAYER_POWER	0.0
 #define MAX_PLAYER_TURNRESISTANCE	1.0
 #define MIN_PLAYER_TURNRESISTANCE	0.0
 
