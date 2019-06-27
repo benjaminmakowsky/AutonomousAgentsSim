@@ -1,5 +1,6 @@
 //Matthew Coffman - July 2018
 #include "cAI.h"
+#include <ctype.h>
 #include <sys/time.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -517,12 +518,19 @@ void handleMsgBuffer()
     //tokenize it by spaces.
     oldMsg = scanMsg(0);
     strcpy(buf, oldMsg);
-    tok = strtok(buf, " ");
 
+    //Checks if a number was entered and if not changes the input string to
+    //add a zero at the start of the string
+    if(!isdigit(buf[0])){
+      char default_string[100];       //Init default string
+      strcpy(default_string, "0 ");   //make string "0 "
+      strcat(default_string, buf);    //Make string "0 buf"
+      strcpy(buf, default_string);    //change buf into the default
+    }
+
+    tok = strtok(buf, " ");
     //If the token is not NULL, meaning the message given was not empty, convert
     //it to an integer and store it as the team number.
-    //TODO: Check if number if not default to 0 - Benjamin Makowsky ---------
-    //is not an integer.
     if(tok)
     {
       team = atoi(tok);
@@ -540,7 +548,6 @@ void handleMsgBuffer()
       tok = strtok(NULL, " ");
 
       //If the keyword-pointing token is not NULL, get the value that follows.
-      //FIXME
       if(tok && strcmp(tok, "beginboids") && strcmp(tok, "endboids"))
       {
         value = atoi(strtok(NULL, " "));
