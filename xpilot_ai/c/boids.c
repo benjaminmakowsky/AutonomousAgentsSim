@@ -82,6 +82,7 @@ int distanceWeighting = 0;	//simple averaging vs factoring in distance
 int oppositesAttract = 0;
 extern char bugstring[50];
 bool fueling = false;
+bool fuel_found = false;
 
 
 /*****************************************************************************
@@ -432,6 +433,8 @@ void searching()
   double new_fuel_level = selfFuel();
   if(new_fuel_level - fuel > 0){
     setPower(0);
+    turnToDeg(selfHeadingDeg() + 180);
+    fuel_found = true;
   }
 
 
