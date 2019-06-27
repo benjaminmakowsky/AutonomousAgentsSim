@@ -34,6 +34,8 @@ void cWeightAdjustByDistance();
 void sWeightAdjustByDistance();
 void eWeightAdjustByDistance();
 void handleMsgBuffer();
+void searching();
+int* pinpoint();
 
 //enumeration of drone states
 enum State
@@ -67,21 +69,21 @@ extern int cRadius;
 int sVector = -1;		//(friend) separation variables
 extern int sWeight;
 extern int sRadius;
-int eVector = -1;		//(enemy) separation variables
+int eVector = -1;		    //(enemy) separation variables
 extern int eWeight;
 extern int eRadius;
-extern int fov;			//field (angle) of vision
-int mobile = 1;			//allows us to completely anchor all drones
+extern int fov;			    //field (angle) of vision
+int mobile = 1;			    //allows us to completely anchor all drones
 bool isLeader = false;		//whether this drone is a leader
 int leaders[10];
 //int *leaders = NULL;		//array of leader id's
-int numLeaders = 0;		//how many leaders on our team
-int leaderMode = 1;		//whether we care just about leaders for flocking
+int numLeaders = 0;		    //how many leaders on our team
+int leaderMode = 1;		    //whether we care just about leaders for flocking
 int distanceWeighting = 0;	//simple averaging vs factoring in distance
 int oppositesAttract = 0;
 extern char bugstring[50];
-bool fueling = false;
-
+bool fueling = false;       //Used as flg to identify if refuelling or not
+bool pinpoint = false;      //Used as a flag to begin pinpointing center of location
 
 /*****************************************************************************
  * Initialization
@@ -437,11 +439,43 @@ void searching()
   }
 
 
+}
 
+/*****************************************************************************
+ * Pinpoint the center of a hive
+ * ***************************************************************************/
 
+int* pinpoint(){
 
-  //Now that we've turned, we can decide how much to thrust.
-  //(mobile) ? thrust(1) : thrust(0);
+  /*
+   *  Step 1: Resume moving until fuel stops increasing
+   *  Step 2: Rotate 180 and move until fuel stops increasing
+   *  Step 3: Find distance traveled and go to midpoint
+   *  Step 4: Rotate 90 find edge rotate 180 find other edge find midpoint
+   */
+
+  //Step 1:
+  fuel = selfFuel();
+  setPower(1);
+  do{
+    int off_set = 10;
+    if(frameCount % 5 == 0 && (fueling == false)){
+      strcpy(bugstring, "Start Refuel");
+      refuel(1);
+      fueling = true;
+    }
+    if((frameCount % 5 == 0) && (fueling == true)){
+      strcpy(bugstring, "Stop Refuel");
+      refuel(0);
+      fueling = false;
+      double curr_fuel = selfFuel();
+      if(curr_fuel - fuel == 0){      //If no change in fuel level then edge is found
+        strcpy(bugstring, "Edge Found");
+        setPower(0);
+        turnToDeg(selfHeadingDeg() + 180);
+      }
+    }
+  }while(pinpoint);
 
 }
 
