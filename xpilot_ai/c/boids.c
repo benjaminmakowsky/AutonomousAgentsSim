@@ -377,7 +377,7 @@ void flocking()
   }
 }
 
-//TODO: Implement search - Benjamin Makowsky -----------------------
+//INPROGRESS: Implement search - Benjamin Makowsky -----------------------
 /*****************************************************************************
  * Searching (Controller)
  * ***************************************************************************/
@@ -408,7 +408,7 @@ void searching()
    */
   wallAvoidance();  //Update vector to for wall avoidance
   if(wallVector != -1){
-    turnToDeg(selfHeadingDeg() + 180);
+    turnToDeg(selfHeadingDeg() + 125);
     //printf("Found Wall");
   }
 
@@ -657,8 +657,7 @@ void handleMsgBuffer()
         state = STATE_FLYING;
       }
 
-      //TODO: implement search alg for bee and hive - Benjamin Makowsky ---------
-      //Begins ai driven search mode
+      //INPROGRESS: Begins ai driven search mode
       else if(!strcmp(tok, "findhoney"))
       {
 
