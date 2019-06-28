@@ -209,7 +209,7 @@
 	extern int getNearestEnemyX();
 	extern int getNearestEnemyY();
 	extern int getAngleBtwnPoints(int x1, int x2, int y1, int y2);
-	extern int selfAngleToXY(int x, int y);
+	extern int selfAngleToXY(int x, int y); //Returns angle from ship to param coordinatess
 /*
 	extern bool withinROV(int x, int y, int rov);
 	extern bool withinFOV(int x, int y, int fov);

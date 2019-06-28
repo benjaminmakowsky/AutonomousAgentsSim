@@ -83,8 +83,11 @@ int leaderMode = 1;		    //whether we care just about leaders for flocking
 int distanceWeighting = 0;	//simple averaging vs factoring in distance
 int oppositesAttract = 0;
 extern char bugstring[50];
+
 bool fueling = false;
 bool fuel_found = false;
+int goal_frame = 0;       //Used as the ending frame after n seconds
+
 
 
 /*****************************************************************************
@@ -401,6 +404,10 @@ void searching()
    *  4. Keep record of supply/hive location
    */
 
+  //Used to store coordinates of location first detected by fuel pickup
+  int x = 0;
+  int y = 0;
+
 
 
   /*
@@ -415,30 +422,59 @@ void searching()
   /*
    * Step 2: Attempt to Attain Honey
    */
-  int frames_passed = 2; //Minimum amount of frames that can be recognized is 2
-  if(fueling == false){
-    fuel = selfFuel();
-    strcpy(bugstring, "Start Refuel");
-    refuel(1);
-    fueling = true;
-  }
-  if((frameCount % frames_passed == 0) && (fueling == true)){
-    strcpy(bugstring, "Stop Refuel");
-    refuel(0);
-    fueling = false;
+  if(!fuel_found) {
+    int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
+    if (fueling == false) {
+      fuel = selfFuel();
+      strcpy(bugstring, "Start Refuel");
+      refuel(1);
+      fueling = true;
+    }
+    if ((frameCount % frames_passed == 0) && (fueling == true)) {
+      strcpy(bugstring, "Stop Refuel");
+      refuel(0);
+      fueling = false;
+    }
+
+    /*
+     * Step 3: Check if fuel levels changed
+     */
+    double new_fuel_level = selfFuel();
+    if (new_fuel_level - fuel > 0) {
+      setPower(0);
+      x = selfX();
+      y = selfY();
+      degToAim = (int)selfHeadingDeg() + 180;
+      fuel_found = true;
+    }
   }
 
 
-  /*
-   * Step 3: Check if fuel levels changed
-   */
-  double new_fuel_level = selfFuel();
-  if(new_fuel_level - fuel > 0){
-    setPower(0);
-    turnToDeg(selfHeadingDeg() + 180);
-    fuel_found = true;
-  }
+  //INPROGRESS: TODO:go to initial point and orient to closest base object
+  if(fuel_found){
 
+    //wait until ship stops
+    int num_seconds = 14 * 4;
+    if(goal_frame == 0) {     //Checks if we have done this before
+      goal_frame = frameCount + num_seconds;
+
+    }else if(frameCount <= goal_frame) {
+      char temp_str[25];
+      sprintf(temp_str, "%.2f", (double) frameCount / goal_frame);
+      strcpy(bugstring, temp_str);
+
+    //Must be >= because turning time is more than 1 frame
+    }else{
+      if((int)selfHeadingDeg() != degToAim) {
+        turnToDeg(degToAim);
+      }else if((int)selfHeadingDeg() == degToAim){
+        strcpy(bugstring, "Turn Completed");
+      }
+
+    }
+
+    //pinpoint(x, y);
+  }
 
 }
 
@@ -446,7 +482,7 @@ void searching()
  * INPROGRESS:Pinpoint the center of a hive
  * ***************************************************************************/
 
-int* pinpoint(){
+int* pinpoint(int x, int y){
 
   /*
    *  Step 1: Resume moving until fuel stops increasing
@@ -455,18 +491,20 @@ int* pinpoint(){
    *  Step 4: Rotate 90 find edge rotate 180 find other edge find midpoint
    */
 
+  setPower(5);
   //Step 1:
+  /*
   fuel = selfFuel();
   setPower(1);
   do{
     int off_set = 10;
-    if(frameCount % 5 == 0 && (fueling == false)){
-      strcpy(bugstring, "Start Refuel");
+    if((fueling == false)){
+      strcpy(bugstring, "Start Pin");
       refuel(1);
       fueling = true;
     }
-    if((frameCount % 5 == 0) && (fueling == true)){
-      strcpy(bugstring, "Stop Refuel");
+    if((frameCount % 3 == 0) && (fueling == true)){
+      strcpy(bugstring, "Stop Pin");
       refuel(0);
       fueling = false;
       double curr_fuel = selfFuel();
@@ -477,7 +515,7 @@ int* pinpoint(){
       }
     }
   }while(pinpoint);
-
+  */
 }
 
 
