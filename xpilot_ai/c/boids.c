@@ -1,4 +1,5 @@
 //Matthew Coffman - July 2018
+//Benjamin Makowsky //Line 453 current progress
 #include "cAI.h"
 #include <ctype.h>
 #include <sys/time.h>
@@ -470,7 +471,13 @@ void searching()
       }else if((int)selfHeadingDeg() == degToAim){
         strcpy(bugstring, "Turn Completed");
       }
+      if(selfX() != x && selfY() != y){
+	setPower(1); //TODO: Make it so that power is a function of distance from point
+      }
+      else{
+      	setPower(0); //Stops on the initial point
 
+      }
     }
 
     //pinpoint(x, y);
