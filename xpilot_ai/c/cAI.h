@@ -14,8 +14,9 @@
 	extern void slowerTurnrate(); //Decreases the ship's Turn Rate -JRA
 	extern void morePower(); //Increases the ship's Thrusting Power -JRA
 	extern void lessPower(); //Decreases the ship's Thrusting Power -JRA
+    extern int goToPoint(int x, int y); //Goes to the point set by params x,y
 
-	// Shooting methods -JNE
+    // Shooting methods -JNE
 	extern void fireShot(); // Fires a Shot -JRA
 	extern void fireMissile(); // Fires a Missile -JRA
 	extern void fireTorpedo(); // Fires a Torpedo

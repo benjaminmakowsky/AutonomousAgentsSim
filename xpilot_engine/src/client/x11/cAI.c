@@ -545,6 +545,27 @@ void lessPower() {
 	Keyboard_button_pressed(XK_KP_Divide);
 	Keyboard_button_released(XK_KP_Divide);
 }
+
+int goToPoint(int x, int y){
+  int distance = computeDistance(selfX(), x, selfY(), y);
+
+  if(distance == 0){
+    setPower(0);
+  }
+  if(distance <= 1){
+    setPower(0);
+  } else if(distance < 5){
+    setPower(1);
+  } else if(distance < 10){
+    setPower(3);
+  }else{
+    setPower(5);
+  }
+
+  return distance;
+  //TODO: Make it so that power is a function of distance from point
+
+}
 //End movement methods -JNE
 //Shooting methods -JNE
 void fireShot() {

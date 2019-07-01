@@ -408,7 +408,7 @@ void searching()
   static bool fueling = false;
   static fuel_found = false;
   static int goal_frame = 0;
-
+  static int original_distance;
 
   /*
    * Step 1: Check for walls
@@ -453,31 +453,46 @@ void searching()
   //INPROGRESS: TODO:go to initial point and orient to closest base object
   if(fuel_found){
 
-    //wait until ship stops
+    //TODO: wait until ship stops (Could test coordinates until same n times in a row
     int num_seconds = 14 * 4;
     if(goal_frame == 0) {     //Checks if we have done this before
       goal_frame = frameCount + num_seconds;
+
 
     }else if(frameCount <= goal_frame) {
       char temp_str[25];
       sprintf(temp_str, "%.2f", (double) frameCount / goal_frame);
       strcpy(bugstring, temp_str);
 
+
+    }else if(frameCount == goal_frame){
+
+      degToAim = (int)atan(((float)(y-selfY())/(x-selfX())));
+      char temp_str[25];
+      sprintf(temp_str, "%d", degToAim);
+      strcpy(bugstring, temp_str);
+
     //Must be >= because turning time is more than 1 frame
     }else{
+
+
+
       if((int)selfHeadingDeg() != degToAim) {
         turnToDeg(degToAim);
+
       }else if((int)selfHeadingDeg() == degToAim){
         strcpy(bugstring, "Turn Completed");
       }
-      if(selfX() != x && selfY() != y){
-	    //setPower(1); //TODO: Make it so that power is a function of distance from point
-      }
-      else{
-      	setPower(0); //Stops on the initial point
 
+      if(selfX() != x && selfY() != y){
+
+        int d = goToPoint(x,y);
+        char temp_str[25];
+        sprintf(temp_str, "%d", d);
+        //strcpy(bugstring, temp_str);
       }
     }
+
 
     //pinpoint(x, y);
   }
