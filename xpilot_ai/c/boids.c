@@ -85,9 +85,6 @@ int distanceWeighting = 0;	//simple averaging vs factoring in distance
 int oppositesAttract = 0;
 extern char bugstring[50];
 
-bool fueling = false;
-bool fuel_found = false;
-int goal_frame = 0;       //Used as the ending frame after n seconds
 
 
 
@@ -406,9 +403,11 @@ void searching()
    */
 
   //Used to store coordinates of location first detected by fuel pickup
-  int x = 0;
-  int y = 0;
-
+  static int x = 0;
+  static int y = 0;
+  static bool fueling = false;
+  static fuel_found = false;
+  static int goal_frame = 0;
 
 
   /*
@@ -472,7 +471,7 @@ void searching()
         strcpy(bugstring, "Turn Completed");
       }
       if(selfX() != x && selfY() != y){
-	setPower(1); //TODO: Make it so that power is a function of distance from point
+	    //setPower(1); //TODO: Make it so that power is a function of distance from point
       }
       else{
       	setPower(0); //Stops on the initial point
