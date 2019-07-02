@@ -5,11 +5,11 @@
 #ifndef XPILOT_LE_BEE_H
 #define XPILOT_LE_BEE_H
 
-/*  void searching()
+/*
  *  Searches for a hive by constantly attempting to refuel and when
  *  it detects that fuel levels have increased it stops
  *  @Return: Void*/
-extern void searching();   //Searches for a hive
+void searching();   //Searches for a hive
 
 
 /*  int* pinpoint()

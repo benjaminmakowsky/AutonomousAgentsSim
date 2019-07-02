@@ -2,41 +2,57 @@
 // Created by makowskyb on 6/20/19.
 //
 
+#ifndef XPILOT_LE_BOIDS_H
+#define XPILOT_LE_BOIDS_H
 
 //global variables
-int cWeight = 0;
-int cRadius = 400;
+extern int cWeight;
+extern int cRadius;
 
 //(friend) alignment variables
-int aWeight = 0;
-int aRadius = 400;
+extern int aWeight;
+extern int aRadius;
 
 //(friend) separation variables
-int sWeight = 0;
-int sRadius = 200;
+extern int sWeight;
+extern int sRadius;
 
 
 //(enemy) separation variables
-int eWeight = 0;
-int eRadius = 200;
+extern int eWeight;
+extern int eRadius;
 
 //field (angle) of vision
-int fov = 60;
+extern int fov;
 
 //fuel levels
-double fuel = 0;
+extern double fuel;
 
 //String used fo debugging
-char bugstring[50] = "Init";
+extern char bugstring[50];
+
 
 extern int frameCount;		//how many frames have elapsed
-int frameCount = 0;
 
 extern int degToAim;	    //what direction do we want to go
-int degToAim = -1;
 
 extern int turnLock;		//time not allowed to compute new wall avoidance
-int turnLock = 0;
 
 extern int wallVector;		//where to go to avoid crashing into a wall
-int wallVector = -1;
+
+
+
+//function prototypes
+void initialize();
+void wallAvoidance();
+void alignment();
+void cohesion();
+void separation();
+void flocking();
+void cWeightAdjustByDistance();
+void sWeightAdjustByDistance();
+void eWeightAdjustByDistance();
+void handleMsgBuffer();
+
+
+#endif //XPILOT_LE_BOIDS_H

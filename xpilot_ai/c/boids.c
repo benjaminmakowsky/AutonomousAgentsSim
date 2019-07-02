@@ -1,5 +1,6 @@
 //Matthew Coffman - July 2018
 //Benjamin Makowsky //Line 453 current progress
+#include "boids.h"
 #include "cAI.h"
 #include "bee.h"
 #include <ctype.h>
@@ -25,18 +26,22 @@
 
 //global constants
 #define MAX_DEG 360
+int cWeight = 0;
+int cRadius = 400;
+int aWeight = 0;
+int aRadius = 400;
+int sWeight = 0;
+int sRadius = 200;
+int eWeight = 0;
+int eRadius = 200;
+int fov = 60;
+double fuel = 0;
+int frameCount = 0;
+int degToAim = -1;
+int turnLock = 0;
+int wallVector = -1;
+char bugstring[50] = "Init";
 
-//function prototypes
-void initialize();
-void wallAvoidance();
-void alignment();
-void cohesion();
-void separation();
-void flocking();
-void cWeightAdjustByDistance();
-void sWeightAdjustByDistance();
-void eWeightAdjustByDistance();
-void handleMsgBuffer();
 
 
 //enumeration of drone states
@@ -66,8 +71,6 @@ extern double fuel;
 extern int aWeight;
 extern int aRadius;
 int cVector; 		//(friend) cohesion variables
-extern int cWeight;
-extern int cRadius;
 int sVector = -1;		//(friend) separation variables
 extern int sWeight;
 extern int sRadius;
@@ -129,6 +132,48 @@ void initialize()
   init = true;
   state = STATE_FLYING;
   thrust(0); 
+}
+
+
+/*****************************************************************************
+ * Scaling Cohesion and (Enemy/Friendly) Separation
+ * ***************************************************************************/
+
+//Scale the cohesion weight by how far away we are from our friends' center of mass.
+void cWeightAdjustByDistance()
+{
+  int avgFriendX, avgFriendY, avgFriendDist;
+
+  avgFriendX = averageFriendRadarX(cRadius, fov);
+  avgFriendY = averageFriendRadarY(cRadius, fov);
+
+  if(avgFriendX != -1 && avgFriendY != -1)
+  {
+    avgFriendDist = computeDistance(selfX(), avgFriendX, selfY(), avgFriendY);
+    cWeight = pow(avgFriendDist / 100, 2);
+  }
+}
+
+//Scale the friendly separation weight by how close we are to our closest friend.
+void sWeightAdjustByDistance()
+{
+  int dist = closestFriendDist();
+
+  if(dist != -1)
+  {
+    sWeight = pow(4 - dist / 75, 2);
+  }
+}
+
+//Scale the enemy separation weight by how close we are to our closest enemy.
+void eWeightAdjustByDistance()
+{
+  int dist = closestEnemyDist();
+
+  if(dist != -1)
+  {
+    eWeight = pow(4 - dist / 50, 2);
+  }
 }
 
 
@@ -384,46 +429,6 @@ void flocking()
 
 
 
-/*****************************************************************************
- * Scaling Cohesion and (Enemy/Friendly) Separation
- * ***************************************************************************/
-
-//Scale the cohesion weight by how far away we are from our friends' center of mass.
-void cWeightAdjustByDistance()
-{
-  int avgFriendX, avgFriendY, avgFriendDist;
-
-  avgFriendX = averageFriendRadarX(cRadius, fov);
-  avgFriendY = averageFriendRadarY(cRadius, fov); 
-
-  if(avgFriendX != -1 && avgFriendY != -1)
-  {
-    avgFriendDist = computeDistance(selfX(), avgFriendX, selfY(), avgFriendY);
-    cWeight = pow(avgFriendDist / 100, 2);
-  }
-}
-
-//Scale the friendly separation weight by how close we are to our closest friend.
-void sWeightAdjustByDistance()
-{
-  int dist = closestFriendDist();
-
-  if(dist != -1)
-  {
-    sWeight = pow(4 - dist / 75, 2);
-  }
-}
-
-//Scale the enemy separation weight by how close we are to our closest enemy.
-void eWeightAdjustByDistance()
-{
-  int dist = closestEnemyDist();
-
-  if(dist != -1)
-  {
-    eWeight = pow(4 - dist / 50, 2);
-  }
-}
 
 
 /*****************************************************************************

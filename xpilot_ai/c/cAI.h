@@ -1,5 +1,9 @@
 //Justin Anderson - May 2012
 //extern method declarations -JTO
+
+#ifndef XPILOT_LE_CAI_H
+#define XPILOT_LE_CAI_H
+
 	extern int start(int argc, char* argv[]); // Initialize AI interface and start XPilot -JRA
 
 	// Movement methods -JNE
@@ -241,3 +245,4 @@
 //	extern bool closeToConcaveCorner(int headingDeg);
 	extern int getWallAvoidance();
 
+#endif //XPILOT_LE_CAI_H
