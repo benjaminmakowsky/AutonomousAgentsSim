@@ -6,6 +6,7 @@
 #define XPILOT_LE_BOIDS_H
 
 
+//Public Variables
 extern int cWeight;         //(friend) cohesion variables
 extern int cRadius;         //(friend) cohesion variables
 extern int aWeight;         //(friend) alignment variables
