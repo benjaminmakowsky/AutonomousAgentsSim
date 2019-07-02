@@ -4,7 +4,6 @@
 
 
 //global variables
-
 int cWeight = 0;
 int cRadius = 400;
 
@@ -29,3 +28,15 @@ double fuel = 0;
 
 //String used fo debugging
 char bugstring[50] = "Init";
+
+extern int frameCount;		//how many frames have elapsed
+int frameCount = 0;
+
+extern int degToAim;	    //what direction do we want to go
+int degToAim = -1;
+
+extern int turnLock;		//time not allowed to compute new wall avoidance
+int turnLock = 0;
+
+extern int wallVector;		//where to go to avoid crashing into a wall
+int wallVector = -1;
