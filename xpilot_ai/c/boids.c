@@ -26,6 +26,41 @@
 
 //global constants
 #define MAX_DEG 360
+
+
+
+
+//enumeration of drone states
+enum State
+{
+  STATE_INIT,
+  STATE_FLYING,
+  STATE_DEAD,
+  STATE_SEARCHING
+};
+
+//global variables
+int idx;			        //what's our unique idx number
+int tot_idx;			    //how many drones are on our team
+int teamNum;			    //what team do we belong to
+bool init = false;		    //have we initialized yet
+int state = STATE_INIT;		//what state are we in (usually STATE_FLYING)
+int wWeight = 0;		    //weight of wall avoidance relative to other vectors
+int pVector = -1;		    //information on the most recent (past) heading
+int pWeight = 5;
+int aVector = -1; 		    //(friend) alignment variables
+int cVector; 		        //(friend) cohesion variables
+int sVector = -1;		    //(friend) separation variables
+int eVector = -1;		    //(enemy) separation variables
+extern int fov;			    //field (angle) of vision
+int mobile = 1;			    //allows us to completely anchor all drones
+bool isLeader = false;		//whether this drone is a leader
+int leaders[10];
+//int *leaders = NULL;		//array of leader id's
+int numLeaders = 0;		    //how many leaders on our team
+int leaderMode = 1;		    //whether we care just about leaders for flocking
+int distanceWeighting = 0;	//simple averaging vs factoring in distance
+int oppositesAttract = 0;
 int cWeight = 0;
 int cRadius = 400;
 int aWeight = 0;
@@ -41,53 +76,6 @@ int degToAim = -1;
 int turnLock = 0;
 int wallVector = -1;
 char bugstring[50] = "Init";
-
-
-
-//enumeration of drone states
-enum State
-{
-  STATE_INIT,
-  STATE_FLYING,
-  STATE_DEAD,
-  STATE_SEARCHING
-};
-
-//global variables
-int idx;			//what's our unique idx number
-int tot_idx;			//how many drones are on our team
-int teamNum;			//what team do we belong to
-bool init = false;		//have we initialized yet
-int state = STATE_INIT;		//what state are we in (usually STATE_FLYING)
-extern int frameCount;		//how many frames have elapsed
-extern int degToAim;		//what direction do we want to go
-extern int turnLock;		//time not allowed to compute new wall avoidance
-extern int wallVector;		//where to go to avoid crashing into a wall
-int wWeight = 0;		//weight of wall avoidance relative to other vectors
-int pVector = -1;		//information on the most recent (past) heading
-int pWeight = 5;
-int aVector = -1; 		//(friend) alignment variables
-extern double fuel;
-extern int aWeight;
-extern int aRadius;
-int cVector; 		//(friend) cohesion variables
-int sVector = -1;		//(friend) separation variables
-extern int sWeight;
-extern int sRadius;
-int eVector = -1;		    //(enemy) separation variables
-extern int eWeight;
-extern int eRadius;
-extern int fov;			    //field (angle) of vision
-int mobile = 1;			    //allows us to completely anchor all drones
-bool isLeader = false;		//whether this drone is a leader
-int leaders[10];
-//int *leaders = NULL;		//array of leader id's
-int numLeaders = 0;		    //how many leaders on our team
-int leaderMode = 1;		    //whether we care just about leaders for flocking
-int distanceWeighting = 0;	//simple averaging vs factoring in distance
-int oppositesAttract = 0;
-extern char bugstring[50];
-
 
 
 
