@@ -803,6 +803,99 @@ double selfBaseFuel(){
 	for (i=0;i<num_ship;i++) if ((self != NULL) && (ship_ptr[i].id==self->id)) return ship_ptr[i].baseFuel;
 }
 
+BaseStruct_t* getBases(char* csv){
+  // Number of bases are the first line
+  FILE* fp;
+  char buf[1024];
+  if( !csv ){
+    printf("No points file provided");
+    return NULL;
+  }
+
+  if((fp=fopen(csv,"r")) == NULL ){
+    printf("Failed to open file: %s\n", csv);
+    return NULL;
+  }
+
+  //get the first line
+  fgets(buf, sizeof(buf), fp );
+  int numBases = atoi(buf);
+
+  //skip the number of fuel depots line
+  fgets(buf, sizeof(buf), fp );
+
+  //Make an array of the bases
+  int i;
+  BaseStruct_t bases[numBases];
+  for(i = 0; i < numBases; ++i){
+    fgets(buf, sizeof(buf), fp );
+    char* token;
+    token = strtok(buf, " ");
+    BaseStruct_t newBase;
+
+    newBase.team = atoi(token);
+    token = strtok( NULL, " ");
+    newBase.x = atoi(token);
+    token = strtok( NULL, " ");
+    newBase.y = atoi(token);
+
+    //add to array
+    bases[i] = newBase;
+  }
+
+  return bases;
+}
+
+FuelStruct_t* getFuelDepots(char* csv){
+  // Number of fuel depots is the second line
+  FILE* fp;
+  char buf[1024];
+  if( !csv ){
+    printf("No points file provided");
+    return NULL;
+  }
+
+  if((fp=fopen(csv,"r")) == NULL ){
+    printf("Failed to open file: %s\n", csv);
+    return NULL;
+  }
+
+  // get number of bases
+  fgets(buf, sizeof(buf), fp );
+  int numBases = atoi(buf);
+
+  //get the number of fuel depots
+  fgets(buf, sizeof(buf), fp );
+  int numFuels = atoi(buf);
+
+  //skip the base lines
+  int i = 0;
+  while( i < numBases ){
+    fgets(buf, sizeof(buf), fp );
+    ++i;
+  }
+
+  //Make an array of the fuels
+  FuelStruct_t fuels[numFuels];
+  for(i = 0; i < numFuels; ++i){
+    fgets(buf, sizeof(buf), fp );
+    char* token;
+    token = strtok(buf, " ");
+    FuelStruct_t newFuel;
+
+    newFuel.x = token;
+    token = strtok( NULL, " ");
+    newFuel.y = token;
+
+    //add to array
+    fuels[i] = newFuel;
+
+  }
+
+  return bases;
+
+}
+
 void keyHome() {
 	Keyboard_button_pressed(XK_Home);
 	Keyboard_button_released(XK_Home);
@@ -870,6 +963,24 @@ int selfX() {       //returns the player's x position
 int selfY() {       //returns the player's y position
 	return selfPos.y;
 }
+
+int getNumberOfShips(){
+  if( num_ship ){
+    return ship_ptr[0].numShips;
+  }
+  return 0;
+}
+
+int selfBaseX() {
+  int i;
+	for (i=0;i<num_ship;i++) if ((self != NULL) && (ship_ptr[i].id==self->id)) return ship_ptr[i].baseX;
+}
+
+int selfBaseY() {
+  int i;
+	for (i=0;i<num_ship;i++) if ((self != NULL) && (ship_ptr[i].id==self->id)) return ship_ptr[i].baseY;
+}
+
 //Returns the player's X coord on radar (int). -EGG
 int selfRadarX() {
 	if (selfVisible) return radar_ptr[0].x;
@@ -1238,7 +1349,7 @@ int closestFriendlyShipId()
 	//go through each ship on screen
 	for(i = 0; i < num_ship; i++) 
 	{
-		//make sure ship is not player's ship   
+		//make sure ship is not player's ship 
 		if((ship_ptr[i].x != selfPos.x || ship_ptr[i].y != selfPos.y) 
 				&& enemyTeamId(ship_ptr[i].id) != -1
 				&& enemyTeamId(ship_ptr[i].id) == selfTeam())
@@ -1539,7 +1650,6 @@ double enemyScoreId(int id) {        //returns the overall score of a ship with 
 int enemyTeamId(int id) {           //returns team of a ship with a particular ID, or -1 if the map is not a team play map -JNE
 	int i;
 	if (num_playing_teams == 0) {
-		printf("num_playing_teams: %d\n", num_playing_teams );
 		return -1;
 	}
 	else {

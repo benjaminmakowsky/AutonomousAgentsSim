@@ -261,28 +261,9 @@ cannonmaxscore : 100.0
 teamsharescore : no
 
 mapData: \multiline: EndOfMapdata
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                              1         #        2                                      1            #         2                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-x                                                                                                                                                    x
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+x                              x
+x    1   #   2      1  #  2    x
+x                              x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 EndOfMapdata

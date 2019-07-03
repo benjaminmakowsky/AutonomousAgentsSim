@@ -4,6 +4,19 @@
 #ifndef XPILOT_LE_CAI_H
 #define XPILOT_LE_CAI_H
 
+// Structs to hold the base coordinates &
+// the fuel depot coordinates
+typedef struct baseStruct_t {
+    int team;
+    int x;
+    int y;
+} BaseStruct_t;
+
+typedef struct fuelStruct_t {
+    int x;
+    int y;
+} FuelStruct_t;
+
 	extern int start(int argc, char* argv[]); // Initialize AI interface and start XPilot -JRA
 
 	// Movement methods -JNE
@@ -79,18 +92,19 @@
 	extern void connector(int flag); // Connects the ship to the ball in Capture the Flag Mode -JRA
 	extern void dropBall(); // Drops the ball in Capture the Flag Mode -JRA
 	extern void refuel(int flag); // Refuels the ship -JRA
-
-	// other options -JNE
-    extern double selfFuel();       // Returns the ship current fuelSum
-    extern double selfBaseFuel();   // Returns the ship base's current fuelReserve
-	extern void keyHome();          // Changes the ship's Home Base or respawn location -JRA
-	extern void selfDestruct();     // Triggers the ship's Self Destruct mechanism //Do not repeatedly press or the ship will not self destruct, it works as a toggle and has a timer -JRA
-	extern void pauseAI();          // Pauses the game for the ship, does not affect other ships -JRA
-	extern void swapSettings();     // Swaps between ship Settings for turn rate and thrusting power -JRA
-	extern void quitAI();           // Quits the game -JRA
-	extern void talkKey();          // Opens up the chat window -JRA
-	extern void toggleCompass();    // Toggles the ship's Compass -JRA
-	extern void toggleShowMessage(); // Toggles Messages on the HUD on the left side of the screen -JRA 
+// other options -JNE
+  extern double selfFuel(); // Returns the ship current fuelSum
+  extern double selfBaseFuel(); // Returns the ship base's current fuelReserve
+  extern BaseStruct_t* getBases();
+  extern FuelStruct_t* getFuelDepots();
+	extern void keyHome(); // Changes the ship's Home Base or respawn location -JRA
+	extern void selfDestruct(); // Triggers the ship's Self Destruct mechanism //Do not repeatedly press or the ship will not self destruct, it works as a toggle and has a timer -JRA
+	extern void pauseAI(); // Pauses the game for the ship, does not affect other ships -JRA
+	extern void swapSettings(); // Swaps between ship Settings for turn rate and thrusting power -JRA
+	extern void quitAI(); // Quits the game -JRA
+	extern void talkKey(); // Opens up the chat window -JRA
+	extern void toggleCompass(); // Toggles the ship's Compass -JRA
+	extern void toggleShowMessage(); // Toggles Messages on the HUD on the left side of the screen -JRA
 	extern void toggleShowItems();  // Toggles Items on the HUD on the left side of the screen -JRA
 	extern void repair();           // Repairs a target -JRA
 	extern void reprogram();        // Reprogram a modifier or lock bank -JRA
@@ -100,6 +114,9 @@
 	// self properties -JNE
 	extern int selfX(); // Returns the ship's X Position -JRA
 	extern int selfY(); // Returns the ship's Y Position -JRA
+	extern int selfBaseX(); // Returns ship's base x coordinate
+	extern int selfBaseY(); // Returns ship's base y coordinate
+	extern int getNumberOfShips(); // Returns number of ships connected to server
 	extern int selfRadarX(); // Returns the ship's X Radar Coordinate -JRA
 	extern int selfRadarY(); // Returns the ship's Y Radar Coordinate -JRA
 	extern int selfVelX(); // Returns the ship's X Velocity -JRA
