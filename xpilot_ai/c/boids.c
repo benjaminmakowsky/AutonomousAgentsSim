@@ -590,19 +590,16 @@ void handleMsgBuffer()
       else if(!strcmp(tok, "findhoney"))
       {
 
+        eRadius = 200;
+        eWeight = 5;
+        sRadius = 100;
+        sWeight = 5;
+        aWeight = 4;
+        cWeight = 2;
+        fov = 180;
         state = STATE_SEARCHING;
 
-        //setPower(0);
-        eRadius = 0;
-        eWeight = 0;
-        sRadius = 0;
-        sWeight = 0;
-        aWeight = 0;
-        cWeight = 0;
-        fov = 180;
-
       }
-
     }
   }
 }

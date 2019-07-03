@@ -93,22 +93,17 @@ void searching() {
       } else{
         counter += 1;
       }
-
-      //Once ship has not moved for 10 iterations it can determined to be stopped
     } else {
 
-      strcpy(bugstring, "goToCoordinate()");
+
+      int* POICoordinates;
+      POICoordinates = getPOICoordinates(x, y);
+      goToCoordinates(POICoordinates[0],POICoordinates[1]);
+
+
+      /*strcpy(bugstring, "goToCoordinate()");
       //INPROGRESS: Fly to point
-      goToCoordinates(selfBaseX(),selfBaseY());
-
-      /*//Turn To heading
-      if ((int)selfHeadingDeg() != new_heading) {
-        //turnToDeg(new_heading); //TODO: Added check for deg>360 in cAI.c
-      } else{
-
-      }*/
-
-
+      goToCoordinates(selfBaseX(),selfBaseY());*/
     }
   }
 }
@@ -141,7 +136,7 @@ int goToCoordinates(int x, int y){
 
 
 /*****************************************************************************
- * Get Heading of Specified Coordinates
+ * Read CSV to determine location of POI
  * ***************************************************************************/
 int getHeadingForCoordinates(int x, int y){
 
@@ -149,43 +144,28 @@ int getHeadingForCoordinates(int x, int y){
 
 }
 
-/*****************************************************************************
- * Pinpoint the center of a hive
- * ***************************************************************************/
+int* getPOICoordinates(int x ,int y){
 
-int* pinpoint(int x, int y){
+  int xPOI = 9999;
+  int yPOI = 9999;
+  BaseStruct_t* bases = getBases("fuelpoints.csv");
+  int length = sizeof(bases)/ sizeof(bases[0]);
 
-  /*
-   *  Step 1: Resume moving until fuel stops increasing
-   *  Step 2: Rotate 180 and move until fuel stops increasing
-   *  Step 3: Find distance traveled and go to midpoint
-   *  Step 4: Rotate 90 find edge rotate 180 find other edge find midpoint
-   */
 
-  setPower(5);
-  //Step 1:
-  /*
-  fuel = selfFuel();
-  setPower(1);
-  do{
-    int off_set = 10;
-    if((fueling == false)){
-      strcpy(bugstring, "Start Pin");
-      refuel(1);
-      fueling = true;
+  int i = 0;
+  for(i; i < length; i++){
+    int old_distance = computeDistance(x,xPOI,y,yPOI);
+    int new_distance = computeDistance(x, bases[i].x, y, bases[i].y);
+    if(new_distance < old_distance) {
+      xPOI = bases[i].x;
+      yPOI = bases[i].y;
     }
-    if((frameCount % 3 == 0) && (fueling == true)){
-      strcpy(bugstring, "Stop Pin");
-      refuel(0);
-      fueling = false;
-      double curr_fuel = selfFuel();
-      if(curr_fuel - fuel == 0){      //If no change in fuel level then edge is found
-        strcpy(bugstring, "Edge Found");
-        setPower(0);
-        turnToDeg(selfHeadingDeg() + 180);
-      }
-    }
-  }while(pinpoint);
-  */
+  }
+
+  static int coordinates[2];
+  coordinates[0] = xPOI;
+  coordinates[1] = yPOI;
+  return coordinates;
+
 }
 

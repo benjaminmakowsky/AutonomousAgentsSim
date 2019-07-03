@@ -37,6 +37,10 @@ int goToCoordinates(int x, int y);
 int getHeadingForCoordinates(int x ,int y);
 
 
+
+
+int* getPOICoordinates(int x ,int y);
+
 #endif //XPILOT_LE_BEE_H
 
 
