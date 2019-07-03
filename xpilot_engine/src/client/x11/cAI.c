@@ -547,28 +547,7 @@ void lessPower() {
 	Keyboard_button_pressed(XK_KP_Divide);
 	Keyboard_button_released(XK_KP_Divide);
 }
-/*TODO: Possible removal
-int goToPoint(int x, int y){
-  int distance = computeDistance(selfX(), x, selfY(), y);
 
-  if(distance == 0){
-    setPower(0);
-  }
-  if(distance <= 1){
-    setPower(0);
-  } else if(distance < 5){
-    setPower(1);
-  } else if(distance < 10){
-    setPower(3);
-  }else{
-    setPower(5);
-  }
-
-  return distance;
-  //TODO: Make it so that power is a function of distance from point
-
-}
- */
 //End movement methods -JNE
 //Shooting methods -JNE
 void fireShot() {
@@ -992,6 +971,25 @@ char* selfName() {
 double selfScore() {
 	if (self != NULL) return self->score;
 	return 0.0;
+}
+
+void setSelfHive(int x, int y){
+  int i;
+  for (i=0;i<num_ship;i++) {
+    if ((self != NULL) && (ship_ptr[i].id==self->id)) {
+      ship_ptr[i].home_base[0] = x;
+      ship_ptr[i].home_base[1] = y;
+    }
+  }
+}
+
+int* getSelfHive(){
+  int i;
+  for (i=0;i<num_ship;i++) {
+    if ((self != NULL) && (ship_ptr[i].id==self->id)) {
+      return ship_ptr[i].home_base;
+    }
+  }
 }
 //End self properties -JNE
 
