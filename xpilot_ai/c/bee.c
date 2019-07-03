@@ -57,12 +57,10 @@ void searching() {
     int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
     if (fueling == false) {
       fuel = selfFuel();
-      strcpy(bugstring, "Start Refuel");
       refuel(1);
       fueling = true;
     }
     if ((frameCount % frames_passed == 0) && (fueling == true)) {
-      strcpy(bugstring, "Stop Refuel");
       refuel(0);
       fueling = false;
     }
@@ -76,7 +74,7 @@ void searching() {
       setPower(0);
       x = selfX();
       y = selfY();
-      fov = old_heading = (int)selfHeadingDeg();
+      old_heading = (int)selfHeadingDeg();
       new_heading = ((int)selfHeadingDeg() + 180) % 360;
       fuel_found = true;
     }
@@ -94,32 +92,65 @@ void searching() {
         current_y = selfY();
       } else{
         counter += 1;
-        sprintf(temp_str, "counter %d", counter);
-        strcpy(bugstring, temp_str);
       }
 
       //Once ship has not moved for 10 iterations it can determined to be stopped
     } else {
 
-      //Turn To heading
-      sprintf(temp_str, "Self %d Aim %d", (int)selfHeadingDeg(), new_heading);
-      strcpy(bugstring, temp_str);
-      int self = (int)selfHeadingDeg();
-      if (self != new_heading) {
-        turnToDeg(new_heading); //TODO: Added check for deg>360 in cAI.c
-      } else {
-        strcpy(bugstring, "Turn Completed");
-      }
+      strcpy(bugstring, "goToCoordinate()");
+      //INPROGRESS: Fly to point
+      goToCoordinates(x,y);
 
-      //sprintf(temp_str, "From %d to %d", old_heading, (int)selfHeadingDeg());
-      strcpy(bugstring, temp_str);
-      //TODO: Fly to point
+      /*//Turn To heading
+      if ((int)selfHeadingDeg() != new_heading) {
+        //turnToDeg(new_heading); //TODO: Added check for deg>360 in cAI.c
+      } else{
+
+      }*/
+
+
     }
   }
 }
 
 /*****************************************************************************
- * INPROGRESS:Pinpoint the center of a hive
+ * Move Bee To Coordinates Specified
+ * ***************************************************************************/
+
+int goToCoordinates(int x, int y){
+
+  //Get Heading to new point
+  int new_heading = getHeadingForCoordinates(x ,y);
+
+  //Turn to new heading
+  if(((int)selfHeadingDeg() <= (new_heading - 2))|| ((int)selfHeadingDeg() >= (new_heading + 2))) {
+    //sprintf(temp_str, "Self %d Point %d", x, y);
+    sprintf(temp_str, "S %d P %d", (int)selfHeadingDeg(), new_heading);
+    strcpy(bugstring, temp_str);
+    turnToDeg(new_heading);
+  }else{
+    //Travel to new point
+    setPower(20);
+  }
+
+
+  //Stop at new point
+  //Return current heading
+
+}
+
+
+/*****************************************************************************
+ * Get Heading of Specified Coordinates
+ * ***************************************************************************/
+int getHeadingForCoordinates(int x, int y){
+
+  return (getAngleBtwnPoints(selfX(), x, selfY(), y)) % 360;
+
+}
+
+/*****************************************************************************
+ * Pinpoint the center of a hive
  * ***************************************************************************/
 
 int* pinpoint(int x, int y){

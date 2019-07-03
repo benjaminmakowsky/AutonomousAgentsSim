@@ -18,10 +18,23 @@ void searching();   //Searches for a hive
 int* pinpoint();
 
 
+/*
+ *  goToCoordinates(x,y)
+ *  Moves the bee to a specified location on the map.
+ *  @Param int x: The x coordinate of the location
+ *  @Param int y: The y coordinate of the locaton
+ *  @Return: int: current heading in degrees
+ *  NOTE: Due to map constraints location will be + or - 5 */
+int goToCoordinates(int x, int y);
 
 
-
-
+/*
+ *  getHeadingForCoordinates(x , y)
+ *  Gets the heading for the the coordinates (x,y)
+ *  @Param int x: The x coordinate of the location
+ *  @Param int y: The y coordinate of the locaton
+ *  @Return: int: heading of coordinates in degrees*/
+int getHeadingForCoordinates(int x ,int y);
 
 
 #endif //XPILOT_LE_BEE_H

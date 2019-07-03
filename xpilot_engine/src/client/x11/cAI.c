@@ -130,8 +130,8 @@ void AIshot_refresh() {
 	int i;
 	if (AIshot_toggle > 0) {
 		i = 1;
-		while (i == -1)
-			i = quickSortShots();
+		/*while (i == -1)
+			i = quickSortShots();*/
 		AIshot_reset();
 		i = 0;
 		while (i < AISHOT_MAX && AIshot_buffer[i].x != -1) {
@@ -467,6 +467,8 @@ void turn(int deg) {	//turns based on the speed, 'deg', that is passed in -JNE
 		Send_pointer_move(deg * -128 / 360);
 }
 void turnToDeg(int deg) {
+
+    deg = deg % 360;
 	//sets the ship's heading to a fixed degree -JNE
 	int selfHead, speed, dif;
 	selfHead = (int)selfHeadingDeg();
@@ -545,7 +547,7 @@ void lessPower() {
 	Keyboard_button_pressed(XK_KP_Divide);
 	Keyboard_button_released(XK_KP_Divide);
 }
-
+/*TODO: Possible removal
 int goToPoint(int x, int y){
   int distance = computeDistance(selfX(), x, selfY(), y);
 
@@ -566,6 +568,7 @@ int goToPoint(int x, int y){
   //TODO: Make it so that power is a function of distance from point
 
 }
+ */
 //End movement methods -JNE
 //Shooting methods -JNE
 void fireShot() {
@@ -1842,7 +1845,7 @@ int aimdir(int idx) {
 		else if ((Sy + Svy * time2) < (selfPos.y + sin(AI_radian(selfTrackingDeg())) * selfSpeed() * time2)) return 360 - (int)degs2;
 		else return (int)degs2;
 	}
-	return -1;
+	//return -1;
 }
 //Capture the flag functions - Sarah Penrose
 int ballX() {
@@ -1868,7 +1871,7 @@ int connectorX0() {
 	for (i=0;i<num_connector;i++) {
 		if (connector_ptr[i].x0 != -1) {
 			return connector_ptr[i].tractor;
-			return connector_ptr[i].x0;
+			//return connector_ptr[i].x0;
 		}
 	}
 	return -1;
