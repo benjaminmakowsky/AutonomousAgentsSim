@@ -141,8 +141,6 @@ typedef struct fuelStruct_t {
 	extern int selfShield(); // Returns the ship's Shield status -JRA
 	extern char* selfName(); // Returns the ship's Name -JRA
 	extern double selfScore(); // Returns the ship's Score -JRA
-	extern int* getSelfHive();
-	extern void setSelfHive(int x, int y);
 
 	// Closest functions -JNE
 	extern int closestRadarX(); // Returns the Closest ship's X Radar Coordinate -JRA

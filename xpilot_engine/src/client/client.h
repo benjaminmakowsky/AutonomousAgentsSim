@@ -306,7 +306,6 @@ typedef struct {
 	u_byte		phased, deflector;
 	double fuel, fov, baseFuel;
 	int range;
-	int* home_base[2];
 } ship_t;
 
 typedef struct {

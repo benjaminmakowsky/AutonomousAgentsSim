@@ -1084,24 +1084,6 @@ double selfScore() {
 	return 0.0;
 }
 
-void setSelfHive(int x, int y){
-  int i;
-  for (i=0;i<num_ship;i++) {
-    if ((self != NULL) && (ship_ptr[i].id==self->id)) {
-      ship_ptr[i].home_base[0] = x;
-      ship_ptr[i].home_base[1] = y;
-    }
-  }
-}
-
-int* getSelfHive(){
-  int i;
-  for (i=0;i<num_ship;i++) {
-    if ((self != NULL) && (ship_ptr[i].id==self->id)) {
-      return ship_ptr[i].home_base;
-    }
-  }
-}
 //End self properties -JNE
 
 

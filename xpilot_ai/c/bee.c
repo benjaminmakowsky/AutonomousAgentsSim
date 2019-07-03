@@ -99,7 +99,7 @@ void searching() {
 
       strcpy(bugstring, "goToCoordinate()");
       //INPROGRESS: Fly to point
-      goToCoordinates(x,y);
+      goToCoordinates(selfBaseX(),selfBaseY());
 
       /*//Turn To heading
       if ((int)selfHeadingDeg() != new_heading) {
