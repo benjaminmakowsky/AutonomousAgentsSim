@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # given a map, this script generates a list of points corresponding to the map
-# and places it into the ../../xpilot-ng-temp/c/ directory
+# and places it into the ../../../xpilot-ai/c/ directory
 
 # identifies the first and last lines of the ASCII map in the given mapfile
 line1=$( grep -n '\EndOfMapdata' $1 | awk '//{i++}i==1' | grep -o -E "^[0-9]{1,3}" )
@@ -20,6 +20,6 @@ gcc -g getMapPoints.c -o getMapPoints
 # removes the created parsemap file
 #rm parsemap.txt
 
-# moves the file with all the graph points to the ../../xpilot-ng-temp/c/ directory
-mv points.csv ../../xpilot-ng-temp/c/
+# moves the file with all the graph points to the ../../../xpilot-ai/c/ directory
+mv points.csv ../../../xpilot-ai/c/
 

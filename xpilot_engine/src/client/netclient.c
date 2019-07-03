@@ -1460,7 +1460,7 @@ int Receive_self_items(void)
  */
 int Receive_self(void)
 {
-	int		n;
+	int		n, sBaseX, sBaseY, sNumShips;
 	short	x, y, vx, vy, lockId, lockDist,
 		sFuelSum, sFuelMax, sBaseFuel, sViewWidth, sViewHeight;
 	u_byte	ch, sNumSparkColors, sHeading, sPower, sTurnSpeed,
@@ -1486,10 +1486,12 @@ int Receive_self(void)
 
 	n = Packet_scanf(&rbuf,
 			"%c%hd%hd%hd"
+      "%hd%hd%hd"
 			"%hd%hd%c"
 			"%c%c",
 
 			&currentTank, &sFuelSum, &sFuelMax, &sBaseFuel,
+      &sBaseX, &sBaseY,&sNumShips,
 			&sViewWidth, &sViewHeight, &sNumSparkColors,
 			&sStat, &sAutopilotLight
 			);
@@ -1521,7 +1523,8 @@ int Receive_self(void)
 			sNextCheckPoint, sAutopilotLight,
 			num_items,
 			currentTank, (double)sFuelSum, (double)sFuelMax, (double)sBaseFuel,
-			rbuf.len, (int)sStat);
+			sBaseX, sBaseY, sNumShips,
+      rbuf.len, (int)sStat);
 
 #ifdef _WINDOWS
 	received_self = TRUE;

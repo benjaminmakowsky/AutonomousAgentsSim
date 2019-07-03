@@ -301,7 +301,7 @@ typedef struct {
 } ball_t;
 
 typedef struct {
-	short		x, y, id, dir, armor;
+	short		x, y, id, dir, armor, baseX, baseY, numShips;
 	u_byte		shield, cloak, eshield;
 	u_byte		phased, deflector;
 	double fuel, fov, baseFuel;
@@ -525,6 +525,9 @@ extern u_byte	old_spark_rand;		/* previous value of spark_rand */
 extern double	fuelSum;		/* Sum of fuel in all tanks */
 extern double	fuelMax;		/* How much fuel can you take? */
 extern double	baseFuel;		/* Sum of ship's home-base fuel */
+extern int baseX; /* Ship's home-base x coordinate */
+extern int baseY; /* Ship's home-base y coordinate */
+extern int numShips; /* Number of ships on server */
 extern short	fuelCurrent;		/* Number of currently used tank */
 extern short	numTanks;		/* Number of tanks */
 extern double	fuelTime;		/* Display fuel for how long? */
@@ -745,7 +748,8 @@ int Handle_self(int x, int y, int vx, int vy, int newHeading,
 		int newLockId, int newLockDist, int newLockBearing,
 		int newNextCheckPoint, int newAutopilotLight,
 		u_byte *newNumItems, int newCurrentTank,
-		double newFuelSum, double newFuelMax, double newBaseFuel,
+		double newFuelSum, double newFuelMax, double newBaseFuel, 
+    int newBaseX, int newBaseY, int newNumPlayers,
 		int newPacketSize, int status);
 int Handle_self_items(u_byte *newNumItems);
 int Handle_modifiers(char *m);
