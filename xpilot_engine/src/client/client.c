@@ -105,6 +105,9 @@ u_byte	old_spark_rand;		/* previous value of spark_rand */
 
 double	fuelSum;		/* Sum of fuel in all tanks */
 double	fuelMax;		/* How much fuel can you take? */
+int baseX; /* Ship's home-base x coordinate */ 
+int baseY; /* Ship's home-base y coordinate */
+int numShips; /* Number of ships on the server */
 double  baseFuel;   /* Ship's home-base current fuel */
 short	fuelCurrent;		/* Number of currently used tank */
 short	numTanks;		/* Number of tanks */
@@ -1635,6 +1638,7 @@ int Handle_self(int x, int y, int vx, int vy, int newHeading,
 		int newNextCheckPoint, int newAutopilotLight,
 		u_byte *newNumItems, int newCurrentTank,
 		double newFuelSum, double newFuelMax, double newBaseFuel,
+    int newBaseX, int newBaseY, int newNumShips,
 		int newPacketSize, int status)
 {
 	selfPos.x = x;
@@ -1657,6 +1661,9 @@ int Handle_self(int x, int y, int vx, int vy, int newHeading,
 	fuelSum = newFuelSum;
 	fuelMax = newFuelMax;
 	baseFuel = newBaseFuel;
+  baseX = newBaseX;
+  baseY = newBaseY;
+  numShips = newNumShips;
 	selfVisible = 0;
 	if (newPacketSize + 16 < packet_size)
 		packet_size -= 16;
@@ -1847,6 +1854,9 @@ int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
 	t.deflector = deflector;
 	t.fuel = fuelSum;
 	t.baseFuel = baseFuel;
+  t.baseX = baseX;
+  t.baseY = baseY;
+  t.numShips = numShips;
 	t.armor = numItems[ITEM_ARMOR];
 	t.fov = numItems[ITEM_FOV];
 	t.range = numItems[ITEM_RANGE] * 100;

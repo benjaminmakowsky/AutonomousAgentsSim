@@ -63,6 +63,7 @@ extern long		frame_loops_slow;
 extern double		frame_time;
 extern int		spectatorStart;
 extern int		NumPlayers;
+extern int		NumBases;
 extern int		NumSpectators;
 extern int		NumOperators;
 extern int		NumPseudoPlayers;

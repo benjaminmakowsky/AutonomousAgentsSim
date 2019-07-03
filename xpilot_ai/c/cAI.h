@@ -1,4 +1,18 @@
 //Justin Anderson - May 2012
+
+// Structs to hold the base coordinates & 
+// the fuel depot coordinates
+typedef struct baseStruct_t {
+  int team;
+  int x;
+  int y;
+} BaseStruct_t;
+
+typedef struct fuelStruct_t {
+  int x;
+  int y;
+} FuelStruct_t;
+
 //extern method declarations -JTO
 	extern int start(int argc, char* argv[]); // Initialize AI interface and start XPilot -JRA
 // Movement methods -JNE
@@ -71,6 +85,8 @@
 // other options -JNE
   extern double selfFuel(); // Returns the ship current fuelSum
   extern double selfBaseFuel(); // Returns the ship base's current fuelReserve
+  extern BaseStruct_t* getBases();
+  extern FuelStruct_t* getFuelDepots();
 	extern void keyHome(); // Changes the ship's Home Base or respawn location -JRA
 	extern void selfDestruct(); // Triggers the ship's Self Destruct mechanism //Do not repeatedly press or the ship will not self destruct, it works as a toggle and has a timer -JRA
 	extern void pauseAI(); // Pauses the game for the ship, does not affect other ships -JRA
@@ -87,6 +103,9 @@
 // self properties -JNE
 	extern int selfX(); // Returns the ship's X Position -JRA
 	extern int selfY(); // Returns the ship's Y Position -JRA
+	extern int selfBaseX(); // Returns ship's base x coordinate
+	extern int selfBaseY(); // Returns ship's base y coordinate
+	extern int getNumberOfShips(); // Returns number of ships connected to server
 	extern int selfRadarX(); // Returns the ship's X Radar Coordinate -JRA
 	extern int selfRadarY(); // Returns the ship's Y Radar Coordinate -JRA
 	extern int selfVelX(); // Returns the ship's X Velocity -JRA

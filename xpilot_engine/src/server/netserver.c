@@ -1539,8 +1539,8 @@ int Send_self(connection_t *connp,
 			"%hd%hd%hd%hd%c"
 			"%c%c%c"
 			"%hd%hd%c%c"
-			"%c%hd%hd"
-			"%hd"
+			"%c%hd%hd%hd"
+      "%hd%hd%hd"
 			"%hd%hd%c"
 			"%c%c"
 			,
@@ -1559,6 +1559,10 @@ int Send_self(connection_t *connp,
 			(int)(pl->fuel.max + 0.5),
 
 			(int)(pl->home_base->fuelReserve->fuel),
+
+      (int)(CLICK_TO_PIXEL(pl->home_base->pos.cx)),
+      (int)(CLICK_TO_PIXEL(pl->home_base->pos.cy)),
+      (int)NumPlayers,
 
 			connp->view_width, connp->view_height,
 			connp->debris_colors,
