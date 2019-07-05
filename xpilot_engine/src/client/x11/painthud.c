@@ -1019,30 +1019,30 @@ void Paint_HUD_values(void) {
   int lenC1, lenC2, w3, w4, lenA1, lenA2, lenS1, lenS2, lenFOV, lenFuel;
 
   //friendly cohesion variables
-  extern int cRadius;
-  extern int cWeight;
+  int cRadius;
+  int cWeight;
 
   //(friend) alignment variables
-  extern int aWeight;
-  extern int aRadius;
+  int aWeight;
+  int aRadius;
 
   //(friend) separation variables
-  extern int sWeight;
-  extern int sRadius;
+  int sWeight;
+  int sRadius;
 
 
   //(enemy) separation variables
-  extern int eWeight;
-  extern int eRadius;
+  int eWeight;
+  int eRadius;
 
   //field (angle) of vision
-  extern int fov;
+  int fov;
 
   //Fuel Level of Ship
-  extern double fuel;
+  double fuel;
 
   //Debug String
-  extern char bugstring[50];
+  char bugstring[50];
 
   if (!hudColor)
     return;
