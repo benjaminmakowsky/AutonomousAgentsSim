@@ -95,7 +95,6 @@ void searching() {
       }
     } else {
 
-
       int* POICoordinates;
       POICoordinates = getPOICoordinates(x, y);
       goToCoordinates(POICoordinates[0],POICoordinates[1]);
@@ -116,16 +115,16 @@ int goToCoordinates(int x, int y){
 
   //Get Heading to new point
   int new_heading = getHeadingForCoordinates(x ,y);
-
+  sprintf(bugstring, "angle: %d", new_heading);
   //Turn to new heading
-  if(((int)selfHeadingDeg() <= (new_heading - 2))|| ((int)selfHeadingDeg() >= (new_heading + 2))) {
+  if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
     //sprintf(temp_str, "Self %d Point %d", x, y);
     sprintf(temp_str, "S %d P %d", (int)selfHeadingDeg(), new_heading);
     strcpy(bugstring, temp_str);
     turnToDeg(new_heading);
   }else{
     //Travel to new point
-    setPower(20);
+    setPower(10);
   }
 
 
@@ -136,22 +135,29 @@ int goToCoordinates(int x, int y){
 
 
 /*****************************************************************************
- * Read CSV to determine location of POI
+ * Get the heading for the POI
  * ***************************************************************************/
 int getHeadingForCoordinates(int x, int y){
 
-  return (getAngleBtwnPoints(selfX(), x, selfY(), y)) % 360;
+  return (getAngleBtwnPoints(selfX(), x, selfY(), y));
 
 }
 
+
+/*****************************************************************************
+ * Get the coordinates for the nearest Point Of Interest to X,Y
+ * ***************************************************************************/
 int* getPOICoordinates(int x ,int y){
 
   int xPOI = 9999;
   int yPOI = 9999;
+
+  //Create array of POI's and get the number of elements in the array
   BaseStruct_t* bases = getBases("fuelpoints.csv");
   int length = sizeof(bases)/ sizeof(bases[0]);
 
 
+  //Traverse array to determine which location was closest to X, Y
   int i = 0;
   for(i; i < length; i++){
     int old_distance = computeDistance(x,xPOI,y,yPOI);

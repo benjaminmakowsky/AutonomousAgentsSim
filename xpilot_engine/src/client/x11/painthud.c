@@ -1019,34 +1019,35 @@ void Paint_HUD_values(void) {
   int lenC1, lenC2, w3, w4, lenA1, lenA2, lenS1, lenS2, lenFOV, lenFuel;
 
   //friendly cohesion variables
-  int cRadius;
-  int cWeight;
+  extern int cRadius;
+  extern int cWeight;
 
   //(friend) alignment variables
-  int aWeight;
-  int aRadius;
+  extern int aWeight;
+  extern int aRadius;
 
   //(friend) separation variables
-  int sWeight;
-  int sRadius;
+  extern int sWeight;
+  extern int sRadius;
 
 
   //(enemy) separation variables
-  int eWeight;
-  int eRadius;
+  extern int eWeight;
+  extern int eRadius;
 
   //field (angle) of vision
-  int fov;
+  extern int fov;
 
   //Fuel Level of Ship
-  double fuel;
+  extern double fuel;
 
   //Debug String
-  char bugstring[50];
+  extern char bugstring[50];
 
   if (!hudColor)
     return;
 
+  //TODO MARK
   SET_FG(colors[hudColor].pixel);
 
   sprintf(buf, "FPS    : %.3f", clientFPS);
@@ -1071,7 +1072,7 @@ void Paint_HUD_values(void) {
 
   //CL.LAG
   len2 = strlen(buf2);
-  w2 = XTextWidth(gameFont, buf2, len2);
+
 
   //cRadius
   lenC1 = strlen(cbuf1);
@@ -1103,6 +1104,7 @@ void Paint_HUD_values(void) {
 
   //Debug String
   int lenDebug = strlen(bugstring);
+  w2 = XTextWidth(gameFont, bugbuf, lenDebug);
 
   wmax = MAX(w, w2);
   //wmax = MAX(wmax, w3);
