@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 	 ******************************************************************************/  
 
 	int baseCount = 0;
-  int fuelCount = 0;
+    int fuelCount = 0;
 
 	for(i = 0; i < numRows; i++)
 	{
@@ -94,6 +94,7 @@ int main(int argc, char *argv[])
 	fprintf(fptr, "%d\n", baseCount);
 	fprintf(fptr, "%d\n", fuelCount);
 
+  printf("%d\n", numCols * 35);
 	//Write the base points first
 	for(i = 0; i < numRows; i++)
 	{

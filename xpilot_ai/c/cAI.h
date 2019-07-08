@@ -10,6 +10,7 @@ typedef struct baseStruct_t {
     int team;
     int x;
     int y;
+    int num_bases;
 } BaseStruct_t;
 
 typedef struct fuelStruct_t {

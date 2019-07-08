@@ -115,12 +115,12 @@ int goToCoordinates(int x, int y){
 
   //Get Heading to new point
   int new_heading = getHeadingForCoordinates(x ,y);
-  sprintf(bugstring, "angle: %d", new_heading);
+
+
   //Turn to new heading
   if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
     //sprintf(temp_str, "Self %d Point %d", x, y);
-    sprintf(temp_str, "S %d P %d", (int)selfHeadingDeg(), new_heading);
-    strcpy(bugstring, temp_str);
+    //sprintf(bugstring, "X %d Y %d", x, y);
     turnToDeg(new_heading);
   }else{
     //Travel to new point
@@ -149,19 +149,21 @@ int getHeadingForCoordinates(int x, int y){
  * ***************************************************************************/
 int* getPOICoordinates(int x ,int y){
 
-  int xPOI = 9999;
-  int yPOI = 9999;
+  int xPOI = 9999999;
+  int yPOI = 9999999;
 
   //Create array of POI's and get the number of elements in the array
   BaseStruct_t* bases = getBases("fuelpoints.csv");
-  int length = sizeof(bases)/ sizeof(bases[0]);
+  int length = bases[0].num_bases;
 
 
+  //sprintf(bugstring, "X %d Y %d", x, y);
   //Traverse array to determine which location was closest to X, Y
   int i = 0;
   for(i; i < length; i++){
     int old_distance = computeDistance(x,xPOI,y,yPOI);
     int new_distance = computeDistance(x, bases[i].x, y, bases[i].y);
+    sprintf(bugstring, "X %d Y %d", bases[i].x, bases[i].y);
     if(new_distance < old_distance) {
       xPOI = bases[i].x;
       yPOI = bases[i].y;
@@ -171,6 +173,7 @@ int* getPOICoordinates(int x ,int y){
   static int coordinates[2];
   coordinates[0] = xPOI;
   coordinates[1] = yPOI;
+
   return coordinates;
 
 }

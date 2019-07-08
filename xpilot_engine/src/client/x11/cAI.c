@@ -817,6 +817,7 @@ BaseStruct_t* getBases(char* csv){
     newBase.x = atoi(token);
     token = strtok( NULL, " ");
     newBase.y = atoi(token);
+    newBase.num_bases = numBases;
 
     //add to array
     bases[i] = newBase;
