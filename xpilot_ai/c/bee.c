@@ -16,9 +16,8 @@
 char temp_str[25];
 
 
-//INPROGRESS: Implement search - Benjamin Makowsky -----------------------
 /*****************************************************************************
- * Searching (Controller)
+ * Searching (Controller)- Benjamin Makowsky
  * ***************************************************************************/
 void searching() {
   /*
@@ -99,12 +98,16 @@ void searching() {
       POICoordinates = getPOICoordinates(x, y);
       goToCoordinates(POICoordinates[0],POICoordinates[1]);
 
-
-      /*strcpy(bugstring, "goToCoordinate()");
-      //INPROGRESS: Fly to point
-      goToCoordinates(selfBaseX(),selfBaseY());*/
     }
   }
+}
+
+//INPROGRESS: Get it to forage
+/*****************************************************************************
+ * Foraging (Controller)- Benjamin Makowsky
+ * ***************************************************************************/
+void forage() {
+
 }
 
 /*****************************************************************************
@@ -119,18 +122,11 @@ int goToCoordinates(int x, int y){
 
   //Turn to new heading
   if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
-    //sprintf(temp_str, "Self %d Point %d", x, y);
-    //sprintf(bugstring, "X %d Y %d", x, y);
     turnToDeg(new_heading);
   }else{
-    //Travel to new point
+    state = STATE_FLOCKING;
     setPower(10);
   }
-
-
-  //Stop at new point
-  //Return current heading
-
 }
 
 
@@ -157,7 +153,6 @@ int* getPOICoordinates(int x ,int y){
   int length = bases[0].num_bases;
 
 
-  //sprintf(bugstring, "X %d Y %d", x, y);
   //Traverse array to determine which location was closest to X, Y
   int i = 0;
   for(i; i < length; i++){
@@ -167,6 +162,22 @@ int* getPOICoordinates(int x ,int y){
     if(new_distance < old_distance) {
       xPOI = bases[i].x;
       yPOI = bases[i].y;
+    }
+  }
+
+  FuelStruct_t depots = getFuelDepots("fuelpoints.csv");
+  length = depots[0].num_fuels;
+
+
+  //sprintf(bugstring, "X %d Y %d", x, y);
+  //Traverse array to determine which location was closest to X, Y
+  int i = 0;
+  for(i; i < length; i++){
+    int old_distance = computeDistance(x,xPOI,y,yPOI);
+    int new_distance = computeDistance(x, depots[i].x, y, depots[i].y);
+    if(new_distance < old_distance) {
+      xPOI = depots[i].x;
+      yPOI = depots[i].y;
     }
   }
 

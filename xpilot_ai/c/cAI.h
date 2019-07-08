@@ -16,6 +16,7 @@ typedef struct baseStruct_t {
 typedef struct fuelStruct_t {
     int x;
     int y;
+    int num_fuels;
 } FuelStruct_t;
 
 	extern int start(int argc, char* argv[]); // Initialize AI interface and start XPilot -JRA
@@ -32,6 +33,9 @@ typedef struct fuelStruct_t {
 	extern void slowerTurnrate(); //Decreases the ship's Turn Rate -JRA
 	extern void morePower(); //Increases the ship's Thrusting Power -JRA
 	extern void lessPower(); //Decreases the ship's Thrusting Power -JRA
+
+	//Memory Methods - Benjamin Makowsky
+	extern void rememberPOICoords(int x , int y);
 
     // Shooting methods -JNE
 	extern void fireShot(); // Fires a Shot -JRA

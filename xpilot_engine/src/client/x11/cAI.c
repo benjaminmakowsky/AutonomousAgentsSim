@@ -549,6 +549,20 @@ void lessPower() {
 }
 
 //End movement methods -JNE
+
+//Memory Methods
+void rememberPOICoords(int x , int y){
+  int i;
+  for (i=0;i<num_ship;i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      ship_ptr[i].fuel_coords[0] = x;
+      ship_ptr[i].fuel_coords[1] = y;
+    }
+  }
+
+}
+
+
 //Shooting methods -JNE
 void fireShot() {
 	Keyboard_button_pressed(XK_Return);
@@ -866,6 +880,7 @@ FuelStruct_t* getFuelDepots(char* csv){
     newFuel.x = token;
     token = strtok( NULL, " ");
     newFuel.y = token;
+    newFuel.num_fuels = numFuels;
 
     //add to array
     fuels[i] = newFuel;

@@ -36,7 +36,8 @@ enum State
   STATE_INIT,
   STATE_FLYING,
   STATE_DEAD,
-  STATE_SEARCHING
+  STATE_SEARCHING,
+  STATE_FORAGING
 };
 
 //global variables
@@ -656,6 +657,10 @@ AI_loop()
 
     case(STATE_SEARCHING):
       searching();
+      break;
+
+    case (STATE_FORAGING):
+      forage():
       break;
 
     default:

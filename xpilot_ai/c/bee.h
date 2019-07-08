@@ -11,6 +11,11 @@
  *  @Return: Void*/
 void searching();   //Searches for a hive
 
+/*
+ *  Forages back and forth from base to fuel source until source is empty
+ *  @Return: Void*/
+void forage();   //Searches for a hive
+
 
 /*  int* pinpoint()
  *  Pinpoints the exact location of a fuel source/hive
