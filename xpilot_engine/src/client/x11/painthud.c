@@ -61,6 +61,34 @@ int old_num_radar, old_max_radar;
 static int meterWidth = 60;
 static int meterHeight = 10;
 
+/**************************************************
+ *  Shared Variables from boids.h for paint_hud   *
+ **************************************************/
+//friendly cohesion variables
+int cRadius = 0;
+int cWeight = 0;
+
+//(friend) alignment variables
+int aWeight = 0;
+int aRadius = 0;
+
+//(friend) separation variables
+int sWeight = 0;
+int sRadius = 0;
+
+
+//(enemy) separation variables
+int eWeight = 0;
+int eRadius = 0;
+
+//field (angle) of vision
+int fov = 0;
+
+//Fuel Level of Ship
+double fuel = 0;
+
+//Debug String
+char bugstring[50];
 /*
  * Draw a meter of some kind on screen.
  * When the x-offset is specified as a negative value then
@@ -1018,31 +1046,7 @@ void Paint_HUD_values(void) {
 
   int lenC1, lenC2, w3, w4, lenA1, lenA2, lenS1, lenS2, lenFOV, lenFuel;
 
-  //friendly cohesion variables
-  extern int cRadius;
-  extern int cWeight;
 
-  //(friend) alignment variables
-  extern int aWeight;
-  extern int aRadius;
-
-  //(friend) separation variables
-  extern int sWeight;
-  extern int sRadius;
-
-
-  //(enemy) separation variables
-  extern int eWeight;
-  extern int eRadius;
-
-  //field (angle) of vision
-  extern int fov;
-
-  //Fuel Level of Ship
-  extern double fuel;
-
-  //Debug String
-  extern char bugstring[50];
 
   if (!hudColor)
     return;
