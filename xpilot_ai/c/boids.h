@@ -5,6 +5,17 @@
 #ifndef XPILOT_LE_BOIDS_H
 #define XPILOT_LE_BOIDS_H
 
+//Machine State
+enum State
+{
+    STATE_INIT,
+    STATE_FLYING,
+    STATE_DEAD,
+    STATE_SEARCHING,
+    STATE_FORAGING
+};
+
+extern enum State state;
 
 //Public Variables
 extern int cWeight;         //(friend) cohesion variables
@@ -22,7 +33,7 @@ extern int frameCount;		//how many frames have elapsed
 extern int degToAim;	    //what direction do we want to go
 extern int turnLock;		//time not allowed to compute new wall avoidance
 extern int wallVector;		//where to go to avoid crashing into a wall
-
+extern int ship_states[50][2];
 
 
 //function prototypes

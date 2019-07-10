@@ -130,28 +130,31 @@ typedef struct fuelStruct_t {
 	extern double lockHeadingRad(); // Returns in Radians the direction of the ship's Lock-on of an enemy -JRA
 	extern short selfLockDist(); // Returns the Distance of the enemy that the ship has Locked-on to -JRA
 	extern int selfReload(); // Returns the player's Reload time remaining, based on a call to fireShot() -JRA 
-	extern int selfID(); // Returns the ID of the ship -JRA
-	extern int selfAlive(); // Returns if the ship is Dead or Alive -JRA
-	extern int selfTeam(); // Returns the ship's Team -JRA
-	extern int selfLives(); // Returns how many Lives are left for the ship -JRA
+	extern int selfID();             // Returns the ID of the ship -JRA
+	extern int selfAlive();          // Returns if the ship is Dead or Alive -JRA
+	extern int selfTeam();           // Returns the ship's Team -JRA
+	extern int selfLives();          // Returns how many Lives are left for the ship -JRA
 	extern double selfTrackingRad(); // Returns the ship's Tracking in Radians -JRA
 	extern double selfTrackingDeg(); // Returns the ship's Tracking in Degrees -JRA
 	extern double selfHeadingDeg(); // Returns the Direction of the ship's Lock-on from the ship in Degrees -JRA
 	extern double selfHeadingRad(); // Returns the Direction of the ship's Lock-on from the ship in Radians -JRA
-	extern char* hudName(); // Returns the Name on the HUD -JRA
-	extern char* hudScore(); // Returns the Score on the HUD -JRA
-	extern double hudTimeLeft(); // Returns the Time Left on the HUD -JRA
-	extern double getTurnSpeed(); // Returns the ship's Turn Speed -JRA
-	extern double getPower(); // Returns the ship's Power Level -JRA
-	extern int selfShield(); // Returns the ship's Shield status -JRA
-	extern char* selfName(); // Returns the ship's Name -JRA
-	extern double selfScore(); // Returns the ship's Score -JRA
-
+	extern char* hudName();         // Returns the Name on the HUD -JRA
+	extern char* hudScore();        // Returns the Score on the HUD -JRA
+	extern double hudTimeLeft();    // Returns the Time Left on the HUD -JRA
+	extern double getTurnSpeed();   // Returns the ship's Turn Speed -JRA
+    extern double getPower();       // Returns the ship's Power Level -JRA
+	extern int selfShield();        // Returns the ship's Shield status -JRA
+	extern char* selfName();        // Returns the ship's Name -JRA
+	extern double selfScore();      // Returns the ship's Score -JRA
+    extern int selfFuelX();             // Returns ships designated fuel source x coord - Ben
+    extern int selfFuelY();             // Returns ships designated fuel source y coord - Ben
+    extern void setSelfState(int state);
+    extern int selfState();
 	// Closest functions -JNE
 	extern int closestRadarX(); // Returns the Closest ship's X Radar Coordinate -JRA
 	extern int closestRadarY(); // Returns the Closest ship's Y Radar Coordinate -JRA
-	extern int closestItemX(); // Returns the Closest Item's X Radar Coordinate -JRA
-	extern int closestItemY(); // Returns the Closest Item's Y Radar Coordinate -JRA
+	extern int closestItemX();  // Returns the Closest Item's X Radar Coordinate -JRA
+	extern int closestItemY();  // Returns the Closest Item's Y Radar Coordinate -JRA
 	extern int closestShipId(); // Returns the Closest ship's ID -JRA
 
 	// ID functions -JNE

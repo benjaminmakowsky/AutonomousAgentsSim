@@ -27,25 +27,12 @@
 //global constants
 #define MAX_DEG 360
 
-
-
-
-//enumeration of drone states
-enum State
-{
-  STATE_INIT,
-  STATE_FLYING,
-  STATE_DEAD,
-  STATE_SEARCHING,
-  STATE_FORAGING
-};
-
 //global variables
 int idx;			        //what's our unique idx number
 int tot_idx;			    //how many drones are on our team
 int teamNum;			    //what team do we belong to
 bool init = false;		    //have we initialized yet
-int state = STATE_INIT;		//what state are we in (usually STATE_FLYING)
+enum State state = STATE_INIT;		//what state are we in (usually STATE_FLYING)
 int wWeight = 0;		    //weight of wall avoidance relative to other vectors
 int pVector = -1;		    //information on the most recent (past) heading
 int pWeight = 5;
@@ -77,6 +64,7 @@ int degToAim = -1;
 int turnLock = 0;
 int wallVector = -1;
 char bugstring[50] = "Init";
+int ship_states[50][2];
 
 
 
@@ -87,6 +75,12 @@ char bugstring[50] = "Init";
 //Declares initialization complete and switches to the NOENEMY state
 void initialize()
 {
+
+  /*int i;
+  for (i = 0; i < getNumberOfShips(); ++i) {
+    ship_states[i][0] =
+  }*/
+
   //Generate a random initial heading.
   if(degToAim < 0)
   {
@@ -120,7 +114,7 @@ void initialize()
   //Declare initialized and set state to typical flying.
   init = true;
   state = STATE_FLYING;
-  thrust(0); 
+  thrust(0);
 }
 
 
@@ -574,7 +568,7 @@ void handleMsgBuffer()
         aWeight = 4;
         cWeight = 2;
         fov = 180;
-        state = STATE_FLYING;
+        setSelfState(1);
       }
       //return to aimless flying
       else if(!strcmp(tok, "endboids"))
@@ -584,10 +578,9 @@ void handleMsgBuffer()
         aWeight = 0;
         cWeight = 0;
         fov = 60;
-        state = STATE_FLYING;
+        setSelfState(1);
       }
 
-      //INPROGRESS: Begins ai driven search mode
       else if(!strcmp(tok, "findhoney"))
       {
 
@@ -598,7 +591,7 @@ void handleMsgBuffer()
         aWeight = 4;
         cWeight = 2;
         fov = 180;
-        state = STATE_SEARCHING;
+        setSelfState(3);
 
       }
     }
@@ -615,6 +608,8 @@ void handleMsgBuffer()
 AI_loop()
 {
 
+  sprintf(bugstring, "%d and %d", selfFuelX(), selfFuelY());
+  rememberPOICoords(3,4);
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
@@ -640,32 +635,35 @@ AI_loop()
   {
     state = STATE_INIT;
   }
- 
+
   switch(state)
   {
     case(STATE_INIT):
       initialize();
       break;
 
-    case(STATE_FLYING):
-      flocking();
-      break;
 
+    case(STATE_FLYING):
+      setSelfState(1);
+
+      switch(selfState()){
+        case (STATE_FLYING):
+          flocking();
+          break;
+        case(STATE_SEARCHING):
+          searching();
+          break;
+        case (STATE_FORAGING):
+          forage();
+          break;
+        default:
+          setSelfState(STATE_FLYING);
+      }
     case(STATE_DEAD):
       state = STATE_FLYING;
-      break;
-
-    case(STATE_SEARCHING):
-      searching();
-      break;
-
-    case (STATE_FORAGING):
-      forage():
-      break;
 
     default:
-      fuel = selfFuel();
-      flocking();
+      state = STATE_FLYING;
   }
 }
 

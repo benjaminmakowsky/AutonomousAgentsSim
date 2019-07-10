@@ -14,6 +14,7 @@
 
 //global variables
 char temp_str[25];
+bool fueling = false;
 
 
 /*****************************************************************************
@@ -34,7 +35,6 @@ void searching() {
   static int y = 0;
   static int current_x = 0;
   static int current_y = 0;
-  static bool fueling = false;
   static fuel_found = false;
   static int goal_frame = 0;
   static int original_distance;
@@ -82,9 +82,11 @@ void searching() {
 
   if (fuel_found) {
     static int counter = 0;
+    strcpy(bugstring, "found");
 
     //Wait for ship to not move for 10 iterations
     if(counter < 50){
+      sprintf(bugstring, "%d", counter);
       if(current_x != selfX() && current_y != selfY()){
         counter = 0;
         current_x = selfX();
@@ -107,7 +109,38 @@ void searching() {
  * Foraging (Controller)- Benjamin Makowsky
  * ***************************************************************************/
 void forage() {
+  strcpy(bugstring, "Beginning Foraging");
 
+  //Go to base
+  static int x = 0;
+  static int y = 0;
+
+  if(x == 0){
+    x = selfBaseX();
+    y = selfBaseY();
+  }
+
+  goToCoordinates(x,y);
+
+  //Drop off fuel
+  if(inVicinityOf(x,y)) {
+    setPower(0);
+
+    if (selfFuel() > 0) {
+        refuel(1);
+        fueling = true;
+    } else{
+      refuel(0);
+      x = selfFuelX();
+      y = selfFuelY();
+      setPower(10);
+    }
+  }
+
+  //Get return to source
+
+
+  //Get more fuel and repeat
 }
 
 /*****************************************************************************
@@ -124,7 +157,9 @@ int goToCoordinates(int x, int y){
   if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
     turnToDeg(new_heading);
   }else{
-    state = STATE_FLOCKING;
+    if(state = STATE_SEARCHING){
+      state = STATE_FORAGING;
+    }
     setPower(10);
   }
 }
@@ -165,13 +200,12 @@ int* getPOICoordinates(int x ,int y){
     }
   }
 
-  FuelStruct_t depots = getFuelDepots("fuelpoints.csv");
+  FuelStruct_t* depots = getFuelDepots("fuelpoints.csv");
   length = depots[0].num_fuels;
 
 
-  //sprintf(bugstring, "X %d Y %d", x, y);
   //Traverse array to determine which location was closest to X, Y
-  int i = 0;
+  i = 0;
   for(i; i < length; i++){
     int old_distance = computeDistance(x,xPOI,y,yPOI);
     int new_distance = computeDistance(x, depots[i].x, y, depots[i].y);
@@ -189,3 +223,16 @@ int* getPOICoordinates(int x ,int y){
 
 }
 
+
+bool inVicinityOf(int x,int y){
+  int range = 30;
+  int lowerRange = range/12;
+  int upperRange = range + lowerRange;
+
+  if(selfX() >= lowerRange && selfX() <= upperRange){
+    if(selfY() >= lowerRange && selfY() <= upperRange){
+      return true;
+    }
+  }
+  return false;
+}
