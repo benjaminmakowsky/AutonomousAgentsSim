@@ -579,13 +579,32 @@ void handleMsgBuffer()
  * AI Loop
  * ***************************************************************************/
 
+bool readFile = false;
+BaseStruct_t* bases;
+FuelStruct_t* fuels; 
+
 //This AI loop runs every frame, keeps track of what state we're in, and acts
 //accordingly.
 AI_loop()
 {
-
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
+
+  if( !readFile ){
+    bases = getBases("fuelpoints.csv");
+    fuels = getFuelDepots("fuelpoints.csv");
+    readFile = true;
+  }
+
+  printf("Printing points\n");
+  int i = 0;
+  for( i = 0; i < 4; ++i ){
+    printf("Base %d: %d,%d\n", i, bases[i].x, bases[i].y );
+  }
+
+  for( i = 0; i < 2; ++i ){
+    printf("Fuel %d: %d,%d\n", i, fuels[i].x, fuels[i].y );
+  }
 
   //If about 300 frames have gone by and we're a leader, broadcast a message that
   //indicates this, so others on my team can follow me in leader mode.

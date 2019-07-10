@@ -802,7 +802,7 @@ BaseStruct_t* getBases(char* csv){
 
   //Make an array of the bases
   int i;
-  BaseStruct_t bases[numBases];
+  BaseStruct_t* bases = malloc( numBases * sizeof( BaseStruct_t ) ); 
   for(i = 0; i < numBases; ++i){
     fgets(buf, sizeof(buf), fp );
     char* token;
@@ -817,6 +817,11 @@ BaseStruct_t* getBases(char* csv){
 
     //add to array
     bases[i] = newBase;
+  }
+
+  if( fclose(fp) == -1 ){
+    printf("Failed to close file\n");
+    return NULL;
   }
 
   return bases;
@@ -852,23 +857,28 @@ FuelStruct_t* getFuelDepots(char* csv){
   }
 
   //Make an array of the fuels
-  FuelStruct_t fuels[numFuels];
+  FuelStruct_t* fuels = malloc( numFuels * sizeof( FuelStruct_t ) ); 
   for(i = 0; i < numFuels; ++i){
     fgets(buf, sizeof(buf), fp );
     char* token;
     token = strtok(buf, " ");
     FuelStruct_t newFuel;
 
-    newFuel.x = token;
+    newFuel.x = atoi(token);
     token = strtok( NULL, " ");
-    newFuel.y = token;
+    newFuel.y = atoi(token);
 
     //add to array
     fuels[i] = newFuel;
-
+    printf("Fuel in file: %d,%d\n", newFuel.x, newFuel.y );
   }
 
-  return bases;
+  if( fclose(fp) == -1 ){
+    printf("Failed to close file\n");
+    return NULL;
+  }
+
+  return fuels;
 
 }
 
