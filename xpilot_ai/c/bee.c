@@ -40,6 +40,8 @@ void searching() {
   static int original_distance;
   static int old_heading = 0;
   static int new_heading = 0;
+  static int xPOI = 0;
+  static int yPOI = 0;
 
   /*
    * Step 1: Check for walls
@@ -82,10 +84,8 @@ void searching() {
 
   if (fuel_found) {
     static int counter = 0;
-    strcpy(bugstring, "found");
-
-    //Wait for ship to not move for 10 iterations
-    if(counter < 50){
+    //Wait for ship to not move for 30 iterations
+    if(counter < 30){
       sprintf(bugstring, "%d", counter);
       if(current_x != selfX() && current_y != selfY()){
         counter = 0;
@@ -96,10 +96,34 @@ void searching() {
       }
     } else {
 
-      int* POICoordinates;
-      POICoordinates = getPOICoordinates(x, y);
-      goToCoordinates(POICoordinates[0],POICoordinates[1]);
+      int *POICoordinates;
+      static bool fileRead = false;
+      if(!fileRead) {
+        strcpy(bugstring, "getting coords");
+        POICoordinates = getPOICoordinates(x, y);
+        xPOI = POICoordinates[0];
+        yPOI = POICoordinates[1];
+        fileRead = !fileRead;
+      }
 
+      /*
+       * Working version goes to fuel coordinates
+       */
+      //strcpy(bugstring, "moving to coords");
+      goToCoordinates(xPOI,yPOI);
+
+      //Used to debug current position vs heading
+      cRadius = selfX();
+      cWeight = selfY();
+      //sprintf(bugstring, "Moving to %d and %d",x,y);
+
+
+      /*
+       * Broken version
+
+      rememberPOICoords(POICoordinates[0],POICoordinates[1]);
+      sprintf(bugstring, "Moving to %d and %d",selfFuelX(), selfFuelY());*/
+      //goToCoordinates(POICoordinates[0],POICoordinates[1]);
     }
   }
 }
@@ -109,16 +133,20 @@ void searching() {
  * Foraging (Controller)- Benjamin Makowsky
  * ***************************************************************************/
 void forage() {
-  strcpy(bugstring, "Beginning Foraging");
 
   //Go to base
   static int x = 0;
   static int y = 0;
 
-  if(x == 0){
+  /*if(x == 0){
     x = selfBaseX();
     y = selfBaseY();
-  }
+  }*/
+
+  //Coordinates for fuel depo stored in ship struct from searching function
+  x = selfFuelX();
+  y = selfFuelY();
+  sprintf(bugstring, "Moving to %d and %d",x,y);
 
   goToCoordinates(x,y);
 
@@ -131,6 +159,8 @@ void forage() {
         fueling = true;
     } else{
       refuel(0);
+
+      //set coordinates of position to go to next
       x = selfFuelX();
       y = selfFuelY();
       setPower(10);
@@ -157,9 +187,9 @@ int goToCoordinates(int x, int y){
   if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
     turnToDeg(new_heading);
   }else{
-    if(state = STATE_SEARCHING){
+    /*if(state = STATE_SEARCHING){
       state = STATE_FORAGING;
-    }
+    }*/
     setPower(10);
   }
 }
@@ -183,6 +213,9 @@ int* getPOICoordinates(int x ,int y){
   int xPOI = 9999999;
   int yPOI = 9999999;
 
+  FILE *fp;
+  fp = fopen("Log.txt", "w");
+
   //Create array of POI's and get the number of elements in the array
   BaseStruct_t* bases = getBases("fuelpoints.csv");
   int length = bases[0].num_bases;
@@ -193,7 +226,7 @@ int* getPOICoordinates(int x ,int y){
   for(i; i < length; i++){
     int old_distance = computeDistance(x,xPOI,y,yPOI);
     int new_distance = computeDistance(x, bases[i].x, y, bases[i].y);
-    sprintf(bugstring, "X %d Y %d", bases[i].x, bases[i].y);
+    fprintf(fp, "From Bases \tIndex %d \tX: %d\tY: %d\n", i, bases[i].x, bases[i].y);
     if(new_distance < old_distance) {
       xPOI = bases[i].x;
       yPOI = bases[i].y;
@@ -209,6 +242,8 @@ int* getPOICoordinates(int x ,int y){
   for(i; i < length; i++){
     int old_distance = computeDistance(x,xPOI,y,yPOI);
     int new_distance = computeDistance(x, depots[i].x, y, depots[i].y);
+    fprintf(fp, "From Fuels reading X: %d Y: %d\n", depots[i].x, depots[i].y);
+
     if(new_distance < old_distance) {
       xPOI = depots[i].x;
       yPOI = depots[i].y;
@@ -216,8 +251,14 @@ int* getPOICoordinates(int x ,int y){
   }
 
   static int coordinates[2];
+
+  sprintf(bugstring, "X read: %d, y Read: %d", xPOI, yPOI);
   coordinates[0] = xPOI;
   coordinates[1] = yPOI;
+
+
+  fprintf(fp, "X Read: %d Y Read: %d", xPOI, yPOI);
+  fclose(fp);
 
   return coordinates;
 

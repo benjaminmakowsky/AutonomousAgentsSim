@@ -919,6 +919,7 @@ BaseStruct_t *getBases(char *csv) {
     //add to array
     bases[i] = newBase;
   }
+  //fclose(fp);
 
   return bases;
 }
@@ -970,6 +971,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
 
   }
 
+  //fclose(fp);
   return bases;
 
 }

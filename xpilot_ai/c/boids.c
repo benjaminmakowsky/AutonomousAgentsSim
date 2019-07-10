@@ -64,7 +64,6 @@ int degToAim = -1;
 int turnLock = 0;
 int wallVector = -1;
 char bugstring[50] = "Init";
-int ship_states[50][2];
 
 
 
@@ -75,12 +74,6 @@ int ship_states[50][2];
 //Declares initialization complete and switches to the NOENEMY state
 void initialize()
 {
-
-  /*int i;
-  for (i = 0; i < getNumberOfShips(); ++i) {
-    ship_states[i][0] =
-  }*/
-
   //Generate a random initial heading.
   if(degToAim < 0)
   {
@@ -113,8 +106,8 @@ void initialize()
 
   //Declare initialized and set state to typical flying.
   init = true;
-  state = STATE_FLYING;
-  thrust(0);
+  state = STATE_SEARCHING;
+  thrust(1);
 }
 
 
@@ -568,7 +561,7 @@ void handleMsgBuffer()
         aWeight = 4;
         cWeight = 2;
         fov = 180;
-        setSelfState(1);
+        state = STATE_FLYING;
       }
       //return to aimless flying
       else if(!strcmp(tok, "endboids"))
@@ -578,7 +571,7 @@ void handleMsgBuffer()
         aWeight = 0;
         cWeight = 0;
         fov = 60;
-        setSelfState(1);
+        state = STATE_FLYING;
       }
 
       else if(!strcmp(tok, "findhoney"))
@@ -591,7 +584,7 @@ void handleMsgBuffer()
         aWeight = 4;
         cWeight = 2;
         fov = 180;
-        setSelfState(3);
+        state = STATE_SEARCHING;
 
       }
     }
@@ -608,8 +601,6 @@ void handleMsgBuffer()
 AI_loop()
 {
 
-  sprintf(bugstring, "%d and %d", selfFuelX(), selfFuelY());
-  rememberPOICoords(3,4);
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
@@ -642,25 +633,17 @@ AI_loop()
       initialize();
       break;
 
-
     case(STATE_FLYING):
-      setSelfState(1);
+      flocking();
+      break;
 
-      switch(selfState()){
-        case (STATE_FLYING):
-          flocking();
-          break;
-        case(STATE_SEARCHING):
-          searching();
-          break;
-        case (STATE_FORAGING):
-          forage();
-          break;
-        default:
-          setSelfState(STATE_FLYING);
-      }
     case(STATE_DEAD):
       state = STATE_FLYING;
+      break;
+
+    case(STATE_SEARCHING):
+      searching();
+      break;
 
     default:
       state = STATE_FLYING;
