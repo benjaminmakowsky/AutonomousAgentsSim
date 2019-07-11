@@ -40,7 +40,6 @@ int aVector = -1; 		    //(friend) alignment variables
 int cVector; 		        //(friend) cohesion variables
 int sVector = -1;		    //(friend) separation variables
 int eVector = -1;		    //(enemy) separation variables
-extern int fov;			    //field (angle) of vision
 int mobile = 1;			    //allows us to completely anchor all drones
 bool isLeader = false;		//whether this drone is a leader
 int leaders[10];
@@ -638,7 +637,7 @@ AI_loop()
       break;
 
     case(STATE_DEAD):
-      state = STATE_FLYING;
+      state = STATE_SEARCHING;
       break;
 
     case(STATE_SEARCHING):
@@ -650,7 +649,7 @@ AI_loop()
       break;
 
     default:
-      state = STATE_FLYING;
+      state = STATE_SEARCHING;
   }
 }
 

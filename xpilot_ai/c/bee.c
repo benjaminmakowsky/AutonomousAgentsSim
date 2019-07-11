@@ -73,6 +73,7 @@ void searching() {
     if (new_fuel_level - fuel > 0) {
       refuel(0);
       setPower(0);
+
       x = selfX();
       y = selfY();
       old_heading = (int)selfHeadingDeg();
@@ -102,29 +103,21 @@ void searching() {
         POICoordinates = getPOICoordinates(x, y);
         xPOI = POICoordinates[0];
         yPOI = POICoordinates[1];
-        fileRead = !fileRead;
-
+        rememberPOICoords(xPOI,yPOI);
         FILE *fp;
         fp = fopen("Log.txt", "a");
-        fprintf(fp,"\nxPOI: %d yPOI: %d", xPOI,yPOI);
         fclose(fp);
+        fileRead = !fileRead;
       }
 
-      /*
-       * Working version goes to fuel coordinates
-       */
-      //strcpy(bugstring, "moving to coords");
-      //goToCoordinates(xPOI,yPOI);
 
-      //Used to debug current position vs heading
-      cRadius = selfX();
-      cWeight = selfY();
-      //sprintf(bugstring, "Moving to %d and %d",x,y);
-
-
-      rememberPOICoords(xPOI,yPOI);
+      FILE *fp;
+      fp = fopen("Log.txt", "a");
+      fprintf(fp,"fuelX: %d fuelY: %d\n", selfFuelX(),selfFuelY());
+      fprintf(fp,"Ending Search behavior\n");
+      fclose(fp);
       sprintf(bugstring, "Search Moving to %d and %d",selfFuelX(), selfFuelY());
-      goToCoordinates(POICoordinates[0],POICoordinates[1]);
+      state = STATE_FORAGING;
     }
   }
 }
@@ -135,43 +128,71 @@ void searching() {
  * ***************************************************************************/
 void forage() {
 
-  //Go to base
-  static int x = 0;
-  static int y = 0;
+  fuel = selfFuel();
+  int x = 0;
+  int y = 0;
+  static bool initForage = true;
+  static bool depositing = true;
+  static bool forage_state_changed = true;
 
-  /*if(x == 0){
-    x = selfBaseX();
-    y = selfBaseY();
-  }*/
 
-  //Coordinates for fuel depo stored in ship struct from searching function
-  x = selfFuelX();
-  y = selfFuelY();
-  sprintf(bugstring, "Forage: Moving to %d and %d",x,y);
-
-  goToCoordinates(x,y);
-
-  //Drop off fuel
-  if(inVicinityOf(x,y)) {
-    setPower(0);
-
-    if (selfFuel() > 0) {
-        refuel(1);
-        fueling = true;
-    } else{
-      refuel(0);
-
-      //set coordinates of position to go to next
-      x = selfFuelX();
-      y = selfFuelY();
-      setPower(10);
-    }
+  if (initForage) {
+    FILE *fp;
+    fp = fopen("Log.txt", "a");
+    fprintf(fp, "\n\n\nBeginning Forage Behavior\n");
+    fclose(fp);
+    initForage = !initForage;
   }
 
-  //Get return to source
 
 
-  //Get more fuel and repeat
+  //Determine whetheror not you are heading to hive to deposit honey or
+  //if you are headed to flower to pickup honey
+  if(depositing){
+    x = selfBaseX();
+    y = selfBaseY();
+  } else {
+    x = selfFuelX();
+    y = selfFuelY();
+  }
+
+
+  if(forage_state_changed){
+    refuel(0);
+    FILE *fp;
+    fp = fopen("Log.txt", "a");
+    if(depositing) {
+      fprintf(fp, "Depositing honey at hive \n");
+    }else{
+      fprintf(fp, "Getting Honey from source (%d,%d)\n", x,y);
+    }
+    fclose(fp);
+    forage_state_changed = false;
+  }
+
+
+  static int fuelLVL = 0;
+  //Act on POI
+  if(!inVicinityOf(x,y)) {
+    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",x,y);
+    goToCoordinates(x,y);
+
+  }else {
+    setPower(0);
+    fuelLVL = (int)selfFuel();
+    if (fuelLVL > 500 && depositing ) {
+      refuel(1);
+      strcpy(bugstring, "Depositing");
+    } else if( fuelLVL < 700 && !depositing){
+      refuel(1);
+      strcpy(bugstring, "Gathering");
+    }else{
+      refuel(0);
+      strcpy(bugstring, "Moving");
+      depositing = !depositing;
+      forage_state_changed = true;
+    }
+  }
 }
 
 /*****************************************************************************
@@ -188,9 +209,6 @@ int goToCoordinates(int x, int y){
   if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
     turnToDeg(new_heading);
   }else{
-    if(state = STATE_SEARCHING) {
-      state = STATE_FORAGING;
-    }
     setPower(10);
   }
 }
@@ -236,7 +254,7 @@ int* getPOICoordinates(int x ,int y){
     }
   }
 
-  fprintf(fp,"Closest bases is at (%d,%d)\n", xPOI,yPOI);
+  fprintf(fp,"Closest base is at (%d,%d)\n", xPOI,yPOI);
   FuelStruct_t* depots = getFuelDepots("fuelpoints.csv");
   length = depots[0].num_fuels;
 
@@ -244,8 +262,8 @@ int* getPOICoordinates(int x ,int y){
   //Traverse array to determine which location was closest to X, Y
   i = 0;
   for(i; i < length; i++){
-    int old_distance = computeDistance(x,xPOI,y,yPOI);
-    int new_distance = computeDistance(x, depots[i].x, y, depots[i].y);
+    int old_distance = abs(computeDistance(x,xPOI,y,yPOI));
+    int new_distance = abs(computeDistance(x, depots[i].x, y, depots[i].y));
     fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, depots[i].x, depots[i].y);
     if(new_distance < old_distance) {
       xPOI = depots[i].x;
@@ -255,12 +273,11 @@ int* getPOICoordinates(int x ,int y){
 
   static int coordinates[2];
 
-  sprintf(bugstring, "X read: %d, y Read: %d", xPOI, yPOI);
   coordinates[0] = xPOI;
   coordinates[1] = yPOI;
 
 
-  fprintf(fp, "X Read: %d Y Read: %d", xPOI, yPOI);
+  fprintf(fp,"Closest POI is at (%d,%d)\n", xPOI,yPOI);
   fclose(fp);
 
   return coordinates;
@@ -270,13 +287,17 @@ int* getPOICoordinates(int x ,int y){
 
 bool inVicinityOf(int x,int y){
   int range = 30;
-  int lowerRange = range/12;
-  int upperRange = range + lowerRange;
+  int lowerXRange = x - range/2;
+  int upperXRange = x + range/2;
+  int lowerYRange = y - range/2;
+  int upperYRange = y + range/2;
 
-  if(selfX() >= lowerRange && selfX() <= upperRange){
-    if(selfY() >= lowerRange && selfY() <= upperRange){
+
+  if(selfX() >= lowerXRange && selfX() <= upperXRange){
+    if(selfY() >= lowerYRange && selfY() <= upperYRange){
       return true;
     }
+  }else {
+    return false;
   }
-  return false;
 }

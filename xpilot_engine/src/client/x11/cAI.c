@@ -584,14 +584,19 @@ void lessPower() {
 
 //Memory Methods
 void rememberPOICoords(int x, int y) {
+  FILE *fp;
+  fp = fopen("Log.txt", "a");
+  fprintf(fp,"\nrememberPOICoords(%d,%d)\n", x,y);
+
   int i;
   for (i = 0; i < num_ship; i++) {
     if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      ship_ptr[i].fuel_coords[0] = x;
-      ship_ptr[i].fuel_coords[1] = y;
+      ship_ptr[i].fuelX = x;
+      ship_ptr[i].fuelY = y;
     }
   }
 
+  fclose(fp);
 }
 
 
@@ -964,9 +969,9 @@ FuelStruct_t *getFuelDepots(char *csv) {
     token = strtok(buf, " ");
     FuelStruct_t newFuel;
 
-    newFuel.x = token;
+    newFuel.x = atoi(token);
     token = strtok(NULL, " ");
-    newFuel.y = token;
+    newFuel.y = atoi(token);
     newFuel.num_fuels = numFuels;
 
     //add to array
@@ -1231,16 +1236,17 @@ int selfFuelX() {
   int i;
   for (i = 0; i < num_ship; i++) {
     if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].fuel_coords[0];
+      return ship_ptr[i].fuelX;
     }
   }
+    return -1;
 }
 
 int selfFuelY() {
   int i;
   for (i = 0; i < num_ship; i++) {
     if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].fuel_coords[1];
+      return ship_ptr[i].fuelY;
     }
   }
 }
