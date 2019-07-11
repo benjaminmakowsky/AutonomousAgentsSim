@@ -35,7 +35,7 @@ void searching() {
   static int y = 0;
   static int current_x = 0;
   static int current_y = 0;
-  static fuel_found = false;
+  static bool fuel_found = false;
   static int goal_frame = 0;
   static int original_distance;
   static int old_heading = 0;
@@ -158,7 +158,6 @@ void forage() {
 
 
   if(forage_state_changed){
-    refuel(0);
     FILE *fp;
     fp = fopen("Log.txt", "a");
     if(depositing) {
@@ -174,6 +173,7 @@ void forage() {
   static int fuelLVL = 0;
   //Act on POI
   if(!inVicinityOf(x,y)) {
+    refuel(0);
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",x,y);
     goToCoordinates(x,y);
 
@@ -181,10 +181,26 @@ void forage() {
     setPower(0);
     fuelLVL = (int)selfFuel();
     if (fuelLVL > 500 && depositing ) {
-      refuel(1);
+      int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
+      if (fueling == false) {
+        refuel(1);
+        fueling = true;
+      }
+      if ((frameCount % frames_passed == 0) && (fueling == true)) {
+        refuel(0);
+        fueling = false;
+      }
       strcpy(bugstring, "Depositing");
     } else if( fuelLVL < 700 && !depositing){
-      refuel(1);
+      int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
+      if (fueling == false) {
+        refuel(1);
+        fueling = true;
+      }
+      if ((frameCount % frames_passed == 0) && (fueling == true)) {
+        refuel(0);
+        fueling = false;
+      }
       strcpy(bugstring, "Gathering");
     }else{
       refuel(0);
