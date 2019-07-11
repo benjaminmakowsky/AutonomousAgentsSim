@@ -902,7 +902,7 @@ BaseStruct_t *getBases(char *csv) {
 
   //Make an array of the bases
   int i;
-  BaseStruct_t bases[numBases];
+  BaseStruct_t* bases = malloc(numBases * sizeof(BaseStruct_t));
   for (i = 0; i < numBases; ++i) {
     fgets(buf, sizeof(buf), fp);
     char *token;
@@ -918,6 +918,10 @@ BaseStruct_t *getBases(char *csv) {
 
     //add to array
     bases[i] = newBase;
+  }
+  if(fclose(fp) == -1){
+    printf("Failed to close");
+    return NULL;
   }
   //fclose(fp);
 
@@ -954,7 +958,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
   }
 
   //Make an array of the fuels
-  FuelStruct_t fuels[numFuels];
+  FuelStruct_t* fuels = malloc(numFuels * sizeof(FuelStruct_t));
   for (i = 0; i < numFuels; ++i) {
     fgets(buf, sizeof(buf), fp);
     char *token;
@@ -971,7 +975,10 @@ FuelStruct_t *getFuelDepots(char *csv) {
 
   }
 
-  //fclose(fp);
+  if(fclose(fp) == -1){
+    printf("Could not close for Fuel struct reading");
+    return NULL;
+  }
   return bases;
 
 }
