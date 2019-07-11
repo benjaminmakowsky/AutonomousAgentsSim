@@ -645,6 +645,10 @@ AI_loop()
       searching();
       break;
 
+    case(STATE_FORAGING):
+      forage();
+      break;
+
     default:
       state = STATE_FLYING;
   }

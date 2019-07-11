@@ -923,7 +923,6 @@ BaseStruct_t *getBases(char *csv) {
     printf("Failed to close");
     return NULL;
   }
-  //fclose(fp);
 
   return bases;
 }
@@ -979,7 +978,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
     printf("Could not close for Fuel struct reading");
     return NULL;
   }
-  return bases;
+  return fuels;
 
 }
 
@@ -2437,7 +2436,7 @@ int start(int argc, char *argv[]) {
 
 //Computes the distance between two points, given x- and y-coordinates
 int computeDistance(int x1, int x2, int y1, int y2) {
-  return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+  return sqrt(pow((x1 - x2),2) + pow((y1 - y2),2));
 }
 
 //Returns the slope of the secant line between two points

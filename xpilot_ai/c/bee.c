@@ -99,18 +99,22 @@ void searching() {
       int *POICoordinates;
       static bool fileRead = false;
       if(!fileRead) {
-        strcpy(bugstring, "getting coords");
         POICoordinates = getPOICoordinates(x, y);
         xPOI = POICoordinates[0];
         yPOI = POICoordinates[1];
         fileRead = !fileRead;
+
+        FILE *fp;
+        fp = fopen("Log.txt", "a");
+        fprintf(fp,"\nxPOI: %d yPOI: %d", xPOI,yPOI);
+        fclose(fp);
       }
 
       /*
        * Working version goes to fuel coordinates
        */
       //strcpy(bugstring, "moving to coords");
-      goToCoordinates(xPOI,yPOI);
+      //goToCoordinates(xPOI,yPOI);
 
       //Used to debug current position vs heading
       cRadius = selfX();
@@ -118,12 +122,9 @@ void searching() {
       //sprintf(bugstring, "Moving to %d and %d",x,y);
 
 
-      /*
-       * Broken version
-
-      rememberPOICoords(POICoordinates[0],POICoordinates[1]);
-      sprintf(bugstring, "Moving to %d and %d",selfFuelX(), selfFuelY());*/
-      //goToCoordinates(POICoordinates[0],POICoordinates[1]);
+      rememberPOICoords(xPOI,yPOI);
+      sprintf(bugstring, "Search Moving to %d and %d",selfFuelX(), selfFuelY());
+      goToCoordinates(POICoordinates[0],POICoordinates[1]);
     }
   }
 }
@@ -146,7 +147,7 @@ void forage() {
   //Coordinates for fuel depo stored in ship struct from searching function
   x = selfFuelX();
   y = selfFuelY();
-  sprintf(bugstring, "Moving to %d and %d",x,y);
+  sprintf(bugstring, "Forage: Moving to %d and %d",x,y);
 
   goToCoordinates(x,y);
 
@@ -187,9 +188,9 @@ int goToCoordinates(int x, int y){
   if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
     turnToDeg(new_heading);
   }else{
-    /*if(state = STATE_SEARCHING){
+    if(state = STATE_SEARCHING) {
       state = STATE_FORAGING;
-    }*/
+    }
     setPower(10);
   }
 }
@@ -210,17 +211,19 @@ int getHeadingForCoordinates(int x, int y){
  * ***************************************************************************/
 int* getPOICoordinates(int x ,int y){
 
-  int xPOI = 9999999;
-  int yPOI = 9999999;
+  int xPOI = 99999;
+  int yPOI = 99999;
 
   FILE *fp;
   fp = fopen("Log.txt", "w");
 
+  fprintf(fp,"getPOICoordinates(%d, %d)\n",x,y);
   //Create array of POI's and get the number of elements in the array
+
+
   BaseStruct_t* bases = getBases("fuelpoints.csv");
   int length = bases[0].num_bases;
-
-
+  fprintf(fp, "numBases read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
   int i = 0;
   for(i; i < length; i++){
@@ -233,17 +236,17 @@ int* getPOICoordinates(int x ,int y){
     }
   }
 
+  fprintf(fp,"Closest bases is at (%d,%d)\n", xPOI,yPOI);
   FuelStruct_t* depots = getFuelDepots("fuelpoints.csv");
   length = depots[0].num_fuels;
 
-
+  fprintf(fp, "\nnum_fuels read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
   i = 0;
   for(i; i < length; i++){
     int old_distance = computeDistance(x,xPOI,y,yPOI);
     int new_distance = computeDistance(x, depots[i].x, y, depots[i].y);
-    fprintf(fp, "From Fuels reading X: %d Y: %d\n", depots[i].x, depots[i].y);
-
+    fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, depots[i].x, depots[i].y);
     if(new_distance < old_distance) {
       xPOI = depots[i].x;
       yPOI = depots[i].y;
