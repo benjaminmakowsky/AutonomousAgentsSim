@@ -208,6 +208,7 @@ void forage() {
       depositing = !depositing;
       forage_state_changed = true;
     }
+
   }
 }
 
@@ -225,7 +226,7 @@ int goToCoordinates(int x, int y){
   if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
     turnToDeg(new_heading);
   }else{
-    setPower(10);
+    //setPower(30);
   }
 }
 
@@ -302,7 +303,7 @@ int* getPOICoordinates(int x ,int y){
 
 
 bool inVicinityOf(int x,int y){
-  int range = 30;
+  int range = 60; //Had to increase range because of the walls around honey sources
   int lowerXRange = x - range/2;
   int upperXRange = x + range/2;
   int lowerYRange = y - range/2;
@@ -314,6 +315,15 @@ bool inVicinityOf(int x,int y){
       return true;
     }
   }else {
+    int distance = computeDistance(selfX(),x,selfY(),y);
+    if(distance < 10) {
+      setPower(10);
+    }else if(distance < 20){
+      setPower(20);
+    }else{
+      setPower(30);
+    }
+
     return false;
   }
 }
