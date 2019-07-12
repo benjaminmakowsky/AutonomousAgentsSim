@@ -179,7 +179,7 @@ void forage() {
 
 
   static int fuelLVL = 0;
-  
+
   if(!inVicinityOf(x,y)) {
     refuel(0);
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",x,y);
