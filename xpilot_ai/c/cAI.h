@@ -12,12 +12,14 @@ typedef struct baseStruct_t {
     int y;
     int num_bases;
 } BaseStruct_t;
+//extern BaseStruct_t *hives; //global array for hives
 
 typedef struct fuelStruct_t {
     int x;
     int y;
     int num_fuels;
 } FuelStruct_t;
+//extern FuelStruct_t *honey_spots; //global array for fuel points
 
 	extern int start(int argc, char* argv[]); // Initialize AI interface and start XPilot -JRA
 

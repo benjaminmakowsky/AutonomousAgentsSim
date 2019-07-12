@@ -18,6 +18,8 @@
 #define AI_MSGLEN   256 //Max length of a message
 #define AI_MSGMAX   16 //Size of (incoming) message buffer - default maxMessage is 8
 
+//FuelStruct_t* honey_spots = getFuelDepots("fuelpoints.csv");
+//BaseStruct_t* hives = getBases("fuelpoints.csv");
 struct AI_msg_struct {
     char body[AI_MSGLEN];
     char from[32];

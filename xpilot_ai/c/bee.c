@@ -85,8 +85,8 @@ void searching() {
 
   if (fuel_found) {
     static int counter = 0;
-    # Whats the point of waiting for 30 frames? Add a comment explaining why if it is needed.
-    //Wait for ship to not move for 30 iterations
+    //Wait for ship to not move for 30 iterations. If less then 30, ship will continue
+    // to drift as it slows down
     if(counter < 30){
       sprintf(bugstring, "%d", counter);
       if(current_x != selfX() && current_y != selfY()){
@@ -98,24 +98,19 @@ void searching() {
       }
     } else {
 
-      # We ideally want to read the file during the initialization and only once, because:
+
+      /* TODO # We ideally want to read the file during the initialization and only once, because:
       # 1. It takes a few second for an agent to fully spawn, can use this time to read the file.
       # 2. At some point the assigned honey depot will deplet, and the forager will need to go to 
       #    another honey location. With the current approach, that bee would have to re-read the 
-      #    points file every time he would switch POI.
-      int *POICoordinates;
+      #    points file every time he would switch POI.*/
+      int POICoordinates[2];
       static bool fileRead = false;
       if(!fileRead) {
-        POICoordinates = getPOICoordinates(x, y);
-        xPOI = POICoordinates[0];
-        yPOI = POICoordinates[1];
-        rememberPOICoords(xPOI,yPOI);
-        FILE *fp;
-        fp = fopen("Log.txt", "a");
-        fclose(fp);
+        memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(getPOICoordinates(x, y)));
+        rememberPOICoords(POICoordinates[0],POICoordinates[1]);
         fileRead = !fileRead;
       }
-
 
       FILE *fp;
       fp = fopen("Log.txt", "a");
@@ -163,8 +158,7 @@ void forage() {
   }
 
 
-  # Bit of a nitpick, I would place this if-block right at the end of this
-  # function. 
+  //If block placed here in order to debug and test that x and y are properly changed
   if(forage_state_changed){
     FILE *fp;
     fp = fopen("Log.txt", "a");
@@ -216,7 +210,6 @@ void forage() {
       depositing = !depositing;
       forage_state_changed = true;
     }
-
   }
 }
 
@@ -224,8 +217,6 @@ void forage() {
  * Move Bee To Coordinates Specified
  * ***************************************************************************/
 
-# This kind of utility function should go in cAI.cpp & cAI.h, since it would be useful
-# to other bots
 int goToCoordinates(int x, int y){
 
   //Get Heading to new point
@@ -235,8 +226,6 @@ int goToCoordinates(int x, int y){
   //Turn to new heading
   if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
     turnToDeg(new_heading);
-  }else{
-    //setPower(30);
   }
 }
 
@@ -244,21 +233,14 @@ int goToCoordinates(int x, int y){
 /*****************************************************************************
  * Get the heading for the POI
  * ***************************************************************************/
-# This kind of utility function should go in cAI.cpp & cAI.h, since it would be useful
-# to other bots
 int getHeadingForCoordinates(int x, int y){
-
   return (getAngleBtwnPoints(selfX(), x, selfY(), y));
-
 }
 
 
 /*****************************************************************************
  * Get the coordinates for the nearest Point Of Interest to X,Y
  * ***************************************************************************/
-# This kind of utility function should go in cAI.cpp & cAI.h, since it would be useful
-# to other bots
-
 int* getPOICoordinates(int x ,int y){
 
   int xPOI = 99999;
@@ -266,16 +248,12 @@ int* getPOICoordinates(int x ,int y){
 
   FILE *fp;
   fp = fopen("Log.txt", "w");
-
   fprintf(fp,"getPOICoordinates(%d, %d)\n",x,y);
   //Create array of POI's and get the number of elements in the array
 
 
+  //TODO: Set bases to a global array at beginning of program
   BaseStruct_t* bases = getBases("fuelpoints.csv");
-  # You *should* be able to get the number of base like this:
-  # int length = sizeof(bases)/sizeof(bases[0])
-  # If that doesn't work, I'd prefer to just have a single global extern int num_bases
-  # in cAI.c / cAI.h to save in space
   int length = bases[0].num_bases;
   fprintf(fp, "numBases read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
@@ -291,8 +269,9 @@ int* getPOICoordinates(int x ,int y){
   }
 
   fprintf(fp,"Closest base is at (%d,%d)\n", xPOI,yPOI);
+
+  //TODO: Set depots to a global array at beginning of program
   FuelStruct_t* depots = getFuelDepots("fuelpoints.csv");
-  # See previous comment, should work for this as well.
   length = depots[0].num_fuels;
 
   fprintf(fp, "\nnum_fuels read: %d\n",length);
@@ -308,14 +287,10 @@ int* getPOICoordinates(int x ,int y){
     }
   }
 
-  # I would malloc this array just to be safe. 
-  # Also, consider doing a memcpy to copy the values of x/yPOI to coordinates, to be safe
   static int coordinates[2];
 
   coordinates[0] = xPOI;
   coordinates[1] = yPOI;
-
-
   fprintf(fp,"Closest POI is at (%d,%d)\n", xPOI,yPOI);
   fclose(fp);
 
@@ -337,6 +312,7 @@ bool inVicinityOf(int x,int y){
       return true;
     }
   }else {
+    //If not in the vicinty of the point slow down as you approach
     int distance = computeDistance(selfX(),x,selfY(),y);
     if(distance < 10) {
       setPower(10);
@@ -345,7 +321,6 @@ bool inVicinityOf(int x,int y){
     }else{
       setPower(30);
     }
-
     return false;
   }
 }

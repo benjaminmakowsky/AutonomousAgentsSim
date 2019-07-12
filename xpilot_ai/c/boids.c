@@ -73,6 +73,9 @@ char bugstring[50] = "Init";
 //Declares initialization complete and switches to the NOENEMY state
 void initialize()
 {
+
+  getFuelDepots("fuelpoints.csv");
+  getBases("fuelpoints.csv");
   //Generate a random initial heading.
   if(degToAim < 0)
   {
