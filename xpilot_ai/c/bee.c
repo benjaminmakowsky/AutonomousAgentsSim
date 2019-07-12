@@ -85,6 +85,7 @@ void searching() {
 
   if (fuel_found) {
     static int counter = 0;
+    # Whats the point of waiting for 30 frames? Add a comment explaining why if it is needed.
     //Wait for ship to not move for 30 iterations
     if(counter < 30){
       sprintf(bugstring, "%d", counter);
@@ -97,6 +98,11 @@ void searching() {
       }
     } else {
 
+      # We ideally want to read the file during the initialization and only once, because:
+      # 1. It takes a few second for an agent to fully spawn, can use this time to read the file.
+      # 2. At some point the assigned honey depot will deplet, and the forager will need to go to 
+      #    another honey location. With the current approach, that bee would have to re-read the 
+      #    points file every time he would switch POI.
       int *POICoordinates;
       static bool fileRead = false;
       if(!fileRead) {
@@ -157,6 +163,8 @@ void forage() {
   }
 
 
+  # Bit of a nitpick, I would place this if-block right at the end of this
+  # function. 
   if(forage_state_changed){
     FILE *fp;
     fp = fopen("Log.txt", "a");
@@ -215,6 +223,8 @@ void forage() {
  * Move Bee To Coordinates Specified
  * ***************************************************************************/
 
+# This kind of utility function should go in cAI.cpp & cAI.h, since it would be useful
+# to other bots
 int goToCoordinates(int x, int y){
 
   //Get Heading to new point
@@ -233,6 +243,8 @@ int goToCoordinates(int x, int y){
 /*****************************************************************************
  * Get the heading for the POI
  * ***************************************************************************/
+# This kind of utility function should go in cAI.cpp & cAI.h, since it would be useful
+# to other bots
 int getHeadingForCoordinates(int x, int y){
 
   return (getAngleBtwnPoints(selfX(), x, selfY(), y));
@@ -243,6 +255,9 @@ int getHeadingForCoordinates(int x, int y){
 /*****************************************************************************
  * Get the coordinates for the nearest Point Of Interest to X,Y
  * ***************************************************************************/
+# This kind of utility function should go in cAI.cpp & cAI.h, since it would be useful
+# to other bots
+
 int* getPOICoordinates(int x ,int y){
 
   int xPOI = 99999;
@@ -256,6 +271,10 @@ int* getPOICoordinates(int x ,int y){
 
 
   BaseStruct_t* bases = getBases("fuelpoints.csv");
+  # You *should* be able to get the number of base like this:
+  # int length = sizeof(bases)/sizeof(bases[0])
+  # If that doesn't work, I'd prefer to just have a single global extern int num_bases
+  # in cAI.c / cAI.h to save in space
   int length = bases[0].num_bases;
   fprintf(fp, "numBases read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
@@ -272,6 +291,7 @@ int* getPOICoordinates(int x ,int y){
 
   fprintf(fp,"Closest base is at (%d,%d)\n", xPOI,yPOI);
   FuelStruct_t* depots = getFuelDepots("fuelpoints.csv");
+  # See previous comment, should work for this as well.
   length = depots[0].num_fuels;
 
   fprintf(fp, "\nnum_fuels read: %d\n",length);
@@ -287,6 +307,8 @@ int* getPOICoordinates(int x ,int y){
     }
   }
 
+  # I would malloc this array just to be safe. 
+  # Also, consider doing a memcpy to copy the values of x/yPOI to coordinates, to be safe
   static int coordinates[2];
 
   coordinates[0] = xPOI;
