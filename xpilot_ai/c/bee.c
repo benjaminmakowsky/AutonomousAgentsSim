@@ -99,11 +99,6 @@ void searching() {
     } else {
 
 
-      /* TODO # We ideally want to read the file during the initialization and only once, because:
-      # 1. It takes a few second for an agent to fully spawn, can use this time to read the file.
-      # 2. At some point the assigned honey depot will deplet, and the forager will need to go to 
-      #    another honey location. With the current approach, that bee would have to re-read the 
-      #    points file every time he would switch POI.*/
       int POICoordinates[2];
       static bool fileRead = false;
       if(!fileRead) {

@@ -36,9 +36,6 @@ typedef struct fuelStruct_t {
 	extern void morePower(); //Increases the ship's Thrusting Power -JRA
 	extern void lessPower(); //Decreases the ship's Thrusting Power -JRA
 
-	//Memory Methods - Benjamin Makowsky
-	extern void rememberPOICoords(int x , int y);
-
     // Shooting methods -JNE
 	extern void fireShot(); // Fires a Shot -JRA
 	extern void fireMissile(); // Fires a Missile -JRA
