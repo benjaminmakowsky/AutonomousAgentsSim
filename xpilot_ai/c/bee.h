@@ -18,12 +18,6 @@ void searching();
 void forage();
 
 
-/*  int* pinpoint()
- *  Pinpoints the exact location of a fuel source/hive
- *  @Returns: Array of size 2 with the x and y coordinates of hive */
-int* pinpoint();
-
-
 /*
  *  goToCoordinates(x,y)
  *  Moves the bee to a specified location on the map.
