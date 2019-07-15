@@ -3,8 +3,9 @@
 //
 
 #include "bee.h"
+#include "beeAI.h"
 #include "cAI.h"
-#include "boids.h"
+#include "beeBoids.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

@@ -21,8 +21,8 @@ cAI.o: cAI.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
  /usr/include/bits/confname.h /usr/include/getopt.h \
  /usr/include/X11/keysym.h /usr/include/X11/keysymdef.h xpclient_x11.h \
- ../../../src/client/xpclient.h ../../../src/common/xpcommon.h \
- ../../../config.h /usr/include/stdlib.h /usr/include/bits/waitflags.h \
+ ../xpclient.h ../../../src/common/xpcommon.h ../../../config.h \
+ /usr/include/stdlib.h /usr/include/bits/waitflags.h \
  /usr/include/bits/waitstatus.h /usr/include/alloca.h \
  /usr/include/bits/stdlib-float.h /usr/include/string.h \
  /usr/include/xlocale.h /usr/include/bits/string.h \
@@ -79,18 +79,14 @@ cAI.o: cAI.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  ../../../src/common/rules.h ../../../src/common/setup.h \
  ../../../src/common/shipshape.h ../../../src/common/wreckshape.h \
  ../../../src/common/xpmap.h ../../../src/common/keys.h \
- /usr/local/include/zlib.h /usr/local/include/zconf.h \
- ../../../src/client/client.h ../../../src/common/shipshape.h \
- ../../../src/client/connectparam.h ../../../src/client/option.h \
- ../../../src/client/clientcommand.h ../../../src/client/clientrank.h \
- ../../../src/client/configure.h ../../../src/client/datagram.h \
- ../../../src/client/gfx2d.h ../../../src/client/guimap.h \
- ../../../src/client/guiobjects.h ../../../src/client/meta.h \
- ../../../src/client/netclient.h ../../../src/client/paint.h \
- ../../../src/client/recordfmt.h ../../../src/client/talk.h \
- /usr/include/X11/X.h /usr/include/X11/Xlib.h \
- /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h \
- /usr/include/X11/Xos.h /usr/include/X11/Xarch.h /usr/include/X11/Xutil.h \
+ /usr/local/include/zlib.h /usr/local/include/zconf.h ../client.h \
+ ../../../src/common/shipshape.h ../connectparam.h ../option.h \
+ ../clientcommand.h ../clientrank.h ../configure.h ../datagram.h \
+ ../gfx2d.h ../guimap.h ../guiobjects.h ../meta.h ../netclient.h \
+ ../paint.h ../recordfmt.h ../talk.h /usr/include/X11/X.h \
+ /usr/include/X11/Xlib.h /usr/include/X11/Xfuncproto.h \
+ /usr/include/X11/Xosdefs.h /usr/include/X11/Xos.h \
+ /usr/include/X11/Xarch.h /usr/include/X11/Xutil.h \
  /usr/include/X11/Xatom.h /usr/include/X11/Xmd.h bitmaps.h \
  ../../../src/client/gfx2d.h ../../../src/common/types.h dbuff.h \
  paintdata.h record.h widget.h xevent.h xeventhandlers.h xinit.h xpaint.h \
@@ -194,7 +190,7 @@ cAI.o: cAI.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 
 xpclient_x11.h:
 
-../../../src/client/xpclient.h:
+../xpclient.h:
 
 ../../../src/common/xpcommon.h:
 
@@ -434,37 +430,37 @@ xpclient_x11.h:
 
 /usr/local/include/zconf.h:
 
-../../../src/client/client.h:
+../client.h:
 
 ../../../src/common/shipshape.h:
 
-../../../src/client/connectparam.h:
+../connectparam.h:
 
-../../../src/client/option.h:
+../option.h:
 
-../../../src/client/clientcommand.h:
+../clientcommand.h:
 
-../../../src/client/clientrank.h:
+../clientrank.h:
 
-../../../src/client/configure.h:
+../configure.h:
 
-../../../src/client/datagram.h:
+../datagram.h:
 
-../../../src/client/gfx2d.h:
+../gfx2d.h:
 
-../../../src/client/guimap.h:
+../guimap.h:
 
-../../../src/client/guiobjects.h:
+../guiobjects.h:
 
-../../../src/client/meta.h:
+../meta.h:
 
-../../../src/client/netclient.h:
+../netclient.h:
 
-../../../src/client/paint.h:
+../paint.h:
 
-../../../src/client/recordfmt.h:
+../recordfmt.h:
 
-../../../src/client/talk.h:
+../talk.h:
 
 /usr/include/X11/X.h:
 

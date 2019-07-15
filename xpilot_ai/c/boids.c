@@ -64,7 +64,7 @@ int turnLock = 0;
 int wallVector = -1;
 char bugstring[50] = "Init";
 
-
+struct fuelStruct_t;
 
 /*****************************************************************************
  * Initialization

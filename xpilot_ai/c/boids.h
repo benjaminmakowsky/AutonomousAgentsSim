@@ -5,6 +5,8 @@
 #ifndef XPILOT_LE_BOIDS_H
 #define XPILOT_LE_BOIDS_H
 
+#include <stdbool.h>
+
 //Machine State
 enum State
 {
@@ -34,6 +36,14 @@ extern int degToAim;	    //what direction do we want to go
 extern int turnLock;		//time not allowed to compute new wall avoidance
 extern int wallVector;		//where to go to avoid crashing into a wall
 extern int ship_states[50][2];
+//Local Globals
+extern int idx;			        //what's our unique idx number
+extern int pVector;		    //information on the most recent (past) heading
+extern bool isLeader;		//whether this drone is a leader
+extern bool init;		    //have we initialized yet
+extern int teamNum;			    //what team do we belong to
+extern int leaderMode;		    //whether we care just about leaders for flocking
+extern int tot_idx;			    //how many drones are on our team
 
 
 //function prototypes

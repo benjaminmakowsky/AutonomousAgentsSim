@@ -18,8 +18,6 @@
 #define AI_MSGLEN   256 //Max length of a message
 #define AI_MSGMAX   16 //Size of (incoming) message buffer - default maxMessage is 8
 
-//FuelStruct_t* honey_spots = getFuelDepots("fuelpoints.csv");
-//BaseStruct_t* hives = getBases("fuelpoints.csv");
 struct AI_msg_struct {
     char body[AI_MSGLEN];
     char from[32];
@@ -886,108 +884,6 @@ double selfBaseFuel() {
   for (i = 0; i < num_ship; i++) if ((self != NULL) && (ship_ptr[i].id == self->id)) return ship_ptr[i].baseFuel;
 }
 
-BaseStruct_t *getBases(char *csv) {
-  // Number of bases are the first line
-  FILE *fp;
-  char buf[1024];
-  if (!csv) {
-    printf("No points file provided");
-    return NULL;
-  }
-
-  if ((fp = fopen(csv, "r")) == NULL) {
-    printf("Failed to open file: %s\n", csv);
-    return NULL;
-  }
-
-  //get the first line
-  fgets(buf, sizeof(buf), fp);
-  int numBases = atoi(buf);
-
-  //skip the number of fuel depots line
-  fgets(buf, sizeof(buf), fp);
-
-  //Make an array of the bases
-  int i;
-  BaseStruct_t* bases = malloc(numBases * sizeof(BaseStruct_t));
-  for (i = 0; i < numBases; ++i) {
-    fgets(buf, sizeof(buf), fp);
-    char *token;
-    token = strtok(buf, " ");
-    BaseStruct_t newBase;
-
-    newBase.team = atoi(token);
-    token = strtok(NULL, " ");
-    newBase.x = atoi(token);
-    token = strtok(NULL, " ");
-    newBase.y = atoi(token);
-    newBase.num_bases = numBases;
-
-    //add to array
-    bases[i] = newBase;
-  }
-  if(fclose(fp) == -1){
-    printf("Failed to close");
-    return NULL;
-  }
-
-  return bases;
-}
-
-FuelStruct_t *getFuelDepots(char *csv) {
-  // Number of fuel depots is the second line
-  FILE *fp;
-  char buf[1024];
-  if (!csv) {
-    printf("No points file provided");
-    return NULL;
-  }
-
-  if ((fp = fopen(csv, "r")) == NULL) {
-    printf("Failed to open file: %s\n", csv);
-    return NULL;
-  }
-
-  // get number of bases
-  fgets(buf, sizeof(buf), fp);
-  int numBases = atoi(buf);
-
-  //get the number of fuel depots
-  fgets(buf, sizeof(buf), fp);
-  int numFuels = atoi(buf);
-
-  //skip the base lines
-  int i = 0;
-  while (i < numBases) {
-    fgets(buf, sizeof(buf), fp);
-    ++i;
-  }
-
-  //Make an array of the fuels
-  FuelStruct_t* fuels = malloc(numFuels * sizeof(FuelStruct_t));
-  for (i = 0; i < numFuels; ++i) {
-    fgets(buf, sizeof(buf), fp);
-    char *token;
-    token = strtok(buf, " ");
-    FuelStruct_t newFuel;
-
-    newFuel.x = atoi(token);
-    token = strtok(NULL, " ");
-    newFuel.y = atoi(token);
-    newFuel.num_fuels = numFuels;
-
-    //add to array
-    fuels[i] = newFuel;
-
-  }
-
-  if(fclose(fp) == -1){
-    printf("Could not close for Fuel struct reading");
-    return NULL;
-  }
-  return fuels;
-
-}
 
 void keyHome() {
   Keyboard_button_pressed(XK_Home);
