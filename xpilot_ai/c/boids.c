@@ -78,7 +78,7 @@ void initialize()
   {
     pVector = degToAim = rand() % 360;
   }
-  
+
   //Turn to the random initial angle.
   turnToDeg(degToAim);
 
@@ -105,7 +105,7 @@ void initialize()
 
   //Declare initialized and set state to typical flying.
   init = true;
-  state = STATE_SEARCHING;
+  state = STATE_FLYING;
   thrust(1);
 }
 
@@ -163,7 +163,7 @@ void wallAvoidance()
   static int lockNum = 5;
 
   //If there's no turn lock on, compute wall avoidance and impose a turn lock
-  //of some number of frames. This will prevent us from computing new turn angles 
+  //of some number of frames. This will prevent us from computing new turn angles
   //too frequently and continually turning back and forth.
   if(!turnLock)
   {
@@ -184,7 +184,7 @@ void wallAvoidance()
 
 
 /*****************************************************************************
- * Friendly Alignment 
+ * Friendly Alignment
  * ***************************************************************************/
 
 //Compute the angle to stay aligned with all friends within a certain radius.
@@ -208,7 +208,7 @@ void alignment()
     aVector = avgFriendlyDir(aRadius, fov);
   }
 }
- 
+
 
 /*****************************************************************************
  * Friendly Cohesion
@@ -225,14 +225,14 @@ void cohesion()
     avgFriendX = averageLeaderX(cRadius, fov, leaders, numLeaders);
     avgFriendY = averageLeaderY(cRadius, fov, leaders, numLeaders);
   }
-  
+
   //If we aren't in leader mode, get the average position of ALL friends nearby.
-  else 
+  else
   {
     avgFriendX = averageFriendRadarX(cRadius, fov);
     avgFriendY = averageFriendRadarY(cRadius, fov);
   }
- 
+
   //If we have valid (i.e. not -1) values for x and y, update the cohesion vector
   //accordingly. Otherwise, return -1.
   if(avgFriendX != -1 && avgFriendY != -1 && (!leaderMode || !isLeader))
@@ -278,10 +278,10 @@ void enemySeparation()
   if(sepVec != -1 && oppositesAttract)
   {
     eVector = modm(sepVec + 180, MAX_DEG);
-  } 
+  }
   else
   {
-    eVector = sepVec;   
+    eVector = sepVec;
   }
 }
 
@@ -304,20 +304,20 @@ void flocking()
 
   xComp = yComp = 0.0;
   totalWt = 0;
-  
+
   //Update the past movement vector
   pVector = degToAim;
-  
+
   //Compute all the aforementioned vectors.
   wallAvoidance();
   alignment();
   cohesion();
-  separation();  
+  separation();
   enemySeparation();
 
   //Add the past-movement vector, which keeps track of our most recent heading, to
   //our running total for x-component, y-component, and weight total. We will be adding
-  //to these values as we check wall avoidance, cohesion, alignment, etc. in succession. 
+  //to these values as we check wall avoidance, cohesion, alignment, etc. in succession.
   scaleVector(pVector, pWeight, &xComp, &yComp, &totalWt);
 
   //If there is a wall nearby, aim away from it.
@@ -325,13 +325,13 @@ void flocking()
   {
     scaleVector(wallVector, wWeight, &xComp, &yComp, &totalWt);
   }
-  
+
   //Get the alignment vector and weight it.
   if(aVector != -1)
   {
     scaleVector(aVector, aWeight, &xComp, &yComp, &totalWt);
   }
-  
+
   //Get the cohesion vector and weight it.
   if(cVector != -1)
   {
@@ -353,18 +353,18 @@ void flocking()
 
     scaleVector(sVector, sWeight, &xComp, &yComp, &totalWt);
   }
-  
+
   //Get the enemy separation vector and weight it.
   if(eVector != -1)
   {
     if(distanceWeighting)
     {
-      eWeightAdjustByDistance();    
+      eWeightAdjustByDistance();
     }
 
     scaleVector(eVector, eWeight, &xComp, &yComp, &totalWt);
   }
-  
+
   //Compute the weighted average of the four vectors above, and point in that
   //direction.
   if(totalWt > 0)
@@ -375,7 +375,7 @@ void flocking()
 
     //Generate a new angle from the resulting x- and y-components, and update
     //the degree to aim.
-    //Notice that, if the resulting angle is less than 0, we add MAX_DEG - 1 = 359 
+    //Notice that, if the resulting angle is less than 0, we add MAX_DEG - 1 = 359
     //to it to get it between 0 and 360. This is because, for some reason, if we
     //add MAX_DEG = 360 to the angle, at the beginning of the simulation before the
     //boids start flocking, some of their headings will slowly but steadily taper
@@ -407,7 +407,7 @@ void flocking()
 
 
 /*****************************************************************************
- * Message Handler (through chat feature) 
+ * Message Handler (through chat feature)
  * ***************************************************************************/
 
 //Handle whatever messages pop up through the chat feature. Messages should take
@@ -415,7 +415,7 @@ void flocking()
 //  <team number> <keyword> <new value>
 //For example, a valid message might be "0 aweight 4". The team number allows
 //you to send messages just to one particular team, or else use 0 if you want to
-//broadcast your message to everyone. There is a case for each keyword below, 
+//broadcast your message to everyone. There is a case for each keyword below,
 //and in each case the new value is assigned to some global variable defined above.
 //Note: the only exceptions to the standard message form shown above are the
 //keywords "beginboids" and "endboids", which take no new value.
@@ -424,7 +424,7 @@ void handleMsgBuffer()
   static char buf[100];
   static char *tok = NULL;
   static char *oldMsg = "";
-  static int team = 0; 
+  static int team = 0;
   static int value = 0;
 
   //Check if the most recent message available has changed since the last frame.
@@ -456,8 +456,8 @@ void handleMsgBuffer()
       team = -1;
     }
 
-    //Check if the given team number matches our team number, or if the message has 
-    //been sent to everyone on the map, 
+    //Check if the given team number matches our team number, or if the message has
+    //been sent to everyone on the map,
     if(team == teamNum || team == 0)
     {
       //Tokenize again, so now our token pointer points to the keyword.
@@ -472,27 +472,27 @@ void handleMsgBuffer()
       //mobile: toggle mobility on and off
       if(!strcmp(tok, "mobile"))
       {
-        mobile = value; 
+        mobile = value;
       }
       //wall weight: adjust how much we want to get away from walls
       else if(!strcmp(tok, "wweight"))
       {
-        wWeight = value; 
+        wWeight = value;
       }
       //alignment weight: adjust how much we want to align with nearby friends
       else if(!strcmp(tok, "aweight"))
       {
-        aWeight = value; 
+        aWeight = value;
       }
       //alignment radius: adjust how far away we check for friends to align with
       else if(!strcmp(tok, "aradius"))
       {
-        aRadius = value; 
+        aRadius = value;
       }
       //cohesion weight: adjust how much we want to be close to our friends
       else if(!strcmp(tok, "cweight"))
       {
-        cWeight = value; 
+        cWeight = value;
       }
       //cohesion radius: adjust how far away we check for friends to cohere with
       else if(!strcmp(tok, "cradius"))
@@ -512,22 +512,22 @@ void handleMsgBuffer()
       //enemy (separation) weight: adjust how much we want to avoid our enemies
       else if(!strcmp(tok, "eweight"))
       {
-        eWeight = value; 
+        eWeight = value;
       }
       //enemy (separation) radius: adjust how far away we check for enemies to avoid
       else if(!strcmp(tok, "eradius"))
       {
-        eRadius = value; 
+        eRadius = value;
       }
       //past direction weight: adjust how much we want to stick to our past direction
       else if(!strcmp(tok, "pweight"))
       {
-        pWeight = value; 
+        pWeight = value;
       }
       //field of vision: adjust how far around us we can see
       else if(!strcmp(tok, "fov"))
       {
-        fov = value; 
+        fov = value;
       }
       //leader: add a leader to the array of leaders to follow, if we're in leader mode
       else if(!strcmp(tok, "leader"))
@@ -548,7 +548,7 @@ void handleMsgBuffer()
       else if(!strcmp(tok, "oppositesattract"))
       {
         oppositesAttract = value;
-      } 
+      }
       //TODO: possibly add a way to remove leaders from the list
       //start a generic boids simulation
       else if(!strcmp(tok, "beginboids"))
@@ -655,10 +655,10 @@ AI_loop()
 
 
 /*****************************************************************************
- * Main (get cmd line info and start AI) 
+ * Main (get cmd line info and start AI)
  * ***************************************************************************/
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
   //Get info on my idx, tot_idx, and my team number.
   idx = strtol(argv[2], NULL, 10);
@@ -666,9 +666,8 @@ int main(int argc, char *argv[])
   teamNum = strtol(argv[4], NULL, 10);
 
   //Seed the random number generator.
-  srand(time(NULL)); 
+  srand(time(NULL));
 
   //Start the AI loop.
   return start(argc, argv);
 }
-
