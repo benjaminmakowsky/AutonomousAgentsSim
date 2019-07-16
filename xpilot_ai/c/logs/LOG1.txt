@@ -1,43 +1,144 @@
 ShipID# 1	State: 0
+------------------------------
+HIVES:
+Team# 50	X: 315	Y: 910
+Team# 49	X: 175	Y: 140
+------------------------------
+FUEL POINTS:
+X: 770	Y: 945
+X: 840	Y: 315
+------------------------------
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 3
 
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
-State: 3
-Power: 55	Self: 34725312
+getPOICoordinates(780, 337)
+numBases read: 2
+From Bases 	Index 0 	X: 315	Y: 910
+From Bases 	Index 1 	X: 175	Y: 140
+Closest base is at (175,140)
 
-State: 3
-Power: 55	Self: 34725312
+num_fuels read: 0
+Closest POI is at (175,140)
+State: 4
+Power: 30	Self: 2556645
 
-State: 3
-Power: 55	Self: 34725312
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
 
