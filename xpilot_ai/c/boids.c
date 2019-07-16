@@ -637,7 +637,7 @@ AI_loop()
       break;
 
     case(STATE_DEAD):
-      state = STATE_SEARCHING;
+      state = STATE_FLYING;
       break;
 
     case(STATE_SEARCHING):
@@ -649,7 +649,7 @@ AI_loop()
       break;
 
     default:
-      state = STATE_SEARCHING;
+      state = STATE_FLYING;
   }
 }
 
