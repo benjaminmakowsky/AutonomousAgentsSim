@@ -1,46 +1,31 @@
 ShipID# 2	State: 0
 State: 2
-Power: 55	Self: -949074208
+Power: 55	Self: 515073760
 
 State: 2
-Power: 55	Self: -949074208
+Power: 55	Self: 515073760
 
 State: 3
-Power: 55	Self: 3867335
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 3867335
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 3867335
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 3867335
-
-State: 3
-Power: 0	Self: 2556645
+Power: 55	Self: 2556645
 
 State: 3
 Power: 0	Self: 7996090
 
 State: 3
-Power: 0	Self: 2556645
+Power: 0	Self: 7996090
+
+State: 3
+Power: 0	Self: 0
 
 State: 4
-Power: 30	Self: 2556645
-
-State: 4
-Power: 30	Self: 2556645
-
-State: 4
-Power: 30	Self: 2556645
-
-State: 4
-Power: 30	Self: 25624974
-
-State: 4
-Power: 30	Self: 25624974
-
-State: 4
-Power: 30	Self: 25624974
+Power: 30	Self: 48
 
