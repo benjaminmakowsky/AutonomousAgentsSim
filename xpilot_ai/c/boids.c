@@ -2,7 +2,7 @@
 //Benjamin Makowsky //Line 453 current progress
 #include "boids.h"
 #include "cAI.h"
-#include "bee.h"
+//#include "bee.h"
 #include <ctype.h>
 #include <sys/time.h>
 #include <stdarg.h>
@@ -641,11 +641,11 @@ AI_loop()
       break;
 
     case(STATE_SEARCHING):
-      searching();
+      //searching();
       break;
 
     case(STATE_FORAGING):
-      forage();
+      //forage();
       break;
 
     default:

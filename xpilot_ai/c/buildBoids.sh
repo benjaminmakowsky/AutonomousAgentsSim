@@ -10,4 +10,4 @@ gcc -o libcAI.so -fPIC -shared -Wl,-soname,libcAI.so,-wrap,Handle_end cAI.o abou
 mv libcAI.so ../../../../xpilot_ai/c/
 rm cAI.h
 cd ../../../../xpilot_ai/c/
-gcc -g boids.c bee.c libcAI.so -lpthread -lm -o boids
+gcc -g boids.c libcAI.so -lpthread -lm -o boids
