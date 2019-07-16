@@ -7,17 +7,7 @@
 
 #include <stdbool.h>
 
-//Machine State
-enum State
-{
-    STATE_INIT,     //0
-    STATE_FLYING,   //1
-    STATE_DEAD,     //2
-    STATE_SEARCHING,//3
-    STATE_FORAGING  //4
-};
 
-extern enum State state;
 
 //Public Variables
 extern int cWeight;         //(friend) cohesion variables

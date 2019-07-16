@@ -4,12 +4,12 @@ export LD_LIBRARY_PATH=.
 
 teamnum=1
 
-#./boids 0 1 11 $teamnum -team $teamnum -join -name a1 -shipShape quad -headlessMode true &
-#sleep 1
+./boids 0 1 11 $teamnum -team $teamnum -join -name a1 -shipShape quad -headlessMode true &
+sleep 1
 
-#teamnum=2
-#./boids 0 2 11 $teamnum -team $teamnum -join -name a2 -shipShape quad -headlessMode true &
-#sleep 1
+teamnum=2
+./boids 0 2 11 $teamnum -team $teamnum -join -name a2 -shipShape quad -headlessMode true &
+sleep 1
 #./boids 0 3 11 $teamnum -team $teamnum -join -name a3 -shipShape quad -headlessMode true &
 #sleep 1
 #./boids 0 4 11 $teamnum -team $teamnum -join -name a4 -shipShape quad -headlessMode true &
