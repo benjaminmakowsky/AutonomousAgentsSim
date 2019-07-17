@@ -100,12 +100,12 @@ void initialize()
   fprintf(fp, "ShipID# %d\tState: %d\n",selfID(), state);
   int i;
   fprintf(fp,"------------------------------\nHIVES:\n");
-  for(i = 0; i < bases->num_bases;i++){
-    fprintf(fp,"Team# %d\tX: %d\tY: %d\n",bases[i].team,bases[i].x,bases[i].y);
+  for(i = 0; i < hives->num_bases;i++){
+    fprintf(fp,"Team# %d\tX: %d\tY: %d\n",hives[i].team,hives[i].x,hives[i].y);
   }
   fprintf(fp,"------------------------------\nFUEL POINTS:\n");
-  for(i = 0; i < fuels->num_fuels;i++){
-    fprintf(fp,"X: %d\tY: %d\n",fuels[i].x, fuels[i].y);
+  for(i = 0; i < honey_spots->num_fuels;i++){
+    fprintf(fp,"X: %d\tY: %d\n",honey_spots[i].x, honey_spots[i].y);
   }
   fprintf(fp,"------------------------------\n");
   fclose(fp);
@@ -610,6 +610,7 @@ AI_loop()
 {
 
 
+
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
@@ -639,6 +640,11 @@ AI_loop()
   if(frameCount % 14 * 10 == 0){
     FILE *fp;
     fp = fopen(LogFile, "a");
+    int i;
+    fprintf(fp,"------------------------------\nFUEL POINTS:\n");
+    for(i = 0; i < honey_spots->num_fuels;i++)
+      fprintf(fp,"X: %d\tY: %d\n",honey_spots[i].x, honey_spots[i].y);
+    fprintf(fp,"------------------------------\n");
     fprintf(fp, "State: %d\nPower: %d\tSelf: %d\n\n",state, (int)getPower(),selfState());
     fclose(fp);
   }

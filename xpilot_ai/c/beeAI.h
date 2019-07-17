@@ -12,7 +12,6 @@ typedef struct baseStruct_t {
     int y;
     int num_bases;
 } BaseStruct_t;
-//extern BaseStruct_t *hives; //global array for hives
 
 typedef struct fuelStruct_t {
     int x;
@@ -21,41 +20,52 @@ typedef struct fuelStruct_t {
 } FuelStruct_t;
 
 
-extern BaseStruct_t* bases;
-extern FuelStruct_t* fuels;
+extern BaseStruct_t* hives;
+extern FuelStruct_t* honey_spots;
 
-extern BaseStruct_t* getBases();      // Creates array of hive coordinates
-extern FuelStruct_t* getFuelDepots(); // Creates array of honey coordinatess
+/***********************
+ * Function Declarations
+ ***********************/
 
+extern BaseStruct_t* getBases();
+/// Creates array of hive coordinates
+
+extern FuelStruct_t* getFuelDepots();
+/// Creates array of honey coordinatess
+
+int goToCoordinates(int x, int y);
 /// Moves user in the direction of a point constantly adjusting heading
 /// \param x x coordinate of where to go
 /// \param y y coordinate of where to go
 /// \return The current heading of the user
-int goToCoordinates(int x, int y);
 
 int getHeadingForCoordinates(int x, int y);
 
+
+
+int* getPOICoordinates(int x ,int y);
 /// Determines the coordinates of the closest POI to the user
 /// \param x The current x coordinate of the user
 /// \param y The current y coordinate of the user
 /// \return 1D array of size 2 where [0] = x and [1] = y
-int* getPOICoordinates(int x ,int y);
 
+bool inVicinityOf(int x,int y);
 /// Used to determine whether or not user is within a certain range of (x,y)
 /// \param x The x coordinate of the POI coordinate
 /// \param y The y coordinate of the POI coordinate
 /// \return  Boolean of whether or not user is within range of (x,y)
-bool inVicinityOf(int x,int y);
 
+int avoidWalls();
 /// Used to determine the vector of the wall and turn to a specified degree
 /// \return The new heading
-int avoidWalls();
 
+
+bool comeToStop(int number_of_frames);
 /// Brings bee to a stop by setting power to zero and wait until no movement
 /// \param number_of_frames The number of frames to not be moving
 /// \return boolean if stopped or not
-bool comeToStop(int number_of_frames);
 
-///Automatically cycles refueling state to determine if near honey
 void checkForFuel();
+///Automatically cycles refueling state to determine if near honey
+
 #endif //XPILOT_LE_BEEAI_H

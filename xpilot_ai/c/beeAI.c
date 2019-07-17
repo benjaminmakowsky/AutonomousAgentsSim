@@ -12,12 +12,12 @@
 #include <unistd.h>
 #include <X11/keysym.h>
 #include "beeAI.h"
-#include "beeBoids.h"
 #include "cAI.h"
 #include "beeBoids.h"
 
 
-
+BaseStruct_t* hives;
+FuelStruct_t* honey_spots;
 BaseStruct_t *getBases(char *csv) {
   // Number of bases are the first line
   FILE *fp;
@@ -41,7 +41,7 @@ BaseStruct_t *getBases(char *csv) {
 
   //Make an array of the bases
   int i;
-  bases = malloc(numBases * sizeof(BaseStruct_t));
+  hives = malloc(numBases * sizeof(BaseStruct_t));
   for (i = 0; i < numBases; ++i) {
     fgets(buf, sizeof(buf), fp);
     char *token;
@@ -56,14 +56,14 @@ BaseStruct_t *getBases(char *csv) {
     newBase.num_bases = numBases;
 
     //add to array
-    bases[i] = newBase;
+    hives[i] = newBase;
   }
   if(fclose(fp) == -1){
     printf("Failed to close");
     return NULL;
   }
 
-  return bases;
+  return hives;
 }
 
 FuelStruct_t *getFuelDepots(char *csv) {
@@ -96,7 +96,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
   }
 
   //Make an array of the fuels
-  fuels = malloc(numFuels * sizeof(FuelStruct_t));
+  honey_spots = malloc(numFuels * sizeof(FuelStruct_t));
   for (i = 0; i < numFuels; ++i) {
     fgets(buf, sizeof(buf), fp);
     char *token;
@@ -109,7 +109,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
     newFuel.num_fuels = numFuels;
 
     //add to array
-    fuels[i] = newFuel;
+    honey_spots[i] = newFuel;
 
   }
 
@@ -117,7 +117,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
     printf("Could not close for Fuel struct reading");
     return NULL;
   }
-  return fuels;
+  return honey_spots;
 
 }
 
@@ -158,43 +158,42 @@ int* getPOICoordinates(int x ,int y){
   FILE *fp;
   fp = fopen(LogFile, "a");
   fprintf(fp,"getPOICoordinates(%d, %d)\n",x,y);
-  //Create array of POI's and get the number of elements in the array
 
 
   //TODO: Set bases to a global array at beginning of program
-  int length = bases[0].num_bases;
+  int length = hives->num_bases;
   fprintf(fp, "numBases read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
   int i = 0;
   for(i; i < length; i++){
     int old_distance = computeDistance(x,xPOI,y,yPOI);
-    int new_distance = computeDistance(x, bases[i].x, y, bases[i].y);
-    fprintf(fp, "From Bases \tIndex %d \tX: %d\tY: %d\n", i, bases[i].x, bases[i].y);
+    int new_distance = computeDistance(x, hives[i].x, y, hives[i].y);
+    fprintf(fp, "From Bases \tIndex %d \tX: %d\tY: %d\n", i, hives[i].x, hives[i].y);
     if(new_distance < old_distance) {
-      xPOI = bases[i].x;
-      yPOI = bases[i].y;
+      xPOI = hives[i].x;
+      yPOI = hives[i].y;
     }
   }
-
   fprintf(fp,"Closest base is at (%d,%d)\n", xPOI,yPOI);
 
   //TODO: Set depots to a global array at beginning of program
-  length = fuels->num_fuels;
+  length = honey_spots[0].num_fuels;
 
   fprintf(fp, "\nnum_fuels read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
   i = 0;
   for(i; i < length; i++){
     int old_distance = abs(computeDistance(x,xPOI,y,yPOI));
-    int new_distance = abs(computeDistance(x, fuels[i].x, y, fuels[i].y));
-    fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, fuels[i].x, fuels[i].y);
+    int new_distance = abs(computeDistance(x, honey_spots[i].x, y, honey_spots[i].y));
+    fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, honey_spots[i].x, honey_spots[i].y);
     if(new_distance < old_distance) {
-      xPOI = fuels[i].x;
-      yPOI = fuels[i].y;
+      xPOI = honey_spots[i].x;
+      yPOI = honey_spots[i].y;
     }
   }
 
   static int coordinates[2];
+
 
   coordinates[0] = xPOI;
   coordinates[1] = yPOI;
@@ -232,7 +231,6 @@ bool inVicinityOf(int x,int y){
   }
 }
 
-//avoidwall: check for wall, if wall present adjust heading
 int avoidWalls(){
   getWallAvoidanceVector();  //Update ship direction vector for wall avoidance
   int newHeading = 0;

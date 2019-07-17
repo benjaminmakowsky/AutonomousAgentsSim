@@ -34,30 +34,23 @@ void searching() {
   //Used to store coordinates of location first detected by fuel pickup
   static int x = 0;
   static int y = 0;
-  static int current_x = 0;
-  static int current_y = 0;
   static bool fuel_found = false;
   static int goal_frame = 0;
-  static int original_distance;
   static int old_heading = 0;
   static int new_heading = 0;
   static int xPOI = 0;
   static int yPOI = 0;
 
-  /*
-   * Step 1: Check for walls
-   */
+
+  //Step 1: Check for walls
   avoidWalls();
 
-  /*
-   * Step 2: Attempt to Attain Honey
-   */
+
+  //Step 2: Attempt to Attain Honey
   if (!fuel_found) {
     checkForFuel();
 
-    /*
-     * Step 3: Check if fuel levels changed
-     */
+    //Step 3: Check if fuel levels changed
     double new_fuel_level = selfFuel();
     if (new_fuel_level - fuel > 0) {
       x = selfX();
