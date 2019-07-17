@@ -21,7 +21,8 @@ typedef struct fuelStruct_t {
 } FuelStruct_t;
 
 
-
+extern BaseStruct_t* bases;
+extern FuelStruct_t* fuels;
 
 extern BaseStruct_t* getBases();      // Creates array of hive coordinates
 extern FuelStruct_t* getFuelDepots(); // Creates array of honey coordinatess

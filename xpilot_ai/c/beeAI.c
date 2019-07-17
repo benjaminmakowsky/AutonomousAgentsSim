@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <X11/keysym.h>
 #include "beeAI.h"
+#include "beeBoids.h"
 #include "cAI.h"
 #include "beeBoids.h"
 
@@ -40,7 +41,7 @@ BaseStruct_t *getBases(char *csv) {
 
   //Make an array of the bases
   int i;
-  BaseStruct_t* bases = malloc(numBases * sizeof(BaseStruct_t));
+  bases = malloc(numBases * sizeof(BaseStruct_t));
   for (i = 0; i < numBases; ++i) {
     fgets(buf, sizeof(buf), fp);
     char *token;
@@ -95,7 +96,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
   }
 
   //Make an array of the fuels
-  FuelStruct_t* fuels = malloc(numFuels * sizeof(FuelStruct_t));
+  fuels = malloc(numFuels * sizeof(FuelStruct_t));
   for (i = 0; i < numFuels; ++i) {
     fgets(buf, sizeof(buf), fp);
     char *token;
@@ -155,13 +156,12 @@ int* getPOICoordinates(int x ,int y){
   int yPOI = 99999;
 
   FILE *fp;
-  fp = fopen("Log.txt", "w");
+  fp = fopen(LogFile, "a");
   fprintf(fp,"getPOICoordinates(%d, %d)\n",x,y);
   //Create array of POI's and get the number of elements in the array
 
 
   //TODO: Set bases to a global array at beginning of program
-  BaseStruct_t* bases = getBases("fuelpoints.csv");
   int length = bases[0].num_bases;
   fprintf(fp, "numBases read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
@@ -179,19 +179,18 @@ int* getPOICoordinates(int x ,int y){
   fprintf(fp,"Closest base is at (%d,%d)\n", xPOI,yPOI);
 
   //TODO: Set depots to a global array at beginning of program
-  FuelStruct_t* depots = getFuelDepots("fuelpoints.csv");
-  length = depots[0].num_fuels;
+  length = fuels->num_fuels;
 
   fprintf(fp, "\nnum_fuels read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
   i = 0;
   for(i; i < length; i++){
     int old_distance = abs(computeDistance(x,xPOI,y,yPOI));
-    int new_distance = abs(computeDistance(x, depots[i].x, y, depots[i].y));
-    fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, depots[i].x, depots[i].y);
+    int new_distance = abs(computeDistance(x, fuels[i].x, y, fuels[i].y));
+    fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, fuels[i].x, fuels[i].y);
     if(new_distance < old_distance) {
-      xPOI = depots[i].x;
-      yPOI = depots[i].y;
+      xPOI = fuels[i].x;
+      yPOI = fuels[i].y;
     }
   }
 

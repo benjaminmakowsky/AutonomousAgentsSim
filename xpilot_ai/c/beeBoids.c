@@ -82,19 +82,35 @@ void initialize()
   //Check if we want to follow the leader, or if this is just normal boids.
   if(leaderMode)
   {
-    //Determine, by some criterion, whether I'm a leader.
-    //if(idx % tot_idx == 1)
     if(idx < 3)
     {
       isLeader = true;
     }
   }
 
+
+  /*************************************************
+   * load up log file with base and fuel coordinates
+   *************************************************/
+  getBases("fuelpoints.csv");
+  getFuelDepots("fuelpoints.csv");
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
   fp = fopen(LogFile, "w");
   fprintf(fp, "ShipID# %d\tState: %d\n",selfID(), state);
+  int i;
+  fprintf(fp,"------------------------------\nHIVES:\n");
+  for(i = 0; i < bases->num_bases;i++){
+    fprintf(fp,"Team# %d\tX: %d\tY: %d\n",bases[i].team,bases[i].x,bases[i].y);
+  }
+  fprintf(fp,"------------------------------\nFUEL POINTS:\n");
+  for(i = 0; i < fuels->num_fuels;i++){
+    fprintf(fp,"X: %d\tY: %d\n",fuels[i].x, fuels[i].y);
+  }
+  fprintf(fp,"------------------------------\n");
   fclose(fp);
+
+
   //Declare initialized and set state to typical flying.
   init = true;
   state = STATE_SEARCHING;
