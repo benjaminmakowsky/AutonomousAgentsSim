@@ -150,7 +150,7 @@ void eWeightAdjustByDistance()
  * ***************************************************************************/
 
 //Provides a mechanism for drones to spot walls ahead and steer away from them.
-void wallAvoidance()
+void getWallAvoidanceVector()
 {
   static int turnLock;
   static int lockNum = 5;
@@ -302,7 +302,7 @@ void flocking()
   pVector = degToAim;
 
   //Compute all the aforementioned vectors.
-  wallAvoidance();
+  getWallAvoidanceVector();
   alignment();
   cohesion();
   separation();

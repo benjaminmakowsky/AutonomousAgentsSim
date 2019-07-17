@@ -13,6 +13,7 @@
 #include <X11/keysym.h>
 #include "beeAI.h"
 #include "cAI.h"
+#include "beeBoids.h"
 
 
 
@@ -232,3 +233,49 @@ bool inVicinityOf(int x,int y){
   }
 }
 
+//avoidwall: check for wall, if wall present adjust heading
+int avoidWalls(){
+  getWallAvoidanceVector();  //Update ship direction vector for wall avoidance
+  int newHeading = 0;
+  if (wallVector != -1) {
+    newHeading = selfHeadingDeg() + 90;
+    turnToDeg(newHeading);
+  }
+  return newHeading;
+}
+
+bool comeToStop(int number_of_frames) {
+
+  static int current_x = 0;
+  static int current_y = 0;
+  refuel(0);
+  setPower(0);
+  static int counter = 0;
+  if (counter < number_of_frames) {
+    sprintf(bugstring, "%d", counter);
+
+    //Current coordinate positions are not the same then reset counter
+    if (current_x != selfX() && current_y != selfY()) {
+      counter = 0;
+      current_x = selfX();
+      current_y = selfY();
+    } else { counter += 1; }
+    return false;
+
+  }else{ return true;}
+}
+
+
+void checkForFuel(){
+  static bool fueling = false;
+  int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
+  if (fueling == false) {
+    fuel = selfFuel();
+    refuel(1);
+    fueling = true;
+  }
+  if ((frameCount % frames_passed == 0) && (fueling == true)) {
+    refuel(0);
+    fueling = false;
+  }
+}

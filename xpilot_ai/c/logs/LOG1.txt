@@ -1,43 +1,133 @@
 ShipID# 1	State: 0
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 3
 
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 3
 
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 55	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
 State: 3
-Power: 55	Self: 34725344
+Power: 0	Self: 2556645
 
-State: 3
-Power: 55	Self: 34725312
+fuelX: 840 fuelY: 315
+Ending Search behavior
 
-State: 3
-Power: 55	Self: 34725312
 
-State: 3
-Power: 55	Self: 34725312
+
+Beginning Forage Behavior
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 0	Self: 2556645
+
+State: 4
+Power: 30	Self: 2556645
 

@@ -38,7 +38,7 @@ extern char LogFile[15];   //Name of the lo file to create
 
 //function prototypes
 void initialize();
-void wallAvoidance();
+void getWallAvoidanceVector();
 void alignment();
 void cohesion();
 void separation();

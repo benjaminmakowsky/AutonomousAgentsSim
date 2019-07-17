@@ -47,58 +47,30 @@ void searching() {
   /*
    * Step 1: Check for walls
    */
-  wallAvoidance();  //Update vector to for wall avoidance
-  if (wallVector != -1) {
-    turnToDeg(selfHeadingDeg() + 100);
-  }
+  avoidWalls();
 
   /*
    * Step 2: Attempt to Attain Honey
    */
   if (!fuel_found) {
-    int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
-    if (fueling == false) {
-      fuel = selfFuel();
-      refuel(1);
-      fueling = true;
-    }
-    if ((frameCount % frames_passed == 0) && (fueling == true)) {
-      refuel(0);
-      fueling = false;
-    }
+    checkForFuel();
 
     /*
      * Step 3: Check if fuel levels changed
      */
     double new_fuel_level = selfFuel();
     if (new_fuel_level - fuel > 0) {
-      refuel(0);
-      setPower(0);
-
       x = selfX();
       y = selfY();
-      old_heading = (int)selfHeadingDeg();
-      new_heading = ((int)selfHeadingDeg() + 180) % 360;
       fuel_found = true;
     }
   }
 
 
   if (fuel_found) {
-    static int counter = 0;
-    //Wait for ship to not move for 30 iterations. If less then 30, ship will continue
-    // to drift as it slows down
-    if(counter < 30){
-      sprintf(bugstring, "%d", counter);
-      if(current_x != selfX() && current_y != selfY()){
-        counter = 0;
-        current_x = selfX();
-        current_y = selfY();
-      } else{
-        counter += 1;
-      }
+    if(comeToStop(30) == false){
+      //Do nothing
     } else {
-
 
       int POICoordinates[2];
       static bool fileRead = false;
@@ -109,7 +81,7 @@ void searching() {
       }
 
       FILE *fp;
-      fp = fopen("Log.txt", "a");
+      fp = fopen(LogFile, "a");
       fprintf(fp,"fuelX: %d fuelY: %d\n", selfFuelX(),selfFuelY());
       fprintf(fp,"Ending Search behavior\n");
       fclose(fp);
@@ -135,7 +107,7 @@ void forage() {
 
   if (initForage) {
     FILE *fp;
-    fp = fopen("Log.txt", "a");
+    fp = fopen(LogFile, "a");
     fprintf(fp, "\n\n\nBeginning Forage Behavior\n");
     fclose(fp);
     initForage = !initForage;

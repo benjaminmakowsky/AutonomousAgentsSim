@@ -46,5 +46,15 @@ int* getPOICoordinates(int x ,int y);
 /// \return  Boolean of whether or not user is within range of (x,y)
 bool inVicinityOf(int x,int y);
 
+/// Used to determine the vector of the wall and turn to a specified degree
+/// \return The new heading
+int avoidWalls();
 
+/// Brings bee to a stop by setting power to zero and wait until no movement
+/// \param number_of_frames The number of frames to not be moving
+/// \return boolean if stopped or not
+bool comeToStop(int number_of_frames);
+
+///Automatically cycles refueling state to determine if near honey
+void checkForFuel();
 #endif //XPILOT_LE_BEEAI_H
