@@ -637,13 +637,9 @@ AI_loop()
     state = STATE_INIT;
   }
 
-  if(frameCount % 14 * 10 == 0){
+  if(frameCount % (14 * 10) == 0){
     FILE *fp;
     fp = fopen(LogFile, "a");
-    int i;
-    fprintf(fp,"------------------------------\nFUEL POINTS:\n");
-    for(i = 0; i < honey_spots->num_fuels;i++)
-      fprintf(fp,"X: %d\tY: %d\n",honey_spots[i].x, honey_spots[i].y);
     fprintf(fp,"------------------------------\n");
     fprintf(fp, "State: %d\nPower: %d\tSelf: %d\n\n",state, (int)getPower(),selfState());
     fclose(fp);

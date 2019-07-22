@@ -197,7 +197,7 @@ int* getPOICoordinates(int x ,int y){
 
   coordinates[0] = xPOI;
   coordinates[1] = yPOI;
-  fprintf(fp,"Closest POI is at (%d,%d)\n", xPOI,yPOI);
+  fprintf(fp,"------------------------------\n");
   fclose(fp);
 
   return coordinates;

@@ -66,7 +66,7 @@ void searching() {
     } else {
 
       int POICoordinates[2];
-      static bool fileRead = false;
+      static bool fileRead = false; //Boolean to set coordinates only once
       if(!fileRead) {
         memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(getPOICoordinates(x, y)));
         rememberPOICoords(POICoordinates[0],POICoordinates[1]);
@@ -75,8 +75,9 @@ void searching() {
 
       FILE *fp;
       fp = fopen(LogFile, "a");
-      fprintf(fp,"fuelX: %d fuelY: %d\n", selfFuelX(),selfFuelY());
       fprintf(fp,"Ending Search behavior\n");
+      fprintf(fp,"------------------------------\n");
+
       fclose(fp);
       sprintf(bugstring, "Search Moving to %d and %d",selfFuelX(), selfFuelY());
       state = STATE_FORAGING;
@@ -97,18 +98,27 @@ void forage() {
   static bool depositing = true;
   static bool forage_state_changed = true;
 
-
+  //Log status line showing what method just executed
   if (initForage) {
     FILE *fp;
     fp = fopen(LogFile, "a");
-    fprintf(fp, "\n\n\nBeginning Forage Behavior\n");
+    fprintf(fp, "\nBeginning Forage Behavior\n");
+    fprintf(fp,"------------------------------\n");
     fclose(fp);
     initForage = !initForage;
   }
 
 
+  /** Steps:
+   *    1) Determine if heading to hive or honey
+   *    2) Approach Destination and stop
+   *    3) Gather or deposit honey
+   *    4) Repeat
+   */
 
-  //Determine whetheror not you are heading to hive to deposit honey or
+
+  //Step 1:
+  //Determine whether or not you are heading to hive to deposit honey or
   //if you are headed to flower to pickup honey
   if(depositing){
     x = selfBaseX();
@@ -120,6 +130,7 @@ void forage() {
 
 
   //If block placed here in order to debug and test that x and y are properly changed
+  /***
   if(forage_state_changed){
     FILE *fp;
     fp = fopen("Log.txt", "a");
@@ -131,45 +142,35 @@ void forage() {
     fclose(fp);
     forage_state_changed = false;
   }
+  */
 
 
   static int fuelLVL = 0;
 
+  //Step 2: Determine if near honey/hive
   if(!inVicinityOf(x,y)) {
     refuel(0);
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",x,y);
     goToCoordinates(x,y);
 
+  //Step 3; Gather or deposit fuel
+
   }else {
     setPower(0);
     fuelLVL = (int)selfFuel();
     if (fuelLVL > 500 && depositing ) {
-      int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
-      if (fueling == false) {
-        refuel(1);
-        fueling = true;
-      }
-      if ((frameCount % frames_passed == 0) && (fueling == true)) {
-        refuel(0);
-        fueling = false;
-      }
+      checkForFuel();
       strcpy(bugstring, "Depositing");
     } else if( fuelLVL < 700 && !depositing){
-      int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
-      if (fueling == false) {
-        refuel(1);
-        fueling = true;
-      }
-      if ((frameCount % frames_passed == 0) && (fueling == true)) {
-        refuel(0);
-        fueling = false;
-      }
+      checkForFuel();
       strcpy(bugstring, "Gathering");
+
+    //Step 4: Repeat Loop
     }else{
       refuel(0);
       strcpy(bugstring, "Moving");
-      depositing = !depositing;
-      forage_state_changed = true;
+      depositing = !depositing;       //Change internal forage state
+      forage_state_changed = true;    //Set flag for Logging change
     }
   }
 }
