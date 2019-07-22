@@ -13,7 +13,9 @@
 #include <X11/keysym.h>
 #include "beeAI.h"
 #include "cAI.h"
-#include "beeBoids.h"
+#include "beeMain.h"
+#include "beeObject.h"
+
 
 
 BaseStruct_t* hives;

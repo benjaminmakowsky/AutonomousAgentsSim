@@ -27,7 +27,7 @@
 
 #include "xpclient_x11.h"
 #include "../../../../xpilot_ai/c/boids.h"
-#include "../../../../xpilot_ai/c/beeBoids.h"
+#include "../../../../xpilot_ai/c/beeMain.h"
 
 
 int hudColor;        /* Color index for HUD drawing, has to be global for windoze */

@@ -5,12 +5,13 @@
 #include "bee.h"
 #include "beeAI.h"
 #include "cAI.h"
-#include "beeBoids.h"
+#include "beeMain.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 #include <string.h>
+#include "beeObject.h"
 
 
 //global variables
@@ -69,18 +70,20 @@ void searching() {
       static bool fileRead = false; //Boolean to set coordinates only once
       if(!fileRead) {
         memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(getPOICoordinates(x, y)));
-        rememberPOICoords(POICoordinates[0],POICoordinates[1]);
+        setHoneyX(POICoordinates[0]);
+        setHoneyY(POICoordinates[1]);
+        //rememberPOICoords(POICoordinates[0],POICoordinates[1]);
         fileRead = !fileRead;
       }
 
       FILE *fp;
       fp = fopen(LogFile, "a");
-      fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",selfFuelX(),selfFuelY());
+      fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",getHoneyX(),getHoneyY());
       fprintf(fp,"Ending Search behavior\n");
       fprintf(fp,"------------------------------\n");
 
       fclose(fp);
-      sprintf(bugstring, "Search Moving to %d and %d",selfFuelX(), selfFuelY());
+      sprintf(bugstring, "Search Moving to %d and %d",getHoneyX(), getHoneyY());
       state = STATE_FORAGING;
     }
   }
@@ -128,8 +131,8 @@ void forage() {
     x = selfBaseX();
     y = selfBaseY();
   } else {
-    x = selfFuelX();
-    y = selfFuelY();
+    x = getHoneyX();
+    y = getHoneyY();
   }
 
 

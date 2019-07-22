@@ -25,5 +25,5 @@ Ending Search behavior
 Beginning Forage Behavior
 ------------------------------
 Home Base:  (192,157)
-Honey Spot: (840,315)
+Honey Spot: (2122018661,1616869491)
 ------------------------------
