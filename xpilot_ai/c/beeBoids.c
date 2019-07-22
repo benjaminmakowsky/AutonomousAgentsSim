@@ -614,6 +614,19 @@ AI_loop()
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
+
+
+  /**
+   * Power stays the same
+   * pause ai is not called
+   * speed decreases to zero
+   * thrust(1) restarts ship movement
+   */
+  //If speed is zero but power is not zero ship should keep moving
+  if(selfSpeed() == 0 && getPower() != 0){
+    thrust(1);
+  }
+  sprintf(bugstring,"%d", selfSpeed());
   //If about 300 frames have gone by and we're a leader, broadcast a message that
   //indicates this, so others on my team can follow me in leader mode.
   if(frameCount == 350 && isLeader)
@@ -629,6 +642,7 @@ AI_loop()
   if(!selfAlive())
   {
     state = STATE_DEAD;
+    //log("Dead");
   }
 
   //If we haven't initialized yet, do that.
@@ -637,13 +651,15 @@ AI_loop()
     state = STATE_INIT;
   }
 
-  if(frameCount % (14 * 10) == 0){
+  /*if(frameCount % (14 * 10) == 0){
     FILE *fp;
     fp = fopen(LogFile, "a");
     fprintf(fp,"------------------------------\n");
     fprintf(fp, "State: %d\nPower: %d\tSelf: %d\n\n",state, (int)getPower(),selfState());
     fclose(fp);
-  }
+  }*/
+
+
   switch(state)
   {
     case(STATE_INIT):

@@ -75,6 +75,7 @@ void searching() {
 
       FILE *fp;
       fp = fopen(LogFile, "a");
+      fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",selfFuelX(),selfFuelY());
       fprintf(fp,"Ending Search behavior\n");
       fprintf(fp,"------------------------------\n");
 
@@ -103,6 +104,9 @@ void forage() {
     FILE *fp;
     fp = fopen(LogFile, "a");
     fprintf(fp, "\nBeginning Forage Behavior\n");
+    fprintf(fp,"------------------------------\n");
+    fprintf(fp,"Home Base:  (%d,%d)\n",selfBaseX(), selfBaseY());
+    fprintf(fp,"Honey Spot: (%d,%d)\n", selfFuelX(), selfFuelY());
     fprintf(fp,"------------------------------\n");
     fclose(fp);
     initForage = !initForage;
@@ -158,10 +162,12 @@ void forage() {
   }else {
     setPower(0);
     fuelLVL = (int)selfFuel();
-    if (fuelLVL > 500 && depositing ) {
+    int empty = 500;
+    int full = 700;
+    if (fuelLVL > empty && depositing ) {
       checkForFuel();
       strcpy(bugstring, "Depositing");
-    } else if( fuelLVL < 700 && !depositing){
+    } else if( fuelLVL < full && !depositing){
       checkForFuel();
       strcpy(bugstring, "Gathering");
 

@@ -276,3 +276,13 @@ void checkForFuel(){
     fueling = false;
   }
 }
+
+/*
+void log(char[50] string){
+  FILE *fp;
+  fp = fopen(LogFile, "a");
+  fprintf(fp,string);
+  fprintf(fp,"------------------------------\n");
+
+  fclose(fp);
+}*/

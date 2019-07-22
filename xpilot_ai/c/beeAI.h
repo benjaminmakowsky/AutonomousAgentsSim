@@ -68,4 +68,8 @@ bool comeToStop(int number_of_frames);
 void checkForFuel();
 ///Automatically cycles refueling state to determine if near honey
 
+
+//void log(char* string);
+/// Prints a string to the log file
+/// \param String to be printed to file
 #endif //XPILOT_LE_BEEAI_H
