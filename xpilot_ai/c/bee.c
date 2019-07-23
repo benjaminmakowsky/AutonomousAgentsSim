@@ -110,7 +110,7 @@ void forage() {
     fprintf(fp, "\nBeginning Forage Behavior\n");
     fprintf(fp,"------------------------------\n");
     fprintf(fp,"Home Base:  (%d,%d)\n",selfBaseX(), selfBaseY());
-    fprintf(fp,"Honey Spot: (%d,%d)\n", selfFuelX(), selfFuelY());
+    fprintf(fp,"Honey Spot: (%d,%d)\n", getHoneyX(), getHoneyY());
     fprintf(fp,"------------------------------\n");
     fclose(fp);
     initForage = !initForage;
