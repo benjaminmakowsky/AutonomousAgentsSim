@@ -288,3 +288,75 @@ void log(char[50] string){
 
   fclose(fp);
 }*/
+
+bool dance(int prevState){
+  static bool dance_is_completed = false;
+  switch(prevState)
+  {
+    case STATE_SEARCHING:
+      dance_is_completed = honeyFoundDance();
+      break;
+    case STATE_FORAGING:
+      break;
+  }
+
+  //Stop dancing once dance has finished
+  if(dance_is_completed){
+    dance_is_completed = false;
+    return true;
+  }else{
+    return false;
+  }
+}
+
+bool honeyFoundDance(){
+
+  static bool is_initial_setup = true;
+  static int initial_heading = 0;
+  static int number_of_spins = 0;
+  static int target_degree = 0;
+  int desired_rotations = 2;
+
+  if(is_initial_setup){
+    number_of_spins = 0;
+    initial_heading = (int)selfHeadingDeg();
+    target_degree = (initial_heading + 345) % 360;
+    is_initial_setup = false;
+  }
+
+  //Perform Dance Motions
+  turnToDeg((int)selfHeadingDeg() + 40);
+
+  //Count number of rotations in order to determine when dance is finished
+  if(beeDegIsBetween(target_degree, (target_degree + 10) % 360)) {
+    number_of_spins+=1;
+  }
+
+  //If desired number of spins has been reached dance is finished
+  if(number_of_spins >= desired_rotations ){
+    is_initial_setup = true;
+    return true;
+  }
+  return false;
+}
+
+bool beeDegIsBetween(int deg1, int deg2){
+
+  /*******************************************************
+   * Case 1: deg1 < deg2                                 *
+   * Do not have to account for passing 360 ie (45 to 90)*
+   *******************************************************/
+   if(deg1 < deg2){
+     return (deg1 <= (int)selfHeadingDeg() && (int)selfHeadingDeg() <= deg2);
+   }
+  /*******************************************************
+  * Case 2: deg1 > deg2                                 *
+  * Do have to account for passing 360 ie (355 to 5)    *
+  *******************************************************/
+   else if(deg1 > deg2){
+     return((int)selfHeadingDeg() > deg1 || (int)selfHeadingDeg() < deg2);
+   }
+   else{
+     return ((int)selfHeadingDeg() == deg1);
+   }
+}

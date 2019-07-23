@@ -99,6 +99,7 @@ void forage() {
   int x = 0;
   int y = 0;
   static bool initForage = true;
+  static bool performed_dance = false;
   static bool depositing = true;
   static bool forage_state_changed = true;
 
@@ -114,6 +115,7 @@ void forage() {
     fclose(fp);
     initForage = !initForage;
   }
+
 
 
   /** Steps:
@@ -161,25 +163,28 @@ void forage() {
     goToCoordinates(x,y);
 
   //Step 3; Gather or deposit fuel
-
   }else {
     setPower(0);
-    fuelLVL = (int)selfFuel();
-    int empty = 500;
-    int full = 700;
-    if (fuelLVL > empty && depositing ) {
-      checkForFuel();
-      strcpy(bugstring, "Depositing");
-    } else if( fuelLVL < full && !depositing){
-      checkForFuel();
-      strcpy(bugstring, "Gathering");
+    if(performed_dance == false){
+      performed_dance = dance(STATE_SEARCHING);
+    }else {
+      fuelLVL = (int) selfFuel();
+      int empty = 500;
+      int full = 700;
+      if (fuelLVL > empty && depositing) {
+        checkForFuel();
+        strcpy(bugstring, "Depositing");
+      } else if (fuelLVL < full && !depositing) {
+        checkForFuel();
+        strcpy(bugstring, "Gathering");
 
-    //Step 4: Repeat Loop
-    }else{
-      refuel(0);
-      strcpy(bugstring, "Moving");
-      depositing = !depositing;       //Change internal forage state
-      forage_state_changed = true;    //Set flag for Logging change
+        //Step 4: Repeat Loop
+      } else {
+        refuel(0);
+        strcpy(bugstring, "Moving");
+        depositing = !depositing;       //Change internal forage state
+        forage_state_changed = true;    //Set flag for Logging change
+      }
     }
   }
 }
