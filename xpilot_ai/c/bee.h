@@ -17,37 +17,12 @@ void searching();
  *  @Return: Void*/
 void forage();
 
-
 /*
- *  goToCoordinates(x,y)
- *  Moves the bee to a specified location on the map.
- *  @Param int x: The x coordinate of the location
- *  @Param int y: The y coordinate of the locaton
- *  @Return: int: current heading in degrees
- *  NOTE: Due to map constraints location will be + or - 5 */
-int goToCoordinates(int x, int y);
+ *
+ */
+void onlook();
 
 
-/*
- *  getHeadingForCoordinates(x , y)
- *  Gets the heading for the the coordinates (x,y)
- *  @Param int x: The x coordinate of the location
- *  @Param int y: The y coordinate of the locaton
- *  @Return: int: heading of coordinates in degrees*/
-int getHeadingForCoordinates(int x ,int y);
-
-/*
- *  inVicinityOf(x, y)
- *  Determines whether or not the ship is close enough to a position to act upon
- *  @Param int x: The x coordinate of the location
- *  @Param int y: The y coordinate of the locaton
- *  @Return: bool - Boolean value if ships current position is close to x ,y*/
-bool inVicinityOf(int x, int y);
-
-
-
-
-int* getPOICoordinates(int x ,int y);
 
 #endif //XPILOT_LE_BEE_H
 

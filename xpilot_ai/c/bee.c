@@ -89,7 +89,6 @@ void searching() {
   }
 }
 
-//INPROGRESS: Get it to forage
 /*****************************************************************************
  * Foraging (Controller)- Benjamin Makowsky
  * ***************************************************************************/
@@ -116,15 +115,12 @@ void forage() {
     initForage = !initForage;
   }
 
-
-
   /** Steps:
    *    1) Determine if heading to hive or honey
    *    2) Approach Destination and stop
    *    3) Gather or deposit honey
    *    4) Repeat
    */
-
 
   //Step 1:
   //Determine whether or not you are heading to hive to deposit honey or
@@ -138,24 +134,8 @@ void forage() {
   }
 
 
-  //If block placed here in order to debug and test that x and y are properly changed
-  /***
-  if(forage_state_changed){
-    FILE *fp;
-    fp = fopen("Log.txt", "a");
-    if(depositing) {
-      fprintf(fp, "Depositing honey at hive \n");
-    }else{
-      fprintf(fp, "Getting Honey from source (%d,%d)\n", x,y);
-    }
-    fclose(fp);
-    forage_state_changed = false;
-  }
-  */
-
 
   static int fuelLVL = 0;
-
   //Step 2: Determine if near honey/hive
   if(!inVicinityOf(x,y)) {
     refuel(0);
@@ -189,3 +169,13 @@ void forage() {
   }
 }
 
+/*****************************************************************************
+ * Foraging (Controller)- Benjamin Makowsky
+ * ***************************************************************************/
+void onlook(){
+  if(!inVicinityOf(selfBaseX(),selfBaseY())){
+    goToCoordinates(selfBaseX(),selfBaseY());
+  }else{
+    setPower(0);
+  }
+}

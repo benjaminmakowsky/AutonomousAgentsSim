@@ -11,7 +11,8 @@ enum State
     STATE_FLYING,   //1
     STATE_DEAD,     //2
     STATE_SEARCHING,//3
-    STATE_FORAGING  //4
+    STATE_FORAGING, //4
+    STATE_ONLOOKING //5
 };
 
 extern enum State state;

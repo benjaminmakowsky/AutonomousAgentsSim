@@ -84,5 +84,10 @@ bool honeyFoundDance();
 /// Performs dance to relay that honey has been found
 /// \return boolean if dance has been completed or not
 
+
 bool beeDegIsBetween(int deg1, int deg2);
+/// Determines whether or no bee heading is between 2 headings
+/// \param deg1 The starting degree bounds
+/// \param deg2  The ending degree bounds
+/// \return boolean if between degree bounds
 #endif //XPILOT_LE_BEEAI_H

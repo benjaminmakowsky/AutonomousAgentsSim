@@ -684,6 +684,9 @@ AI_loop()
       forage();
       break;
 
+    case (STATE_ONLOOKING):
+      onlook();
+      break;
     default:
       state = STATE_SEARCHING;
   }
