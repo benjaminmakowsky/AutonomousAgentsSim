@@ -1130,43 +1130,7 @@ double selfScore() {
   return 0.0;
 }
 
-int selfFuelX() {
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].fuelX;
-    }
-  }
-    return -1;
-}
 
-int selfFuelY() {
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].fuelY;
-    }
-  }
-}
-
-void setSelfState(int state){
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      ship_ptr[i].self_state = state;
-
-    }
-  }
-}
-
-int selfState(){
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].self_state;
-    }
-  }
-}
 //End self properties -JNE
 
 
@@ -3061,3 +3025,78 @@ int getWallAvoidance() {
   }
 }
 
+
+/**********************************************
+ * BEE Functions
+ */
+int selfFuelX() {
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return ship_ptr[i].fuelX;
+    }
+  }
+  return -1;
+}
+
+int selfFuelY() {
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return ship_ptr[i].fuelY;
+    }
+  }
+}
+
+void setSelfState(int state){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      ship_ptr[i].self_state = state;
+
+    }
+  }
+}
+
+int selfState(){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return ship_ptr[i].self_state;
+    }
+  }
+}
+
+void setDancingState(int state){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      ship_ptr[i].isDancing = state;
+
+    }
+  }
+}
+
+int getDancingState(){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return ship_ptr[i].isDancing;
+    }
+  }
+}
+
+int seeIfDancing(int fov, int rov){
+
+  //Loop to self ships
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      //Check if ships in range are dancing
+      int j;
+      for (j = 0; j < num_ship; j++) {
+        ship_ptr[j]
+      }
+    }
+  }
+}

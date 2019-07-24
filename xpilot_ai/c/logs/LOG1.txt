@@ -8,22 +8,3 @@ FUEL POINTS:
 X: 770	Y: 945
 X: 840	Y: 315
 ------------------------------
-getPOICoordinates(815, 407)
-numBases read: 2
-From Bases 	Index 0 	X: 315	Y: 910
-From Bases 	Index 1 	X: 175	Y: 140
-Closest base is at (175,140)
-
-num_fuels read: 2
-From Fuels 	Index 0 	X: 770	Y: 945
-From Fuels 	Index 1 	X: 840	Y: 315
-------------------------------
-Saved POI Coordinates as (840,315)
-Ending Search behavior
-------------------------------
-
-Beginning Forage Behavior
-------------------------------
-Home Base:  (192,157)
-Honey Spot: (2556615,3343047)
-------------------------------

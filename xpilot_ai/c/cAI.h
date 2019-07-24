@@ -139,10 +139,7 @@ extern double getPower();       // Returns the ship's Power Level -JRA
 extern int selfShield();        // Returns the ship's Shield status -JRA
 extern char* selfName();        // Returns the ship's Name -JRA
 extern double selfScore();      // Returns the ship's Score -JRA
-extern int selfFuelX();             // Returns ships designated fuel source x coord - Ben
-extern int selfFuelY();             // Returns ships designated fuel source y coord - Ben
-extern void setSelfState(int state);
-extern int selfState();
+
 // Closest functions -JNE
 extern int closestRadarX(); // Returns the Closest ship's X Radar Coordinate -JRA
 extern int closestRadarY(); // Returns the Closest ship's Y Radar Coordinate -JRA
@@ -232,14 +229,14 @@ extern int getNearestEnemyX();
 extern int getNearestEnemyY();
 extern int getAngleBtwnPoints(int x1, int x2, int y1, int y2);
 extern int selfAngleToXY(int x, int y); //Returns angle from ship to param coordinatess
-/*
+
 extern bool withinROV(int x, int y, int rov);
 extern bool withinFOV(int x, int y, int fov);
 extern bool inSight(int x, int y, int fov, int rov);
 extern bool radarEFInView(int fov, int rov, int ef);
 extern bool radarEnemyInView(int fov, int rov);
 extern bool radarFriendInView(int fov, int rov);
-*/
+
 extern int getEFSeparation(int r, int fov, int ef);
 extern int getEnemySeparation(int r, int fov);
 extern int getFriendSeparation(int r, int fov);
@@ -262,4 +259,13 @@ extern void broadcastMessage(int teamNum, char *keyword, int newVal);
 //	extern bool closeToConcaveCorner(int headingDeg);
 extern int getWallAvoidance();
 
+
+//Bee functions
+extern int selfFuelX();             // Returns ships designated fuel source x coord - Ben
+extern int selfFuelY();             // Returns ships designated fuel source y coord - Ben
+extern void setSelfState(int state);
+extern int selfState();
+extern void setDancingState(int state);
+extern int getDancingState();
+extern int seeIfDancing(int fov,int rov);
 #endif //XPILOT_LE_CAI_H

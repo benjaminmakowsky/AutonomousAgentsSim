@@ -1,7 +1,7 @@
 #Enter name of map as arg
 ./getFuelPoints.sh debugmap.xp
 
-./xpilot-ng-server -maxArmor 5 -targetTeamCollision -selfImmunity +limitedLives -lives 4 -maxRobots 0 +allowShields +playersStartShielded  -maxIdleTime 0 -maxPauseTime 0 -maxClientsPerIp 0 -itemProbMult 0 +limitedVisibility -maxVisibility 5 -map debugmap.xp -shipMass 0.1 -sparkSpeed 0.2 -friction 0.1 -coriolis 0  -playerWallFriction 0 -teamPlay -shipShapes
+./xpilot-ng-server -maxArmor 5 -targetTeamCollision -initialCloaks 5 -selfImmunity +limitedLives -lives 4 -maxRobots 0 +allowShields +playersStartShielded  -maxIdleTime 0 -maxPauseTime 0 -maxClientsPerIp 0 -itemProbMult 0 +limitedVisibility -maxVisibility 5 -map debugmap.xp -shipMass 0.1 -sparkSpeed 0.2 -friction 0.1 -coriolis 0  -playerWallFriction 0 -teamPlay -shipShapes
 
 #./xpilot-ng-server -maxArmor 5 -selfImmunity +limitedLives -lives 4 -maxRobots 0 +allowShields +playersStartShielded  -maxIdleTime 0 -maxPauseTime 0 -maxClientsPerIp 0 -itemProbMult 0 +limitedVisibility -maxVisibility 5 -map demomap.xp -shipMass 0.1 -sparkSpeed 0.2 -friction 0.1 -coriolis 0  -playerWallFriction 0 -teamPlay -shipShapes
 

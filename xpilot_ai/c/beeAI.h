@@ -90,4 +90,8 @@ bool beeDegIsBetween(int deg1, int deg2);
 /// \param deg1 The starting degree bounds
 /// \param deg2  The ending degree bounds
 /// \return boolean if between degree bounds
+
+
+void updateShip();
+///Update ship_t for cAI
 #endif //XPILOT_LE_BEEAI_H

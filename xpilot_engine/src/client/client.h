@@ -306,6 +306,7 @@ typedef struct {
 	int fuelX;
 	int fuelY;
 	int self_state;      //Ben
+	int isDancing;
 	u_byte		shield, cloak, eshield;
 	u_byte		phased, deflector;
 	double fuel, fov, baseFuel;

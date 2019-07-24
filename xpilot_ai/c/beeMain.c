@@ -114,8 +114,17 @@ void initialize()
 
   //Declare initialized and set state to typical flying.
   init = true;
-  state = STATE_SEARCHING;
-  setSelfState(3);
+  int r = rand() % 2;
+  switch(r)
+  {
+    case 0:
+      state = STATE_SEARCHING;
+      break;
+    case 1:
+      state = STATE_ONLOOKING;
+      break;
+  }
+  setCurrState(state);
   thrust(1);
 }
 
@@ -610,19 +619,12 @@ void handleMsgBuffer()
 AI_loop()
 {
 
-
-
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
+  //Update ship_t every frame
+  updateShip();
 
-
-  /**
-   * Power stays the same
-   * pause ai is not called
-   * speed decreases to zero
-   * thrust(1) restarts ship movement
-   */
   //If speed is zero but power is not zero ship should keep moving
   if(selfSpeed() == 0 && getPower() != 0){
     thrust(1);

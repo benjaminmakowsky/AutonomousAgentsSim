@@ -65,7 +65,6 @@ void searching() {
     if(comeToStop(30) == false){
       //Do nothing
     } else {
-
       int POICoordinates[2];
       static bool fileRead = false; //Boolean to set coordinates only once
       if(!fileRead) {
@@ -177,5 +176,8 @@ void onlook(){
     goToCoordinates(selfBaseX(),selfBaseY());
   }else{
     setPower(0);
+    if(radarFriendInView(360,20)){
+      seeIfDancing(360,20);
+    }
   }
 }

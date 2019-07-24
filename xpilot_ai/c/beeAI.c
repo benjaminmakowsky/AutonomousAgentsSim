@@ -291,6 +291,7 @@ void log(char[50] string){
 
 bool dance(int prevState){
   static bool dance_is_completed = false;
+  setDancingState(1);
   switch(prevState)
   {
     case STATE_SEARCHING:
@@ -302,6 +303,7 @@ bool dance(int prevState){
 
   //Stop dancing once dance has finished
   if(dance_is_completed){
+    setDancingState(0);
     dance_is_completed = false;
     return true;
   }else{
@@ -359,4 +361,9 @@ bool beeDegIsBetween(int deg1, int deg2){
    else{
      return ((int)selfHeadingDeg() == deg1);
    }
+}
+
+void updateShip(){
+  setSelfState(getCurrState());
+
 }
