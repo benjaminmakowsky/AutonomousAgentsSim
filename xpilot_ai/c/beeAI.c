@@ -291,11 +291,12 @@ void log(char[50] string){
 
 bool dance(int prevState){
   static bool dance_is_completed = false;
-  setDancingState(1);
+  setIsDancing(1);
   switch(prevState)
   {
-    case STATE_SEARCHING:
+    case STATE_SEARCHING: //If you were just searching then let others know you found honey
       dance_is_completed = honeyFoundDance();
+      setDanceType(FOUND_HONEY);
       break;
     case STATE_FORAGING:
       break;
@@ -303,7 +304,7 @@ bool dance(int prevState){
 
   //Stop dancing once dance has finished
   if(dance_is_completed){
-    setDancingState(0);
+    setIsDancing(0);
     dance_is_completed = false;
     return true;
   }else{
@@ -364,6 +365,20 @@ bool beeDegIsBetween(int deg1, int deg2){
 }
 
 void updateShip(){
+  /*FILE *fp;
+  fp = fopen(LogFile, "a");
+  fprintf(fp, "Updating ship values:\nState: %d Dancing: %d", getCurrState(),getIsDancing());
+  fclose(fp);*/
   setSelfState(getCurrState());
+  sendDancingState(getIsDancing());
+}
 
+int interpretDance(int dance){
+  if(dance == FOUND_HONEY){
+    int danceChance = rand();
+    if(danceChance % 1 == 0){
+      state = STATE_FORAGING;
+      setCurrState(STATE_FORAGING);
+    }
+  }
 }

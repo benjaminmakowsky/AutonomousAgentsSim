@@ -624,6 +624,7 @@ AI_loop()
 
   //Update ship_t every frame
   updateShip();
+  cRadius = state;
 
   //If speed is zero but power is not zero ship should keep moving
   if(selfSpeed() == 0 && getPower() != 0){

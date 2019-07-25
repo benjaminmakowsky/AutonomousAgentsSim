@@ -19,7 +19,14 @@ typedef struct fuelStruct_t {
     int num_fuels;
 } FuelStruct_t;
 
+enum DanceType
+{
+    FOUND_HONEY,          //0
+    HONEY_EMPTY,          //1
+    FOUND_ENEMY_HIVE,     //2
+};
 
+extern enum DanceType dance_num;
 extern BaseStruct_t* hives;
 extern FuelStruct_t* honey_spots;
 
@@ -94,4 +101,10 @@ bool beeDegIsBetween(int deg1, int deg2);
 
 void updateShip();
 ///Update ship_t for cAI
+
+
+int interpretDance(int dance);
+/// Decides whether or not to change state based on observed dance
+/// \param dance The dance being observed
+/// \return The state bee has changed into based on dance
 #endif //XPILOT_LE_BEEAI_H

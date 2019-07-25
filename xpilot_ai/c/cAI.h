@@ -265,7 +265,8 @@ extern int selfFuelX();             // Returns ships designated fuel source x co
 extern int selfFuelY();             // Returns ships designated fuel source y coord - Ben
 extern void setSelfState(int state);
 extern int selfState();
-extern void setDancingState(int state);
-extern int getDancingState();
+extern void sendDancingState(int state);
+extern int getDanceFrom(int ship);
 extern int seeIfDancing(int fov,int rov);
+extern int getSelfIsDancing();
 #endif //XPILOT_LE_CAI_H

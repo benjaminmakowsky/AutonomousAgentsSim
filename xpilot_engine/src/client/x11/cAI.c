@@ -3067,17 +3067,16 @@ int selfState(){
   }
 }
 
-void setDancingState(int state){
+void sendDancingState(int state){
   int i;
   for (i = 0; i < num_ship; i++) {
     if ((self != NULL) && (ship_ptr[i].id == self->id)) {
       ship_ptr[i].isDancing = state;
-
     }
   }
 }
 
-int getDancingState(){
+int getSelfIsDancing(){
   int i;
   for (i = 0; i < num_ship; i++) {
     if ((self != NULL) && (ship_ptr[i].id == self->id)) {
@@ -3086,17 +3085,29 @@ int getDancingState(){
   }
 }
 
+int getDanceFrom(int ship){
+  return ship_ptr[ship].dancingType;
+}
+
 int seeIfDancing(int fov, int rov){
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
 
   //Loop to self ships
   int i;
   for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      //Check if ships in range are dancing
-      int j;
-      for (j = 0; j < num_ship; j++) {
-        ship_ptr[j]
+    if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov)) {
+      //return 10;
+      fprintf(fp, "cAI ifDancing(): %d\n", ship_ptr[i].isDancing);
+
+      if(ship_ptr[i].isDancing == 1) {
+        fclose(fp);
+        return i;
       }
     }
   }
+  fclose(fp);
+  return -1;
 }

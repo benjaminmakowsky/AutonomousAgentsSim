@@ -10,6 +10,7 @@ static int honeyY;
 static int currState;
 static int prev;
 static int isDancing;
+static int danceType;
 
 void setHoneyX(int x);
 void setHoneyY(int y);
@@ -22,4 +23,7 @@ void setCurrState(int state);
 
 void setIsDancing(int answer);
 int getIsDancing();
+
+void setDanceType(int type);
+int getDanceType();
 #endif //XPILOT_LE_BEEOBJECT_H

@@ -40,3 +40,10 @@ void setIsDancing(int answer){
 int getIsDancing(){
   return isDancing;
 }
+
+void setDanceType(int type){
+  danceType = type;
+}
+int getDanceType(){
+  return danceType;
+}
