@@ -580,7 +580,6 @@ int Handle_keyboard(player_t *pl)
 	bool pressed;
 
 	/*assert(!Player_is_killed(pl));*/
-
 	for (key = 0; key < NUM_KEYS; key++) {
 		/* Find first keyv element where last_keyv isn't equal to prev_keyv. */
 		if (pl->last_keyv[key / BITV_SIZE] == pl->prev_keyv[key / BITV_SIZE]) {
@@ -1052,6 +1051,11 @@ int Handle_keyboard(player_t *pl)
 						      do_lose_item(pl);
 						      break;
 
+        case KEY_NURSE_BEE:
+          pl->nursing = 1;
+          break;
+
+
 				default:
 						      break;
 			}
@@ -1120,6 +1124,10 @@ int Handle_keyboard(player_t *pl)
 				case KEY_SELECT_ITEM:
 					pl->lose_item_state = 1;
 					break;
+
+        case KEY_NURSE_BEE:
+          pl->nursing = 0;
+          break;
 
 				default:
 					break;

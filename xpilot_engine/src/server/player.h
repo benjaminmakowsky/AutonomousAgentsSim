@@ -358,6 +358,8 @@ typedef struct player {
 	int shotmass; /* Amount of recoil from firing a shot */
 	int shotlife; /* For how long will this bullet last (range) */
 
+  bool nursing; /* If spending base resourse to spawn new ships */
+
 #define PRIV_NOAUTOKICK		1
 #define PRIV_AUTOKICKLAST	2
 
@@ -550,6 +552,11 @@ static inline bool Player_has_armor(player_t *pl)
 		if (BIT(pl->obj_status, THRUSTING))
 			return true;
 		return false;
+	}
+  
+  static inline bool Player_is_nursing(player_t *pl)
+	{
+    return pl->nursing;
 	}
 
 	static inline bool Player_is_refueling(player_t *pl)
@@ -784,5 +791,6 @@ static inline bool Player_has_armor(player_t *pl)
 	void Player_print_state(player_t *pl, const char *funcname);
 	void Player_set_state(player_t *pl, int state);
 	void Player_set_modbank(player_t *pl, int bank, const char *str);
+  void SpawnPlayer( player_t *pl );
 
 #endif

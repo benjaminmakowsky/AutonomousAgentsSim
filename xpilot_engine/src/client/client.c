@@ -394,7 +394,7 @@ static homebase_t *Homebase_by_pos(int x, int y)
 	}
 	if (lo == hi && pos == bases[lo].pos)
 		return &bases[lo];
-	warn("No homebase at (%d,%d)", x, y);
+	//warn("No homebase at (%d,%d)", x, y);
 	return NULL;
 }
 

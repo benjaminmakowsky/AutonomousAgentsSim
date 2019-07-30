@@ -82,6 +82,7 @@ typedef struct fuelStruct_t {
 	extern void connector(int flag); // Connects the ship to the ball in Capture the Flag Mode -JRA
 	extern void dropBall(); // Drops the ball in Capture the Flag Mode -JRA
 	extern void refuel(int flag); // Refuels the ship -JRA
+	extern void nurseBee(int flag); // Spend hive's honey to spawn more bees (if in range)
 // other options -JNE
   extern double selfFuel(); // Returns the ship current fuelSum
   extern double selfBaseFuel(); // Returns the ship base's current fuelReserve

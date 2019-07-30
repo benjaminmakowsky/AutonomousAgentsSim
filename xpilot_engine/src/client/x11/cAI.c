@@ -766,6 +766,14 @@ void refuel(int flag) {
 	else
 		Keyboard_button_released(XK_Control_L);
 }
+
+void nurseBee(int flag) {
+  if(flag)
+    Keyboard_button_pressed(XK_9);
+  else
+    Keyboard_button_pressed(XK_9);
+}
+
 //End map features -JNE
 //Other options -JNE
 

@@ -1940,3 +1940,17 @@ void Player_set_state(player_t *pl, int state)
 			break;
 	}
 }
+
+// Spawns a new bot that is derived from the given player_t
+// parameter.
+void SpawnPlayer(player_t *pl)
+{
+  // Buffer to hold the ship spawn command
+  char cmd[SHIP_SPAWN_STR_LENGTH];
+  // template arguments:
+  // placeholder, Index, max index, team number, team, name, shipshape
+  sprintf(cmd, SHIP_SPAWN_CMD , 0, NumPlayers, NumPlayers, pl->team - 1, pl->team,
+      NumPlayers, pl->ship->name );
+  // Execute the cmd to spawn the player
+  system(cmd);
+}
