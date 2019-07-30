@@ -3,12 +3,12 @@
  *
  * Copyright (C) 1991-2004 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
  *      Erik Andersson       <maximan@users.sourceforge.net>
- *      Kristian Söderblom   <kps@users.sourceforge.net>
+ *      Kristian Sï¿½derblom   <kps@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -847,6 +847,23 @@ void Paint_recording(void)
 	XDrawString(dpy, drawPixmap, gameGC, x, y, buf, len);
 }
 
+/*
+void Paint_Parameter(int val)
+{
+    int w, x, y, len;
+    char buf[32];
+
+    if (!hudColor)
+        return;
+
+    SET_FG(colors[hudColor].pixel);
+    sprintf(buf, "cRadius: %d", val);
+    len = strlen(buf);
+    w = XTextWidth(gameFont, buf, len);
+    x = WINSCALE(ext_view_width) - 10 - w;
+    y = 150 + gameFont->ascent; //was 200
+    rd.drawString(dpy, drawPixmap, gameGC, x, y, buf, len);
+}*/
 
 void Paint_HUD_values(void)
 {

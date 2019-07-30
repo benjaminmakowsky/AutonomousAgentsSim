@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1991-2001 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
@@ -57,6 +57,7 @@ ipos_t	selfVel;
 int selfRange = 0;
 short	heading;
 short	nextCheckPoint;
+int hive_location[2];
 
 u_byte	numItems[NUM_ITEMS];	/* Count of currently owned items */
 u_byte	lastNumItems[NUM_ITEMS];/* Last item count shown */

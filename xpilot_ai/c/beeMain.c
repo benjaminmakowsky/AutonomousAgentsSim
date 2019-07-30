@@ -1,8 +1,10 @@
 //Matthew Coffman - July 2018
 //Benjamin Makowsky //Line 453 current progress
-#include "boids.h"
+#include "beeMain.h"
+#include "beeAI.h"
+#include "beeObject.h"
 #include "cAI.h"
-//#include "bee.h"
+#include "bee.h"
 #include <ctype.h>
 #include <sys/time.h>
 #include <stdarg.h>
@@ -17,12 +19,8 @@
 #include <unistd.h>
 #include <time.h>
 #include <string.h>
-#include "graph.c"
-#include "dijkstra.c"
-#include "astar.c"
-#include "bfs.c"
-#include "dfs.c"
 #include <sys/time.h>
+#include <limits.h>
 
 //global constants
 #define MAX_DEG 360
@@ -63,7 +61,7 @@ int degToAim = -1;
 int turnLock = 0;
 int wallVector = -1;
 char bugstring[50] = "Init";
-
+char LogFile[15] = "";
 struct fuelStruct_t;
 
 /*****************************************************************************
@@ -85,27 +83,39 @@ void initialize()
   //Check if we want to follow the leader, or if this is just normal boids.
   if(leaderMode)
   {
-    //Determine, by some criterion, whether I'm a leader.
-    //if(idx % tot_idx == 1)
     if(idx < 3)
     {
       isLeader = true;
     }
-  //FIXME: figure out why dynamic allocation doesn't work
-  /*
-    //Allocate space for an array of all the leader id's for later use.
-    leaders = (int *)malloc(sizeof(int) * tot_idx);
-    if(!leaders)
-    {
-      perror("couldn't allocate leaders memory");
-      exit(EXIT_FAILURE);
-    }
-  */
   }
+
+
+  /*************************************************
+   * load up log file with base and fuel coordinates
+   *************************************************/
+  getBases("fuelpoints.csv");
+  getFuelDepots("fuelpoints.csv");
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "w");
+  fprintf(fp, "ShipID# %d\tState: %d\n",selfID(), state);
+  int i;
+  fprintf(fp,"------------------------------\nHIVES:\n");
+  for(i = 0; i < hives->num_bases;i++){
+    fprintf(fp,"Team# %d\tX: %d\tY: %d\n",hives[i].team,hives[i].x,hives[i].y);
+  }
+  fprintf(fp,"------------------------------\nFUEL POINTS:\n");
+  for(i = 0; i < honey_spots->num_fuels;i++){
+    fprintf(fp,"X: %d\tY: %d\n",honey_spots[i].x, honey_spots[i].y);
+  }
+  fprintf(fp,"------------------------------\n");
+  fclose(fp);
+
 
   //Declare initialized and set state to typical flying.
   init = true;
-  state = STATE_FLYING;
+  state = STATE_SEARCHING;
+  setSelfState(3);
   thrust(1);
 }
 
@@ -157,7 +167,7 @@ void eWeightAdjustByDistance()
  * ***************************************************************************/
 
 //Provides a mechanism for drones to spot walls ahead and steer away from them.
-void wallAvoidance()
+void getWallAvoidanceVector()
 {
   static int turnLock;
   static int lockNum = 5;
@@ -309,7 +319,7 @@ void flocking()
   pVector = degToAim;
 
   //Compute all the aforementioned vectors.
-  wallAvoidance();
+  getWallAvoidanceVector();
   alignment();
   cohesion();
   separation();
@@ -595,33 +605,29 @@ void handleMsgBuffer()
  * AI Loop
  * ***************************************************************************/
 
-bool readFile = false;
-BaseStruct_t* bases;
-FuelStruct_t* fuels; 
-
 //This AI loop runs every frame, keeps track of what state we're in, and acts
-//accordingly.
+//accordingly. INPROGRESS
 AI_loop()
 {
+
+
+
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
-  if( !readFile ){
-    bases = getBases("fuelpoints.csv");
-    fuels = getFuelDepots("fuelpoints.csv");
-    readFile = true;
-  }
 
-  printf("Printing points\n");
-  int i = 0;
-  for( i = 0; i < 4; ++i ){
-    printf("Base %d: %d,%d\n", i, bases[i].x, bases[i].y );
-  }
 
-  for( i = 0; i < 2; ++i ){
-    printf("Fuel %d: %d,%d\n", i, fuels[i].x, fuels[i].y );
+  /**
+   * Power stays the same
+   * pause ai is not called
+   * speed decreases to zero
+   * thrust(1) restarts ship movement
+   */
+  //If speed is zero but power is not zero ship should keep moving
+  if(selfSpeed() == 0 && getPower() != 0){
+    thrust(1);
   }
-
+  sprintf(bugstring,"%d", selfSpeed());
   //If about 300 frames have gone by and we're a leader, broadcast a message that
   //indicates this, so others on my team can follow me in leader mode.
   if(frameCount == 350 && isLeader)
@@ -637,6 +643,7 @@ AI_loop()
   if(!selfAlive())
   {
     state = STATE_DEAD;
+    //log("Dead");
   }
 
   //If we haven't initialized yet, do that.
@@ -644,6 +651,15 @@ AI_loop()
   {
     state = STATE_INIT;
   }
+
+  /*if(frameCount % (14 * 10) == 0){
+    FILE *fp;
+    fp = fopen(LogFile, "a");
+    fprintf(fp,"------------------------------\n");
+    fprintf(fp, "State: %d\nPower: %d\tSelf: %d\n\n",state, (int)getPower(),selfState());
+    fclose(fp);
+  }*/
+
 
   switch(state)
   {
@@ -656,19 +672,20 @@ AI_loop()
       break;
 
     case(STATE_DEAD):
-      state = STATE_FLYING;
+      state = STATE_SEARCHING;
       break;
 
     case(STATE_SEARCHING):
-      //searching();
+      //thrust(1);
+      searching();
       break;
 
     case(STATE_FORAGING):
-      //forage();
+      forage();
       break;
 
     default:
-      state = STATE_FLYING;
+      state = STATE_SEARCHING;
   }
 }
 

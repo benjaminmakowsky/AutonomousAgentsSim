@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1991-2001 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
@@ -302,6 +302,10 @@ typedef struct {
 
 typedef struct {
 	short		x, y, id, dir, armor, baseX, baseY, numShips;
+	int fuel_coords[2];  //Ben
+	int fuelX;
+	int fuelY;
+	int self_state;      //Ben
 	u_byte		shield, cloak, eshield;
 	u_byte		phased, deflector;
 	double fuel, fov, baseFuel;

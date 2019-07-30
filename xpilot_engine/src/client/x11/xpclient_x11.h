@@ -1,7 +1,7 @@
 /* 
  * XPilot NG, a multiplayer space war game.
  *
- * Copyright (C) 2003 Kristian Söderblom <kps@users.sourceforge.net>
+ * Copyright (C) 2003 Kristian Sï¿½derblom <kps@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #ifndef XPCLIENT_X11_H
 #define XPCLIENT_X11_H
 
-#include "xpclient.h"
+#include "../xpclient.h"
 
 #ifdef HAVE_X11_X_H
 #  include <X11/X.h>

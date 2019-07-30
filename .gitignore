@@ -7,8 +7,8 @@
 *.swp
 *.Po
 *.swo
-*Makefile
-*xpilot-ng-x11
-*xpilot-ng-server
-*config.status
-*config.log
+#Makefile
+#xpilot-ng-x11
+#xpilot-ng-server
+#config.status
+#config.log
