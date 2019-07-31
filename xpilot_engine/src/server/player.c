@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1991-2001 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
@@ -1949,8 +1949,9 @@ void SpawnPlayer(player_t *pl)
   char cmd[SHIP_SPAWN_STR_LENGTH];
   // template arguments:
   // placeholder, Index, max index, team number, team, name, shipshape
-  sprintf(cmd, SHIP_SPAWN_CMD , 0, NumPlayers, NumPlayers, pl->team - 1, pl->team,
+  sprintf(cmd, SHIP_SPAWN_CMD , 0, NumPlayers, NumPlayers, pl->team,
       NumPlayers, pl->ship->name );
   // Execute the cmd to spawn the player
+  printf("Command is: %s\n",cmd);
   system(cmd);
 }
