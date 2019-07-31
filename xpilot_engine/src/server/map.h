@@ -83,6 +83,7 @@ extern world_t		World, *world;
 typedef struct fuel {
 	clpos_t	pos;
 	double	fuel;
+  double  nursedFuel;
 	uint32_t	conn_mask;
 	long	last_change;
 	int		team;

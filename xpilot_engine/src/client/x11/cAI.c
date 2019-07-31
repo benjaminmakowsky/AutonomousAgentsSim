@@ -869,6 +869,14 @@ void refuel(int flag) {
   else
     Keyboard_button_released(XK_Control_L);
 }
+
+void nurseBee(int flag) {
+  if(flag)
+    Keyboard_button_pressed(XK_9);
+  else
+    Keyboard_button_pressed(XK_9);
+}
+
 //End map features -JNE
 //Other options -JNE
 
@@ -3066,8 +3074,8 @@ int selfState(){
     }
   }
 }
-
-void sendDancingState(int state){
+//TODO: Dep Check
+/*void sendDancingState(int state){
   int i;
   for (i = 0; i < num_ship; i++) {
     if ((self != NULL) && (ship_ptr[i].id == self->id)) {
@@ -3075,7 +3083,7 @@ void sendDancingState(int state){
       ship_ptr[i].isDancing = state;
     }
   }
-}
+}*/
 
 int getSelfIsDancing(){
   int i;
@@ -3091,6 +3099,14 @@ int getDanceFrom(int ship){
 }
 
 int seeIfDancing(int fov, int rov){
+
+  static int ship_observed = -1;       //The ship being observed if one is dancing
+  static int prevHeading = 0;          //previous heading of ship being observed
+  int observed_dir = 0;                //current direction of the observed ship
+  static int half_turns = 0;           //Number of half turns made to determine dance
+  static bool observing_dance = false; //boolean used to flag if ship is dancing
+
+
   char LogFile[15] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
@@ -3100,7 +3116,11 @@ int seeIfDancing(int fov, int rov){
   //Loop to self ships
   int i;
   for (i = 0; i < num_ship; i++) {
-    if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && (ship_ptr[i].id != self->id)) {
+    short self_id = self->id;
+    short curr_id = ship_ptr[i].id;
+    fprintf(fp, "i: %d cAI ifDancing(): %d\n", i,currentShip.isDancing);
+
+    if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && (curr_id != self_id)) {
       //return 10;
       ship_t currentShip = ship_ptr[i];
       fprintf(fp, "i: %d cAI ifDancing(): %d\n", i,currentShip.isDancing);
