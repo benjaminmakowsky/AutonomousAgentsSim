@@ -3075,7 +3075,7 @@ int selfState(){
   }
 }
 //TODO: Dep Check
-/*void sendDancingState(int state){
+void sendDancingState(int state){
   int i;
   for (i = 0; i < num_ship; i++) {
     if ((self != NULL) && (ship_ptr[i].id == self->id)) {
@@ -3083,7 +3083,7 @@ int selfState(){
       ship_ptr[i].isDancing = state;
     }
   }
-}*/
+}
 
 int getSelfIsDancing(){
   int i;
@@ -3118,12 +3118,12 @@ int seeIfDancing(int fov, int rov){
   for (i = 0; i < num_ship; i++) {
     short self_id = self->id;
     short curr_id = ship_ptr[i].id;
-    fprintf(fp, "i: %d cAI ifDancing(): %d\n", i,currentShip.isDancing);
+    //fprintf(fp, "i: %d cAI ifDancing(): %d\n", i,currentShip.isDancing);
 
     if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && (curr_id != self_id)) {
       //return 10;
       ship_t currentShip = ship_ptr[i];
-      fprintf(fp, "i: %d cAI ifDancing(): %d\n", i,currentShip.isDancing);
+      //fprintf(fp, "i: %d cAI ifDancing(): %d\n", i,currentShip.isDancing);
 
       if(ship_ptr[i].isDancing == 1) {
         fclose(fp);
