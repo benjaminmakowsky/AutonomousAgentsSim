@@ -972,6 +972,8 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
 	ship_color = WHITE;
 
 	/* mara attempts similar behaviour to the kth ss hack */
+  // Since we are using bitmap sprites, don't need to draw this
+  /*
 	if ((!instruments.showShipShapes)
 			&& (self != NULL)
 			&& (self->id != id))
@@ -982,6 +984,7 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
 		cnt = set_shipshape(x, y, dir, Default_ship(), points);
 	else
 		cnt = set_shipshape(x, y, dir, ship, points);
+  */
 
 	/*
 	 * Determine if the name of the player should be drawn below

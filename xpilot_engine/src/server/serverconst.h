@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1991-2001 by
  *
- *      Bjørn Stabell        <bjoern@xpilot.org>
+ *      Bjï¿½rn Stabell        <bjoern@xpilot.org>
  *      Ken Ronny Schouten   <ken@xpilot.org>
  *      Bert Gijsbers        <bert@xpilot.org>
  *      Dick Balaska         <dick@xpilot.org>
@@ -251,5 +251,14 @@
 
 /* Maximum frames per second the server code supports. */
 #define MAX_SERVER_FPS		255
+
+#define NURSE_THRESHOLD 1000.0
+
+#define NURSE_TICK 5.0
+
+#define SHIP_SPAWN_STR_LENGTH 300
+
+#define SHIP_SPAWN_CMD "gnome-terminal -- sh -c 'cd ../../../xpilot_ai/c/ && export LD_LIBRARY_PATH=. && ./bee %d %d %d -team %d -join -name newBorn%d -shipShape %s '"
+#define SHIP_SPAWN_CMD_LEN strlen(SHIP_SPAWN_CMD)
 
 #endif

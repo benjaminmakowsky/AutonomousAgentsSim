@@ -131,6 +131,69 @@ void Phasing(player_t *pl, bool on)
 }
 
 /*
+ * Spend resources from in-range base to spawn new team player
+ */
+void Do_nurse(player_t *pl){
+  // Check that player is alive
+  if( !Player_is_alive(pl) ){
+    return;
+  }
+
+  // Check that player is in range to his team's base
+  // Loop through the fuel station list, keep track of 
+  // closest team base 
+  int i;
+  int baseX = -1;
+  int baseY = -1;
+  int distance = INT_MAX;
+  fuel_t* closestBase = NULL;
+	for (i = 0; i < Num_fuels(); i++) {
+		fuel_t *fs = Fuel_by_index(i);
+
+		// Check if this is our team base
+		if( fs->isBase && fs->team == pl->team ){
+      // Do distance formula to determine range
+      int range = DistanceFormula(fs->pos.cx, fs->pos.cy, pl->pos.cx, pl->pos.cy);
+      if( range < distance ){
+        distance = range;
+        baseX = fs->pos.cx;
+        baseY = fs->pos.cy;
+        closestBase = fs;
+      }
+		}
+	}
+
+  // Check if closest base is in nurse range
+  if ((Wrap_length(pl->pos.cx - closestBase->pos.cx,
+			 pl->pos.cy - closestBase->pos.cy) > 90.0 * CLICK)){
+    return;
+  }
+
+  // Check if base has fuel left
+	if( closestBase->fuel == 0 ){
+    return;
+  }
+  
+  // NURSE_TICK is how much fuel a nurse bee spends per tick
+  // Add NURSE_TICK amount of fuel towards nursed bees
+	if((closestBase->fuel - NURSE_TICK ) <= 0 ){
+    closestBase->nursedFuel += closestBase->fuel;
+    closestBase->fuel = 0;
+	}
+  else{
+    closestBase->nursedFuel += NURSE_TICK;
+    closestBase->fuel -= NURSE_TICK;
+  }
+
+  // Check if nursedFuel is above threshold
+  // If so, spawn a new ship
+  if( closestBase->nursedFuel >= NURSE_THRESHOLD ){
+    closestBase->nursedFuel -= NURSE_THRESHOLD;
+    SpawnPlayer(pl);
+  }
+}
+
+/*
  * Turn cloak on or off.
  */
 void Cloak(player_t *pl, bool on)
@@ -982,16 +1045,23 @@ static void Update_players(void)
 		 */
 		Update_visibility(pl, i);
 
-		if (!Player_is_active(pl))
+		if (!Player_is_active(pl)){
 			continue;
+    }
 
 		Use_items(pl);
 
-		if (Player_is_refueling(pl))
+		if (Player_is_refueling(pl)){
 			Do_refuel(pl);
+    }
 
-		if (Player_is_repairing(pl))
+    if( Player_is_nursing(pl)){
+      Do_nurse(pl);
+    }
+
+		if (Player_is_repairing(pl)){
 			Do_repair(pl);
+    }
 
 		if (pl->fuel.sum <= 0) {
 			CLR_BIT(pl->used, USES_SHIELD);

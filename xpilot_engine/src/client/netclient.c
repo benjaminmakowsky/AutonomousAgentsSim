@@ -2349,10 +2349,10 @@ int Receive_reply(int *replyto, int *result)
 int Send_keyboard(u_byte *keyboard_vector)
 {
 	int		size = KEYBOARD_SIZE;
-
-	if (wbuf.size - wbuf.len < size + 1 + 4)
+	if (wbuf.size - wbuf.len < size + 1 + 4){
 		/* Not enough write buffer space for keyboard state */
 		return 0;
+  }
 	Packet_printf(&wbuf, "%c%ld", PKT_KEYBOARD, last_keyboard_change);
 	memcpy(&wbuf.buf[wbuf.len], keyboard_vector, (size_t)size);
 	wbuf.len += size;
@@ -2369,13 +2369,11 @@ int Send_keyboard(u_byte *keyboard_vector)
 
 int Send_shape(char *str)
 {
-	warn("Sending shape str: %s\n", str );
 	shipshape_t		*w;
 	char		buf[MSG_LEN], ext[MSG_LEN];
 
 	w = Convert_shape_str(str);
 	Convert_ship_2_string(w, buf, ext, 0x3200);
-	warn("Final str: %s\n", buf );
 	Free_ship_shape(w);
 	if (Packet_printf(&wbuf, "%c%S", PKT_SHAPE, buf) <= 0)
 		return -1;

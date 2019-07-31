@@ -1467,6 +1467,11 @@ xp_option_t key_options[] = {
 			"",
 			KEY_MSG_20,
 			"Sends the talkmessage stored in msg20.\n"),
+  XP_KEY_OPTION(
+      "keyNurseBee",
+      "9",
+      KEY_NURSE_BEE,
+      "Spends hive honey to spawn new bees.\n"),
 
 	/*
 	 * These are after the keys so that the key options will be
