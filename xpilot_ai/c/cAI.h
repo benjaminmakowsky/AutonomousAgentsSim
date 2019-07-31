@@ -5,6 +5,7 @@
 #define XPILOT_LE_CAI_H
 
 //Machine State
+
 enum State
 {
     STATE_INIT,     //0

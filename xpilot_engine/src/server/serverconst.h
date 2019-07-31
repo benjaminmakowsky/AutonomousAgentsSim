@@ -258,7 +258,7 @@
 
 #define SHIP_SPAWN_STR_LENGTH 300
 
-#define SHIP_SPAWN_CMD "gnome-terminal -- sh -c 'cd ../../../xpilot_ai/c/ && export LD_LIBRARY_PATH=. && ./boids %d %d %d %d -team %d -join -name newBorn%d -shipShape %s -headlessMode true '"
+#define SHIP_SPAWN_CMD "gnome-terminal -- sh -c 'cd ../../../xpilot_ai/c/ && export LD_LIBRARY_PATH=. && ./bee %d %d %d %d -team %d -join -name newBorn%d -shipShape %s '"
 #define SHIP_SPAWN_CMD_LEN strlen(SHIP_SPAWN_CMD)
 
 #endif
