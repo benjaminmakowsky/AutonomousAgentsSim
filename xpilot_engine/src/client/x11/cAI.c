@@ -3076,19 +3076,19 @@ void sendDancingState(int state){
     }
   }
 }
+//TODO: Dep check
+//int getSelfIsDancing(){
+//  int i;
+//  for (i = 0; i < num_ship; i++) {
+//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+//      return ship_ptr[i].isDancing;
+//    }
+//  }
+//}
 
-int getSelfIsDancing(){
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].isDancing;
-    }
-  }
-}
-
-int getDanceFrom(int ship){
-  return ship_ptr[ship].dancingType;
-}
+//int getDanceFrom(int ship){
+//  return ship_ptr[ship].dancingType;
+//}
 
 int seeIfDancing(int fov, int rov){
   char LogFile[15] = "";
