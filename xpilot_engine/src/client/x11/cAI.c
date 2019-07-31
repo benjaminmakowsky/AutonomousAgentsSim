@@ -3071,6 +3071,7 @@ void sendDancingState(int state){
   int i;
   for (i = 0; i < num_ship; i++) {
     if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      ship_t ship = ship_ptr[i];
       ship_ptr[i].isDancing = state;
     }
   }
@@ -3095,12 +3096,14 @@ int seeIfDancing(int fov, int rov){
   FILE *fp;
   fp = fopen(LogFile, "a");
 
+
   //Loop to self ships
   int i;
   for (i = 0; i < num_ship; i++) {
-    if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov)) {
+    if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && (ship_ptr[i].id != self->id)) {
       //return 10;
-      fprintf(fp, "cAI ifDancing(): %d\n", ship_ptr[i].isDancing);
+      ship_t currentShip = ship_ptr[i];
+      fprintf(fp, "i: %d cAI ifDancing(): %d\n", i,currentShip.isDancing);
 
       if(ship_ptr[i].isDancing == 1) {
         fclose(fp);

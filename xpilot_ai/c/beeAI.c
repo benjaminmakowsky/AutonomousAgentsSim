@@ -365,10 +365,7 @@ bool beeDegIsBetween(int deg1, int deg2){
 }
 
 void updateShip(){
-  /*FILE *fp;
-  fp = fopen(LogFile, "a");
-  fprintf(fp, "Updating ship values:\nState: %d Dancing: %d", getCurrState(),getIsDancing());
-  fclose(fp);*/
+
   setSelfState(getCurrState());
   sendDancingState(getIsDancing());
 }

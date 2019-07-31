@@ -622,8 +622,7 @@ AI_loop()
   //Increment the frame counter.
   frameCount = (frameCount + 1) % INT_MAX;
 
-  //Update ship_t every frame
-  updateShip();
+
   cRadius = state;
 
   //If speed is zero but power is not zero ship should keep moving
@@ -681,10 +680,19 @@ AI_loop()
     case(STATE_SEARCHING):
       //thrust(1);
       searching();
+      //Update ship_t every frame
+      updateShip();
       break;
 
     case(STATE_FORAGING):
       forage();
+      //Update ship_t every frame
+      FILE *fp;
+      fp = fopen(LogFile, "a");
+      fprintf(fp,"------------------------------\n");
+      fprintf(fp, "State: %d\nisDancing: %d\tSelf: %d\n\n",selfState(), getIsDancing(), getSelfIsDancing());
+      fclose(fp);
+      updateShip();
       break;
 
     case (STATE_ONLOOKING):
@@ -693,6 +701,7 @@ AI_loop()
     default:
       state = STATE_SEARCHING;
   }
+
 }
 
 

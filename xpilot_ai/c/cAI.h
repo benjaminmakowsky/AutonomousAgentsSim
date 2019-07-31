@@ -269,4 +269,5 @@ extern void sendDancingState(int state);
 extern int getDanceFrom(int ship);
 extern int seeIfDancing(int fov,int rov);
 extern int getSelfIsDancing();
+void logwrite();
 #endif //XPILOT_LE_CAI_H

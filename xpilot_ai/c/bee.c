@@ -148,6 +148,7 @@ void forage() {
     //ONce at location perform dance of what you were doing
     if(performed_dance == false){
       performed_dance = dance(STATE_SEARCHING);
+      setIsDancing(1);
       sendDancingState(1);
     }else {
       fuelLVL = (int) selfFuel();
