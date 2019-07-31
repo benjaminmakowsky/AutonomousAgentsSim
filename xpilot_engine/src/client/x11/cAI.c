@@ -3091,20 +3091,28 @@ void sendDancingState(int state){
 //}
 
 int seeIfDancing(int fov, int rov){
+  static int ship_observed = -1;       //The ship being observed if one is dancing
+  static int prevHeading = 0;          //previous heading of ship being observed
+  int observed_dir = 0;                //current direction of the observed ship
+  static int half_turns = 0;           //Number of half turns made to determine dance
+  static bool observing_dance = false; //boolean used to flag if ship is dancing
+
+
   char LogFile[15] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
   fp = fopen(LogFile, "a");
 
-
   //Loop to self ships
   int i;
   for (i = 0; i < num_ship; i++) {
-    if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && (ship_ptr[i].id != self->id)) {
-      //return 10;
-      ship_t currentShip = ship_ptr[i];
-      fprintf(fp, "i: %d cAI ifDancing(): %d\n", i,currentShip.isDancing);
+    short self_id = self->id;
+    short curr_id = ship_ptr[i].id;
 
+    //If ship is insight and not self check if moving
+    if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && ( curr_id != self_id)) {
+    //return 10;
+      if (ship_ptr[i].)
       if(ship_ptr[i].isDancing == 1) {
         fclose(fp);
         return i;
