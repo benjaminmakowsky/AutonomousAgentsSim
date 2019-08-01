@@ -128,6 +128,8 @@ void initialize()
   thrust(1);
 }
 
+// Is there a reason to keep these boids-centered functions? 
+// I believe David & I decided not to use Boids for the bee scenario
 
 /*****************************************************************************
  * Scaling Cohesion and (Enemy/Friendly) Separation
@@ -632,6 +634,7 @@ AI_loop()
   sprintf(bugstring,"%d", selfSpeed());
   //If about 300 frames have gone by and we're a leader, broadcast a message that
   //indicates this, so others on my team can follow me in leader mode.
+  // should get rid of this, we won't be using leaders in the bee sim
   if(frameCount == 350 && isLeader)
   {
     broadcastMessage(teamNum, "leader", selfID());
@@ -712,6 +715,7 @@ AI_loop()
 int main(int argc, char *argv[])
 {
   //Get info on my idx, tot_idx, and my team number.
+  // Get rid of these 3 variables, the bee sim won't need them
   idx = strtol(argv[2], NULL, 10);
   tot_idx = strtol(argv[3], NULL, 10);
   teamNum = strtol(argv[4], NULL, 10);

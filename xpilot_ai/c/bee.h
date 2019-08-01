@@ -23,6 +23,8 @@ void forage();
 void onlook();
 
 
+// Add comment explaining what this function does
+int* getPOICoordinates(int x ,int y);
 
 #endif //XPILOT_LE_BEE_H
 

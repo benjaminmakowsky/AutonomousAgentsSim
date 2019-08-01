@@ -892,7 +892,6 @@ double selfBaseFuel() {
   for (i = 0; i < num_ship; i++) if ((self != NULL) && (ship_ptr[i].id == self->id)) return ship_ptr[i].baseFuel;
 }
 
-
 void keyHome() {
   Keyboard_button_pressed(XK_Home);
   Keyboard_button_released(XK_Home);

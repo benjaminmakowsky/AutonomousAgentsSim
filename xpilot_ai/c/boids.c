@@ -597,7 +597,7 @@ void handleMsgBuffer()
 
 bool readFile = false;
 BaseStruct_t* bases;
-FuelStruct_t* fuels; 
+FuelStruct_t* fuels;
 
 //This AI loop runs every frame, keeps track of what state we're in, and acts
 //accordingly.

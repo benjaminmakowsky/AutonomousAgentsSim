@@ -15,6 +15,7 @@
 
 
 //global variables
+// What are these used for? Remove them if they aren't used. 
 char temp_str[25];
 bool fueling = false;
 
@@ -71,6 +72,7 @@ void searching() {
         memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(getPOICoordinates(x, y)));
         setHoneyX(POICoordinates[0]);
         setHoneyY(POICoordinates[1]);
+        // remove this commented line if it won't be used
         //rememberPOICoords(POICoordinates[0],POICoordinates[1]);
         fileRead = !fileRead;
       }
@@ -111,6 +113,7 @@ void forage() {
     fprintf(fp,"Honey Spot: (%d,%d)\n", getHoneyX(), getHoneyY());
     fprintf(fp,"------------------------------\n");
     fclose(fp);
+    // just set it to false, it's faster.
     initForage = !initForage;
   }
 
@@ -124,6 +127,7 @@ void forage() {
   //Step 1:
   //Determine whether or not you are heading to hive to deposit honey or
   //if you are headed to flower to pickup honey
+  // Use a more descriptive variable name than x,y, i.e objectiveX, objectiveY
   if(depositing){
     x = selfBaseX();
     y = selfBaseY();
@@ -152,6 +156,7 @@ void forage() {
       sendDancingState(1);
     }else {
       fuelLVL = (int) selfFuel();
+      // empty & full should be in #define 
       int empty = 500;
       int full = 700;
       if (fuelLVL > empty && depositing) {

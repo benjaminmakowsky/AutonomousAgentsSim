@@ -34,6 +34,11 @@ extern FuelStruct_t* honey_spots;
  * Function Declarations
  ***********************/
 
+// The GNU standard states that comments describing the function should 
+// be immediately before the function header 
+// ( see https://www.gnu.org/prep/standards/html_node/Comments.html )
+// Move the comment descriptions to immediately above the function.
+
 extern BaseStruct_t* getBases();
 /// Creates array of hive coordinates
 
