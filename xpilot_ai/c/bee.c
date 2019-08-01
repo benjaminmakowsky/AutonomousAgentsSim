@@ -144,8 +144,8 @@ void forage() {
   //Step 3; Gather or deposit fuel
   }else {
     setPower(0);
-    sprintf(bugstring, "Dancing: %d", getSelfIsDancing());
-    //ONce at location perform dance of what you were doing
+    //sprintf(bugstring, "Dancing: %d", getSelfIsDancing());
+    //Once at location perform dance of what you were doing
     if(performed_dance == false){
       performed_dance = dance(STATE_SEARCHING);
       setIsDancing(1);
@@ -188,8 +188,8 @@ void onlook(){
       fp = fopen(LogFile, "a");
       fprintf(fp, "dancing_ship = %d\n",dancing_ship);
       fclose(fp);
-      int dance = getDanceFrom(dancing_ship);
-      interpretDance(dance);
+      //int dance = getDanceFrom(dancing_ship);
+      //interpretDance(dance);
     }
     //}
   }

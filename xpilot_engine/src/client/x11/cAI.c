@@ -3097,6 +3097,22 @@ int seeIfDancing(int fov, int rov){
   static int half_turns = 0;           //Number of half turns made to determine dance
   static bool observing_dance = false; //boolean used to flag if ship is dancing
 
+  int max_num_ships = 20;
+  int num_fields = 5;
+  static int local_ships[20][5];
+  static bool first_init = true;        //flag to determine if array has been intialized
+
+  //zero out array
+  if(first_init){
+    int i =0;
+    int j =0;
+    for(;i<max_num_ships;i++){
+      for(;j<num_fields;j++){
+        local_ships[i][j] = 0;
+      }
+    }
+    first_init = false;
+  }
 
   char LogFile[15] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
@@ -3111,8 +3127,26 @@ int seeIfDancing(int fov, int rov){
 
     //If ship is insight and not self check if moving
     if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && ( curr_id != self_id)) {
-    //return 10;
-      if (ship_ptr[i].)
+
+      //array index labels
+      int currX = 0;
+      int currY = 1;
+      int prevX = 2;
+      int prevY = 3;
+      int movementCount = 4;
+
+      //Save each local ships x an y coordinates
+      local_ships[i][currX] = (int)ship_ptr[i].x;
+      local_ships[i][currY] = (int)ship_ptr[i].y;
+
+      //Check if the new coordinates are the same. If they are count the number of frames they havent moved
+      if(local_ships[i][prevX] == (int)ship_ptr[i].x && local_ships[i][currY] == (int)ship_ptr[i].y){
+        local_ships[i][movementCount] += 1;
+      } else{
+        local_ships[i][movementCount] += 0;
+      }
+      local_ships[i][prevX] = (int)ship_ptr[i].x;
+      local_ships[i][prevY] = (int)ship_ptr[i].x;
       if(ship_ptr[i].isDancing == 1) {
         fclose(fp);
         return i;
