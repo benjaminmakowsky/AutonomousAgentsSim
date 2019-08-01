@@ -46,7 +46,7 @@ bool inVicinityOf(int x, int y);
 
 
 
-
+// Add comment explaining what this function does
 int* getPOICoordinates(int x ,int y);
 
 #endif //XPILOT_LE_BEE_H
