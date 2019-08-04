@@ -26,5 +26,5 @@ teamnum=1
 #sleep 1
 #konsole -e "./boids 0 10 11 $teamnum -team $teamnum -join -name myname -shipShape fixed" &
 #gdb --args boids 0 10 11 $teamnum -team $teamnum -join -name myname -shipShape fixed 
-./bee 0 10 11 $teamnum -team $teamnum -join -name myname -shipShape quad &
+./bee 0 10 11 $teamnum -team $teamnum -join -name myname -shipShape fixed &
 #sleep 1

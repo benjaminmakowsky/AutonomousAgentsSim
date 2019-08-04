@@ -2174,7 +2174,6 @@ int __wrap_Handle_end(long server_loops) {
 int start(int argc, char *argv[]) {
   int j, k;
   ship_t theShip;
-  theShip.self_state = -1;
   theShip.x = -1;
   theShip.y = -1;
   theShip.dir = -1;
@@ -3047,35 +3046,35 @@ int selfFuelY() {
     }
   }
 }
-
-void setSelfState(int state){
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      ship_ptr[i].self_state = state;
-
-    }
-  }
-}
-
-int selfState(){
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].self_state;
-    }
-  }
-}
-
-void sendDancingState(int state){
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      ship_t ship = ship_ptr[i];
-      ship_ptr[i].isDancing = state;
-    }
-  }
-}
+//TODO:Dep Check
+//void setSelfState(int state){
+//  int i;
+//  for (i = 0; i < num_ship; i++) {
+//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+//      ship_ptr[i].self_state = state;
+//
+//    }
+//  }
+//}
+//
+//int selfState(){
+//  int i;
+//  for (i = 0; i < num_ship; i++) {
+//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+//      return ship_ptr[i].self_state;
+//    }
+//  }
+//}
+//
+//void sendDancingState(int state){
+//  int i;
+//  for (i = 0; i < num_ship; i++) {
+//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+//      ship_t ship = ship_ptr[i];
+//      ship_ptr[i].isDancing = state;
+//    }
+//  }
+//}
 //TODO: Dep check
 //int getSelfIsDancing(){
 //  int i;
@@ -3093,8 +3092,10 @@ void sendDancingState(int state){
 int seeIfDancing(int fov, int rov){
   static int ship_observed = -1;       //The ship being observed if one is dancing
   static int prevHeading = 0;          //previous heading of ship being observed
+  static int initialHeading = 0;       //Heading used to determine start of dance position
+  static int targetHeading = 0;        //Heading used as the marker for a dance turn
   int observed_dir = 0;                //current direction of the observed ship
-  static int half_turns = 0;           //Number of half turns made to determine dance
+  static int num_turns = 0;            //Number of turns made to determine dance
   static bool observing_dance = false; //boolean used to flag if ship is dancing
 
   int max_num_ships = 20;
@@ -3122,37 +3123,67 @@ int seeIfDancing(int fov, int rov){
   //Loop to self ships
   int i;
   for (i = 0; i < num_ship; i++) {
+
     short self_id = self->id;
     short curr_id = ship_ptr[i].id;
-
-    //If ship is insight and not self check if moving
+    //If ship is insight and not self; check if moving
     if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && ( curr_id != self_id)) {
-
       //array index labels
+      fprintf(fp,"self: %d Other: %d\n",(int)self->id,(int)curr_id);
       int currX = 0;
       int currY = 1;
       int prevX = 2;
       int prevY = 3;
-      int movementCount = 4;
+      int stoppedCount = 4;
 
       //Save each local ships x an y coordinates
       local_ships[i][currX] = (int)ship_ptr[i].x;
       local_ships[i][currY] = (int)ship_ptr[i].y;
 
       //Check if the new coordinates are the same. If they are count the number of frames they havent moved
-      if(local_ships[i][prevX] == (int)ship_ptr[i].x && local_ships[i][currY] == (int)ship_ptr[i].y){
-        local_ships[i][movementCount] += 1;
+      if(local_ships[i][stoppedCount] <= 5) {
+        if (local_ships[i][prevX] == (int) ship_ptr[i].x && local_ships[i][currY] == (int) ship_ptr[i].y) {
+          local_ships[i][stoppedCount] += 1;
+        } else {
+          local_ships[i][stoppedCount] = 0;
+        }
+        local_ships[i][prevX] = (int) ship_ptr[i].x;
+        local_ships[i][prevY] = (int) ship_ptr[i].x;
       } else{
-        local_ships[i][movementCount] += 0;
-      }
-      local_ships[i][prevX] = (int)ship_ptr[i].x;
-      local_ships[i][prevY] = (int)ship_ptr[i].x;
-      if(ship_ptr[i].isDancing == 1) {
-        fclose(fp);
-        return i;
+        if(!observing_dance){
+          initialHeading = (int)ship_ptr[i].dir;
+          targetHeading = initialHeading + 180;
+          observing_dance = true;
+        }else{
+          int current_observed_heading = (int)ship_ptr[i].dir;
+          //TODO:Define 10 parameter
+          if(headingIsBetween(current_observed_heading,targetHeading-10,targetHeading+10)){
+            turnToDeg(getHeadingForCoordinates((int)ship_ptr[i].x ,(int)ship_ptr[i].y));
+          }
+        }
       }
     }
   }
   fclose(fp);
   return -1;
+}
+
+bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
+/*******************************************************
+   * Case 1: deg1 < deg2                                 *
+   * Do not have to account for passing 360 ie (45 to 90)*
+   *******************************************************/
+  if(lowerHeading < upperHeading){
+    return (lowerHeading <= heading && heading <= upperHeading);
+  }
+    /*******************************************************
+    * Case 2: deg1 > deg2                                 *
+    * Do have to account for passing 360 ie (355 to 5)    *
+    *******************************************************/
+  else if(lowerHeading > upperHeading){
+    return(heading > lowerHeading || heading < upperHeading);
+  }
+  else{
+    return (heading == lowerHeading);
+  }
 }

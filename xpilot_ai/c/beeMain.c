@@ -681,7 +681,7 @@ AI_loop()
       //thrust(1);
       searching();
       //Update ship_t every frame
-      updateShip();
+      //updateShip();
       break;
 
     case(STATE_FORAGING):
@@ -692,7 +692,7 @@ AI_loop()
       fprintf(fp,"------------------------------\n");
       //fprintf(fp, "State: %d\nisDancing: %d\tSelf: %d\n\n",selfState(), getIsDancing(), getSelfIsDancing());
       fclose(fp);
-      updateShip();
+      //updateShip();
       break;
 
     case (STATE_ONLOOKING):

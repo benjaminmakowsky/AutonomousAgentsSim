@@ -60,7 +60,6 @@ void searching() {
     }
   }
 
-
   if (fuel_found) {
     if(comeToStop(30) == false){
       //Do nothing
@@ -141,6 +140,7 @@ void forage() {
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",x,y);
     goToCoordinates(x,y);
 
+
   //Step 3; Gather or deposit fuel
   }else {
     setPower(0);
@@ -149,7 +149,7 @@ void forage() {
     if(performed_dance == false){
       performed_dance = dance(STATE_SEARCHING);
       setIsDancing(1);
-      sendDancingState(1);
+      //sendDancingState(1);
     }else {
       fuelLVL = (int) selfFuel();
       int empty = 500;
@@ -182,15 +182,15 @@ void onlook(){
     setPower(0);
     //if(radarFriendInView(360,20)){
     int dancing_ship = seeIfDancing(360,20);
-    sprintf(bugstring, "ship dancing: %d",dancing_ship);
-    if(dancing_ship > -1){
-      FILE *fp;
-      fp = fopen(LogFile, "a");
-      fprintf(fp, "dancing_ship = %d\n",dancing_ship);
-      fclose(fp);
-      //int dance = getDanceFrom(dancing_ship);
-      //interpretDance(dance);
-    }
+//    sprintf(bugstring, "ship dancing: %d",dancing_ship);
+//    if(dancing_ship > -1){
+//      FILE *fp;
+//      fp = fopen(LogFile, "a");
+//      fprintf(fp, "dancing_ship = %d\n",dancing_ship);
+//      fclose(fp);
+//      //int dance = getDanceFrom(dancing_ship);
+//      //interpretDance(dance);
+//    }
     //}
   }
 }
