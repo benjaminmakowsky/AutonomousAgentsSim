@@ -16,6 +16,7 @@ self: 1 Other: 2
 self: 1 Other: 2
 self: 1 Other: 2
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
 self: 1 Other: 2
 self: 1 Other: 2
@@ -35,57 +36,150 @@ self: 1 Other: 2
 self: 1 Other: 2
 self: 1 Other: 2
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
 self: 1 Other: 2
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
 self: 1 Other: 2
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
 self: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Ship not moving
 self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Danceself: 1 Other: 2
+Observing Dance

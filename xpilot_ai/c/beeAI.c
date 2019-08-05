@@ -318,7 +318,7 @@ bool honeyFoundDance(){
   static int initial_heading = 0;
   static int number_of_spins = 0;
   static int target_degree = 0;
-  int desired_rotations = 2;
+  int desired_rotations = 4;
 
   if(is_initial_setup){
     number_of_spins = 0;
