@@ -8,178 +8,95 @@ FUEL POINTS:
 X: 770	Y: 945
 X: 840	Y: 315
 ------------------------------
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-self: 1 Other: 2
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-self: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Ship not moving
-self: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
-Observing Danceself: 1 Other: 2
+Ship Moving
+Current X: 192, Previous X: 0
+Ship Moving
+Current X: 193, Previous X: 0
+Ship Moving
+Current X: 195, Previous X: 192
+Ship Moving
+Current X: 198, Previous X: 193
+Ship Moving
+Current X: 201, Previous X: 198
+Ship Moving
+Current X: 204, Previous X: 201
+Ship Moving
+Current X: 208, Previous X: 204
+Ship Moving
+Current X: 211, Previous X: 208
+Ship Moving
+Current X: 208, Previous X: 195
+Ship Moving
+Current X: 205, Previous X: 211
+Ship Moving
+Current X: 202, Previous X: 208
+Ship Moving
+Current X: 200, Previous X: 205
+Ship Moving
+Current X: 198, Previous X: 200
+Ship Moving
+Current X: 196, Previous X: 198
+Ship Moving
+Current X: 194, Previous X: 196
+Ship Moving
+Current X: 193, Previous X: 202
+Ship Moving
+Current X: 191, Previous X: 194
+Ship Moving
+Current X: 190, Previous X: 191
+Ship Moving
+Current X: 189, Previous X: 193
+Ship Moving
+Current X: 188, Previous X: 189
+Ship Moving
+Current X: 187, Previous X: 190
+Ship Moving
+Current X: 186, Previous X: 187
+Ship Moving
+Current X: 185, Previous X: 188
+Ship Moving
+Current X: 185, Previous X: 186
+Ship Moving
+Current X: 184, Previous X: 185
+Ship Moving
+Current X: 183, Previous X: 185
+Ship Moving
+Current X: 183, Previous X: 184
+Ship Moving
+Current X: 182, Previous X: 183
+Ship Moving
+Current X: 182, Previous X: 183
+Ship Moving
+Current X: 181, Previous X: 182
+Ship not moving: 1
+Ship Moving
+Current X: 181, Previous X: 182
+Ship Moving
+Current X: 180, Previous X: 181
+Ship not moving: 1
+Ship not moving: 2
+Ship not moving: 3
+Ship Moving
+Current X: 179, Previous X: 181
+Ship Moving
+Current X: 179, Previous X: 180
+Ship not moving: 1
+Ship not moving: 2
+Ship not moving: 1
+Ship not moving: 3
+Ship Moving
+Current X: 178, Previous X: 179
+Ship Moving
+Current X: 178, Previous X: 179
+Ship not moving: 1
+Ship not moving: 2
+Ship not moving: 1
+Ship not moving: 3
+Ship not moving: 2
+Ship not moving: 4
+Ship not moving: 3
+Ship not moving: 4
+Ship not moving: 5
+Ship not moving: 6
+returning: 0
 Observing Dance

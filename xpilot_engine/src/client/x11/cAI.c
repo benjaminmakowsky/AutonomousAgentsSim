@@ -3046,35 +3046,6 @@ int selfFuelY() {
     }
   }
 }
-//TODO:Dep Check
-//void setSelfState(int state){
-//  int i;
-//  for (i = 0; i < num_ship; i++) {
-//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-//      ship_ptr[i].self_state = state;
-//
-//    }
-//  }
-//}
-//
-//int selfState(){
-//  int i;
-//  for (i = 0; i < num_ship; i++) {
-//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-//      return ship_ptr[i].self_state;
-//    }
-//  }
-//}
-//
-//void sendDancingState(int state){
-//  int i;
-//  for (i = 0; i < num_ship; i++) {
-//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-//      ship_t ship = ship_ptr[i];
-//      ship_ptr[i].isDancing = state;
-//    }
-//  }
-//}
 //TODO: Dep check
 //int getSelfIsDancing(){
 //  int i;
@@ -3091,17 +3062,19 @@ int selfFuelY() {
 
 int seeIfDancing(int fov, int rov){
   /**Set up initial Variables*/
+  static bool first_init = true;        //flag to determine if array has been intialized
   static int ship_observed = -1;       //The ship being observed if one is dancing
   static int prevHeading = 0;          //previous heading of ship being observed
-  static int initialHeading = 0;       //Heading used to determine start of dance position
-  static int targetHeading = 0;        //Heading used as the marker for a dance turn
-  static int num_turns = 0;            //Number of turns made to determine dance
-  static bool observing_dance = false; //boolean used to flag if ship is dancing
   int observed_dir = 0;                //current direction of the observed ship
   int max_num_ships = 20;
   int num_fields = 5;
   static int local_ships[20][5];
-  static bool first_init = true;        //flag to determine if array has been intialized
+  //array index labels
+  int currX = 0;
+  int currY = 1;
+  int prevX = 2;
+  int prevY = 3;
+  int stoppedCount = 4;
 
   //zero out array
   if(first_init){
@@ -3128,15 +3101,6 @@ int seeIfDancing(int fov, int rov){
     short curr_id = ship_ptr[i].id;
     //If ship is insight and not self; check if moving
     if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && ( curr_id != self_id)) {
-
-      //array index labels
-      fprintf(fp,"self: %d Other: %d\n",(int)self->id,(int)curr_id);
-      int currX = 0;
-      int currY = 1;
-      int prevX = 2;
-      int prevY = 3;
-      int stoppedCount = 4;
-
       //Save each local ships x an y coordinates
       local_ships[i][currX] = (int)ship_ptr[i].x;
       local_ships[i][currY] = (int)ship_ptr[i].y;
@@ -3145,31 +3109,50 @@ int seeIfDancing(int fov, int rov){
       if(local_ships[i][stoppedCount] <= 5) {
         if (local_ships[i][prevX] == (int) ship_ptr[i].x && local_ships[i][currY] == (int) ship_ptr[i].y) {
           local_ships[i][stoppedCount] += 1;
-          fprintf(fp,"Ship not moving\n");
+          fprintf(fp,"Ship not moving: %d\n", local_ships[i][stoppedCount]);
         } else {
+          fprintf(fp,"Ship Moving\n");
+          fprintf(fp,"Current X: %d, Previous X: %d\n",(int)ship_ptr[i].x,local_ships[i][prevX]);
           local_ships[i][stoppedCount] = 0;
         }
         local_ships[i][prevX] = (int) ship_ptr[i].x;
         local_ships[i][prevY] = (int) ship_ptr[i].x;
       } else{
-        fprintf(fp,"Observing Dance");
-        if(!observing_dance){
-          initialHeading = (int)ship_ptr[i].dir;
-          targetHeading = initialHeading + 180;
-          observing_dance = true;
-        }else{
-          int current_observed_heading = (int)ship_ptr[i].dir;
-          turnToDeg(getHeadingForCoordinates((int)ship_ptr[i].x ,(int)ship_ptr[i].y));
-          //TODO:Define 10 parameter
-          if(headingIsBetween(current_observed_heading,targetHeading-10,targetHeading+10)){
-
-          }
-        }
+        fprintf(fp,"returning: %d\n", i);
+        fclose(fp);
+        return i;
       }
     }
   }
   fclose(fp);
   return -1;
+}
+
+
+void observeDance(int ship_idx){
+
+  static bool observing_dance = false; //boolean used to flag if ship is dancing
+  static int initialHeading = 0;       //Heading used to determine start of dance position
+  static int targetHeading = 0;        //Heading used as the marker for a dance turn
+  static int num_turns = 0;            //Number of turns made to determine dance
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
+
+  if(!observing_dance){
+    fprintf(fp,"Observing Dance");
+    initialHeading = (int)ship_ptr[ship_idx].dir;
+    targetHeading = initialHeading + 180;
+    observing_dance = true;
+  }else{
+    int current_observed_heading = (int)ship_ptr[ship_idx].dir;
+    turnToDeg(getHeadingForCoordinates((int)ship_ptr[ship_idx].x ,(int)ship_ptr[ship_idx].y));
+    //TODO:Define 10 parameter
+    if(headingIsBetween(current_observed_heading,targetHeading-10,targetHeading+10)){
+
+    }
+  }
 }
 
 bool headingIsBetween(int heading, int lowerHeading, int upperHeading){

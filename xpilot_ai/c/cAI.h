@@ -272,5 +272,6 @@ extern int getDanceFrom(int ship);
 extern int seeIfDancing(int fov,int rov);
 extern int getSelfIsDancing();
 extern bool headingIsBetween(int heading, int lowerHeading, int upperHeading);
+extern void observeDance(int ship_idx);
 void logwrite();
 #endif //XPILOT_LE_CAI_H

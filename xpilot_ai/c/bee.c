@@ -176,21 +176,18 @@ void forage() {
  * Foraging (Controller)- Benjamin Makowsky
  * ***************************************************************************/
 void onlook(){
+  static int dancing_ship = -1;
   if(!inVicinityOf(selfBaseX(),selfBaseY())){
     goToCoordinates(selfBaseX(),selfBaseY());
   }else{
     setPower(0);
     //if(radarFriendInView(360,20)){
-    int dancing_ship = seeIfDancing(360,20);
-//    sprintf(bugstring, "ship dancing: %d",dancing_ship);
-//    if(dancing_ship > -1){
-//      FILE *fp;
-//      fp = fopen(LogFile, "a");
-//      fprintf(fp, "dancing_ship = %d\n",dancing_ship);
-//      fclose(fp);
-//      //int dance = getDanceFrom(dancing_ship);
-//      //interpretDance(dance);
-//    }
-    //}
+    if(dancing_ship == -1){
+      dancing_ship = seeIfDancing(360,20);
+      sprintf(bugstring,"%d",dancing_ship);
+    }else{
+      sprintf(bugstring,"Observing: %d",dancing_ship);
+      observeDance(dancing_ship);
+    }
   }
 }
