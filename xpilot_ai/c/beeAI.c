@@ -291,24 +291,34 @@ void log(char[50] string){
 
 bool dance(int prevState){
   static bool dance_is_completed = false;
+  static bool beingObserved = false;
+  static int waiting_counter = 0;
   setIsDancing(1);
-  switch(prevState)
-  {
-    case STATE_SEARCHING: //If you were just searching then let others know you found honey
-      dance_is_completed = honeyFoundDance();
-      setDanceType(FOUND_HONEY);
-      break;
-    case STATE_FORAGING:
-      break;
-  }
 
-  //Stop dancing once dance has finished
-  if(dance_is_completed){
-    setIsDancing(0);
-    dance_is_completed = false;
-    return true;
-  }else{
-    return false;
+  //Wait until someone is observing you
+  if(!beingObserved || waiting_counter < 14 * 10){
+    //do nothing for n seconds or until observed
+    waiting_counter++;
+    beingObserved = checkIfBeingObserved();
+    sprintf(bugstring,"waiting: %f2", (float)waiting_counter/(14*10) * 100);
+  }else {
+    switch (prevState) {
+      case STATE_SEARCHING: //If you were just searching then let others know you found honey
+        dance_is_completed = honeyFoundDance();
+        setDanceType(FOUND_HONEY);
+        break;
+      case STATE_FORAGING:
+        break;
+    }
+
+    //Stop dancing once dance has finished
+    if (dance_is_completed) {
+      setIsDancing(0);
+      dance_is_completed = false;
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

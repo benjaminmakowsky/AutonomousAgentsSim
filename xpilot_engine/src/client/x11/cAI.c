@@ -3096,31 +3096,31 @@ int seeIfDancing(int fov, int rov){
   //Loop to self ships
   int i;
   for (i = 0; i < num_ship; i++) {
-
     short self_id = self->id;
     short curr_id = ship_ptr[i].id;
+
     //If ship is insight and not self; check if moving
     if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && ( curr_id != self_id)) {
-      //Save each local ships x an y coordinates
-      local_ships[i][currX] = (int)ship_ptr[i].x;
-      local_ships[i][currY] = (int)ship_ptr[i].y;
 
-      //Check if the new coordinates are the same. If they are count the number of frames they havent moved
+      //Check if the new coordinates are the same as previous.
+      //If they are count the number of frames ship hasnt moved
       if(local_ships[i][stoppedCount] <= 5) {
-        if (local_ships[i][prevX] == (int) ship_ptr[i].x && local_ships[i][currY] == (int) ship_ptr[i].y) {
+        if (local_ships[i][prevX] >= (int) ship_ptr[i].x - 1 && local_ships[i][prevX] <= (int) ship_ptr[i].x + 1 &&
+            local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
           local_ships[i][stoppedCount] += 1;
-          fprintf(fp,"Ship not moving: %d\n", local_ships[i][stoppedCount]);
+          fprintf(fp, "Ship not moving: %d\n", local_ships[i][stoppedCount]);
         } else {
-          fprintf(fp,"Ship Moving\n");
-          fprintf(fp,"Current X: %d, Previous X: %d\n",(int)ship_ptr[i].x,local_ships[i][prevX]);
+          fprintf(fp, "Ship Moving\n");
+          fprintf(fp, "Current X: %d, Previous X: %d\n", (int) ship_ptr[i].x, local_ships[i][prevX]);
+          fprintf(fp, "Current y: %d, Previous y: %d\n", (int) ship_ptr[i].y, local_ships[i][prevY]);
           local_ships[i][stoppedCount] = 0;
+          local_ships[i][prevX] = (int) ship_ptr[i].x;
+          local_ships[i][prevY] = (int) ship_ptr[i].y;
         }
-        local_ships[i][prevX] = (int) ship_ptr[i].x;
-        local_ships[i][prevY] = (int) ship_ptr[i].x;
-      } else{
-        fprintf(fp,"returning: %d\n", i);
-        fclose(fp);
-        return i;
+      }else {
+          fprintf(fp, "returning: %d\n", i);
+          fclose(fp);
+          return (int)ship_ptr[i].id;
       }
     }
   }
@@ -3146,8 +3146,12 @@ void observeDance(int ship_idx){
     targetHeading = initialHeading + 180;
     observing_dance = true;
   }else{
+
+    //Turn to dancer
+    int selfX = getSelfX();
+    int selfY = getSelfY();
     int current_observed_heading = (int)ship_ptr[ship_idx].dir;
-    turnToDeg(getHeadingForCoordinates((int)ship_ptr[ship_idx].x ,(int)ship_ptr[ship_idx].y));
+    turnToDeg(getAngleBtwnPoints((int)ship_ptr[ship_idx].x, selfX,(int)ship_ptr[ship_idx].y,selfY));
     //TODO:Define 10 parameter
     if(headingIsBetween(current_observed_heading,targetHeading-10,targetHeading+10)){
 
@@ -3172,5 +3176,64 @@ bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
   }
   else{
     return (heading == lowerHeading);
+  }
+}
+
+
+bool checkIfBeingObserved(){
+  bool beingObserved = false;
+  int i;
+  int selfX = getSelfX();
+  int selfY = getSelfY();
+  static int observed_counter = 0;
+
+  //See if anybody is observing self
+  for (i = 0; i < num_ship; i++) {
+    if ((ship_ptr[i].id != self->id)) {
+      if(ship_ptr[i].dir == getAngleBtwnPoints(selfX,(int)ship_ptr[i].x,selfY,(int)ship_ptr[i].y)){
+        beingObserved = true;
+      }
+    }
+  }
+  if (beingObserved != NULL) {
+    observed_counter++;
+  } else {
+    observed_counter = 0;
+  }
+  return (observed_counter == 15);
+}
+
+int getSelfX(){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return (int)ship_ptr[i].x;
+    }
+  }
+}
+
+int getSelfY(){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return (int)ship_ptr[i].y;
+    }
+  }
+}
+
+int getDancersX(int dancing_ship){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((ship_ptr[i].id == (short) dancing_ship)) {
+      return (int) ship_ptr[i].x;
+    }
+  }
+}
+int getDancersY(int dancing_ship) {
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((ship_ptr[i].id == (short) dancing_ship)) {
+      return (int) ship_ptr[i].y;
+    }
   }
 }

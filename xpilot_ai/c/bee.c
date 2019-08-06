@@ -70,7 +70,6 @@ void searching() {
         memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(getPOICoordinates(x, y)));
         setHoneyX(POICoordinates[0]);
         setHoneyY(POICoordinates[1]);
-        //rememberPOICoords(POICoordinates[0],POICoordinates[1]);
         fileRead = !fileRead;
       }
 
@@ -181,13 +180,13 @@ void onlook(){
     goToCoordinates(selfBaseX(),selfBaseY());
   }else{
     setPower(0);
-    //if(radarFriendInView(360,20)){
     if(dancing_ship == -1){
-      dancing_ship = seeIfDancing(360,20);
+      dancing_ship = seeIfDancing(360,40);
       sprintf(bugstring,"%d",dancing_ship);
     }else{
-      sprintf(bugstring,"Observing: %d",dancing_ship);
-      observeDance(dancing_ship);
+      sprintf(bugstring,"Turning Toward : (%d,%d)",getDancersX(dancing_ship),getDancersY(dancing_ship));
+      goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
+      //observeDance(dancing_ship);
     }
   }
 }

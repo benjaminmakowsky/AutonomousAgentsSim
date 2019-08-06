@@ -690,9 +690,7 @@ AI_loop()
       FILE *fp;
       fp = fopen(LogFile, "a");
       fprintf(fp,"------------------------------\n");
-      //fprintf(fp, "State: %d\nisDancing: %d\tSelf: %d\n\n",selfState(), getIsDancing(), getSelfIsDancing());
       fclose(fp);
-      //updateShip();
       break;
 
     case (STATE_ONLOOKING):
