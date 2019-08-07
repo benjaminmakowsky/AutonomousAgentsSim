@@ -15,130 +15,117 @@ Ship Moving
 Current X: 195, Previous X: 192
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 198, Previous X: 195
-Current y: 157, Previous y: 157
+Current X: 198, Previous X: 0
+Current y: 157, Previous y: 0
 Ship Moving
 Current X: 201, Previous X: 198
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 204, Previous X: 0
-Current y: 157, Previous y: 0
-Ship Moving
-Current X: 208, Previous X: 201
+Current X: 204, Previous X: 201
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 213, Previous X: 204
+Current X: 208, Previous X: 204
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 218, Previous X: 213
+Current X: 213, Previous X: 208
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 223, Previous X: 218
+Current X: 218, Previous X: 195
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 229, Previous X: 223
+Current X: 223, Previous X: 213
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 234, Previous X: 229
+Current X: 229, Previous X: 218
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 236, Previous X: 208
-Current y: 164, Previous y: 157
+Current X: 226, Previous X: 229
+Current y: 167, Previous y: 157
 Ship Moving
-Current X: 231, Previous X: 236
-Current y: 163, Previous y: 164
+Current X: 222, Previous X: 223
+Current y: 165, Previous y: 157
 Ship Moving
-Current X: 226, Previous X: 234
-Current y: 162, Previous y: 157
+Current X: 218, Previous X: 226
+Current y: 164, Previous y: 167
 Ship Moving
-Current X: 221, Previous X: 231
-Current y: 161, Previous y: 163
+Current X: 214, Previous X: 222
+Current y: 163, Previous y: 165
 Ship Moving
-Current X: 217, Previous X: 226
-Current y: 161, Previous y: 162
+Current X: 211, Previous X: 214
+Current y: 162, Previous y: 163
 Ship Moving
-Current X: 213, Previous X: 217
+Current X: 208, Previous X: 211
+Current y: 162, Previous y: 162
+Ship Moving
+Current X: 205, Previous X: 218
+Current y: 161, Previous y: 164
+Ship Moving
+Current X: 202, Previous X: 208
+Current y: 160, Previous y: 162
+Ship Moving
+Current X: 200, Previous X: 205
 Current y: 160, Previous y: 161
 Ship Moving
-Current X: 210, Previous X: 221
-Current y: 159, Previous y: 161
+Current X: 198, Previous X: 200
+Current y: 159, Previous y: 160
 Ship Moving
-Current X: 207, Previous X: 210
-Current y: 159, Previous y: 159
+Current X: 196, Previous X: 202
+Current y: 159, Previous y: 160
 Ship Moving
-Current X: 204, Previous X: 213
-Current y: 158, Previous y: 160
-Ship Moving
-Current X: 201, Previous X: 207
+Current X: 194, Previous X: 198
 Current y: 158, Previous y: 159
+Ship not moving: 1
 Ship Moving
-Current X: 199, Previous X: 204
-Current y: 158, Previous y: 158
-Ship Moving
-Current X: 197, Previous X: 199
+Current X: 191, Previous X: 194
 Current y: 157, Previous y: 158
 Ship Moving
-Current X: 195, Previous X: 197
-Current y: 157, Previous y: 157
+Current X: 190, Previous X: 196
+Current y: 157, Previous y: 159
 Ship Moving
-Current X: 193, Previous X: 195
+Current X: 189, Previous X: 191
 Current y: 157, Previous y: 157
 Ship not moving: 1
 Ship Moving
-Current X: 190, Previous X: 193
+Current X: 187, Previous X: 189
 Current y: 156, Previous y: 157
 Ship Moving
-Current X: 189, Previous X: 201
-Current y: 156, Previous y: 158
+Current X: 186, Previous X: 190
+Current y: 156, Previous y: 157
 Ship Moving
-Current X: 188, Previous X: 190
-Current y: 156, Previous y: 156
-Ship Moving
-Current X: 186, Previous X: 188
+Current X: 185, Previous X: 187
 Current y: 156, Previous y: 156
 Ship not moving: 1
-Ship Moving
-Current X: 185, Previous X: 189
-Current y: 155, Previous y: 156
 Ship Moving
 Current X: 184, Previous X: 186
 Current y: 155, Previous y: 156
-Ship Moving
-Current X: 183, Previous X: 185
-Current y: 155, Previous y: 155
 Ship not moving: 1
-Ship not moving: 2
+Ship Moving
+Current X: 182, Previous X: 185
+Current y: 155, Previous y: 156
+Ship not moving: 1
 Ship Moving
 Current X: 181, Previous X: 184
 Current y: 155, Previous y: 155
 Ship not moving: 1
+Ship not moving: 2
 Ship Moving
-Current X: 180, Previous X: 183
+Current X: 180, Previous X: 182
 Current y: 155, Previous y: 155
+Ship not moving: 2
 Ship not moving: 1
 Ship Moving
 Current X: 179, Previous X: 181
-Current y: 155, Previous y: 155
-Ship not moving: 2
-Ship not moving: 1
-Ship not moving: 2
-Ship not moving: 3
-Ship not moving: 4
-Ship not moving: 5
-Ship Moving
-Current X: 177, Previous X: 179
 Current y: 154, Previous y: 155
 Ship not moving: 1
+Ship not moving: 2
+Ship not moving: 3
+Ship not moving: 2
 Ship Moving
-Current X: 177, Previous X: 180
+Current X: 178, Previous X: 180
 Current y: 154, Previous y: 155
-Ship not moving: 2
 Ship not moving: 3
+Ship not moving: 4
 Ship not moving: 1
-Ship not moving: 2
-Ship not moving: 4
-Ship not moving: 3
-Ship not moving: 4
 Ship not moving: 5
 Ship not moving: 6
 returning: 0

@@ -142,13 +142,27 @@ void forage() {
 
   //Step 3; Gather or deposit fuel
   }else {
-    setPower(0);
-    //sprintf(bugstring, "Dancing: %d", getSelfIsDancing());
-    //Once at location perform dance of what you were doing
-    if(performed_dance == false){
-      performed_dance = dance(STATE_SEARCHING);
-      setIsDancing(1);
-      //sendDancingState(1);
+    static bool beingObserved = false;  //Used to determine if being observed
+    static int waiting_counter = 0;     //Counter used to wait for specified frames
+    int frameLimit = 14 * 10;           //14fps for 10 seconds
+    setPower(0);                        //Come to stop until being observed or time limit has been reached
+
+    //wait to fly off until someone has seen dance or time has been reached
+    if(performed_dance == false || waiting_counter < frameLimit){
+
+      //while not being observed increment counter
+      if(!beingObserved){
+        //do nothing for n seconds or until observed
+        waiting_counter++;
+        beingObserved = checkIfBeingObserved();
+        sprintf(bugstring,"waiting: %.2f", (float)waiting_counter/(frameLimit) * 100);
+
+      //If you are being observed perform dance
+      }else {
+        sprintf(bugstring,"Being Observed");
+        performed_dance = dance(STATE_SEARCHING);
+      }
+
     }else {
       fuelLVL = (int) selfFuel();
       int empty = 500;
@@ -184,7 +198,9 @@ void onlook(){
       dancing_ship = seeIfDancing(360,40);
       sprintf(bugstring,"%d",dancing_ship);
     }else{
-      sprintf(bugstring,"Turning Toward : (%d,%d)",getDancersX(dancing_ship),getDancersY(dancing_ship));
+      sprintf(bugstring,"Heading: %d",(int)selfHeadingDeg());
+
+      //Turn toward dancer
       goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
       //observeDance(dancing_ship);
     }

@@ -654,15 +654,6 @@ AI_loop()
     state = STATE_INIT;
   }
 
-  /*if(frameCount % (14 * 10) == 0){
-    FILE *fp;
-    fp = fopen(LogFile, "a");
-    fprintf(fp,"------------------------------\n");
-    fprintf(fp, "State: %d\nPower: %d\tSelf: %d\n\n",state, (int)getPower(),selfState());
-    fclose(fp);
-  }*/
-
-
   switch(state)
   {
     case(STATE_INIT):
@@ -686,11 +677,6 @@ AI_loop()
 
     case(STATE_FORAGING):
       forage();
-      //Update ship_t every frame
-      FILE *fp;
-      fp = fopen(LogFile, "a");
-      fprintf(fp,"------------------------------\n");
-      fclose(fp);
       break;
 
     case (STATE_ONLOOKING):

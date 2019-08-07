@@ -278,5 +278,6 @@ extern int getSelfX();
 extern int getSelfY();
 int getDancersY(int dancing_ship);
 int getDancersY(int dancing_ship);
+int getHeadingBetween(int x1, int y1, int x2, int y2);
 void logwrite();
 #endif //XPILOT_LE_CAI_H

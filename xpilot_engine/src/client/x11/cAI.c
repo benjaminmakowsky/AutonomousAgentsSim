@@ -1,6 +1,7 @@
 //Evan Gray - February 2012
 #include <stdio.h>
 #include <sys/types.h>
+#include <math.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/mman.h>
@@ -1548,6 +1549,7 @@ int wrapY(int firstY, int selfY) {
 
 double enemyHeadingDegId(int id) {  //returns the heading of ship with a particular ID in degrees -JNE
   int i;
+
   for (i = 0; i < num_ship; i++) {
     if (ship_ptr[i].id == id) {
       return (double) ship_ptr[i].dir * 2.8125;    //convert from 0-127 scale to 0-360 scale
@@ -3157,6 +3159,7 @@ void observeDance(int ship_idx){
 
     }
   }
+  fclose(fp);
 }
 
 bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
@@ -3183,23 +3186,44 @@ bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
 bool checkIfBeingObserved(){
   bool beingObserved = false;
   int i;
-  int selfX = getSelfX();
-  int selfY = getSelfY();
+  int selfX = getSelfX(); //Using custom made command instead relying on cAI.c
+  int selfY = getSelfY(); //Using custom made command instead relying on cAI.c
+
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
+
+  //Used to make sure bee is being watch and bee didnt glance during fly-by
   static int observed_counter = 0;
 
   //See if anybody is observing self
+  //TODO: implement withinVicinity() [WAITING FOR DAVID]
   for (i = 0; i < num_ship; i++) {
     if ((ship_ptr[i].id != self->id)) {
-      if(ship_ptr[i].dir == getAngleBtwnPoints(selfX,(int)ship_ptr[i].x,selfY,(int)ship_ptr[i].y)){
+      //Determine if they are looking in your direction
+      ship_t observing_ship = ship_ptr[i];  //Get the observing ship
+
+      //Get the direction ship is looking
+      double conversion_factor = 2.8125;
+      int others_dir = (int)((double)observing_ship.dir * conversion_factor);
+
+      //get the heading from observer to self
+      int angle = getHeadingBetween(ship_ptr[i].x,ship_ptr[i].y,selfX,selfY);
+      fprintf(fp, "ship.dir: %d angle: %d\n",others_dir,angle);
+
+      //If headings are the same they are looking at self
+      if(others_dir >= angle-1 && others_dir <= angle+1){
         beingObserved = true;
       }
     }
   }
-  if (beingObserved != NULL) {
+  if (beingObserved == true) {
     observed_counter++;
   } else {
     observed_counter = 0;
   }
+  fclose(fp);
   return (observed_counter == 15);
 }
 
@@ -3236,4 +3260,26 @@ int getDancersY(int dancing_ship) {
       return (int) ship_ptr[i].y;
     }
   }
+}
+
+int getHeadingBetween(int x1, int y1, int x2, int y2){
+  //x1, y1 are self coordinates
+  double adjacent = x2 -x1;
+  double opposite  = y2 - y1;
+  double conversion = 180.0 / PI_AI;
+  double heading = atan(opposite/adjacent) * conversion; //retuns between -pi/2 and pi/2 in radians
+
+  //Determine which quadrant angle came from
+  if(adjacent >= 0 && opposite >= 0){
+    //came from quadrant 1 no conversion needed
+  }else if(adjacent < 0 && opposite >= 0){
+    //Came from quadrant 2 add 180
+    heading += 180;
+  }else if(adjacent < 0 && opposite < 0){
+    //came from quadrant 3 add 180
+    heading += 180;
+  }else if(adjacent >= 0 && opposite < 0){
+    //came from quadrant 4 no conversion needed
+  }
+  return (int)heading;
 }
