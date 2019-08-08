@@ -4,6 +4,8 @@
 
 #include <stdbool.h>
 
+#define MIN_FRAMES_PASSED 3 //Minimum amount of frames that can be recognized is 3
+
 // Structs to hold the base coordinates &
 // the fuel depot coordinates
 typedef struct baseStruct_t {
