@@ -145,7 +145,7 @@ void forage() {
     setPower(0);                        //Come to stop until being observed or time limit has been reached
 
     //wait to fly off until someone has seen dance or time has been reached
-    if(performed_dance == false || waiting_counter < frameLimit){
+    if(performed_dance == false && waiting_counter < frameLimit){
 
       //while not being observed increment counter
       if(!beingObserved){
@@ -156,7 +156,7 @@ void forage() {
 
       //If you are being observed perform dance
       }else {
-        sprintf(bugstring,"Being Observed");
+        //sprintf(bugstring,"Being Observed");
         performed_dance = dance(STATE_SEARCHING);
       }
 

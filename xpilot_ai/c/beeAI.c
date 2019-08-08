@@ -155,9 +155,9 @@ int getHeadingForCoordinates(int x, int y){
  * ***************************************************************************/
 int* getPOICoordinates(int x ,int y){
 
-  int xPOI = INT_MAX;
-  int yPOI = INT_MAX;
-  int old_distance = computeDistance(x,xPOI,y,yPOI); //Starting distance to furthest point
+  //Default values for location to be far
+  int xPOI = 66101110;  //Using MAX_INT causes it to not work
+  int yPOI = 66101110;  //Using MAX_INT causes it to not work
 
   FILE *fp;
   fp = fopen(LogFile, "a");
@@ -170,7 +170,8 @@ int* getPOICoordinates(int x ,int y){
   int i = 0;
   for(i; i < length; i++){
     //Distance from (x,y) to (hive_x,hive_y) if smaller than old distance than thats the closest point
-    int new_distance = computeDistance(x, hives[i].x, y, hives[i].y);
+    int old_distance = abs(computeDistance(x,xPOI,y,yPOI));
+    int new_distance = abs(computeDistance(x, hives[i].x, y, hives[i].y));
     fprintf(fp, "From Bases \tIndex %d \tX: %d\tY: %d\n", i, hives[i].x, hives[i].y);
     if(new_distance < old_distance) {
       xPOI = hives[i].x;
@@ -182,10 +183,10 @@ int* getPOICoordinates(int x ,int y){
   //Determines how many fuel stations to traverse
   length = honey_spots[0].num_fuels;
   fprintf(fp, "\nnum_fuels read: %d\n",length);
-  old_distance = abs(computeDistance(x,xPOI,y,yPOI));
-
-  i = 0;  //Traverse array to determine which location was closest to X, Y
+  //Traverse array to determine which location was closest to X, Y
+  i = 0;
   for(i; i < length; i++){
+    int old_distance = abs(computeDistance(x,xPOI,y,yPOI));
     int new_distance = abs(computeDistance(x, honey_spots[i].x, y, honey_spots[i].y));
     fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, honey_spots[i].x, honey_spots[i].y);
     if(new_distance < old_distance) {
@@ -223,9 +224,9 @@ bool inVicinityOf(int x,int y){
     //If not in the vicinty of the point slow down as you approach
     int distance = computeDistance(selfX(),x,selfY(),y);
     int max_speed = 40;
-    if(distance < 10) {
+    if(distance < 20) {
       setPower(max_speed/4);
-    }else if(distance < 20){
+    }else if(distance < 60){
       setPower(max_speed/2);
     }else{
       setPower(max_speed);
