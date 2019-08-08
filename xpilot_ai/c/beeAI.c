@@ -15,6 +15,7 @@
 #include "cAI.h"
 #include "beeMain.h"
 #include "beeObject.h"
+#include <limits.h>
 
 
 
@@ -154,21 +155,21 @@ int getHeadingForCoordinates(int x, int y){
  * ***************************************************************************/
 int* getPOICoordinates(int x ,int y){
 
-  int xPOI = 99999;
-  int yPOI = 99999;
+  int xPOI = INT_MAX;
+  int yPOI = INT_MAX;
+  int old_distance = computeDistance(x,xPOI,y,yPOI); //Starting distance to furthest point
 
   FILE *fp;
   fp = fopen(LogFile, "a");
   fprintf(fp,"getPOICoordinates(%d, %d)\n",x,y);
 
 
-  //TODO: Set bases to a global array at beginning of program
   int length = hives->num_bases;
   fprintf(fp, "numBases read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
   int i = 0;
   for(i; i < length; i++){
-    int old_distance = computeDistance(x,xPOI,y,yPOI);
+    //Distance from (x,y) to (hive_x,hive_y) if smaller than old distance than thats the closest point
     int new_distance = computeDistance(x, hives[i].x, y, hives[i].y);
     fprintf(fp, "From Bases \tIndex %d \tX: %d\tY: %d\n", i, hives[i].x, hives[i].y);
     if(new_distance < old_distance) {
@@ -178,14 +179,13 @@ int* getPOICoordinates(int x ,int y){
   }
   fprintf(fp,"Closest base is at (%d,%d)\n", xPOI,yPOI);
 
-  //TODO: Set depots to a global array at beginning of program
+  //Determines how many fuel stations to traverse
   length = honey_spots[0].num_fuels;
-
   fprintf(fp, "\nnum_fuels read: %d\n",length);
-  //Traverse array to determine which location was closest to X, Y
-  i = 0;
+  old_distance = abs(computeDistance(x,xPOI,y,yPOI));
+
+  i = 0;  //Traverse array to determine which location was closest to X, Y
   for(i; i < length; i++){
-    int old_distance = abs(computeDistance(x,xPOI,y,yPOI));
     int new_distance = abs(computeDistance(x, honey_spots[i].x, y, honey_spots[i].y));
     fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, honey_spots[i].x, honey_spots[i].y);
     if(new_distance < old_distance) {
@@ -203,7 +203,6 @@ int* getPOICoordinates(int x ,int y){
   fclose(fp);
 
   return coordinates;
-
 }
 
 
@@ -215,6 +214,7 @@ bool inVicinityOf(int x,int y){
   int upperYRange = y + range/2;
 
 
+  //Check if lowerRange < x,y < upperRange
   if(selfX() >= lowerXRange && selfX() <= upperXRange){
     if(selfY() >= lowerYRange && selfY() <= upperYRange){
       return true;
@@ -222,12 +222,13 @@ bool inVicinityOf(int x,int y){
   }else {
     //If not in the vicinty of the point slow down as you approach
     int distance = computeDistance(selfX(),x,selfY(),y);
+    int max_speed = 40;
     if(distance < 10) {
-      setPower(10);
+      setPower(max_speed/4);
     }else if(distance < 20){
-      setPower(20);
+      setPower(max_speed/2);
     }else{
-      setPower(30);
+      setPower(max_speed);
     }
     return false;
   }
@@ -259,21 +260,20 @@ bool comeToStop(int number_of_frames) {
       current_x = selfX();
       current_y = selfY();
     } else { counter += 1; }
-    return false;
 
+    return false;
   }else{ return true;}
 }
 
 
 void checkForFuel(){
   static bool fueling = false;
-  int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
   if (fueling == false) {
     fuel = selfFuel();
     refuel(1);
     fueling = true;
   }
-  if ((frameCount % frames_passed == 0) && (fueling == true)) {
+  if ((frameCount % MIN_FRAMES_PASSED == 0) && (fueling == true)) {
     refuel(0);
     fueling = false;
   }
@@ -307,6 +307,7 @@ bool honeyFoundDance(){
   static int target_degree = 0;
   int desired_rotations = 4;
 
+  //Reset all static variables
   if(is_initial_setup){
     number_of_spins = 0;
     initial_heading = (int)selfHeadingDeg();

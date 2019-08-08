@@ -18,8 +18,8 @@ void searching();
 void forage();
 
 /*
- *
- */
+ *  Waits at hive and observes incoming bee's dances
+ *  @Return: void*/
 void onlook();
 
 

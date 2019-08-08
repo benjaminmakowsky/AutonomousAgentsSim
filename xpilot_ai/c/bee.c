@@ -13,11 +13,8 @@
 #include <string.h>
 #include "beeObject.h"
 
-
-//global variables
-char temp_str[25];
-bool fueling = false;
-
+#define EMPTY 200
+#define FULL 700
 
 /*****************************************************************************
  * Searching (Controller)- Benjamin Makowsky
@@ -92,8 +89,8 @@ void searching() {
 void forage() {
 
   fuel = selfFuel();
-  int x = 0;
-  int y = 0;
+  int destination_x = 0;
+  int destination_y = 0;
   static bool initForage = true;
   static bool performed_dance = false;
   static bool depositing = true;
@@ -109,7 +106,7 @@ void forage() {
     fprintf(fp,"Honey Spot: (%d,%d)\n", getHoneyX(), getHoneyY());
     fprintf(fp,"------------------------------\n");
     fclose(fp);
-    initForage = !initForage;
+    initForage = false;
   }
 
   /** Steps:
@@ -123,21 +120,21 @@ void forage() {
   //Determine whether or not you are heading to hive to deposit honey or
   //if you are headed to flower to pickup honey
   if(depositing){
-    x = selfBaseX();
-    y = selfBaseY();
+    destination_x = selfBaseX();
+    destination_y = selfBaseY();
   } else {
-    x = getHoneyX();
-    y = getHoneyY();
+    destination_x = getHoneyX();
+    destination_y = getHoneyY();
   }
 
 
 
   static int fuelLVL = 0;
   //Step 2: Determine if near honey/hive
-  if(!inVicinityOf(x,y)) {
+  if(!inVicinityOf(destination_x,destination_y)) {
     refuel(0);
-    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",x,y);
-    goToCoordinates(x,y);
+    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
+    goToCoordinates(destination_x,destination_y);
 
 
   //Step 3; Gather or deposit fuel
@@ -165,12 +162,10 @@ void forage() {
 
     }else {
       fuelLVL = (int) selfFuel();
-      int empty = 500;
-      int full = 700;
-      if (fuelLVL > empty && depositing) {
+      if (fuelLVL > EMPTY && depositing) {
         checkForFuel();
         strcpy(bugstring, "Depositing");
-      } else if (fuelLVL < full && !depositing) {
+      } else if (fuelLVL < FULL && !depositing) {
         checkForFuel();
         strcpy(bugstring, "Gathering");
 
