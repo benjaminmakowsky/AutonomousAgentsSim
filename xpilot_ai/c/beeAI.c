@@ -15,17 +15,10 @@
 #include "cAI.h"
 #include "beeMain.h"
 #include "beeObject.h"
+#include <limits.h>
 
 
-// The global variables hives & honey_spots are problematic:
-//    They are implicitly required to be set before calling getPOICoordinates. 
-//    getPOICoordinates only works properly if getBases & getFuels have been called, and neither
-//    the function name, header nor parameters clue the reader into this.
-// We want to keep things modular so that we can scale-up and re-use as much functionality as 
-// much possible. 
-// BaseStruct_t* hives & FuelStruct_t* honey_spots should be passed as parameters to the getPOICoordinates,
-// hinting to the reader that they need to construct these first before calling the function, and
-// allowing the user to call the function with different arrays.
+
 BaseStruct_t* hives;
 FuelStruct_t* honey_spots;
 
@@ -139,10 +132,10 @@ FuelStruct_t *getFuelDepots(char *csv) {
 int goToCoordinates(int x, int y){
 
   //Get Heading to new point
-  int new_heading = getHeadingForCoordinates(x ,y);
+  int new_heading = getHeadingBetween(selfX(), selfY(), x, y);
 
   //Turn to new heading
-  if(((int)selfHeadingDeg() <= (new_heading - 2)) || ((int)selfHeadingDeg() >= (new_heading + 2))) {
+  if( (int)selfHeadingDeg() != new_heading) {
     turnToDeg(new_heading);
   }
   return new_heading;
@@ -163,24 +156,23 @@ int getHeadingForCoordinates(int x, int y){
  * ***************************************************************************/
 int* getPOICoordinates(int x ,int y){
 
-  // use INT_MAX instead of 99999 here
-  int xPOI = 99999;
-  int yPOI = 99999;
+  //Default values for location to be far
+  int xPOI = 66101110;  //Using MAX_INT causes it to not work
+  int yPOI = 66101110;  //Using MAX_INT causes it to not work
 
   FILE *fp;
   fp = fopen(LogFile, "a");
   fprintf(fp,"getPOICoordinates(%d, %d)\n",x,y);
 
-  // This global array you mention should be on the client-side (bee.c)
-  //TODO: Set bases to a global array at beginning of program
+
   int length = hives->num_bases;
   fprintf(fp, "numBases read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
   int i = 0;
   for(i; i < length; i++){
-    // you don't need to compute the old_distance through computeDistance in this for-loop.
-    int old_distance = computeDistance(x,xPOI,y,yPOI);
-    int new_distance = computeDistance(x, hives[i].x, y, hives[i].y);
+    //Distance from (x,y) to (hive_x,hive_y) if smaller than old distance than thats the closest point
+    int old_distance = abs(computeDistance(x,xPOI,y,yPOI));
+    int new_distance = abs(computeDistance(x, hives[i].x, y, hives[i].y));
     fprintf(fp, "From Bases \tIndex %d \tX: %d\tY: %d\n", i, hives[i].x, hives[i].y);
     if(new_distance < old_distance) {
       xPOI = hives[i].x;
@@ -189,14 +181,12 @@ int* getPOICoordinates(int x ,int y){
   }
   fprintf(fp,"Closest base is at (%d,%d)\n", xPOI,yPOI);
 
-  //TODO: Set depots to a global array at beginning of program
+  //Determines how many fuel stations to traverse
   length = honey_spots[0].num_fuels;
-
   fprintf(fp, "\nnum_fuels read: %d\n",length);
   //Traverse array to determine which location was closest to X, Y
   i = 0;
   for(i; i < length; i++){
-    // Again, don't need to re-compute old_distance like this
     int old_distance = abs(computeDistance(x,xPOI,y,yPOI));
     int new_distance = abs(computeDistance(x, honey_spots[i].x, y, honey_spots[i].y));
     fprintf(fp, "From Fuels \tIndex %d \tX: %d\tY: %d\n", i, honey_spots[i].x, honey_spots[i].y);
@@ -215,13 +205,10 @@ int* getPOICoordinates(int x ,int y){
   fclose(fp);
 
   return coordinates;
-
 }
 
 
 bool inVicinityOf(int x,int y){
-  // This '60' is a magic number. It should be a #define at the start of beeAI.h so that
-  // it can easily be adjusted and re-used
   int range = 60; //Had to increase range because of the walls around honey sources
   int lowerXRange = x - range/2;
   int upperXRange = x + range/2;
@@ -229,6 +216,7 @@ bool inVicinityOf(int x,int y){
   int upperYRange = y + range/2;
 
 
+  //Check if lowerRange < x,y < upperRange
   if(selfX() >= lowerXRange && selfX() <= upperXRange){
     if(selfY() >= lowerYRange && selfY() <= upperYRange){
       return true;
@@ -236,13 +224,13 @@ bool inVicinityOf(int x,int y){
   }else {
     //If not in the vicinty of the point slow down as you approach
     int distance = computeDistance(selfX(),x,selfY(),y);
-    // The numbers here should be put into #defines in beeAI.h
-    if(distance < 10) {
-      setPower(10);
-    }else if(distance < 20){
-      setPower(20);
+    int max_speed = 40;
+    if(distance < 20) {
+      setPower(max_speed/4);
+    }else if(distance < 60){
+      setPower(max_speed/2);
     }else{
-      setPower(30);
+      setPower(max_speed);
     }
     return false;
   }
@@ -252,7 +240,6 @@ int avoidWalls(){
   getWallAvoidanceVector();  //Update ship direction vector for wall avoidance
   int newHeading = 0;
   if (wallVector != -1) {
-    // Another number to put in a #define
     newHeading = selfHeadingDeg() + 90;
     turnToDeg(newHeading);
   }
@@ -266,18 +253,6 @@ bool comeToStop(int number_of_frames) {
   refuel(0);
   setPower(0);
   static int counter = 0;
-  // Stylistic nitpick: I consider this if structure:
-  // if{
-  //
-  // } else {
-  //
-  // }
-  //
-  // To be more readable than:
-  //
-  // if{ 
-  //
-  // } else {}
   if (counter < number_of_frames) {
     sprintf(bugstring, "%d", counter);
 
@@ -287,57 +262,41 @@ bool comeToStop(int number_of_frames) {
       current_x = selfX();
       current_y = selfY();
     } else { counter += 1; }
-    return false;
 
+    return false;
   }else{ return true;}
 }
 
 
 void checkForFuel(){
   static bool fueling = false;
-  // Another case for adding a new #define
-  int frames_passed = 3; //Minimum amount of frames that can be recognized is 3
   if (fueling == false) {
     fuel = selfFuel();
     refuel(1);
     fueling = true;
   }
-  if ((frameCount % frames_passed == 0) && (fueling == true)) {
+  if ((frameCount % MIN_FRAMES_PASSED == 0) && (fueling == true)) {
     refuel(0);
     fueling = false;
   }
 }
 
-/*
-void log(char[50] string){
-  FILE *fp;
-  fp = fopen(LogFile, "a");
-  fprintf(fp,string);
-  fprintf(fp,"------------------------------\n");
-
-  fclose(fp);
-}*/
-
 bool dance(int prevState){
   static bool dance_is_completed = false;
-  // Should change this switch to a simple 'if' if we only do
-  // something when prevState == STATE_SEARCHING
-  // Follow-up question: Why do we care about stae when we call dance?
-  // Add a comment explaining why.
-  switch(prevState)
-  {
-    case STATE_SEARCHING:
+
+  switch (prevState) {
+    case STATE_SEARCHING: //If you were just searching then let others know you found honey
       dance_is_completed = honeyFoundDance();
       break;
-    case STATE_FORAGING: 
+    case STATE_FORAGING:
       break;
   }
 
   //Stop dancing once dance has finished
-  if(dance_is_completed){
+  if (dance_is_completed) {
     dance_is_completed = false;
     return true;
-  }else{
+  } else {
     return false;
   }
 }
@@ -348,10 +307,9 @@ bool honeyFoundDance(){
   static int initial_heading = 0;
   static int number_of_spins = 0;
   static int target_degree = 0;
-  // Another thing to add as a # define
-  int desired_rotations = 2;
+  int desired_rotations = 4;
 
-  // Add a comment explaining what is going on in this if statement.
+  //Reset all static variables
   if(is_initial_setup){
     number_of_spins = 0;
     initial_heading = (int)selfHeadingDeg();
@@ -394,4 +352,21 @@ bool beeDegIsBetween(int deg1, int deg2){
    else{
      return ((int)selfHeadingDeg() == deg1);
    }
+}
+
+//TODO: Deprecated updateship
+/*void updateShip(){
+
+  setSelfState(getCurrState());
+  sendDancingState(getIsDancing());
+}*/
+
+int interpretDance(int dance){
+  if(dance == FOUND_HONEY){
+    int danceChance = rand();
+    if(danceChance % 1 == 0){
+      state = STATE_FORAGING;
+      setCurrState(STATE_FORAGING);
+    }
+  }
 }

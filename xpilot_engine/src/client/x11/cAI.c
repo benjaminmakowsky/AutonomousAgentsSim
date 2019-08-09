@@ -1,6 +1,7 @@
 //Evan Gray - February 2012
 #include <stdio.h>
 #include <sys/types.h>
+#include <math.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/mman.h>
@@ -1149,43 +1150,7 @@ double selfScore() {
   return 0.0;
 }
 
-int selfFuelX() {
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].fuelX;
-    }
-  }
-    return -1;
-}
 
-int selfFuelY() {
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].fuelY;
-    }
-  }
-}
-
-void setSelfState(int state){
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      ship_ptr[i].self_state = state;
-
-    }
-  }
-}
-
-int selfState(){
-  int i;
-  for (i = 0; i < num_ship; i++) {
-    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-      return ship_ptr[i].self_state;
-    }
-  }
-}
 //End self properties -JNE
 
 
@@ -1603,6 +1568,7 @@ int wrapY(int firstY, int selfY) {
 
 double enemyHeadingDegId(int id) {  //returns the heading of ship with a particular ID in degrees -JNE
   int i;
+
   for (i = 0; i < num_ship; i++) {
     if (ship_ptr[i].id == id) {
       return (double) ship_ptr[i].dir * 2.8125;    //convert from 0-127 scale to 0-360 scale
@@ -2229,7 +2195,6 @@ int __wrap_Handle_end(long server_loops) {
 int start(int argc, char *argv[]) {
   int j, k;
   ship_t theShip;
-  theShip.self_state = -1;
   theShip.x = -1;
   theShip.y = -1;
   theShip.dir = -1;
@@ -3080,3 +3045,260 @@ int getWallAvoidance() {
   }
 }
 
+
+/**********************************************
+ * BEE Functions
+ */
+int selfFuelX() {
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return ship_ptr[i].fuelX;
+    }
+  }
+  return -1;
+}
+
+int selfFuelY() {
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return ship_ptr[i].fuelY;
+    }
+  }
+}
+//TODO: Dep check
+//int getSelfIsDancing(){
+//  int i;
+//  for (i = 0; i < num_ship; i++) {
+//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+//      return ship_ptr[i].isDancing;
+//    }
+//  }
+//}
+
+//int getDanceFrom(int ship){
+//  return ship_ptr[ship].dancingType;
+//}
+
+int seeIfDancing(int fov, int rov){
+  /**Set up initial Variables*/
+  static bool first_init = true;        //flag to determine if array has been intialized
+  static int ship_observed = -1;       //The ship being observed if one is dancing
+  static int prevHeading = 0;          //previous heading of ship being observed
+  int observed_dir = 0;                //current direction of the observed ship
+  int max_num_ships = 20;
+  int num_fields = 5;
+  static int local_ships[20][5];
+  //array index labels
+  int currX = 0;
+  int currY = 1;
+  int prevX = 2;
+  int prevY = 3;
+  int stoppedCount = 4;
+
+  //zero out array
+  if(first_init){
+    int i =0;
+    int j =0;
+    for(;i<max_num_ships;i++){
+      for(;j<num_fields;j++){
+        local_ships[i][j] = 0;
+      }
+    }
+    first_init = false;
+  }
+
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
+
+  //Loop to self ships
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    short self_id = self->id;
+    short curr_id = ship_ptr[i].id;
+
+    //If ship is insight and not self; check if moving
+    if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && ( curr_id != self_id)) {
+
+      //Check if the new coordinates are the same as previous.
+      //If they are count the number of frames ship hasnt moved
+      if(local_ships[i][stoppedCount] <= 5) {
+        if (local_ships[i][prevX] >= (int) ship_ptr[i].x - 1 && local_ships[i][prevX] <= (int) ship_ptr[i].x + 1 &&
+            local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
+          local_ships[i][stoppedCount] += 1;
+          fprintf(fp, "Ship not moving: %d\n", local_ships[i][stoppedCount]);
+        } else {
+          fprintf(fp, "Ship Moving\n");
+          fprintf(fp, "Current X: %d, Previous X: %d\n", (int) ship_ptr[i].x, local_ships[i][prevX]);
+          fprintf(fp, "Current y: %d, Previous y: %d\n", (int) ship_ptr[i].y, local_ships[i][prevY]);
+          local_ships[i][stoppedCount] = 0;
+          local_ships[i][prevX] = (int) ship_ptr[i].x;
+          local_ships[i][prevY] = (int) ship_ptr[i].y;
+        }
+      }else {
+          fprintf(fp, "returning: %d\n", i);
+          fclose(fp);
+          return (int)ship_ptr[i].id;
+      }
+    }
+  }
+  fclose(fp);
+  return -1;
+}
+
+
+void observeDance(int ship_idx){
+
+  static bool observing_dance = false; //boolean used to flag if ship is dancing
+  static int initialHeading = 0;       //Heading used to determine start of dance position
+  static int targetHeading = 0;        //Heading used as the marker for a dance turn
+  static int num_turns = 0;            //Number of turns made to determine dance
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
+
+  if(!observing_dance){
+    fprintf(fp,"Observing Dance");
+    initialHeading = (int)ship_ptr[ship_idx].dir;
+    targetHeading = initialHeading + 180;
+    observing_dance = true;
+  }else{
+
+    //Turn to dancer
+    int selfX = getSelfX();
+    int selfY = getSelfY();
+    int current_observed_heading = (int)ship_ptr[ship_idx].dir;
+    turnToDeg(getAngleBtwnPoints((int)ship_ptr[ship_idx].x, selfX,(int)ship_ptr[ship_idx].y,selfY));
+    //TODO:Define 10 parameter
+    if(headingIsBetween(current_observed_heading,targetHeading-10,targetHeading+10)){
+
+    }
+  }
+  fclose(fp);
+}
+
+bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
+/*******************************************************
+   * Case 1: deg1 < deg2                                 *
+   * Do not have to account for passing 360 ie (45 to 90)*
+   *******************************************************/
+  if(lowerHeading < upperHeading){
+    return (lowerHeading <= heading && heading <= upperHeading);
+  }
+    /*******************************************************
+    * Case 2: deg1 > deg2                                 *
+    * Do have to account for passing 360 ie (355 to 5)    *
+    *******************************************************/
+  else if(lowerHeading > upperHeading){
+    return(heading > lowerHeading || heading < upperHeading);
+  }
+  else{
+    return (heading == lowerHeading);
+  }
+}
+
+
+bool checkIfBeingObserved(){
+  bool beingObserved = false;
+  int i;
+  int selfX = getSelfX(); //Using custom made command instead relying on cAI.c
+  int selfY = getSelfY(); //Using custom made command instead relying on cAI.c
+
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
+
+  //Used to make sure bee is being watch and bee didnt glance during fly-by
+  static int observed_counter = 0;
+
+  //See if anybody is observing self
+  //TODO: implement withinVicinity() [WAITING FOR DAVID]
+  for (i = 0; i < num_ship; i++) {
+    if ((ship_ptr[i].id != self->id)) {
+      //Determine if they are looking in your direction
+      ship_t observing_ship = ship_ptr[i];  //Get the observing ship
+
+      //Get the direction ship is looking
+      double conversion_factor = 2.8125;
+      int others_dir = (int)((double)observing_ship.dir * conversion_factor);
+
+      //get the heading from observer to self
+      int angle = getHeadingBetween(ship_ptr[i].x,ship_ptr[i].y,selfX,selfY);
+      fprintf(fp, "ship.dir: %d angle: %d\n",others_dir,angle);
+
+      //If headings are the same they are looking at self
+      if(others_dir >= angle-1 && others_dir <= angle+1){
+        beingObserved = true;
+      }
+    }
+  }
+  if (beingObserved == true) {
+    observed_counter++;
+  } else {
+    observed_counter = 0;
+  }
+  fclose(fp);
+  return (observed_counter == 15);
+}
+
+int getSelfX(){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return (int)ship_ptr[i].x;
+    }
+  }
+}
+
+int getSelfY(){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
+      return (int)ship_ptr[i].y;
+    }
+  }
+}
+
+int getDancersX(int dancing_ship){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((ship_ptr[i].id == (short) dancing_ship)) {
+      return (int) ship_ptr[i].x;
+    }
+  }
+}
+int getDancersY(int dancing_ship) {
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if ((ship_ptr[i].id == (short) dancing_ship)) {
+      return (int) ship_ptr[i].y;
+    }
+  }
+}
+
+int getHeadingBetween(int x1, int y1, int x2, int y2){
+  //x1, y1 are self coordinates
+  double adjacent = x2 -x1;
+  double opposite  = y2 - y1;
+  double conversion = 180.0 / PI_AI;
+  double heading = atan(opposite/adjacent) * conversion; //retuns between -pi/2 and pi/2 in radians
+
+  //Determine which quadrant angle came from
+  if(adjacent >= 0 && opposite >= 0){
+    //came from quadrant 1 no conversion needed
+  }else if(adjacent < 0 && opposite >= 0){
+    //Came from quadrant 2 add 180
+    heading += 180;
+  }else if(adjacent < 0 && opposite < 0){
+    //came from quadrant 3 add 180
+    heading += 180;
+  }else if(adjacent >= 0 && opposite < 0){
+    //came from quadrant 4 no conversion needed
+  }
+  return (int)heading;
+}

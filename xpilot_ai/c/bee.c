@@ -13,12 +13,8 @@
 #include <string.h>
 #include "beeObject.h"
 
-
-//global variables
-// What are these used for? Remove them if they aren't used. 
-char temp_str[25];
-bool fueling = false;
-
+#define EMPTY 200
+#define FULL 700
 
 /*****************************************************************************
  * Searching (Controller)- Benjamin Makowsky
@@ -61,20 +57,16 @@ void searching() {
     }
   }
 
-
   if (fuel_found) {
     if(comeToStop(30) == false){
       //Do nothing
     } else {
-
       int POICoordinates[2];
       static bool fileRead = false; //Boolean to set coordinates only once
       if(!fileRead) {
         memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(getPOICoordinates(x, y)));
         setHoneyX(POICoordinates[0]);
         setHoneyY(POICoordinates[1]);
-        // remove this commented line if it won't be used
-        //rememberPOICoords(POICoordinates[0],POICoordinates[1]);
         fileRead = !fileRead;
       }
 
@@ -92,15 +84,14 @@ void searching() {
   }
 }
 
-//INPROGRESS: Get it to forage
 /*****************************************************************************
  * Foraging (Controller)- Benjamin Makowsky
  * ***************************************************************************/
 void forage() {
 
   fuel = selfFuel();
-  int x = 0;
-  int y = 0;
+  int destination_x = 0;
+  int destination_y = 0;
   static bool initForage = true;
   static bool performed_dance = false;
   static bool depositing = true;
@@ -116,11 +107,8 @@ void forage() {
     fprintf(fp,"Honey Spot: (%d,%d)\n", getHoneyX(), getHoneyY());
     fprintf(fp,"------------------------------\n");
     fclose(fp);
-    // just set it to false, it's faster.
-    initForage = !initForage;
+    initForage = false;
   }
-
-
 
   /** Steps:
    *    1) Determine if heading to hive or honey
@@ -129,58 +117,56 @@ void forage() {
    *    4) Repeat
    */
 
-
   //Step 1:
   //Determine whether or not you are heading to hive to deposit honey or
   //if you are headed to flower to pickup honey
-  // Use a more descriptive variable name than x,y, i.e objectiveX, objectiveY
   if(depositing){
-    x = selfBaseX();
-    y = selfBaseY();
+    destination_x = selfBaseX();
+    destination_y = selfBaseY();
   } else {
-    x = getHoneyX();
-    y = getHoneyY();
+    destination_x = getHoneyX();
+    destination_y = getHoneyY();
   }
 
-
-  //If block placed here in order to debug and test that x and y are properly changed
-  /***
-  if(forage_state_changed){
-    FILE *fp;
-    fp = fopen("Log.txt", "a");
-    if(depositing) {
-      fprintf(fp, "Depositing honey at hive \n");
-    }else{
-      fprintf(fp, "Getting Honey from source (%d,%d)\n", x,y);
-    }
-    fclose(fp);
-    forage_state_changed = false;
-  }
-  */
 
 
   static int fuelLVL = 0;
-
   //Step 2: Determine if near honey/hive
-  if(!inVicinityOf(x,y)) {
+  if(!inVicinityOf(destination_x,destination_y)) {
     refuel(0);
-    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",x,y);
-    goToCoordinates(x,y);
+    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
+    goToCoordinates(destination_x,destination_y);
+
 
   //Step 3; Gather or deposit fuel
   }else {
-    setPower(0);
-    if(performed_dance == false){
-      performed_dance = dance(STATE_SEARCHING);
+    static bool beingObserved = false;  //Used to determine if being observed
+    static int waiting_counter = 0;     //Counter used to wait for specified frames
+    int frameLimit = 14 * 10;           //14fps for 10 seconds
+    setPower(0);                        //Come to stop until being observed or time limit has been reached
+
+    //wait to fly off until someone has seen dance or time has been reached
+    if(performed_dance == false && waiting_counter < frameLimit){
+
+      //while not being observed increment counter
+      if(!beingObserved){
+        //do nothing for n seconds or until observed
+        waiting_counter++;
+        beingObserved = checkIfBeingObserved();
+        sprintf(bugstring,"waiting: %.2f", (float)waiting_counter/(frameLimit) * 100);
+
+      //If you are being observed perform dance
+      }else {
+        //sprintf(bugstring,"Being Observed");
+        performed_dance = dance(STATE_SEARCHING);
+      }
+
     }else {
       fuelLVL = (int) selfFuel();
-      // empty & full should be in #define 
-      int empty = 500;
-      int full = 700;
-      if (fuelLVL > empty && depositing) {
+      if (fuelLVL > EMPTY && depositing) {
         checkForFuel();
         strcpy(bugstring, "Depositing");
-      } else if (fuelLVL < full && !depositing) {
+      } else if (fuelLVL < FULL && !depositing) {
         checkForFuel();
         strcpy(bugstring, "Gathering");
 
@@ -195,3 +181,24 @@ void forage() {
   }
 }
 
+/*****************************************************************************
+ * Foraging (Controller)- Benjamin Makowsky
+ * ***************************************************************************/
+void onlook(){
+  static int dancing_ship = -1;
+  if(!inVicinityOf(selfBaseX(),selfBaseY())){
+    goToCoordinates(selfBaseX(),selfBaseY());
+  }else{
+    setPower(0);
+    if(dancing_ship == -1){
+      dancing_ship = seeIfDancing(360,40);
+      sprintf(bugstring,"%d",dancing_ship);
+    }else{
+      sprintf(bugstring,"Heading: %d",(int)selfHeadingDeg());
+
+      //Turn toward dancer
+      goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
+      //observeDance(dancing_ship);
+    }
+  }
+}

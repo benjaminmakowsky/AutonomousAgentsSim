@@ -4,6 +4,8 @@
 
 #include <stdbool.h>
 
+#define MIN_FRAMES_PASSED 3 //Minimum amount of frames that can be recognized is 3
+
 // Structs to hold the base coordinates &
 // the fuel depot coordinates
 typedef struct baseStruct_t {
@@ -19,7 +21,14 @@ typedef struct fuelStruct_t {
     int num_fuels;
 } FuelStruct_t;
 
+enum DanceType
+{
+    FOUND_HONEY,          //0
+    HONEY_EMPTY,          //1
+    FOUND_ENEMY_HIVE,     //2
+};
 
+extern enum DanceType dance_num;
 extern BaseStruct_t* hives;
 extern FuelStruct_t* honey_spots;
 
@@ -89,5 +98,20 @@ bool honeyFoundDance();
 /// Performs dance to relay that honey has been found
 /// \return boolean if dance has been completed or not
 
+
 bool beeDegIsBetween(int deg1, int deg2);
+/// Determines whether or no bee heading is between 2 headings
+/// \param deg1 The starting degree bounds
+/// \param deg2  The ending degree bounds
+/// \return boolean if between degree bounds
+
+
+void updateShip();
+///Update ship_t for cAI
+
+
+int interpretDance(int dance);
+/// Decides whether or not to change state based on observed dance
+/// \param dance The dance being observed
+/// \return The state bee has changed into based on dance
 #endif //XPILOT_LE_BEEAI_H

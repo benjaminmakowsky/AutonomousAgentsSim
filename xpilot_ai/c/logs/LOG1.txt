@@ -1,0 +1,151 @@
+ShipID# 1	State: 0
+------------------------------
+HIVES:
+Team# 50	X: 315	Y: 910
+Team# 49	X: 175	Y: 140
+------------------------------
+FUEL POINTS:
+X: 770	Y: 945
+X: 840	Y: 315
+------------------------------
+Ship Moving
+Current X: 192, Previous X: 0
+Current y: 157, Previous y: 0
+Ship Moving
+Current X: 193, Previous X: 0
+Current y: 157, Previous y: 0
+Ship Moving
+Current X: 195, Previous X: 193
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 198, Previous X: 195
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 201, Previous X: 192
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 204, Previous X: 198
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 208, Previous X: 204
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 213, Previous X: 201
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 218, Previous X: 208
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 223, Previous X: 218
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 229, Previous X: 223
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 234, Previous X: 229
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 237, Previous X: 213
+Current y: 172, Previous y: 157
+Ship Moving
+Current X: 231, Previous X: 234
+Current y: 170, Previous y: 157
+Ship Moving
+Current X: 226, Previous X: 237
+Current y: 168, Previous y: 172
+Ship Moving
+Current X: 221, Previous X: 231
+Current y: 166, Previous y: 170
+Ship Moving
+Current X: 217, Previous X: 226
+Current y: 165, Previous y: 168
+Ship Moving
+Current X: 213, Previous X: 221
+Current y: 164, Previous y: 166
+Ship Moving
+Current X: 209, Previous X: 213
+Current y: 162, Previous y: 164
+Ship Moving
+Current X: 206, Previous X: 209
+Current y: 161, Previous y: 162
+Ship Moving
+Current X: 202, Previous X: 217
+Current y: 160, Previous y: 165
+Ship Moving
+Current X: 200, Previous X: 206
+Current y: 159, Previous y: 161
+Ship Moving
+Current X: 197, Previous X: 200
+Current y: 158, Previous y: 159
+Ship Moving
+Current X: 195, Previous X: 197
+Current y: 158, Previous y: 158
+Ship Moving
+Current X: 193, Previous X: 195
+Current y: 157, Previous y: 158
+Ship Moving
+Current X: 191, Previous X: 202
+Current y: 156, Previous y: 160
+Ship Moving
+Current X: 189, Previous X: 193
+Current y: 156, Previous y: 157
+Ship Moving
+Current X: 187, Previous X: 189
+Current y: 155, Previous y: 156
+Ship Moving
+Current X: 186, Previous X: 191
+Current y: 155, Previous y: 156
+Ship not moving: 1
+Ship Moving
+Current X: 184, Previous X: 187
+Current y: 154, Previous y: 155
+Ship Moving
+Current X: 182, Previous X: 186
+Current y: 154, Previous y: 155
+Ship not moving: 1
+Ship not moving: 2
+Ship Moving
+Current X: 180, Previous X: 182
+Current y: 153, Previous y: 154
+Ship not moving: 1
+Ship Moving
+Current X: 178, Previous X: 180
+Current y: 152, Previous y: 153
+Ship Moving
+Current X: 178, Previous X: 184
+Current y: 152, Previous y: 154
+Ship not moving: 1
+Ship not moving: 2
+Ship Moving
+Current X: 176, Previous X: 178
+Current y: 151, Previous y: 152
+Ship not moving: 1
+Ship Moving
+Current X: 175, Previous X: 178
+Current y: 151, Previous y: 152
+Ship not moving: 2
+Ship not moving: 3
+Ship not moving: 4
+Ship not moving: 1
+Ship not moving: 2
+Ship Moving
+Current X: 174, Previous X: 176
+Current y: 151, Previous y: 151
+Ship not moving: 1
+Ship not moving: 2
+Ship not moving: 3
+Ship Moving
+Current X: 173, Previous X: 175
+Current y: 150, Previous y: 151
+Ship not moving: 1
+Ship not moving: 2
+Ship not moving: 3
+Ship not moving: 4
+Ship not moving: 5
+Ship not moving: 4
+Ship Moving
+Current X: 172, Previous X: 174
+Current y: 150, Previous y: 151
+Ship not moving: 6
+Ship not moving: 1
+returning: 0

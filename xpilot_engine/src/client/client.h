@@ -314,7 +314,6 @@ typedef struct {
 
 typedef struct {
 	short		x, y, id, dir, armor, baseX, baseY, numShips;
-	int fuel_coords[2];  //Ben
 	int fuelX;
 	int fuelY;
 	int self_state;      //Ben
