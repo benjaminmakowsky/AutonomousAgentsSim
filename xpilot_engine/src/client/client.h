@@ -201,7 +201,8 @@ enum State
   STATE_DEAD,     //2
   STATE_SEARCHING,//3
   STATE_FORAGING, //4
-  STATE_NURSE     //5
+  STATE_NURSE,    //5
+  STATE_ONLOOKING //6
 };
 
 typedef struct {

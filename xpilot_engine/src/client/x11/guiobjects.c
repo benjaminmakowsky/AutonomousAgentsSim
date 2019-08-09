@@ -1027,6 +1027,7 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
             case( STATE_SEARCHING ): ship_shape = BM_BEE_SEARCHER; break;
             case( STATE_FORAGING ): ship_shape = BM_BEE_FORAGER; break;
             case( STATE_NURSE ): ship_shape = BM_BEE_NURSE; break;
+            case( STATE_ONLOOKING ): ship_shape = BM_BEE_ONLOOKER; break;
             default: ship_shape = BM_BEE; break;
           }
 				}
@@ -1035,6 +1036,7 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
             case( STATE_SEARCHING ): ship_shape = BM_BEE_ENEMY_SEARCHER; break;
             case( STATE_FORAGING ): ship_shape = BM_BEE_ENEMY_FORAGER; break;
             case( STATE_NURSE ): ship_shape = BM_BEE_ENEMY_NURSE; break;
+            case( STATE_ONLOOKING ): ship_shape = BM_BEE_ENEMY_ONLOOKER; break;
             default: ship_shape = BM_BEE_ENEMY; break;
           }
 				}
@@ -1043,6 +1045,7 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
             case( STATE_SEARCHING ): ship_shape = BM_BEE_FRIEND_SEARCHER; break;
             case( STATE_FORAGING ): ship_shape = BM_BEE_FRIEND_FORAGER; break;
             case( STATE_NURSE ): ship_shape = BM_BEE_FRIEND_NURSE; break;
+            case( STATE_ONLOOKING ): ship_shape = BM_BEE_FRIEND_ONLOOKER; break;
             default: ship_shape = BM_BEE_FRIEND; break;
           }
 				}

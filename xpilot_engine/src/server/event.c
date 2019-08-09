@@ -1076,7 +1076,7 @@ int Handle_keyboard(player_t *pl)
           break;
 
         case KEY_STATE_6:
-          pl->aiState = 6;
+          pl->aiState = STATE_ONLOOKING;
           break;
 
 				default:

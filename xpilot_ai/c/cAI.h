@@ -14,11 +14,8 @@ enum State
     STATE_DEAD,     //2
     STATE_SEARCHING,//3
     STATE_FORAGING, //4
-<<<<<<< HEAD
-    STATE_NURSE     //5
-=======
-    STATE_ONLOOKING //5
->>>>>>> c444725496ec973c45ff80446650dba33e378ee9
+    STATE_NURSE,    //5
+    STATE_ONLOOKING //6
 };
 #endif
 
