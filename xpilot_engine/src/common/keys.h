@@ -60,8 +60,8 @@ typedef enum {
 	KEY_SWAP_SETTINGS,
 	KEY_REFUEL,
 	KEY_CONNECTOR,
-	KEY_UNUSED_26,		/* Was KEY_INCREASE_POWER */
-	KEY_UNUSED_27,		/* Was KEY_DECREASE_POWER */
+	KEY_UNUSED_26,	
+	KEY_UNUSED_27,	
 	KEY_UNUSED_28,		/* Was KEY_INCREASE_TURNSPEED */
 	KEY_UNUSED_29,		/* Was KEY_DECREASE_TURNSPEED */
 	KEY_THRUST,							/* 30 */
@@ -99,13 +99,13 @@ typedef enum {
 	KEY_HYPERJUMP,		/* Was KEY_POINTER_CONTROL up to 3.2.5 */
 	KEY_DETONATE_MINES,
 	KEY_DEFLECTOR,		/* since 3.8.0 */
-	KEY_NURSE_BEE,   /* Was KEY_UNUSED_66 */
-	KEY_UNUSED_66,
-	KEY_UNUSED_67,
-	KEY_UNUSED_68,
-	KEY_UNUSED_69,
-	KEY_UNUSED_70,						/* 70 */
-	KEY_UNUSED_71,
+	KEY_NURSE_BEE,   /* Was KEY_UNUSED_65 */
+	KEY_STATE_1,   /* Was KEY_UNUSED_66 */
+	KEY_STATE_2,   /* Was KEY_UNUSED_67 */
+	KEY_STATE_3,   /* Was KEY_UNUSED_68 */
+	KEY_STATE_4,   /* Was KEY_UNUSED_69 */
+	KEY_STATE_5, /* 70 */  // Do not use or replace, buggy
+	KEY_STATE_6,    // Do not use or replace, buggy
 	NUM_KEYS		/* The number of different keys_t */
 #ifndef SERVER
 		/*

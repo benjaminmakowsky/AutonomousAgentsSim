@@ -191,6 +191,18 @@ N = 0;
 # define RELEASE(P, N, M)	((N) = 0)
 #endif
 
+//
+// AI State
+//
+enum State
+{
+  STATE_INIT,     //0
+  STATE_FLYING,   //1
+  STATE_DEAD,     //2
+  STATE_SEARCHING,//3
+  STATE_FORAGING, //4
+  STATE_NURSE     //5
+};
 
 typedef struct {
 	double	score;
@@ -306,6 +318,7 @@ typedef struct {
 	int fuelX;
 	int fuelY;
 	int self_state;      //Ben
+  int aiState; // Rene
 	u_byte		shield, cloak, eshield;
 	u_byte		phased, deflector;
 	double fuel, fov, baseFuel;
@@ -531,6 +544,7 @@ extern double	baseFuel;		/* Sum of ship's home-base fuel */
 extern int baseX; /* Ship's home-base x coordinate */
 extern int baseY; /* Ship's home-base y coordinate */
 extern int numShips; /* Number of ships on server */
+extern int aiState; /* Ship's ai state according to server, used by GUI */
 extern short	fuelCurrent;		/* Number of currently used tank */
 extern short	numTanks;		/* Number of tanks */
 extern double	fuelTime;		/* Display fuel for how long? */
@@ -752,7 +766,7 @@ int Handle_self(int x, int y, int vx, int vy, int newHeading,
 		int newNextCheckPoint, int newAutopilotLight,
 		u_byte *newNumItems, int newCurrentTank,
 		double newFuelSum, double newFuelMax, double newBaseFuel, 
-    int newBaseX, int newBaseY, int newNumPlayers,
+    int newBaseX, int newBaseY, int newNumPlayers, int newAI,
 		int newPacketSize, int status);
 int Handle_self_items(u_byte *newNumItems);
 int Handle_modifiers(char *m);
@@ -769,7 +783,7 @@ int Handle_laser(int color, int x, int y, int len, int dir);
 int Handle_missile(int x, int y, int dir, int len);
 int Handle_ball(int x, int y, int id, int style);
 int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
-		int eshield, int phased, int deflector);
+		int eshield, int phased, int deflector, int aiState);
 int Handle_mine(int x, int y, int teammine, int id);
 int Handle_item(int x, int y, int type);
 int Handle_fastshot(int type, u_byte *p, int n);

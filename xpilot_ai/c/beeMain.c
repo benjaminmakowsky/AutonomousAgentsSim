@@ -663,6 +663,7 @@ AI_loop()
     fclose(fp);
   }*/
 
+  sendSelfState(state);
 
   switch(state)
   {

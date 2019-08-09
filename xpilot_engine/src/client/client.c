@@ -109,6 +109,7 @@ double	fuelMax;		/* How much fuel can you take? */
 int baseX; /* Ship's home-base x coordinate */ 
 int baseY; /* Ship's home-base y coordinate */
 int numShips; /* Number of ships on the server */
+int aiState; /* Ship's AI state according to server, used by GUI */
 double  baseFuel;   /* Ship's home-base current fuel */
 short	fuelCurrent;		/* Number of currently used tank */
 short	numTanks;		/* Number of tanks */
@@ -1639,7 +1640,7 @@ int Handle_self(int x, int y, int vx, int vy, int newHeading,
 		int newNextCheckPoint, int newAutopilotLight,
 		u_byte *newNumItems, int newCurrentTank,
 		double newFuelSum, double newFuelMax, double newBaseFuel,
-    int newBaseX, int newBaseY, int newNumShips,
+    int newBaseX, int newBaseY, int newNumShips, int newAIState,
 		int newPacketSize, int status)
 {
 	selfPos.x = x;
@@ -1665,6 +1666,7 @@ int Handle_self(int x, int y, int vx, int vy, int newHeading,
   baseX = newBaseX;
   baseY = newBaseY;
   numShips = newNumShips;
+  aiState = newAIState;
 	selfVisible = 0;
 	if (newPacketSize + 16 < packet_size)
 		packet_size -= 16;
@@ -1835,7 +1837,7 @@ int distanceFormula( int x1, int x2, int y1, int y2 ){
 }
 
 int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
-		int eshield, int phased, int deflector)
+		int eshield, int phased, int deflector, int aiState)
 {
 	ship_t	t;
 
@@ -1858,6 +1860,7 @@ int Handle_ship(int x, int y, int id, int dir, int shield, int cloak,
   t.baseX = baseX;
   t.baseY = baseY;
   t.numShips = numShips;
+  t.aiState = aiState;
 	t.armor = numItems[ITEM_ARMOR];
 	t.fov = numItems[ITEM_FOV];
 	t.range = numItems[ITEM_RANGE] * 100;

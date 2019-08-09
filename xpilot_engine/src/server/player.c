@@ -531,7 +531,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
 
 	// New code: Give different stats to ship based on the shipshape
 	warn( "%s\n", ship->name );
-	if( !strcmp( ship->name, "quad" ) ){
+	if( !strcmp( ship->name, "quad" ) || !strcmp( ship->name, "bee" ) ){
 		pl->cloak = 1;
 
 		pl->power = 0.5;
@@ -1765,7 +1765,7 @@ void Player_death_reset(player_t *pl, bool add_rank_death)
 
 	pl->vel.x		= pl->vel.y	= 0.0;
 	pl->acc.x		= pl->acc.y	= 0.0;
-	if( !strcmp( pl->ship->name, "quad" ) ){
+	if( !strcmp( pl->ship->name, "quad" ) || !strcmp( pl->ship->name, "bee" ) ){
 		pl->emptymass = pl->mass = 50; 
 	}
 	else if( !strcmp( pl->ship->name, "fixed" ) ){

@@ -1055,6 +1055,29 @@ int Handle_keyboard(player_t *pl)
           pl->nursing = 1;
           break;
 
+        case KEY_STATE_1:
+          pl->aiState = STATE_FLYING;
+          break;
+
+        case KEY_STATE_2:
+          pl->aiState = STATE_DEAD;
+          break;
+
+        case KEY_STATE_3:
+          pl->aiState = STATE_SEARCHING;
+          break;
+
+        case KEY_STATE_4:
+          pl->aiState = STATE_FORAGING;
+          break;
+
+        case KEY_STATE_5:
+          pl->aiState = STATE_NURSE;
+          break;
+
+        case KEY_STATE_6:
+          pl->aiState = 6;
+          break;
 
 				default:
 						      break;
@@ -1127,6 +1150,24 @@ int Handle_keyboard(player_t *pl)
 
         case KEY_NURSE_BEE:
           pl->nursing = 0;
+          break;
+
+        case KEY_STATE_1:
+          break;
+
+        case KEY_STATE_2:
+          break;
+
+        case KEY_STATE_3:
+          break;
+
+        case KEY_STATE_4:
+          break;
+
+        case KEY_STATE_5:
+          break;
+
+        case KEY_STATE_6:
           break;
 
 				default:

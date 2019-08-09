@@ -957,7 +957,8 @@ Frame_ships (connection_t * conn, player_t * pl)
 					Player_is_cloaked (pl_i) ? 1 : 0,
 					BIT (pl_i->used, HAS_EMERGENCY_SHIELD) != 0,
 					Player_is_phasing (pl_i) ? 1 : 0,
-					BIT (pl_i->used, USES_DEFLECTOR) != 0);
+					BIT (pl_i->used, USES_DEFLECTOR) != 0,
+          pl_i->aiState );
 		}
 
 		if (Player_is_refueling (pl_i))

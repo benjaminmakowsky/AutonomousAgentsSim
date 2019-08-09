@@ -261,4 +261,14 @@
 #define SHIP_SPAWN_CMD "gnome-terminal -- sh -c 'cd ../../../xpilot_ai/c/ && export LD_LIBRARY_PATH=. && ./bee %d %d %d %d -team %d -join -name newBorn%d -shipShape %s '"
 #define SHIP_SPAWN_CMD_LEN strlen(SHIP_SPAWN_CMD)
 
+enum State
+{
+  STATE_INIT,     //0
+  STATE_FLYING,   //1
+  STATE_DEAD,     //2
+  STATE_SEARCHING,//3
+  STATE_FORAGING, //4
+  STATE_NURSE     //5
+};
+
 #endif

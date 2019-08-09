@@ -472,7 +472,8 @@ static void Paint_all_ships(void)
 					ship_ptr[i].dir, ship_ptr[i].id,
 					ship_ptr[i].cloak, ship_ptr[i].phased,
 					ship_ptr[i].shield,
-					ship_ptr[i].deflector, ship_ptr[i].eshield);
+					ship_ptr[i].deflector, ship_ptr[i].eshield,
+          ship_ptr[i].aiState );
 
 
 		}

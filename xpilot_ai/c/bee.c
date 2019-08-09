@@ -87,6 +87,7 @@ void searching() {
       fclose(fp);
       sprintf(bugstring, "Search Moving to %d and %d",getHoneyX(), getHoneyY());
       state = STATE_FORAGING;
+      sendSelfState(state);
     }
   }
 }

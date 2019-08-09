@@ -359,6 +359,7 @@ typedef struct player {
 	int shotlife; /* For how long will this bullet last (range) */
 
   bool nursing; /* If spending base resourse to spawn new ships */
+  int aiState; /* AI state, used by clients to add visual effects */
 
 #define PRIV_NOAUTOKICK		1
 #define PRIV_AUTOKICKLAST	2

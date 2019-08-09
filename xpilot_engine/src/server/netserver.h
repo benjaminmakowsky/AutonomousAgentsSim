@@ -76,7 +76,7 @@ int Send_item(connection_t *connp, clpos_t pos, int type);
 int Send_paused(connection_t *connp, clpos_t pos, int count);
 int Send_appearing(connection_t *connp, clpos_t pos, int id, int count);
 int Send_ecm(connection_t *connp, clpos_t pos, int size);
-int Send_ship(connection_t *connp, clpos_t pos, int id, int dir, int shield, int cloak, int eshield, int phased, int deflector);
+int Send_ship(connection_t *connp, clpos_t pos, int id, int dir, int shield, int cloak, int eshield, int phased, int deflector, int aiState);
 int Send_refuel(connection_t *connp, clpos_t pos1, clpos_t pos2);
 int Send_connector(connection_t *connp, clpos_t pos1, clpos_t pos2, int tractor);
 int Send_laser(connection_t *connp, int color, clpos_t pos, int len, int dir);

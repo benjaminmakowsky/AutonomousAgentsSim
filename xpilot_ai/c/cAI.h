@@ -6,14 +6,19 @@
 
 //Machine State
 
+#ifdef BEE
 enum State
 {
     STATE_INIT,     //0
     STATE_FLYING,   //1
     STATE_DEAD,     //2
     STATE_SEARCHING,//3
-    STATE_FORAGING  //4
+    STATE_FORAGING, //4
+    STATE_NURSE     //5
 };
+#endif
+
+
 
 extern enum State state;
 
@@ -109,6 +114,8 @@ extern void repair();           // Repairs a target -JRA
 extern void reprogram();        // Reprogram a modifier or lock bank -JRA
 extern void talk(char* talk_str); // Sends a message -JRA
 extern char* scanMsg(int id); // Returns the specified message -EGG
+extern void sendSelfState( int state); // Sends state enum to server so that it can propagate it to the other clients,
+                                  // clients will use this info for purely cosmetic GUI features
 
 // self properties -JNE
 extern int selfX(); // Returns the ship's X Position -JRA
@@ -196,6 +203,7 @@ extern int shotAlert(int idx); // Returns a Danger Rating of a shot -JRA
 extern int shotX(int idx); // Returns the X coordinate of a shot -JRA
 extern int shotY(int idx); // Returns the Y coordinate of a shot -JRA
 extern int shotDist(int idx); // Returns the Distance of a shot from the ship -JRA
+
 extern int shotVel(int idx); // Returns the Velocity of a shot -JRA
 extern int shotVelDir(int idx); // Returns the Direction of the Velocity of a shot -JRA
 extern int aimdir(int idx); // Returns the Direction that the ship needs to turn to shot the Enemy -JRA

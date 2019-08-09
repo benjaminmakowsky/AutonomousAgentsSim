@@ -886,7 +886,7 @@ xp_option_t key_options[] = {
 
 	XP_KEY_OPTION(
 			"keyFireMissile",
-			"backslash",
+			"", // was "backslash"
 			KEY_FIRE_MISSILE,
 			"Fire smart missile.\n"),
 
@@ -916,13 +916,13 @@ xp_option_t key_options[] = {
 
 	XP_KEY_OPTION(
 			"keyDetachMine",
-			"bracketright",
+			"", // was bracketright
 			KEY_DETACH_MINE,
 			"Detach a moving mine.\n"),
 
 	XP_KEY_OPTION(
 			"keyDetonateMines",
-			"equal",
+			"", // was equal
 			KEY_DETONATE_MINES,
 			"Detonate the closest mine you have dropped or thrown.\n"),
 
@@ -970,7 +970,7 @@ xp_option_t key_options[] = {
 
 	XP_KEY_OPTION(
 			"keyEcm",
-			"bracketleft",
+			"", // was bracketleft
 			KEY_ECM,
 			"Use ECM.\n"),
 
@@ -1414,6 +1414,10 @@ xp_option_t key_options[] = {
 			KEY_MSG_11,
 			"Sends the talkmessage stored in msg11.\n"),
 
+  // There are only so many keys that the client can handle
+  // Let's cleared these unused msg keys to make room for our
+  // state send keys
+  /*
 	XP_KEY_OPTION(
 			"keySendMsg12",
 			"",
@@ -1467,13 +1471,51 @@ xp_option_t key_options[] = {
 			"",
 			KEY_MSG_20,
 			"Sends the talkmessage stored in msg20.\n"),
+*/
   XP_KEY_OPTION(
       "keyNurseBee",
       "9",
       KEY_NURSE_BEE,
       "Spends hive honey to spawn new bees.\n"),
 
-	/*
+  XP_KEY_OPTION(
+      "keySendState1",
+      "minus",
+      KEY_STATE_1,
+      "Tell server that ship is in state enum 1.\n"),
+  
+  XP_KEY_OPTION(
+      "keySendState2",
+      "equal",
+      KEY_STATE_2,
+      "Tell server that ship is in state enum 2.\n"),
+  
+  XP_KEY_OPTION(
+      "keySendState3",
+      "backslash",
+      KEY_STATE_3,
+      "Tell server that ship is in state enum 3.\n"),
+  
+  XP_KEY_OPTION(
+      "keySendState4",
+      "bracketright",
+      KEY_STATE_4,
+      "Tell server that ship is in state enum 4.\n"),
+  
+  XP_KEY_OPTION(
+      "keySendState5",
+      "semicolon",
+      KEY_STATE_5,
+      "Tell server that ship is in state enum 5.\n"),
+      
+       
+  XP_KEY_OPTION(
+      "keySendState6",
+      "apostrophe",
+      KEY_STATE_6,
+      "Tell server that ship is in state enum 6.\n"),
+
+  /*
 	 * These are after the keys so that the key options will be
 	 * present when the pointer button options are stored.
 	 */

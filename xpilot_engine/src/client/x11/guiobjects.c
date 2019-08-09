@@ -955,7 +955,7 @@ static int set_shipshape(int world_x, int world_y,
 
 
 void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
-		int shield, int deflector, int eshield)
+		int shield, int deflector, int eshield, int aiState)
 {
 	int			cnt, ship_color;
 	other_t		*other;
@@ -1021,6 +1021,36 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
 			if( ship->num_points == 3 ){
 				ship_shape = BM_QUAD;
 			}
+			else if( !strcmp( ship->name, "bee" ) ){
+				if( ship_color == WHITE ){
+          switch( aiState ){
+            case( STATE_SEARCHING ): ship_shape = BM_BEE_SEARCHER; break;
+            case( STATE_FORAGING ): ship_shape = BM_BEE_FORAGER; break;
+            case( STATE_NURSE ): ship_shape = BM_BEE_NURSE; break;
+            default: ship_shape = BM_BEE; break;
+          }
+				}
+				else if( ship_color == RED ){
+          switch( aiState ){
+            case( STATE_SEARCHING ): ship_shape = BM_BEE_ENEMY_SEARCHER; break;
+            case( STATE_FORAGING ): ship_shape = BM_BEE_ENEMY_FORAGER; break;
+            case( STATE_NURSE ): ship_shape = BM_BEE_ENEMY_NURSE; break;
+            default: ship_shape = BM_BEE_ENEMY; break;
+          }
+				}
+				else if( ship_color == BLUE ){
+          switch( aiState ){
+            case( STATE_SEARCHING ): ship_shape = BM_BEE_FRIEND_SEARCHER; break;
+            case( STATE_FORAGING ): ship_shape = BM_BEE_FRIEND_FORAGER; break;
+            case( STATE_NURSE ): ship_shape = BM_BEE_FRIEND_NURSE; break;
+            default: ship_shape = BM_BEE_FRIEND; break;
+          }
+				}
+				else{
+					printf("Unknown quad ship: %d - %d\n", id, ship_color ); 
+				}
+			}
+
 			else if( !strcmp( ship->name, "quad" ) ){
 				if( ship_color == WHITE ){
 					ship_shape = BM_QUAD;

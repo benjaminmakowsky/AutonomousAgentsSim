@@ -1539,10 +1539,10 @@ int Send_self(connection_t *connp,
 			"%hd%hd%hd%hd%c"
 			"%c%c%c"
 			"%hd%hd%c%c"
-			"%c%hd%hd%hd"
-      "%hd%hd%hd"
-			"%hd%hd%c"
-			"%c%c"
+			"%c%hd%hd%hd" // fuel.current, fuel sum, fuel max, base fuel
+      "%hd%hd%hd%c" // cx, cy, NumPlayers, ai_state
+			"%hd%hd%c" // view_width, view_height, debris_color
+			"%c%c" //status, autopilotlight
 			,
 			PKT_SELF,
 			CLICK_TO_PIXEL(pl->pos.cx), CLICK_TO_PIXEL(pl->pos.cy),
@@ -1562,7 +1562,7 @@ int Send_self(connection_t *connp,
 
       (int)(CLICK_TO_PIXEL(pl->home_base->pos.cx)),
       (int)(CLICK_TO_PIXEL(pl->home_base->pos.cy)),
-      (int)NumPlayers,
+      (int)NumPlayers, (char)pl->aiState,
 
 			connp->view_width, connp->view_height,
 			connp->debris_colors,
@@ -1939,14 +1939,14 @@ int Send_trans(connection_t *connp, clpos_t pos1, clpos_t pos2)
 
 int Send_ship(connection_t *connp, clpos_t pos, int id, int dir,
 		int shield, int cloak, int emergency_shield, int phased,
-		int deflector)
+		int deflector, int aiState)
 {
 	if (!FEATURE(connp, F_SEPARATEPHASING))
 		cloak |= phased;
 	return Packet_printf(&connp->w,
-			"%c%hd%hd%hd" "%c" "%c",
+			"%c%hd%hd%hd" "%c%c%c",
 			PKT_SHIP,
-			CLICK_TO_PIXEL(pos.cx), CLICK_TO_PIXEL(pos.cy), id,
+			CLICK_TO_PIXEL(pos.cx), CLICK_TO_PIXEL(pos.cy), id, (char) aiState,
 			dir,
 			(shield != 0)
 			| ((cloak != 0) << 1)

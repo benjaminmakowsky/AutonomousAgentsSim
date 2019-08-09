@@ -823,7 +823,7 @@ static int Net_packet(void)
 	while (rbuf.buf + rbuf.len > rbuf.ptr) {
 		type = (*rbuf.ptr & 0xFF);
 
-		if (receive_tbl[type] == NULL) {
+    if(receive_tbl[type] == NULL){
 			warn("Received unknown packet type (%d, %d), "
 					"dropping frame.", type, prev_type);
 			Sockbuf_clear(&rbuf);
@@ -1466,6 +1466,7 @@ int Receive_self(void)
 	u_byte	ch, sNumSparkColors, sHeading, sPower, sTurnSpeed,
 		sTurnResistance, sNextCheckPoint, lockDir, sAutopilotLight,
 		currentTank, sStat;
+  u_byte sAIState;
 	u_byte	num_items[NUM_ITEMS];
 
 	n = Packet_scanf(&rbuf,
@@ -1485,13 +1486,13 @@ int Receive_self(void)
 	memset(num_items, 0, sizeof num_items);
 
 	n = Packet_scanf(&rbuf,
-			"%c%hd%hd%hd"
-      "%hd%hd%hd"
-			"%hd%hd%c"
-			"%c%c",
+			"%c%hd%hd%hd" // currentTank, fuelSum, fuelMax, baseFuel
+      "%hd%hd%hd%c" // baseX, baseY, numShips, ai_state
+			"%hd%hd%c" // viewWidth, viewHeight, numSparkColors
+			"%c%c", // sStat, autoPilotLight
 
 			&currentTank, &sFuelSum, &sFuelMax, &sBaseFuel,
-      &sBaseX, &sBaseY,&sNumShips,
+      &sBaseX, &sBaseY,&sNumShips, &sAIState,
 			&sViewWidth, &sViewHeight, &sNumSparkColors,
 			&sStat, &sAutopilotLight
 			);
@@ -1523,7 +1524,7 @@ int Receive_self(void)
 			sNextCheckPoint, sAutopilotLight,
 			num_items,
 			currentTank, (double)sFuelSum, (double)sFuelMax, (double)sBaseFuel,
-			sBaseX, sBaseY, sNumShips,
+			sBaseX, sBaseY, sNumShips, (int)sAIState,
       rbuf.len, (int)sStat);
 
 #ifdef _WINDOWS
@@ -1626,11 +1627,11 @@ int Receive_ship(void)
 {
 	int		n, shield, cloak, eshield, phased, deflector;
 	short	x, y, id;
-	u_byte	ch, dir, flags;
+	u_byte	ch, dir, flags, aiState;
 
 	if ((n = Packet_scanf(&rbuf,
-					"%c%hd%hd%hd" "%c%c",
-					&ch, &x, &y, &id,
+					"%c%hd%hd%hd" "%c%c%c", //ch,x,y,id, aiState,dir,flags
+					&ch, &x, &y, &id, &aiState,
 					&dir, &flags)) <= 0)
 		return n;
 	shield = ((flags & 1) != 0);
@@ -1640,7 +1641,7 @@ int Receive_ship(void)
 	deflector = ((flags & 0x10) != 0);
 
 	if((n = Handle_ship( x, y, id, dir, shield,
-					cloak, eshield, phased, deflector)) == -1)
+					cloak, eshield, phased, deflector, (int)aiState)) == -1)
 		return -1;
 	return 1;
 }

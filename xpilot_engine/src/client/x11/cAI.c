@@ -874,7 +874,7 @@ void nurseBee(int flag) {
   if(flag)
     Keyboard_button_pressed(XK_9);
   else
-    Keyboard_button_pressed(XK_9);
+    Keyboard_button_released(XK_9);
 }
 
 //End map features -JNE
@@ -962,6 +962,18 @@ void talk(char *talk_str) {
 char *scanMsg(int id) {
   if (id < MAX_MSGS) return TalkMsg[id]->txt;
   return NULL;
+}
+
+void sendSelfState(int state) {
+  switch(state){
+    case(1): Keyboard_button_pressed(XK_KP_Subtract);break;
+    case(2): Keyboard_button_pressed(XK_KP_Equal);break;
+    case(3): Keyboard_button_pressed(XK_backslash);break;
+    case(4): Keyboard_button_pressed(XK_bracketright);break;
+    case(5): Keyboard_button_pressed(XK_semicolon);break;
+    case(6): Keyboard_button_pressed(XK_apostrophe);break;
+    default: break;
+  }
 }
 
 //End other options -JNE

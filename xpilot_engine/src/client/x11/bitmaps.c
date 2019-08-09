@@ -79,12 +79,9 @@ xp_pixmap_t object_pixmaps[] = {
 	XP_PIXMAP_INITIALIZER("meter.ppm", -2),
 	XP_PIXMAP_INITIALIZER("asteroidconcentrator.ppm", 32),
 	XP_PIXMAP_INITIALIZER("ball_gray16.ppm", -16),
-	//XP_PIXMAP_INITIALIZER("quad.ppm", 128),        // 45
-	XP_PIXMAP_INITIALIZER("bee.ppm", 128),        // 45
-	//XP_PIXMAP_INITIALIZER("quad_f.ppm", 128),
-	XP_PIXMAP_INITIALIZER("bee_f.ppm", 128),
-	//XP_PIXMAP_INITIALIZER("quad_e.ppm", 128),
-	XP_PIXMAP_INITIALIZER("bee_e.ppm", 128),
+	XP_PIXMAP_INITIALIZER("quad.ppm", 128),        // 45
+	XP_PIXMAP_INITIALIZER("quad_f.ppm", 128),
+	XP_PIXMAP_INITIALIZER("quad_e.ppm", 128),
 	XP_PIXMAP_INITIALIZER("fixed.ppm", 128),       
 	XP_PIXMAP_INITIALIZER("fixed_f.ppm", 128),       
 	XP_PIXMAP_INITIALIZER("fixed_e.ppm", 128),     // 50      
@@ -96,6 +93,18 @@ xp_pixmap_t object_pixmaps[] = {
 	XP_PIXMAP_INITIALIZER("infantry_e.ppm", 128),        
 	XP_PIXMAP_INITIALIZER("bullet_red.ppm", -16),
 	XP_PIXMAP_INITIALIZER("hive_e.ppm", 1),
+	XP_PIXMAP_INITIALIZER("bee.ppm", 128),        
+	XP_PIXMAP_INITIALIZER("bee_f.ppm", 128),   // 60     
+	XP_PIXMAP_INITIALIZER("bee_e.ppm", 128),        
+	XP_PIXMAP_INITIALIZER("bee_forager.ppm", 128),        
+	XP_PIXMAP_INITIALIZER("bee_searcher.ppm", 128),       
+	XP_PIXMAP_INITIALIZER("bee_nurse.ppm", 128),        
+	XP_PIXMAP_INITIALIZER("bee_e_forager.ppm", 128),  // 65        
+	XP_PIXMAP_INITIALIZER("bee_e_searcher.ppm", 128),        
+	XP_PIXMAP_INITIALIZER("bee_e_nurse.ppm", 128),       
+	XP_PIXMAP_INITIALIZER("bee_f_forager.ppm", 128),      
+	XP_PIXMAP_INITIALIZER("bee_f_searcher.ppm", 128),        
+	XP_PIXMAP_INITIALIZER("bee_f_nurse.ppm", 128)  // 70
 };
 
 xp_pixmap_t *pixmaps = 0;
