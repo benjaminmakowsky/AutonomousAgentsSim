@@ -186,14 +186,23 @@ void forage() {
 void onlook(){
   static int dancing_ship = -1;
   if(!inVicinityOf(selfBaseX(),selfBaseY())){
+
+    //Make sure we are at the base when we are observing 
     goToCoordinates(selfBaseX(),selfBaseY());
   }else{
+
+    //Once at base stop and wait
     setPower(0);
+
+    //Check if there are any nearby ships that may be dancing
     if(dancing_ship == -1){
-      dancing_ship = seeIfDancing(360,40);
-      sprintf(bugstring,"%d",dancing_ship);
+      int field_of_view = 360;
+      int range_of_view = 40; 
+      dancing_ship = seeIfDancing(field_of_view,range_of_view);
+      sprintf(bugstring,"Observing Ship: %d",dancing_ship);
     }else{
-      sprintf(bugstring,"Heading: %d",(int)selfHeadingDeg());
+      //Debug string to check which way we are facing
+      //sprintf(bugstring,"Heading: %d",(int)selfHeadingDeg());
 
       //Turn toward dancer
       goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
