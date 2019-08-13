@@ -480,11 +480,23 @@ void Player_init_items(player_t *pl )
 				SET_BIT(pl->have, HAS_ARMOR);
 			}
 		}
+    else if( i == ITEM_PHASING ){
+      pl->item[i] = pl->phasing;
+      if( pl->phasing > 0 ){
+        SET_BIT(pl->have, HAS_PHASING_DEVICE );
+      }
+    }
 		else if(i == ITEM_CLOAK ){
 			pl->item[i] = pl->cloak;
 			if( pl->cloak > 0 ){
 				SET_BIT(pl->have, HAS_CLOAKING_DEVICE );
 			}
+      // Observers are always cloaked & phased no matter what
+      if( strcmp( pl->shapename, "observer" ) == 0 ){
+        pl->updateVisibility = true;
+        SET_BIT(pl->used, USES_CLOAKING_DEVICE );
+        SET_BIT(pl->used, USES_PHASING_DEVICE );
+      }
 		}
 		else if( i == ITEM_FOV ){
 			pl->item[i] = pl->fov;
@@ -555,7 +567,37 @@ int Init_player(int ind, shipshape_t *ship, int type)
 		pl->addShotSpeed = 0;
 		pl->shotmass = 5;
 		pl->shotlife = 6;
+  }
+  else if( !strcmp( ship->name,"observer" ) ){
+		pl->cloak = 1;
+    pl->phasing = 1;
+
+		pl->power = 10.0;
+		pl->armor = 10;
+		pl->shots = 0;
+		pl->sight_range = 100;
+		pl->mass = 10;
+		pl->emptymass = 5;
+		pl->fuel.max = 9000;
+		pl->flying = true;
+		pl->velocity = 50;
+		pl->acc.x = 1.5;
+		pl->acc.y = 1.5;
+		pl->fov = 180;
+
+		pl->turnresistance = 0.5;
+		pl->turnspeed = 5;
+		pl->maxturnsps = 14;
+
+		pl->shot_range = 0;
+		pl->shot_radius = 0;
+		pl->addShotSpeed = 0;
+		pl->shotmass = 10;
+		pl->shotlife = 0;
+
+    snprintf(pl->shapename, sizeof( pl->shapename ), "%s", "observer" );
 	}
+
 	else if( !strcmp( ship->name,"fixed" ) ){
 		pl->cloak = 0;
 

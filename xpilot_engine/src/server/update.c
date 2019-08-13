@@ -198,7 +198,7 @@ void Do_nurse(player_t *pl){
  */
 void Cloak(player_t *pl, bool on)
 {
-	if (on) {
+  if (on) {
 		if (!Player_is_cloaked(pl)
 				&& pl->item[ITEM_CLOAK] > 0) {
 			sound_play_player(pl, CLOAK_SOUND);
@@ -745,7 +745,8 @@ static void Use_items(player_t *pl)
 		}
 	}
 
-	if (Player_is_phasing(pl)) {
+  // observer never runs out of phasing
+	if (Player_is_phasing(pl) && strcmp( pl->shapename, "observer") != 0 ) {
 		if ((pl->phasing_left -= timeStep) <= 0) {
 			if (pl->item[ITEM_PHASING] > 0)
 				Phasing(pl, true);

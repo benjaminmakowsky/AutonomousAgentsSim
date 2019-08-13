@@ -107,7 +107,8 @@ xp_pixmap_t object_pixmaps[] = {
 	XP_PIXMAP_INITIALIZER("bee_f_forager.ppm", 128),  //70    
 	XP_PIXMAP_INITIALIZER("bee_f_searcher.ppm", 128),        
 	XP_PIXMAP_INITIALIZER("bee_f_nurse.ppm", 128), 
-	XP_PIXMAP_INITIALIZER("bee_f_onlooker.ppm", 128) 
+	XP_PIXMAP_INITIALIZER("bee_f_onlooker.ppm", 128), 
+	XP_PIXMAP_INITIALIZER("observer.ppm", 128) 
 };
 
 xp_pixmap_t *pixmaps = 0;

@@ -270,7 +270,7 @@
 #define HAVE_X11_X_H 1
 
 /* Define to 1 if you have the Xf86Misc library */
-/* #undef HAVE_XF86MISC */
+#define HAVE_XF86MISC 1
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */

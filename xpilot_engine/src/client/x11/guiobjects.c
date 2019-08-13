@@ -1021,6 +1021,9 @@ void Gui_paint_ship(int x, int y, int dir, int id, int cloak, int phased,
 			if( ship->num_points == 3 ){
 				ship_shape = BM_QUAD;
 			}
+      else if( !strcmp( ship->name, "observer" ) ){
+        ship_shape = BM_OBSERVER;
+      }
 			else if( !strcmp( ship->name, "bee" ) ){
 				if( ship_color == WHITE ){
           switch( aiState ){

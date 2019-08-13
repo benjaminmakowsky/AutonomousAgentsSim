@@ -338,6 +338,7 @@ typedef struct player {
 
 	int armor;        /* Player health */
 	int cloak;        /* Whether or not this ship has a cloak (stealth) ability */
+	int phasing;      /* Whether or not this ship has a phase (noclip) ability */
 	char shapename[MAX_CHARS]; /* ship shape name. Stats are based on this */
 	char role[MAX_CHARS]; /* behavioral role this unit plays */
 	rallypoint_t rallypoint;   /* Where to head to at start */
