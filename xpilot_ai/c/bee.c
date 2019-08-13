@@ -156,7 +156,6 @@ void forage() {
 
       //If you are being observed perform dance
       }else {
-        //sprintf(bugstring,"Being Observed");
         performed_dance = dance(STATE_SEARCHING);
       }
 
@@ -213,7 +212,7 @@ void onlook(){
       //observeDance(dancing_ship);
       int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
       if(selfHeadingDeg() < targetHeading-1 || selfHeadingDeg() > targetHeading + 1) {
-        sprintf(bugstring,"self: %d target: %d",selfHeadingDeg(),targetHeading);
+        //sprintf(bugstring,"self: %d target: %d",selfHeadingDeg(),targetHeading);
         turnToDeg(targetHeading);
       }else{
         //While looking at dancer observe dance

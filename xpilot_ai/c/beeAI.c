@@ -283,12 +283,17 @@ void checkForFuel(){
 bool dance(int prevState){
   static bool dance_is_completed = false;
 
-  switch (prevState) {
-    case STATE_SEARCHING: //If you were just searching then let others know you found honey
-      dance_is_completed = honeyFoundDance();
-      break;
-    case STATE_FORAGING:
-      break;
+  //Make sure you are fully stopped before dancing
+  if(selfSpeed() == 0) {
+    switch (prevState) {
+      case STATE_SEARCHING: //If you were just searching then let others know you found honey
+        dance_is_completed = honeyFoundDance();
+        break;
+      case STATE_FORAGING:
+        break;
+    }
+  }else{
+    setPower(0);
   }
 
   //Stop dancing once dance has finished
