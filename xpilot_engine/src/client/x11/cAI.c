@@ -3154,12 +3154,52 @@ void observeDance(int ship_id){
 
   //If not intializing counts the number of turns
   }else{
-    //Count the number of target headings reached
-    num_turns = countTurnsOfShip(ship_id);
-    fprintf(fp,"Turns %d\n", num_turns);
+    //TODO: Determine when stopped dancing
+    if(beeIsDancing(ship_id)){
+      //Count the number of target headings reached
+      num_turns = countTurnsOfShip(ship_id);
+      fprintf(fp,"Turns %d\n", num_turns);
+    }
+
   }
   fclose(fp);
 }
+
+bool beeIsDancing(int ship_id){
+  //Assume true until otherwise
+  static bool isDancing = true;
+  static bool isInitial = true;
+  ship_t observed_ship= getShipWithID(ship_id);
+  static int prevHeading = 0;
+  static int num_frames_same_dir = 0;
+
+  if(isInitial){
+    prevHeading = (int)observed_ship.dir * 2.8125;
+    num_frames_same_dir = 0;
+    isInitial = false;
+  } else{
+
+    //Compare current direction to previous direction
+    int currentHeading = observed_ship.dir * 2.8125;
+    if(currentHeading == prevHeading){
+      num_frames_same_dir += 1;
+    }else{
+      num_frames_same_dir = 0;
+      prevHeading = currentHeading;
+    }
+
+    int threshold = 5;
+    if(num_frames_same_dir < threshold){
+      return true;
+
+    //Return false if you have been in the same direction for the threshold limit
+    }else{
+      isInitial = true;
+      return false;
+    }
+  }
+}
+
 
 bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
 /*******************************************************
