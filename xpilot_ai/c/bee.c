@@ -188,18 +188,29 @@ void onlook(){
 
   //If not near the hive, go to it
   if(!inVicinityOf(selfBaseX(),selfBaseY())){
+
+    //Make sure we are at the base when we are observing
     goToCoordinates(selfBaseX(),selfBaseY());
 
   //While at the hive observe dancing bee
   }else{
+
+    //Once at base stop and wait
     setPower(0);
 
     //While not watching a dancing ship, check to see who may be dancing
     if(dancing_ship == -1){
-      dancing_ship = seeIfDancing(360,40);
-
-    //If you observe a dancing ship, orient towards the dancer
+      int field_of_view = 360;
+      int range_of_view = 40;
+      dancing_ship = seeIfDancing(field_of_view,range_of_view);
+      sprintf(bugstring,"Observing Ship: %d",dancing_ship);
     }else{
+      //Debug string to check which way we are facing
+      //sprintf(bugstring,"Heading: %d",(int)selfHeadingDeg());
+
+      //Turn toward dancer
+      goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
+      //observeDance(dancing_ship);
       int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
       if(selfHeadingDeg() < targetHeading-1 || selfHeadingDeg() > targetHeading + 1) {
         sprintf(bugstring,"self: %d target: %d",selfHeadingDeg(),targetHeading);
