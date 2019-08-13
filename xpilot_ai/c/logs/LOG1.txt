@@ -11,141 +11,749 @@ X: 840	Y: 315
 Ship Moving
 Current X: 192, Previous X: 0
 Current y: 157, Previous y: 0
+Ship not moving: 1
 Ship Moving
-Current X: 193, Previous X: 0
+Current X: 195, Previous X: 192
+Current y: 157, Previous y: 157
+Ship Moving
+Current X: 198, Previous X: 0
 Current y: 157, Previous y: 0
 Ship Moving
-Current X: 195, Previous X: 193
+Current X: 201, Previous X: 198
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 198, Previous X: 195
+Current X: 204, Previous X: 195
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 201, Previous X: 192
+Current X: 208, Previous X: 201
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 204, Previous X: 198
-Current y: 157, Previous y: 157
-Ship Moving
-Current X: 208, Previous X: 204
-Current y: 157, Previous y: 157
-Ship Moving
-Current X: 213, Previous X: 201
+Current X: 213, Previous X: 204
 Current y: 157, Previous y: 157
 Ship Moving
 Current X: 218, Previous X: 208
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 223, Previous X: 218
+Current X: 222, Previous X: 213
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 229, Previous X: 223
+Current X: 225, Previous X: 222
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 234, Previous X: 229
+Current X: 229, Previous X: 218
 Current y: 157, Previous y: 157
 Ship Moving
-Current X: 237, Previous X: 213
-Current y: 172, Previous y: 157
+Current X: 232, Previous X: 225
+Current y: 157, Previous y: 157
 Ship Moving
-Current X: 231, Previous X: 234
-Current y: 170, Previous y: 157
+Current X: 235, Previous X: 232
+Current y: 157, Previous y: 157
 Ship Moving
-Current X: 226, Previous X: 237
-Current y: 168, Previous y: 172
+Current X: 237, Previous X: 229
+Current y: 157, Previous y: 157
 Ship Moving
-Current X: 221, Previous X: 231
-Current y: 166, Previous y: 170
+Current X: 236, Previous X: 237
+Current y: 171, Previous y: 157
 Ship Moving
-Current X: 217, Previous X: 226
-Current y: 165, Previous y: 168
+Current X: 231, Previous X: 235
+Current y: 169, Previous y: 157
 Ship Moving
-Current X: 213, Previous X: 221
+Current X: 226, Previous X: 231
+Current y: 167, Previous y: 169
+Ship Moving
+Current X: 221, Previous X: 236
+Current y: 166, Previous y: 171
+Ship Moving
+Current X: 216, Previous X: 221
 Current y: 164, Previous y: 166
 Ship Moving
-Current X: 209, Previous X: 213
-Current y: 162, Previous y: 164
+Current X: 212, Previous X: 226
+Current y: 163, Previous y: 167
 Ship Moving
-Current X: 206, Previous X: 209
-Current y: 161, Previous y: 162
+Current X: 209, Previous X: 212
+Current y: 162, Previous y: 163
 Ship Moving
-Current X: 202, Previous X: 217
-Current y: 160, Previous y: 165
+Current X: 206, Previous X: 216
+Current y: 161, Previous y: 164
 Ship Moving
-Current X: 200, Previous X: 206
-Current y: 159, Previous y: 161
+Current X: 203, Previous X: 206
+Current y: 160, Previous y: 161
 Ship Moving
-Current X: 197, Previous X: 200
+Current X: 200, Previous X: 203
+Current y: 159, Previous y: 160
+Ship Moving
+Current X: 198, Previous X: 200
 Current y: 158, Previous y: 159
 Ship Moving
-Current X: 195, Previous X: 197
-Current y: 158, Previous y: 158
+Current X: 195, Previous X: 209
+Current y: 158, Previous y: 162
 Ship Moving
 Current X: 193, Previous X: 195
 Current y: 157, Previous y: 158
 Ship Moving
-Current X: 191, Previous X: 202
-Current y: 156, Previous y: 160
-Ship Moving
-Current X: 189, Previous X: 193
+Current X: 191, Previous X: 193
 Current y: 156, Previous y: 157
-Ship Moving
-Current X: 187, Previous X: 189
-Current y: 155, Previous y: 156
-Ship Moving
-Current X: 186, Previous X: 191
-Current y: 155, Previous y: 156
 Ship not moving: 1
 Ship Moving
-Current X: 184, Previous X: 187
+Current X: 188, Previous X: 198
+Current y: 155, Previous y: 158
+Ship not moving: 1
+Ship Moving
+Current X: 186, Previous X: 188
 Current y: 154, Previous y: 155
 Ship Moving
-Current X: 182, Previous X: 186
-Current y: 154, Previous y: 155
+Current X: 184, Previous X: 186
+Current y: 154, Previous y: 154
+Ship Moving
+Current X: 183, Previous X: 191
+Current y: 154, Previous y: 156
+Ship Moving
+Current X: 182, Previous X: 184
+Current y: 153, Previous y: 154
 Ship not moving: 1
-Ship not moving: 2
+Ship not moving: 1
 Ship Moving
 Current X: 180, Previous X: 182
-Current y: 153, Previous y: 154
+Current y: 153, Previous y: 153
+Ship not moving: 1
+Ship Moving
+Current X: 179, Previous X: 183
+Current y: 152, Previous y: 154
 Ship not moving: 1
 Ship Moving
 Current X: 178, Previous X: 180
 Current y: 152, Previous y: 153
 Ship Moving
-Current X: 178, Previous X: 184
-Current y: 152, Previous y: 154
+Current X: 177, Previous X: 179
+Current y: 152, Previous y: 152
 Ship not moving: 1
 Ship not moving: 2
 Ship Moving
 Current X: 176, Previous X: 178
 Current y: 151, Previous y: 152
 Ship not moving: 1
+Ship not moving: 2
+Ship not moving: 1
+Ship not moving: 2
 Ship Moving
-Current X: 175, Previous X: 178
+Current X: 175, Previous X: 177
 Current y: 151, Previous y: 152
+Ship not moving: 1
 Ship not moving: 2
 Ship not moving: 3
 Ship not moving: 4
-Ship not moving: 1
-Ship not moving: 2
 Ship Moving
 Current X: 174, Previous X: 176
 Current y: 151, Previous y: 151
 Ship not moving: 1
-Ship not moving: 2
-Ship not moving: 3
-Ship Moving
-Current X: 173, Previous X: 175
-Current y: 150, Previous y: 151
-Ship not moving: 1
-Ship not moving: 2
-Ship not moving: 3
-Ship not moving: 4
 Ship not moving: 5
-Ship not moving: 4
-Ship Moving
-Current X: 172, Previous X: 174
-Current y: 150, Previous y: 151
+Ship not moving: 2
 Ship not moving: 6
-Ship not moving: 1
-returning: 0
+returning ship ID: 2
+Observing Dance
+Initial Heading: 0	Target Heading: 345
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 213
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 227
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 244
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 258
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 275
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 289
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 306
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 320
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 337
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 351
+Target: 345	Target Upper: 355
+Number of spins: 1
+Turns -1
+Observer's Heading 8
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 22
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 39
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 53
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 70
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 84
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 101
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 115
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 132
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 146
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 163
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 177
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 194
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 208
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 225
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 239
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 255
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 270
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 286
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 300
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 317
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 331
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 348
+Target: 345	Target Upper: 355
+Number of spins: 2
+Turns -1
+Observer's Heading 2
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 19
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 33
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 50
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 64
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 81
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 95
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 112
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 126
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 143
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 157
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 174
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 188
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 205
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 219
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 236
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 250
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 267
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 281
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 298
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 312
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 329
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 343
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 0
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 14
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 30
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 45
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 61
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 75
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 92
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 106
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 123
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 137
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 154
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 168
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 185
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 199
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 216
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 230
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 247
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 261
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 278
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 292
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 309
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 323
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 340
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 354
+Target: 345	Target Upper: 355
+Number of spins: 3
+Turns -1
+Observer's Heading 11
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 25
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 42
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 56
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 73
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 87
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 104
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 118
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 135
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 149
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 165
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 180
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 196
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 210
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 227
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 241
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 258
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 272
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 289
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 303
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 320
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 334
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 351
+Target: 345	Target Upper: 355
+Number of spins: 4
+Turns -1
+Observer's Heading 5
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 22
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 36
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 53
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 67
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 84
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 98
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 115
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 129
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 146
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 160
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 177
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 191
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 208
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 222
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 239
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 253
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 270
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 284
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 300
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 315
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 331
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 345
+Target: 345	Target Upper: 355
+Number of spins: 5
+Turns -1
+Observer's Heading 2
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 16
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 33
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 47
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 64
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 78
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 95
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 109
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 126
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 140
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 157
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 171
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 188
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1
+Observer's Heading 202
+Target: 345	Target Upper: 355
+Turns -1

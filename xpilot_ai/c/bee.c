@@ -185,19 +185,30 @@ void forage() {
  * ***************************************************************************/
 void onlook(){
   static int dancing_ship = -1;
+
+  //If not near the hive, go to it
   if(!inVicinityOf(selfBaseX(),selfBaseY())){
     goToCoordinates(selfBaseX(),selfBaseY());
+
+  //While at the hive observe dancing bee
   }else{
     setPower(0);
+
+    //While not watching a dancing ship, check to see who may be dancing
     if(dancing_ship == -1){
       dancing_ship = seeIfDancing(360,40);
-      sprintf(bugstring,"%d",dancing_ship);
-    }else{
-      sprintf(bugstring,"Heading: %d",(int)selfHeadingDeg());
 
-      //Turn toward dancer
-      goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
-      //observeDance(dancing_ship);
+    //If you observe a dancing ship, orient towards the dancer
+    }else{
+      int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
+      if(selfHeadingDeg() < targetHeading-1 || selfHeadingDeg() > targetHeading + 1) {
+        sprintf(bugstring,"self: %d target: %d",selfHeadingDeg(),targetHeading);
+        turnToDeg(targetHeading);
+      }else{
+        //While looking at dancer observe dance
+        sprintf(bugstring,"Observing");
+        observeDance(dancing_ship);
+      }
     }
   }
 }

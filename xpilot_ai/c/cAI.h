@@ -279,5 +279,9 @@ extern int getSelfY();
 int getDancersY(int dancing_ship);
 int getDancersY(int dancing_ship);
 int getHeadingBetween(int x1, int y1, int x2, int y2);
+int countTurnsOfShip(int ship_id);
 void logwrite();
 #endif //XPILOT_LE_CAI_H
+
+/***Private Helper Functions***/
+//ship_t getShipWithID(int ID);
