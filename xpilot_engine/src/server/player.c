@@ -567,6 +567,8 @@ int Init_player(int ind, shipshape_t *ship, int type)
 		pl->addShotSpeed = 0;
 		pl->shotmass = 5;
 		pl->shotlife = 6;
+
+    snprintf(pl->shapename, sizeof( pl->shapename ), "%s", "bee" );
   }
   else if( !strcmp( ship->name,"observer" ) ){
 		pl->cloak = 1;

@@ -265,12 +265,13 @@ static void PlayerCollision(void)
 							&& !Player_has_armor(pl_j)))
 					Player_set_state(pl_j, PL_STATE_KILLED);
 
+        // Bees don't take damage from colliding
 				if (!BIT(pl->used, HAS_SHIELD)
-						&& Player_has_armor(pl))
+						&& Player_has_armor(pl) && strcmp(pl->shapename, "bee") != 0)
 					Player_hit_armor(pl);
 
 				if (!BIT(pl_j->used, HAS_SHIELD)
-						&& Player_has_armor(pl_j))
+						&& Player_has_armor(pl_j) && strcmp(pl->shapename, "bee") != 0)
 					Player_hit_armor(pl_j);
 
 				if (Player_is_killed(pl_j)) {
