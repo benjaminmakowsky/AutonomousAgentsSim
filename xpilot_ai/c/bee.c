@@ -217,7 +217,8 @@ void onlook(){
       }else{
         //While looking at dancer observe dance
         sprintf(bugstring,"Observing");
-        observeDance(dancing_ship);
+        int danceObserved = observeDance(dancing_ship);
+        sprintf(bugstring, "Observed Dance: %d", danceObserved);
       }
     }
   }
