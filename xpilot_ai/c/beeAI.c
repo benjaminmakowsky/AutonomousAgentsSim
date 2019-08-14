@@ -224,7 +224,7 @@ bool inVicinityOf(int x,int y){
   }else {
     //If not in the vicinty of the point slow down as you approach
     int distance = computeDistance(selfX(),x,selfY(),y);
-    int max_speed = 40;
+    int max_speed = 80;
     if(distance < 20) {
       setPower(max_speed/4);
     }else if(distance < 60){
