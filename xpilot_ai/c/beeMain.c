@@ -1,5 +1,6 @@
 //Matthew Coffman - July 2018
 //Benjamin Makowsky //Line 453 current progress
+#include "beeGlobals.h"
 #include "beeMain.h"
 #include "beeAI.h"
 #include "beeObject.h"
@@ -21,7 +22,6 @@
 #include <string.h>
 #include <sys/time.h>
 #include <limits.h>
-
 //global constants
 #define MAX_DEG 360
 
@@ -62,6 +62,7 @@ int turnLock = 0;
 int wallVector = -1;
 char bugstring[50] = "Init";
 char LogFile[15] = "";
+FILE *fp;
 struct fuelStruct_t;
 
 /*****************************************************************************
@@ -89,15 +90,16 @@ void initialize()
     }
   }
 
+  //Initial File Creation
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  fp = fopen(LogFile, "w");
 
   /*************************************************
    * load up log file with base and fuel coordinates
    *************************************************/
   getBases("fuelpoints.csv");
   getFuelDepots("fuelpoints.csv");
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
-  fp = fopen(LogFile, "w");
+
   fprintf(fp, "ShipID# %d\tState: %d\n",selfID(), state);
   int i;
   fprintf(fp,"------------------------------\nHIVES:\n");

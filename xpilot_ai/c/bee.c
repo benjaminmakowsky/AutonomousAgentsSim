@@ -2,6 +2,7 @@
 // Created by makowskyb on 7/2/19.
 //
 
+#include "beeGlobals.h"
 #include "bee.h"
 #include "beeAI.h"
 #include "cAI.h"
@@ -70,8 +71,7 @@ void searching() {
         fileRead = !fileRead;
       }
 
-      FILE *fp;
-      fp = fopen(LogFile, "a");
+      OPENLOG()
       fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",getHoneyX(),getHoneyY());
       fprintf(fp,"Ending Search behavior\n");
       fprintf(fp,"------------------------------\n");
@@ -99,8 +99,7 @@ void forage() {
 
   //Log status line showing what method just executed
   if (initForage) {
-    FILE *fp;
-    fp = fopen(LogFile, "a");
+    OPENLOG()
     fprintf(fp, "\nBeginning Forage Behavior\n");
     fprintf(fp,"------------------------------\n");
     fprintf(fp,"Home Base:  (%d,%d)\n",selfBaseX(), selfBaseY());
@@ -157,7 +156,6 @@ void forage() {
 
       //If you are being observed perform dance
       }else {
-        //sprintf(bugstring,"Being Observed");
         performed_dance = dance(STATE_SEARCHING);
       }
 
@@ -186,19 +184,45 @@ void forage() {
  * ***************************************************************************/
 void onlook(){
   static int dancing_ship = -1;
-  if(!inVicinityOf(selfBaseX(),selfBaseY())){
-    goToCoordinates(selfBaseX(),selfBaseY());
-  }else{
-    setPower(0);
-    if(dancing_ship == -1){
-      dancing_ship = seeIfDancing(360,40);
-      sprintf(bugstring,"%d",dancing_ship);
-    }else{
-      sprintf(bugstring,"Heading: %d",(int)selfHeadingDeg());
 
-      //Turn toward dancer
-      goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
+  //If not near the hive, go to it
+  if(!inVicinityOf(selfBaseX(),selfBaseY())){
+
+    //Make sure we are at the base when we are observing
+    goToCoordinates(selfBaseX(),selfBaseY());
+
+  //While at the hive observe dancing bee
+  }else{
+
+    //Once at base stop and wait
+    setPower(0);
+
+    //While not watching a dancing ship, check to see who may be dancing
+    if(dancing_ship == -1){
+      int field_of_view = 360;  //Looks for ships all around bee
+      int range_of_view = 40;   //Distance for how far a bee can be seen
+
+      //Check to see if any ships are nearby and if one is get its ID
+      //TODO: Possibly change name to getNearbySHipID() or similar
+      dancing_ship = seeIfDancing(field_of_view,range_of_view);
+      sprintf(bugstring,"Observing Ship: %d",dancing_ship);
+    }else{
+
+      //Turn towards the bee we are observing
+      //TODO: Check ig needed (turnTODeg may work below)
+      //goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
+
       //observeDance(dancing_ship);
+      int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
+      if(selfHeadingDeg() < targetHeading-1 || selfHeadingDeg() > targetHeading + 1) {
+        //sprintf(bugstring,"self: %d target: %d",selfHeadingDeg(),targetHeading);
+        turnToDeg(targetHeading);
+      }else{
+        //While looking at dancer observe dance
+        sprintf(bugstring,"Observing");
+        int danceObserved = observeDance(dancing_ship);
+        sprintf(bugstring, "Observed Dance: %d", danceObserved);
+      }
     }
   }
 }
