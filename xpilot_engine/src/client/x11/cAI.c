@@ -3097,7 +3097,10 @@ int seeIfDancing(int fov, int rov){
     first_init = false;
   }
 
-  OPENLOG()
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
 
   //Loop to self ships
   int i;
@@ -3146,7 +3149,10 @@ int observeDance(int ship_id){
   int dance_observed = -1;             //Used to return the dance type
   static bool dancingCheck = true;     //Used to determine if bee is still dancing
   ship_t observed_ship = getShipWithID(ship_id);
-  OPENLOG()
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
 
   //Initialization code
   if(!observing_dance){
@@ -3240,7 +3246,10 @@ bool checkIfBeingObserved(){
   int selfX = getSelfX(); //Using custom made command instead relying on cAI.c
   int selfY = getSelfY(); //Using custom made command instead relying on cAI.c
 
-  OPENLOG()
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
 
   //Used to make sure bee is being watch and bee didnt glance during fly-by
   static int observed_counter = 0;
@@ -3335,7 +3344,10 @@ int getHeadingBetween(int x1, int y1, int x2, int y2){
 
 int countTurnsOfShip(int ship_id){
 
-  OPENLOG()
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
 
   //Local Variables
   ship_t observed_ship = getShipWithID(ship_id);

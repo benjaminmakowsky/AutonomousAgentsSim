@@ -209,7 +209,7 @@ void onlook(){
 
       //Turn towards the bee we are observing
       //TODO: Check ig needed (turnTODeg may work below)
-      goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
+      //goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
 
       //observeDance(dancing_ship);
       int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
