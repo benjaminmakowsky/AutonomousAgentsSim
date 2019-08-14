@@ -41,7 +41,7 @@ xp_pixmap_t object_pixmaps[] = {
 	XP_PIXMAP_INITIALIZER("hive_big_f.ppm", 1),
 	XP_PIXMAP_INITIALIZER("hive_big_f.ppm", 1),
 	XP_PIXMAP_INITIALIZER("hive_big_f.ppm", 1),
-	XP_PIXMAP_INITIALIZER("honeycombs.ppm", 1),
+	XP_PIXMAP_INITIALIZER("honeycombs_big.ppm", 1),
 	XP_PIXMAP_INITIALIZER("fuel2.ppm", -16),
 	XP_PIXMAP_INITIALIZER("allitems.ppm", -30),
 	XP_PIXMAP_INITIALIZER("cannon_down.ppm", 1),  // 15
