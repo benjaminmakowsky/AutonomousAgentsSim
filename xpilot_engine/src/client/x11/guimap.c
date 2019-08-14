@@ -391,7 +391,7 @@ void Gui_paint_base(int x, int y, int id, int team, int type)
 		}
 		else{
 			Bitmap_paint(drawPixmap, BM_BASE_ENEMY, WINSCALE(X(x + BEE_BASE_X_SCALE*BLOCK_SZ)),
-					WINSCALE(Y(y + BEE_BASE_X_SCALE*BLOCK_SZ)), 0);
+					WINSCALE(Y(y + BEE_BASE_Y_SCALE*BLOCK_SZ)), 0);
 		}
 	}
 
