@@ -3143,7 +3143,7 @@ int observeDance(int ship_id){
   static int targetHeading = 0;        //Heading used as the marker for a dance turn
   static int num_turns = 0;            //Number of turns made to determine dance
   int dance_observed = -1;             //Used to return the dance type
-  static bool dancingCheck = true;
+  static bool dancingCheck = true;     //Used to determine if bee is still dancing
   ship_t observed_ship = getShipWithID(ship_id);
   char LogFile[15] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
@@ -3158,7 +3158,6 @@ int observeDance(int ship_id){
     fprintf(fp,"observeDance(ship_id: %d)\n",ship_id);
   //If not intializing counts the number of turns
   }else{
-    //TODO: Determine when stopped dancing
     if(dancingCheck)
     {
       dancingCheck = beeIsDancing(ship_id);
@@ -3166,10 +3165,8 @@ int observeDance(int ship_id){
       num_turns = countTurnsOfShip(ship_id);
       fprintf(fp,"Turns %d\n", num_turns);
     }else{
-      //TODO: Determine dance based on number of turns
       dance_observed = determineDance(num_turns);
     }
-
   }
   fclose(fp);
   return dance_observed;
