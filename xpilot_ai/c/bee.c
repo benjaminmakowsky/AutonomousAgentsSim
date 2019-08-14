@@ -199,16 +199,19 @@ void onlook(){
 
     //While not watching a dancing ship, check to see who may be dancing
     if(dancing_ship == -1){
-      int field_of_view = 360;
-      int range_of_view = 40;
+      int field_of_view = 360;  //Looks for ships all around bee
+      int range_of_view = 40;   //Distance for how far a bee can be seen
+
+      //Check to see if any ships are nearby and if one is get its ID
+      //TODO: Possibly change name to getNearbySHipID() or similar
       dancing_ship = seeIfDancing(field_of_view,range_of_view);
       sprintf(bugstring,"Observing Ship: %d",dancing_ship);
     }else{
-      //Debug string to check which way we are facing
-      //sprintf(bugstring,"Heading: %d",(int)selfHeadingDeg());
 
-      //Turn toward dancer
+      //Turn towards the bee we are observing
+      //TODO: Check ig needed (turnTODeg may work below)
       goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
+
       //observeDance(dancing_ship);
       int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
       if(selfHeadingDeg() < targetHeading-1 || selfHeadingDeg() > targetHeading + 1) {

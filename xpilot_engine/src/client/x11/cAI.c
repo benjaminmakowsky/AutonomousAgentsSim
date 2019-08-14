@@ -3071,15 +3071,15 @@ int seeIfDancing(int fov, int rov){
   static int ship_observed = -1;       //The ship being observed if one is dancing
   static int prevHeading = 0;          //previous heading of ship being observed
   int observed_dir = 0;                //current direction of the observed ship
-  int max_num_ships = 20;
-  int num_fields = 5;
-  static int local_ships[20][5];
+  int max_num_ships = 20;              //Needed to make a static array
+  int num_fields = 5;                  //Needed to make a static array
+  static int local_ships[20][5];       //Array to hold all the ships in vicinity
   //array index labels
-  int currX = 0;
+  int currX = 0;        //Index in array of current x positon
   int currY = 1;
   int prevX = 2;
   int prevY = 3;
-  int stoppedCount = 4;
+  int stoppedCount = 4; //Index holding how many frames ship has been stopped
 
   //zero out array
   if(first_init){
@@ -3101,8 +3101,8 @@ int seeIfDancing(int fov, int rov){
   //Loop to self ships
   int i;
   for (i = 0; i < num_ship; i++) {
-    short self_id = self->id;
-    short curr_id = ship_ptr[i].id;
+    short self_id = self->id;        //ID of self (observer)
+    short curr_id = ship_ptr[i].id;  //ID of ship being observed
 
     //If ship is insight and not self; check if moving
     if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && ( curr_id != self_id)) {
@@ -3110,6 +3110,8 @@ int seeIfDancing(int fov, int rov){
       //Check if the new coordinates are the same as previous.
       //If they are count the number of frames ship hasnt moved
       if(local_ships[i][stoppedCount] <= 3) {
+
+        //Checks if x and y coordinates are the same as previously + or - 1
         if (local_ships[i][prevX] >= (int) ship_ptr[i].x - 1 && local_ships[i][prevX] <= (int) ship_ptr[i].x + 1 &&
             local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
           local_ships[i][stoppedCount] += 1;
