@@ -2,6 +2,7 @@
 // Created by makowskyb on 7/2/19.
 //
 
+#include "beeGlobals.h"
 #include "bee.h"
 #include "beeAI.h"
 #include "cAI.h"
@@ -70,8 +71,7 @@ void searching() {
         fileRead = !fileRead;
       }
 
-      FILE *fp;
-      fp = fopen(LogFile, "a");
+      OPENLOG()
       fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",getHoneyX(),getHoneyY());
       fprintf(fp,"Ending Search behavior\n");
       fprintf(fp,"------------------------------\n");
@@ -98,8 +98,7 @@ void forage() {
 
   //Log status line showing what method just executed
   if (initForage) {
-    FILE *fp;
-    fp = fopen(LogFile, "a");
+    OPENLOG()
     fprintf(fp, "\nBeginning Forage Behavior\n");
     fprintf(fp,"------------------------------\n");
     fprintf(fp,"Home Base:  (%d,%d)\n",selfBaseX(), selfBaseY());

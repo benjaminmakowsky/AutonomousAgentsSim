@@ -16,6 +16,7 @@
 #include "beeMain.h"
 #include "beeObject.h"
 #include <limits.h>
+#include "beeGlobals.h"
 
 
 
@@ -159,8 +160,7 @@ int* getPOICoordinates(int x ,int y){
   int xPOI = 66101110;  //Using MAX_INT causes it to not work
   int yPOI = 66101110;  //Using MAX_INT causes it to not work
 
-  FILE *fp;
-  fp = fopen(LogFile, "a");
+  OPENLOG()
   fprintf(fp,"getPOICoordinates(%d, %d)\n",x,y);
 
 

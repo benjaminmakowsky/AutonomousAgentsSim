@@ -20,7 +20,6 @@ extern int eWeight;         //(enemy) separation variables
 extern int eRadius;         //(enemy) separation variables
 extern int fov;             //field (angle) of vision
 extern double fuel;         //fuel levels
-extern char bugstring[50];  //String used for debugging
 extern int frameCount;		//how many frames have elapsed
 extern int degToAim;	    //what direction do we want to go
 extern int turnLock;		//time not allowed to compute new wall avoidance
@@ -34,7 +33,6 @@ extern bool init;		    //have we initialized yet
 extern int teamNum;			    //what team do we belong to
 extern int leaderMode;		    //whether we care just about leaders for flocking
 extern int tot_idx;			    //how many drones are on our team
-extern char LogFile[15];   //Name of the lo file to create
 
 //function prototypes
 void initialize();

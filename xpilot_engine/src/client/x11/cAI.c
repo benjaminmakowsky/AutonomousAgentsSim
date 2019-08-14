@@ -11,6 +11,10 @@
 #include <X11/keysym.h>
 #include "xpclient_x11.h"
 #include "cAI.h"
+#include "../../../../xpilot_ai/c/beeGlobals.h"
+char bugstring[50] = "Init";
+char LogFile[15] = "";
+FILE *fp;
 
 #define BASE_X(i)    (((i % x_areas) << 8) + ext_view_x_offset)
 #define BASE_Y(i)    ((ext_view_height - 1 - (((i / x_areas) % y_areas) << 8)) - ext_view_y_offset)
@@ -3093,10 +3097,7 @@ int seeIfDancing(int fov, int rov){
     first_init = false;
   }
 
-  char LogFile[15] = "";
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
-  fp = fopen(LogFile, "a");
+  OPENLOG()
 
   //Loop to self ships
   int i;
@@ -3145,10 +3146,7 @@ int observeDance(int ship_id){
   int dance_observed = -1;             //Used to return the dance type
   static bool dancingCheck = true;     //Used to determine if bee is still dancing
   ship_t observed_ship = getShipWithID(ship_id);
-  char LogFile[15] = "";
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
-  fp = fopen(LogFile, "a");
+  OPENLOG()
 
   //Initialization code
   if(!observing_dance){
@@ -3242,10 +3240,7 @@ bool checkIfBeingObserved(){
   int selfX = getSelfX(); //Using custom made command instead relying on cAI.c
   int selfY = getSelfY(); //Using custom made command instead relying on cAI.c
 
-  char LogFile[15] = "";
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
-  fp = fopen(LogFile, "a");
+  OPENLOG()
 
   //Used to make sure bee is being watch and bee didnt glance during fly-by
   static int observed_counter = 0;
@@ -3340,10 +3335,7 @@ int getHeadingBetween(int x1, int y1, int x2, int y2){
 
 int countTurnsOfShip(int ship_id){
 
-  char LogFile[15] = "";
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
-  fp = fopen(LogFile, "a");
+  OPENLOG()
 
   //Local Variables
   ship_t observed_ship = getShipWithID(ship_id);
