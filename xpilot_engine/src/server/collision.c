@@ -249,8 +249,15 @@ static void PlayerCollision(void)
 					}
 					pl->forceVisible = 20;
 					pl_j->forceVisible = 20;
+
+          
+          // Base bounce, fairly large
+					//Obj_repel(OBJ_PTR(pl), OBJ_PTR(pl_j),
+					//		PIXEL_TO_CLICK(2*SHIP_SZ));
+            
+          // Bee-sim bounce, much more subtle
 					Obj_repel(OBJ_PTR(pl), OBJ_PTR(pl_j),
-							PIXEL_TO_CLICK(2*SHIP_SZ));
+							PIXEL_TO_CLICK(SHIP_SZ));
 				}
 				if (!BIT(world->rules->mode, CRASH_WITH_PLAYER))
 					continue;
