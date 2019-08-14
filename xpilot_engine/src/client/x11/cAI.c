@@ -3134,12 +3134,13 @@ int seeIfDancing(int fov, int rov){
 }
 
 
-void observeDance(int ship_id){
+int observeDance(int ship_id){
 
   static bool observing_dance = false; //boolean used to flag if ship is dancing
   static int initialHeading = 0;       //Heading used to determine start of dance position
   static int targetHeading = 0;        //Heading used as the marker for a dance turn
   static int num_turns = 0;            //Number of turns made to determine dance
+  int dance_observed = -1;             //Used to return the dance type
   static bool dancingCheck = true;
   ship_t observed_ship = getShipWithID(ship_id);
   char LogFile[15] = "";
@@ -3164,11 +3165,22 @@ void observeDance(int ship_id){
       fprintf(fp,"Turns %d\n", num_turns);
     }else{
       //TODO: Determine dance based on number of turns
+      dance_observed = determineDance(num_turns);
     }
 
   }
   fclose(fp);
+  return dance_observed;
 }
+
+int determineDance(int num_turns){
+    switch(num_turns)
+    {
+        case 4:
+            return HONEY_FOUND;
+    }
+}
+
 
 bool beeIsDancing(int ship_id){
 

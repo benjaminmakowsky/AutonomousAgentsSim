@@ -15,7 +15,14 @@ enum State
     STATE_ONLOOKING //5
 };
 
+enum Dance
+{
+    HONEY_FOUND,    //0
+    SOURCE_EMPTY    //1
+};
+
 extern enum State state;
+extern enum Dance dance_type;
 
 extern int start(int argc, char* argv[]); // Initialize AI interface and start XPilot -JRA
 
@@ -272,7 +279,7 @@ extern int getDanceFrom(int ship);
 extern int seeIfDancing(int fov,int rov);
 extern int getSelfIsDancing();
 extern bool headingIsBetween(int heading, int lowerHeading, int upperHeading);
-extern void observeDance(int ship_idx);
+extern int observeDance(int ship_idx);
 extern bool checkIfBeingObserved();
 extern int getSelfX();
 extern int getSelfY();
@@ -281,6 +288,7 @@ int getDancersY(int dancing_ship);
 int getHeadingBetween(int x1, int y1, int x2, int y2);
 int countTurnsOfShip(int ship_id);
 bool beeIsDancing(int ship_id);
+int determineDance(int num_turns);
 void logwrite();
 #endif //XPILOT_LE_CAI_H
 
