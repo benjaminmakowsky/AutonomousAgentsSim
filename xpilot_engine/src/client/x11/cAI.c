@@ -11,6 +11,10 @@
 #include <X11/keysym.h>
 #include "xpclient_x11.h"
 #include "cAI.h"
+#include "../../../../xpilot_ai/c/beeGlobals.h"
+char bugstring[50] = "Init";
+char LogFile[15] = "";
+FILE *fp;
 
 #define BASE_X(i)    (((i % x_areas) << 8) + ext_view_x_offset)
 #define BASE_Y(i)    ((ext_view_height - 1 - (((i / x_areas) % y_areas) << 8)) - ext_view_y_offset)
@@ -36,6 +40,9 @@ typedef struct {
     int reload;
     ship_t ship;
 } shipData_t;
+
+//Private helper function
+ship_t getShipWithID(int ID);
 shipData_t allShips[128][3];
 int prevFrameShips = 0;
 //Shot tracking stuff -EGG
@@ -3087,15 +3094,15 @@ int seeIfDancing(int fov, int rov){
   static int ship_observed = -1;       //The ship being observed if one is dancing
   static int prevHeading = 0;          //previous heading of ship being observed
   int observed_dir = 0;                //current direction of the observed ship
-  int max_num_ships = 20;
-  int num_fields = 5;
-  static int local_ships[20][5];
+  int max_num_ships = 20;              //Needed to make a static array
+  int num_fields = 5;                  //Needed to make a static array
+  static int local_ships[20][5];       //Array to hold all the ships in vicinity
   //array index labels
-  int currX = 0;
+  int currX = 0;        //Index in array of current x positon
   int currY = 1;
   int prevX = 2;
   int prevY = 3;
-  int stoppedCount = 4;
+  int stoppedCount = 4; //Index holding how many frames ship has been stopped
 
   //zero out array
   if(first_init){
@@ -3117,15 +3124,17 @@ int seeIfDancing(int fov, int rov){
   //Loop to self ships
   int i;
   for (i = 0; i < num_ship; i++) {
-    short self_id = self->id;
-    short curr_id = ship_ptr[i].id;
+    short self_id = self->id;        //ID of self (observer)
+    short curr_id = ship_ptr[i].id;  //ID of ship being observed
 
     //If ship is insight and not self; check if moving
     if (inSight((int)ship_ptr[i].x, (int)ship_ptr[i].y,fov,rov) && ( curr_id != self_id)) {
 
       //Check if the new coordinates are the same as previous.
       //If they are count the number of frames ship hasnt moved
-      if(local_ships[i][stoppedCount] <= 5) {
+      if(local_ships[i][stoppedCount] <= 3) {
+
+        //Checks if x and y coordinates are the same as previously + or - 1
         if (local_ships[i][prevX] >= (int) ship_ptr[i].x - 1 && local_ships[i][prevX] <= (int) ship_ptr[i].x + 1 &&
             local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
           local_ships[i][stoppedCount] += 1;
@@ -3139,7 +3148,7 @@ int seeIfDancing(int fov, int rov){
           local_ships[i][prevY] = (int) ship_ptr[i].y;
         }
       }else {
-          fprintf(fp, "returning: %d\n", i);
+          fprintf(fp, "returning ship ID: %d\n", (int)ship_ptr[i].id);
           fclose(fp);
           return (int)ship_ptr[i].id;
       }
@@ -3150,36 +3159,85 @@ int seeIfDancing(int fov, int rov){
 }
 
 
-void observeDance(int ship_idx){
+int observeDance(int ship_id){
 
   static bool observing_dance = false; //boolean used to flag if ship is dancing
   static int initialHeading = 0;       //Heading used to determine start of dance position
   static int targetHeading = 0;        //Heading used as the marker for a dance turn
   static int num_turns = 0;            //Number of turns made to determine dance
+  int dance_observed = -1;             //Used to return the dance type
+  static bool dancingCheck = true;     //Used to determine if bee is still dancing
+  ship_t observed_ship = getShipWithID(ship_id);
   char LogFile[15] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
   fp = fopen(LogFile, "a");
 
+  //Initialization code
   if(!observing_dance){
-    fprintf(fp,"Observing Dance");
-    initialHeading = (int)ship_ptr[ship_idx].dir;
-    targetHeading = initialHeading + 180;
-    observing_dance = true;
+    initialHeading = (int)observed_ship.dir;      //Record initial heading as start of dance orientation
+    targetHeading = initialHeading + 180;         //Target Heading for when a dance move ends
+    observing_dance = true;                       //Flag to exit initialization
+    fprintf(fp,"observeDance(ship_id: %d)\n",ship_id);
+  //If not intializing counts the number of turns
   }else{
-
-    //Turn to dancer
-    int selfX = getSelfX();
-    int selfY = getSelfY();
-    int current_observed_heading = (int)ship_ptr[ship_idx].dir;
-    turnToDeg(getAngleBtwnPoints((int)ship_ptr[ship_idx].x, selfX,(int)ship_ptr[ship_idx].y,selfY));
-    //TODO:Define 10 parameter
-    if(headingIsBetween(current_observed_heading,targetHeading-10,targetHeading+10)){
-
+    if(dancingCheck)
+    {
+      dancingCheck = beeIsDancing(ship_id);
+      //Count the number of target headings reached
+      num_turns = countTurnsOfShip(ship_id);
+      fprintf(fp,"Turns %d\n", num_turns);
+    }else{
+      dance_observed = determineDance(num_turns);
     }
   }
   fclose(fp);
+  return dance_observed;
 }
+
+int determineDance(int num_turns){
+    switch(num_turns)
+    {
+        case 4:
+            return HONEY_FOUND;
+    }
+}
+
+
+bool beeIsDancing(int ship_id){
+
+  static bool isInitial = true;
+  ship_t observed_ship= getShipWithID(ship_id);
+  static int prevHeading = 0;
+  static int num_frames_same_dir = 0;
+
+  if(isInitial){
+    prevHeading = (int)observed_ship.dir * 2.8125;
+    num_frames_same_dir = 0;
+    isInitial = false;
+  } else{
+
+    //Compare current direction to previous direction
+    int currentHeading = observed_ship.dir * 2.8125;
+    if(currentHeading == prevHeading){
+      num_frames_same_dir += 1;
+    }else{
+      num_frames_same_dir = 0;
+      prevHeading = currentHeading;
+    }
+
+    int threshold = 20;
+    if(num_frames_same_dir < threshold){
+      return true;
+
+    //Return false if you have been in the same direction for the threshold limit
+    }else{
+      isInitial = true;
+      return false;
+    }
+  }
+}
+
 
 bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
 /*******************************************************
@@ -3200,7 +3258,6 @@ bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
     return (heading == lowerHeading);
   }
 }
-
 
 bool checkIfBeingObserved(){
   bool beingObserved = false;
@@ -3272,6 +3329,7 @@ int getDancersX(int dancing_ship){
     }
   }
 }
+
 int getDancersY(int dancing_ship) {
   int i;
   for (i = 0; i < num_ship; i++) {
@@ -3301,4 +3359,63 @@ int getHeadingBetween(int x1, int y1, int x2, int y2){
     //came from quadrant 4 no conversion needed
   }
   return (int)heading;
+}
+
+int countTurnsOfShip(int ship_id){
+
+  char LogFile[15] = "";
+  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+  FILE *fp;
+  fp = fopen(LogFile, "a");
+
+  //Local Variables
+  ship_t observed_ship = getShipWithID(ship_id);
+  static bool is_initial_setup = true;
+  static int initial_heading = 0;
+  static int number_of_spins = 0;
+  static int target_degree = 0;
+  static short initialHeading = 0;
+  static short previous_heading = 0;
+  static short num_frames_still = 0;
+
+  //Reset all static variables
+  if(is_initial_setup){
+    number_of_spins = 0;
+    initialHeading = (int)observed_ship.dir * 2.8125;          //Record initial heading as start of dance orientation
+    target_degree = (initial_heading + 345) % 360;    //+345 so that we have to turn at least that much for it to count
+    previous_heading = 0;
+    num_frames_still = 0;
+    fprintf(fp,"Observing Dance\nInitial Heading: %d\tTarget Heading: %d\n",initial_heading,target_degree);
+    is_initial_setup = false;
+  }
+
+  //Get Dance Motions
+  short observers_heading = observed_ship.dir * 2.8125;
+
+  //IF the observed ships direction is the same after N frames, it has stopped dancing
+  if(num_frames_still <= 4) {
+    //Count number of rotations in order to determine when dance is finished
+    //fprintf(fp,"Observer's Heading %d\nTarget: %d\tTarget Upper: %d\n",(int)observers_heading, target_degree, (target_degree + 10) % 360);
+    if (headingIsBetween((int)observers_heading, target_degree, (target_degree + 10) % 360)) {
+      number_of_spins += 1;
+      fprintf(fp,"Number of spins: %d\n",number_of_spins);
+    }
+    fclose(fp);
+    return number_of_spins;
+    //If num frames is > 4 then the bee has stopped moving
+  } else{
+    fclose(fp);
+    is_initial_setup = true;
+    return number_of_spins;
+  }
+}
+
+/*** Private helper functions ***/
+ship_t getShipWithID(int ID){
+  int i;
+  for (i = 0; i < num_ship; i++) {
+    if(ship_ptr[i].id == ID) {
+      return ship_ptr[i];
+    }
+  }
 }

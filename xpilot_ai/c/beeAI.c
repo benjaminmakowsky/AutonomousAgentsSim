@@ -16,6 +16,7 @@
 #include "beeMain.h"
 #include "beeObject.h"
 #include <limits.h>
+#include "beeGlobals.h"
 
 
 
@@ -160,8 +161,7 @@ int* getPOICoordinates(int x ,int y){
   int xPOI = 66101110;  //Using MAX_INT causes it to not work
   int yPOI = 66101110;  //Using MAX_INT causes it to not work
 
-  FILE *fp;
-  fp = fopen(LogFile, "a");
+  OPENLOG()
   fprintf(fp,"getPOICoordinates(%d, %d)\n",x,y);
 
 
@@ -224,7 +224,7 @@ bool inVicinityOf(int x,int y){
   }else {
     //If not in the vicinty of the point slow down as you approach
     int distance = computeDistance(selfX(),x,selfY(),y);
-    int max_speed = 40;
+    int max_speed = 80;
     if(distance < 20) {
       setPower(max_speed/4);
     }else if(distance < 60){
@@ -284,12 +284,17 @@ void checkForFuel(){
 bool dance(int prevState){
   static bool dance_is_completed = false;
 
-  switch (prevState) {
-    case STATE_SEARCHING: //If you were just searching then let others know you found honey
-      dance_is_completed = honeyFoundDance();
-      break;
-    case STATE_FORAGING:
-      break;
+  //Make sure you are fully stopped before dancing
+  if(selfSpeed() == 0) {
+    switch (prevState) {
+      case STATE_SEARCHING: //If you were just searching then let others know you found honey
+        dance_is_completed = honeyFoundDance();
+        break;
+      case STATE_FORAGING:
+        break;
+    }
+  }else{
+    setPower(0);
   }
 
   //Stop dancing once dance has finished
