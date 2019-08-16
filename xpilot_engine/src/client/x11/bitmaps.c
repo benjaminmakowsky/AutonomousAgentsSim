@@ -37,16 +37,11 @@ xp_pixmap_t object_pixmaps[] = {
 	XP_PIXMAP_INITIALIZER("ship_red2.ppm", 128),  // 5
 	XP_PIXMAP_INITIALIZER("bullet.ppm", -16),
 	XP_PIXMAP_INITIALIZER("bullet_blue.ppm", -16),
-	//XP_PIXMAP_INITIALIZER("base_down.ppm", 1),
-	XP_PIXMAP_INITIALIZER("hive.ppm", 1),
-	//XP_PIXMAP_INITIALIZER("base_left.ppm", 1),
-	XP_PIXMAP_INITIALIZER("hive.ppm", 1),
-	//XP_PIXMAP_INITIALIZER("base_up.ppm", 1),      // 10
-	XP_PIXMAP_INITIALIZER("hive.ppm", 1),
-	//XP_PIXMAP_INITIALIZER("base_right.ppm", 1),
-	XP_PIXMAP_INITIALIZER("hive.ppm", 1),
-	//XP_PIXMAP_INITIALIZER("fuelcell.ppm", 1),
-	XP_PIXMAP_INITIALIZER("honeycombs.ppm", 1),
+	XP_PIXMAP_INITIALIZER("hive_big_f.ppm", 1),
+	XP_PIXMAP_INITIALIZER("hive_big_f.ppm", 1),
+	XP_PIXMAP_INITIALIZER("hive_big_f.ppm", 1),
+	XP_PIXMAP_INITIALIZER("hive_big_f.ppm", 1),
+	XP_PIXMAP_INITIALIZER("honeycombs_big.ppm", 1),
 	XP_PIXMAP_INITIALIZER("fuel2.ppm", -16),
 	XP_PIXMAP_INITIALIZER("allitems.ppm", -30),
 	XP_PIXMAP_INITIALIZER("cannon_down.ppm", 1),  // 15
@@ -92,7 +87,7 @@ xp_pixmap_t object_pixmaps[] = {
 	XP_PIXMAP_INITIALIZER("infantry_f.ppm", 128),   // 55        
 	XP_PIXMAP_INITIALIZER("infantry_e.ppm", 128),        
 	XP_PIXMAP_INITIALIZER("bullet_red.ppm", -16),
-	XP_PIXMAP_INITIALIZER("hive_e.ppm", 1),
+	XP_PIXMAP_INITIALIZER("hive_big_e.ppm", 1),
 	XP_PIXMAP_INITIALIZER("bee.ppm", 128),        
 	XP_PIXMAP_INITIALIZER("bee_f.ppm", 128),   // 60     
 	XP_PIXMAP_INITIALIZER("bee_e.ppm", 128),        

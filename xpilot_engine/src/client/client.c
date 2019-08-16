@@ -222,12 +222,12 @@ vfuel_t             *vfuel_ptr;
 int                 num_vfuel, max_vfuel;
 vbase_t             *vbase_ptr;
 int                 num_vbase, max_vbase;
-debris_t            *debris_ptr[DEBRIS_TYPES];
-int                 num_debris[DEBRIS_TYPES],
-		    max_debris[DEBRIS_TYPES];
-debris_t            *fastshot_ptr[DEBRIS_TYPES * 2];
-int                 num_fastshot[DEBRIS_TYPES * 2],
-		    max_fastshot[DEBRIS_TYPES * 2];
+debris_t            *debris_ptr[DEBRIS_TYPES * 3];
+int                 num_debris[DEBRIS_TYPES * 3],
+		    max_debris[DEBRIS_TYPES * 3];
+debris_t            *fastshot_ptr[DEBRIS_TYPES * 3];
+int                 num_fastshot[DEBRIS_TYPES * 3],
+		    max_fastshot[DEBRIS_TYPES * 3];
 vdecor_t            *vdecor_ptr;
 int                 num_vdecor, max_vdecor;
 wreckage_t          *wreckage_ptr;

@@ -255,8 +255,13 @@ void Gui_paint_fuel(int x, int y, double fuel)
 		size = (int)((BLOCK_SZ - 2 * BITMAP_FUEL_BORDER)
 				* fuel / MAX_STATION_FUEL);
 
-		Bitmap_paint(drawPixmap, BM_FUELCELL,
-				SCALEX(x), SCALEY(y + BLOCK_SZ), 0);
+    // Bitmap paint used for OG fuelcell
+		//Bitmap_paint(drawPixmap, BM_FUELCELL,
+		//		WINSCALEX(x), WINSCALEY(y + BLOCK_SZ), 0);
+    //
+    //Bitmap paint used for bee honey-source
+    Bitmap_paint(drawPixmap, BM_FUELCELL,
+        WINSCALE(X(x + BEE_FUELCELL_X_SCALE*BLOCK_SZ)), WINSCALE(Y(y + BEE_FUELCELL_Y_SCALE*BLOCK_SZ)), 0 );
 
 		bit = Bitmap_get(drawPixmap, BM_FUEL, image);
 		if (bit != NULL) {
@@ -381,12 +386,12 @@ void Gui_paint_base(int x, int y, int id, int team, int type)
 		   }
 		 */
 		if( team == this_player_team ){
-			Bitmap_paint(drawPixmap, BM_BASE_DOWN, WINSCALE(X(x)),
-					WINSCALE(Y(y + BLOCK_SZ)), 0);
+			Bitmap_paint(drawPixmap, BM_BASE_DOWN, WINSCALE(X(x + BEE_BASE_X_SCALE*BLOCK_SZ)),
+					WINSCALE(Y(y + BEE_BASE_Y_SCALE*BLOCK_SZ)), 0);
 		}
 		else{
-			Bitmap_paint(drawPixmap, BM_BASE_ENEMY, WINSCALE(X(x)),
-					WINSCALE(Y(y + BLOCK_SZ)), 0);
+			Bitmap_paint(drawPixmap, BM_BASE_ENEMY, WINSCALE(X(x + BEE_BASE_X_SCALE*BLOCK_SZ)),
+					WINSCALE(Y(y + BEE_BASE_Y_SCALE*BLOCK_SZ)), 0);
 		}
 	}
 

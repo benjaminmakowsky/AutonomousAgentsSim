@@ -26,6 +26,12 @@
 #ifndef GUIMAP_H
 #define GUIMAP_H
 
+#define BEE_FUELCELL_X_SCALE ( 0 - 1.32 )
+#define BEE_FUELCELL_Y_SCALE ( 2.2 )
+
+#define BEE_BASE_X_SCALE ( 0 - 1.45 )
+#define BEE_BASE_Y_SCALE ( 2.2 )
+
 void Gui_paint_cannon(int x, int y, int type);
 void Gui_paint_fuel(int x, int y, double fuel);
 void Gui_paint_base(int x, int y, int id, int team, int type);
