@@ -160,7 +160,7 @@ void forage() {
 
       //If you are being observed perform dance
       }else {
-        performed_dance = dance(STATE_SEARCHING);
+        performed_dance = dance(foundSource);
       }
 
     }else {

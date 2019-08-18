@@ -15,7 +15,7 @@
 
 //Array to hold message types ie (0: found honey, 1: found enemy hive) etc
 //Using an int so that when the message is transmitted its all in ints for the coordinates
-extern int msgType[2];
+extern int msgTypes[2];
 
 /// Builds the message for the dance
 /// \param msgType

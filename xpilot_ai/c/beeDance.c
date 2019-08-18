@@ -5,10 +5,11 @@
 #include "beeDance.h"
 #include "beeObject.h"
 #include "cAI.h"
+#include "beeGlobals.h"
 
 //Local Variables
 static char danceMoves[4] = {none,none,none,none}; //Array to hold dance moves
-int msgType[2] = {foundSource, foundEnemy};
+int msgTypes[2] = {foundSource, foundEnemy};
 int danceTree[10] = {0,1,2,3,4,5,6,7,8,9};
 static int initialHeading = 0;
 static int rightHeading = 0;
@@ -20,14 +21,17 @@ bool dance(int msgType){
     static bool completed_second_dance = false;
     static bool completed_third_dance = false;
     static bool isInitial = true;
+    OPENLOG()
 
     if(isInitial){
+        fprintf(fp, "Intializing beeDance() with msgType: %d\n",msgType);
         completed_first_dance = false;
         completed_second_dance = false;
         completed_third_dance = false;
         initialHeading = (int)selfHeadingDeg();
         rightHeading = (initialHeading+90) % 360;
         leftHeading = (initialHeading-90) % 360;
+        isInitial = false;
     }
 
     //Make sure you are fully stopped before dancing
@@ -35,6 +39,7 @@ bool dance(int msgType){
 
         switch (msgType) {
             case foundSource:
+                fprintf(fp,"Found Source Dance");
                 if(!completed_first_dance){
                     completed_first_dance = relayMsg(msgType);
                 }else if(!completed_second_dance){
