@@ -39,7 +39,7 @@ bool dance(int msgType){
 
         switch (msgType) {
             case foundSource:
-                fprintf(fp,"Found Source Dance");
+                //fprintf(fp,"Found Source Dance");
                 if(!completed_first_dance){
                     completed_first_dance = relayMsg(msgType);
                 }else if(!completed_second_dance){
@@ -79,32 +79,32 @@ int getParent(int child){
 bool relayMsg(int symbol){
     static bool finishedMove = false;
     static bool isInitial = true;
+    static char danceDirection = none;
 
     if(isInitial){
         finishedMove = false;
-        isInitial = false;
-
-    }else if(!finishedMove){
         //determine which direction to dance
-        char danceDirection = none;
         //If 0 turn left if 1 turn right
         danceDirection = (symbol == 0) ?  left : right;
+        isInitial = false;
+        fprintf(fp,"Begin relayMsg(%d) in direction %c\n",symbol, danceDirection);
+
+    }else if(!finishedMove){
+        setPower(10);
         //move in that direction
         if(danceDirection == left){
-            turnToDeg(leftHeading - 1);
+            //TODO: CREATE A RANGE VALUE to stop
+            sprintf(bugstring,"Turning to: %d\nCurrently: %d", leftHeading,(int)selfHeadingDeg());
+            turnToDeg(((int)selfHeadingDeg() - 90) % 360);
+            //finishedMove = selfHeadingDeg() < leftHeading;
         }else{
             turnToDeg(rightHeading + 1);
-        }
-        //Once in direction stop
-        if(danceDirection == left){
-            finishedMove = selfHeadingDeg() > leftHeading;
-        }else{
             finishedMove = selfHeadingDeg() > rightHeading;
         }
-
     }
     if(finishedMove){
         //reset for next msg
+        setPower(0);
         isInitial = true;
     }
     return finishedMove;
