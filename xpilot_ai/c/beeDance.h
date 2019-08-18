@@ -1,9 +1,10 @@
 //
 // Created by makowskyb on 8/17/19.
 //
-
 #ifndef XPILOT_LE_BEE_DANCE_H
 #define XPILOT_LE_BEE_DANCE_H
+
+#include <stdbool.h>
 
 //Defined values
 #define foundSource 0
@@ -21,6 +22,10 @@ extern int msgType[2];
 /// \return
 char* buildDance(int msgType);
 
+/// Performs dance movements according to dance symbol
+/// \param symbol The symbol to dance
+/// \return true/false depending on if the move has been finished
+bool relayMsg(int symbol);
 
 
 #endif //XPILOT_LE_BEE_DANCE_H
