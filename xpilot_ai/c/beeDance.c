@@ -48,16 +48,17 @@ bool dance(int msgType){
                 break;
         }
     }else{
+        //IF you haven't stopped moving make sure the power is off
         setPower(0);
     }
 
     //Stop dancing once dance has finished
-//    if (dance_is_completed) {
-//        dance_is_completed = false;
-//        return true;
-//    } else {
-//        return false;
-//    }
+    if (completed_first_dance && completed_second_dance && completed_third_dance) {
+        isInitial = true;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -77,16 +78,31 @@ bool relayMsg(int symbol){
     if(isInitial){
         finishedMove = false;
         isInitial = false;
+
     }else if(!finishedMove){
-        //determine which direction
+        //determine which direction to dance
+        char danceDirection = none;
+        //If 0 turn left if 1 turn right
+        danceDirection = (symbol == 0) ?  left : right;
         //move in that direction
+        if(danceDirection == left){
+            turnToDeg(leftHeading - 1);
+        }else{
+            turnToDeg(rightHeading + 1);
+        }
         //Once in direction stop
+        if(danceDirection == left){
+            finishedMove = selfHeadingDeg() > leftHeading;
+        }else{
+            finishedMove = selfHeadingDeg() > rightHeading;
+        }
+
     }
     if(finishedMove){
         //reset for next msg
         isInitial = true;
-        return finishedMove;
     }
+    return finishedMove;
 
 }
 

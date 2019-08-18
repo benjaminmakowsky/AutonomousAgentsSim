@@ -5,6 +5,7 @@
 #include "beeGlobals.h"
 #include "bee.h"
 #include "beeAI.h"
+#include "beeDance.h"
 #include "cAI.h"
 #include "beeMain.h"
 #include <stdio.h>
