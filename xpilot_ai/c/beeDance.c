@@ -6,6 +6,8 @@
 #include "beeObject.h"
 #include "cAI.h"
 #include "beeGlobals.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 //Local Variables
 static char danceMoves[4] = {none,none,none,none}; //Array to hold dance moves
@@ -29,8 +31,8 @@ bool dance(int msgType){
         completed_second_dance = false;
         completed_third_dance = false;
         initialHeading = (int)selfHeadingDeg();
-        rightHeading = (initialHeading+90) % 360;
-        leftHeading = (initialHeading-90) % 360;
+        rightHeading = abs((initialHeading-90)) % 360;
+        leftHeading = (initialHeading+90) % 360;
         isInitial = false;
     }
 
@@ -90,15 +92,15 @@ bool relayMsg(int symbol){
         fprintf(fp,"Begin relayMsg(%d) in direction %c\n",symbol, danceDirection);
 
     }else if(!finishedMove){
-        setPower(10);
+        setPower(3);
         //move in that direction
         if(danceDirection == left){
             //TODO: CREATE A RANGE VALUE to stop
-            sprintf(bugstring,"Turning to: %d\nCurrently: %d", leftHeading,(int)selfHeadingDeg());
-            turnToDeg(((int)selfHeadingDeg() - 90) % 360);
-            //finishedMove = selfHeadingDeg() < leftHeading;
+            sprintf(bugstring,"Turning to: %d Currently: %d", leftHeading,(int)selfHeadingDeg());
+            turnToDeg(leftHeading);
+            finishedMove = selfHeadingDeg() > leftHeading;
         }else{
-            turnToDeg(rightHeading + 1);
+            turnToDeg(rightHeading);
             finishedMove = selfHeadingDeg() > rightHeading;
         }
     }
@@ -106,6 +108,7 @@ bool relayMsg(int symbol){
         //reset for next msg
         setPower(0);
         isInitial = true;
+        fprintf(fp, "Finished msg part 1 of 3");
     }
     return finishedMove;
 
