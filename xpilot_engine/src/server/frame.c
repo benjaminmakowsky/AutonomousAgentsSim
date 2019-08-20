@@ -81,8 +81,8 @@ static int view_width,
 	   view_cwidth,
 	   view_cheight,
 	   debris_x_areas, debris_y_areas, debris_areas, debris_colors, spark_rand;
-static debris_t *debris_ptr[DEBRIS_TYPES];
-static unsigned debris_num[DEBRIS_TYPES], debris_max[DEBRIS_TYPES];
+static debris_t *debris_ptr[DEBRIS_TYPES * 2];
+static unsigned debris_num[DEBRIS_TYPES], debris_max[DEBRIS_TYPES * 2];
 static debris_t *fastshot_ptr[DEBRIS_TYPES * 2];
 static unsigned fastshot_num[DEBRIS_TYPES * 2],
 		fastshot_max[DEBRIS_TYPES * 2];
@@ -156,7 +156,7 @@ if (num_ >= 255)							  \
 return;								  \
 if (num_ >= max_) {							  \
 	if (num_ == 0)							  \
-	ptr_ = (debris_t *) malloc((max_ = 16) * sizeof(*ptr_));	  \
+	ptr_ = (debris_t *) malloc((max_ = 64) * sizeof(*ptr_));	  \
 	else								  \
 	ptr_ = (debris_t *) realloc(ptr_, (max_ += max_) * sizeof(*ptr_)); \
 	if (ptr_ == NULL) {						  \

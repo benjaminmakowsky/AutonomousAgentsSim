@@ -95,15 +95,21 @@ xp_pixmap_t object_pixmaps[] = {
 	XP_PIXMAP_INITIALIZER("bee_searcher.ppm", 128),       
 	XP_PIXMAP_INITIALIZER("bee_nurse.ppm", 128),        
 	XP_PIXMAP_INITIALIZER("bee_onlooker.ppm", 128),  // 65        
+	XP_PIXMAP_INITIALIZER("bee_guard.ppm", 128),         
+	XP_PIXMAP_INITIALIZER("bee_attacker.ppm", 128),          
 	XP_PIXMAP_INITIALIZER("bee_e_forager.ppm", 128),        
 	XP_PIXMAP_INITIALIZER("bee_e_searcher.ppm", 128),        
-	XP_PIXMAP_INITIALIZER("bee_e_nurse.ppm", 128),       
+	XP_PIXMAP_INITIALIZER("bee_e_nurse.ppm", 128),    // 70   
 	XP_PIXMAP_INITIALIZER("bee_e_onlooker.ppm", 128),       
-	XP_PIXMAP_INITIALIZER("bee_f_forager.ppm", 128),  //70    
-	XP_PIXMAP_INITIALIZER("bee_f_searcher.ppm", 128),        
+	XP_PIXMAP_INITIALIZER("bee_e_guard.ppm", 128),       
+	XP_PIXMAP_INITIALIZER("bee_e_attacker.ppm", 128),       
+	XP_PIXMAP_INITIALIZER("bee_f_forager.ppm", 128),     
+	XP_PIXMAP_INITIALIZER("bee_f_searcher.ppm", 128), // 75        
 	XP_PIXMAP_INITIALIZER("bee_f_nurse.ppm", 128), 
 	XP_PIXMAP_INITIALIZER("bee_f_onlooker.ppm", 128), 
-	XP_PIXMAP_INITIALIZER("observer.ppm", 128) 
+	XP_PIXMAP_INITIALIZER("bee_f_guard.ppm", 128), 
+	XP_PIXMAP_INITIALIZER("bee_f_attacker.ppm", 128), 
+	XP_PIXMAP_INITIALIZER("observer.ppm", 128)        // 80 
 };
 
 xp_pixmap_t *pixmaps = 0;

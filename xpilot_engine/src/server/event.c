@@ -1079,6 +1079,16 @@ int Handle_keyboard(player_t *pl)
           pl->aiState = STATE_ONLOOKING;
           break;
 
+        case KEY_STATE_7:
+          pl->aiState = STATE_GUARD;
+          break;
+
+        case KEY_STATE_8:
+          pl->aiState = STATE_ATTACKER;
+          break;
+
+
+
 				default:
 						      break;
 			}
@@ -1168,6 +1178,12 @@ int Handle_keyboard(player_t *pl)
           break;
 
         case KEY_STATE_6:
+          break;
+
+        case KEY_STATE_7:
+          break;
+
+        case KEY_STATE_8:
           break;
 
 				default:

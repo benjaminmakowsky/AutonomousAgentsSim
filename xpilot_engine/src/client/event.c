@@ -1507,7 +1507,6 @@ xp_option_t key_options[] = {
       "semicolon",
       KEY_STATE_5,
       "Tell server that ship is in state enum 5.\n"),
-      
        
   XP_KEY_OPTION(
       "keySendState6",
@@ -1515,6 +1514,18 @@ xp_option_t key_options[] = {
       KEY_STATE_6,
       "Tell server that ship is in state enum 6.\n"),
 
+  XP_KEY_OPTION(
+      "keySendState7",
+      "o",
+      KEY_STATE_7,
+      "Tell server that ship is in state enum 7.\n"),
+ 
+  XP_KEY_OPTION(
+      "keySendState8",
+      "Caps_Lock",
+      KEY_STATE_8,
+      "Tell server that ship is in state enum 8.\n"),
+ 
   /*
 	 * These are after the keys so that the key options will be
 	 * present when the pointer button options are stored.

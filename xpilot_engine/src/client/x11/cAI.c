@@ -852,7 +852,7 @@ void loadModifiers4() {
   Keyboard_button_released(XK_4);
 }
 
-void clearModifiers() {
+void clearModifiers() { 
   Keyboard_button_pressed(XK_k);
   Keyboard_button_released(XK_k);
 }
@@ -980,6 +980,8 @@ void sendSelfState(int state) {
     case(4): Keyboard_button_pressed(XK_bracketright);break;
     case(5): Keyboard_button_pressed(XK_semicolon);break;
     case(6): Keyboard_button_pressed(XK_apostrophe);break;
+    case(7): Keyboard_button_pressed(XK_o);break;
+    case(8): Keyboard_button_pressed(XK_Caps_Lock);break;
     default: break;
   }
 }
