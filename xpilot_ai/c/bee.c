@@ -132,6 +132,9 @@ void forage() {
   static int fuelLVL = 0;
   //Step 2: Determine if near honey/hive
   if(!inVicinityOf(destination_x,destination_y)) {
+    if(getPower() == 0){
+      setPower(10);
+    }
     refuel(0);
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
     goToCoordinates(destination_x,destination_y);
@@ -145,7 +148,7 @@ void forage() {
     setPower(0);                        //Come to stop until being observed or time limit has been reached
 
     //wait to fly off until someone has seen dance or time has been reached
-    if(performed_dance == false && waiting_counter < frameLimit){
+    if(performed_dance == false && waiting_counter < frameLimit && depositing){
 
       //while not being observed increment counter
       if(!beingObserved){
@@ -174,6 +177,7 @@ void forage() {
         strcpy(bugstring, "Moving");
         depositing = !depositing;       //Change internal forage state
         forage_state_changed = true;    //Set flag for Logging change
+        waiting_counter = 0;            //Reset waiting limit for next iteration
       }
     }
   }
@@ -184,6 +188,7 @@ void forage() {
  * ***************************************************************************/
 void onlook(){
   static int dancing_ship = -1;
+
 
   //If not near the hive, go to it
   if(!inVicinityOf(selfBaseX(),selfBaseY())){
@@ -209,17 +214,13 @@ void onlook(){
     }else{
 
       //Turn towards the bee we are observing
-      //TODO: Check ig needed (turnTODeg may work below)
-      goToCoordinates(getDancersX(dancing_ship),getDancersY(dancing_ship));
-
-      //observeDance(dancing_ship);
       int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
       if(selfHeadingDeg() < targetHeading-1 || selfHeadingDeg() > targetHeading + 1) {
         //sprintf(bugstring,"self: %d target: %d",selfHeadingDeg(),targetHeading);
+        //sprintf(bugstring,"targetHeading: %d",targetHeading);
         turnToDeg(targetHeading);
       }else{
         //While looking at dancer observe dance
-        sprintf(bugstring,"Observing");
         int danceObserved = observeDance(dancing_ship);
         sprintf(bugstring, "Observed Dance: %d", danceObserved);
       }

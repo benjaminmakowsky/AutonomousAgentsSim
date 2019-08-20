@@ -209,7 +209,7 @@ int* getPOICoordinates(int x ,int y){
 
 
 bool inVicinityOf(int x,int y){
-  int range = 60; //Had to increase range because of the walls around honey sources
+  int range = 40; //Had to increase range because of the walls around honey sources
   int lowerXRange = x - range/2;
   int upperXRange = x + range/2;
   int lowerYRange = y - range/2;
