@@ -11,21 +11,40 @@
 #define foundEnemy 1
 #define left 'l'
 #define right 'r'
+#define endOfSequence 'p' //p for pause
 #define none '\0'
 
 //Array to hold message types ie (0: found honey, 1: found enemy hive) etc
 //Using an int so that when the message is transmitted its all in ints for the coordinates
 extern int msgTypes[2];
 
+/// Relays the coordinates of the message through dance
+/// \param coords the coordinates to relay
+/// \return whether or not the coordinates have been relayed
+bool relayCoords(int coords);
+
+
+
+
+
+
+
+/**********************************************************
+ * Helper Methods
+ *********************************************************/
+
 /// Builds the message for the dance
 /// \param msgType
 /// \return
-char* buildDance(int msgType);
+char* buildDance(int coords);
 
 /// Performs dance movements according to dance symbol
 /// \param symbol The symbol to dance
 /// \return true/false depending on if the move has been finished
 bool relayMsg(int symbol);
 
-
+/// Function to get the depth of a number from tree
+/// \param number the number being looked for
+/// \return the depth
+int getDepthOfNumber(int number);
 #endif //XPILOT_LE_BEE_DANCE_H
