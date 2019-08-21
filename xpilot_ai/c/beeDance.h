@@ -55,4 +55,11 @@ bool relayMsg(int symbol);
 /// \param number the number being looked for
 /// \return the depth
 int getDepthOfNumber(int number);
+
+
+/// Performs the dance sequence
+/// \param sequence
+/// \return
+bool performSequence(char* sequence);
+
 #endif //XPILOT_LE_BEE_DANCE_H

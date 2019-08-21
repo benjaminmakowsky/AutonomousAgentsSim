@@ -99,7 +99,7 @@ bool relayMsg(int symbol) {
     setPower(3);
     //move in that direction
     if (danceDirection == left) {
-      fprintf(fp, "Turning to: %d Currently: %d\n", leftHeading, (int) selfHeadingDeg());
+      fprintf(fp, "Signaling found source turning left: %d Currently: %d\n", leftHeading, (int) selfHeadingDeg());
       turnToDeg(leftHeading);
       finishedMove = headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
     } else {
@@ -111,18 +111,22 @@ bool relayMsg(int symbol) {
 
     //Wait 8 frames to signal end of word
     static int wait_count = 0;
-    if(wait_count < endOfWordSig){
+    if(wait_count < endOfSymbolSig){
       wait_count++;
+      setPower(0);
       fprintf(fp, "%d, ",wait_count);
     }else{
       //move back to initial heading after each move
+      //fprintf(fp, "PRE_IF: END OF PART1 Turning to initial: %d, facing %d\n",initialHeading,(int)selfHeadingDeg());
       if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,isInitial+2)){
-        fprintf(fp, "Turning to %d, facing %d\n",initialHeading,(int)selfHeadingDeg());
+        fprintf(fp, "\nEND OF PART1 Turning to initial: %d, facing %d",initialHeading,(int)selfHeadingDeg());
+        setPower(3);
         turnToDeg(initialHeading);
       }else{
         //reset for next msg
         //Signal end of word
-        if(wait_count < endOfWordSig + endOfMSGSig){
+        if(wait_count < endOfWordSig + endOfSymbolSig){
+          setPower(0);
           wait_count++;
           fprintf(fp, "%d, ",wait_count);
         }else {
@@ -145,15 +149,19 @@ bool relayCoords(int coords) {
   static bool isInitial = true;
   static char danceDirection = none;
 
-  char *danceSequence = buildDance(coords);
-  int i;
-  OPENLOG()
-  fprintf(fp, "\nDance built\n");
-  for (i = 0; i < 8; i++) {
-    fprintf(fp, "%c", danceSequence[i]);
+  static char *danceSequence = 0;
+  if(danceSequence == 0){
+    danceSequence = buildDance(coords);
+    int i;
+    OPENLOG()
+    fprintf(fp, "\nDance built\n");
+    for (i = 0; i < 8; i++) {
+      fprintf(fp, "%c", danceSequence[i]);
+    }
+    fclose(fp);
   }
 
-  fclose(fp);
+  finishedMove = performSequence(danceSequence);
   return finishedMove;
 }
 
@@ -256,4 +264,67 @@ int getDepthOfNumber(int number) {
     depth += 1;
   }
   return depth;
+}
+
+
+bool performSequence(char* sequence){
+  static bool completedSequence = false;
+  static bool isInitial = true;
+  static int wait_count = 0;
+
+  int sequenceLength = (int)(sizeof(sequence) / sizeof(sequence[0]));
+  OPENLOG()
+
+  if(isInitial){
+    fprintf(fp,"\n\nBeginning performSequence()\n");
+    fprintf(fp,"Performing %d moves\n", sequenceLength);
+    fprintf(fp,"---------------------------\n");
+    isInitial = false;
+  }
+  //Iterate through all the dance moves
+  static int i = 0;
+  if(i < sequenceLength){
+    bool completedChar = false;
+    char danceDir = sequence[i];
+    switch (danceDir)
+    {
+      case left:
+        turnToDeg(leftHeading);
+        completedChar = headingIsBetween(selfHeadingDeg(),leftHeading-2,leftHeading+2);
+        break;
+      case right:
+        turnToDeg(rightHeading);
+        completedChar = headingIsBetween(selfHeadingDeg(),rightHeading-2,rightHeading+2);
+        break;
+      case endOfSequence:
+        completedChar = true;
+    }
+
+
+    if(completedChar) {
+
+      //Wait at character direction
+      if(wait_count < endOfSymbolSig){
+        wait_count++;
+        fprintf(fp, "%d, ",wait_count);
+
+      //Return to starting location for next direction
+      }else{
+        //move back to initial heading after each move
+        if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,isInitial+2)){
+          fprintf(fp, "\nTurning to %d, facing %d\n",initialHeading,(int)selfHeadingDeg());
+          turnToDeg(initialHeading);
+        }else{
+          i++;
+          wait_count = 0;
+          fprintf(fp,"Finished sequence part %d\n", i);
+        }
+      }
+    }
+  }else{
+    completedSequence = true;
+    fprintf(fp,"completedSequence\n");
+  }
+  fclose(fp);
+  return completedSequence;
 }
