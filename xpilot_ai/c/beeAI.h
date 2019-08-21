@@ -88,7 +88,7 @@ void checkForFuel();
 /// \param String to be printed to file
 
 
-bool dance(int prevState);
+//bool dance(int prevState);
 /// Performs a set of movements based on the state before dancing
 /// \param prevState The state the bee was in before initiating dance
 /// \return boolean if dance has been completed or not

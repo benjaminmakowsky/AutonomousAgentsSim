@@ -157,7 +157,6 @@ void forage() {
         waiting_counter++;
         beingObserved = checkIfBeingObserved();
         sprintf(bugstring,"waiting: %.2f", (float)waiting_counter/(frameLimit) * 100);
-
       //If you are being observed perform dance
       }else {
         performed_dance = dance(foundSource);

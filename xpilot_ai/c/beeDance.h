@@ -7,6 +7,9 @@
 #include <stdbool.h>
 
 //Defined values
+#define endOfMSGSig 16    //16 frames for end of message
+#define endOfWordSig 8    //8 frames for end of word
+#define endOfSymbolSig 4  //4 frames for end of symbol
 #define foundSource 0
 #define foundEnemy 1
 #define left 'l'
@@ -22,6 +25,11 @@ extern int msgTypes[2];
 /// \param coords the coordinates to relay
 /// \return whether or not the coordinates have been relayed
 bool relayCoords(int coords);
+
+/// Performs the dance for the bee
+/// \param msgType The msg to dance
+/// \return whether or not the dance was completed
+bool dance(int msgType);
 
 
 

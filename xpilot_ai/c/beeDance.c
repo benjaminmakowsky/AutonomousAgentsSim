@@ -12,156 +12,189 @@
 #include <math.h>
 
 
-
-
 //Local Variables
-static char danceMoves[4] = {none,none,none,none}; //Array to hold dance moves
+static char danceMoves[4] = {none, none, none, none}; //Array to hold dance moves
 int msgTypes[2] = {foundSource, foundEnemy};
-int danceTree[10] = {0,1,2,3,4,5,6,7,8,9};
+int danceTree[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 static int initialHeading = 0;
 static int rightHeading = 0;
 static int leftHeading = 0;
 
 
-bool dance(int msgType){
-    static bool completed_first_dance = false;
-    static bool completed_second_dance = false;
-    static bool completed_third_dance = false;
-    static bool isInitial = true;
+bool dance(int msgType) {
+  static bool completed_first_dance = false;
+  static bool completed_second_dance = false;
+  static bool completed_third_dance = false;
+  static bool isInitial = true;
+
+  if(isInitial) {
     OPENLOG()
 
-    if(isInitial){
-        fprintf(fp, "Intializing beeDance() with msgType: %d\n",msgType);
-        completed_first_dance = false;
-        completed_second_dance = false;
-        completed_third_dance = false;
-        initialHeading = (int)selfHeadingDeg();
-        rightHeading = abs((initialHeading-90)) % 360;
-        leftHeading = (initialHeading+90) % 360;
-        isInitial = false;
-    }
+    completed_first_dance = false;
+    completed_second_dance = false;
+    completed_third_dance = false;
+    initialHeading = (int) selfHeadingDeg();
+    rightHeading = abs((initialHeading - 90)) % 360;
+    leftHeading = (initialHeading + 90) % 360;
+    fprintf(fp, "\nInitializing beeDance() with msgType: %d\n", msgType);
+    fprintf(fp, "Init: %d, Left: %d, Right: %d\n",initialHeading,leftHeading,rightHeading);
+    fprintf(fp,"------------------------------\n");
+    isInitial = false;
+    fclose(fp);
+  }
 
-    //Make sure you are fully stopped before dancing
-    if(selfSpeed() == 0) {
+  //Make sure you are fully stopped before dancing
+  if (selfSpeed() == 0) {
 
-        switch (msgType) {
-            case foundSource:
+    switch (msgType) {
+      case foundSource:
 
-                //Dance msgType
-                if(!completed_first_dance){
-                    completed_first_dance = relayMsg(msgType);
+        //Dance msgType
+        if (!completed_first_dance) {
+          completed_first_dance = relayMsg(msgType);
 
-                //Dance x coordinates
-                }else if(!completed_second_dance){
-                    completed_second_dance = relayCoords(getHoneyX());
+          //Dance x coordinates
+        } else if (!completed_second_dance) {
+          completed_second_dance = relayCoords(getHoneyX());
 
-                //Dance y coordinates
-                }else if(!completed_third_dance){
-                    completed_third_dance = relayCoords(getHoneyY());
-                }
-                //dance_is_completed = honeyFoundDance();
-                break;
-            case foundEnemy:
-                break;
+          //Dance y coordinates
+        } else if (!completed_third_dance) {
+          completed_third_dance = relayCoords(getHoneyY());
         }
-    }else{
-        //IF you haven't stopped moving make sure the power is off
-        setPower(0);
+        //dance_is_completed = honeyFoundDance();
+        break;
+      case foundEnemy:
+        break;
     }
+  } else {
+    //IF you haven't stopped moving make sure the power is off
+    setPower(0);
+  }
 
-    //Stop dancing once dance has finished
-    if (completed_first_dance && completed_second_dance && completed_third_dance) {
-        isInitial = true;
-        return true;
+  //Stop dancing once dance has finished
+  if (completed_first_dance && completed_second_dance && completed_third_dance) {
+    isInitial = true;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+bool relayMsg(int symbol) {
+  static bool finishedMove = false;
+  static bool isInitial = true;
+  static char danceDirection = none;
+  OPENLOG()
+
+  if (isInitial) {
+    finishedMove = false;
+    //determine which direction to dance
+    //If 0 turn left if 1 turn right
+    danceDirection = (symbol == 0) ? left : right;
+    isInitial = false;
+    fprintf(fp, "Begin relayMsg(%d) in direction %c\n", symbol, danceDirection);
+
+  } else if (!finishedMove) {
+    setPower(3);
+    //move in that direction
+    if (danceDirection == left) {
+      fprintf(fp, "Turning to: %d Currently: %d\n", leftHeading, (int) selfHeadingDeg());
+      turnToDeg(leftHeading);
+      finishedMove = headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
     } else {
-        return false;
+      turnToDeg(rightHeading);
+      finishedMove = selfHeadingDeg() > rightHeading;
     }
-}
+  }
+  if (finishedMove) {
 
-
-
-
-
-bool relayMsg(int symbol){
-    static bool finishedMove = false;
-    static bool isInitial = true;
-    static char danceDirection = none;
-
-    if(isInitial){
-        finishedMove = false;
-        //determine which direction to dance
-        //If 0 turn left if 1 turn right
-        danceDirection = (symbol == 0) ?  left : right;
-        isInitial = false;
-        fprintf(fp,"Begin relayMsg(%d) in direction %c\n",symbol, danceDirection);
-
-    }else if(!finishedMove){
-        setPower(3);
-        //move in that direction
-        if(danceDirection == left){
-            sprintf(bugstring,"Turning to: %d Currently: %d", leftHeading,(int)selfHeadingDeg());
-            turnToDeg(leftHeading);
-            finishedMove = selfHeadingDeg() > leftHeading;
-        }else{
-            turnToDeg(rightHeading);
-            finishedMove = selfHeadingDeg() > rightHeading;
-        }
-    }
-    if(finishedMove){
+    //Wait 8 frames to signal end of word
+    static int wait_count = 0;
+    if(wait_count < endOfWordSig){
+      wait_count++;
+      fprintf(fp, "%d, ",wait_count);
+    }else{
+      //move back to initial heading after each move
+      if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,isInitial+2)){
+        fprintf(fp, "Turning to %d, facing %d\n",initialHeading,(int)selfHeadingDeg());
+        turnToDeg(initialHeading);
+      }else{
         //reset for next msg
-        setPower(0);
-        isInitial = true;
-        fprintf(fp, "Finished msg part 1 of 3");
+        //Signal end of word
+        if(wait_count < endOfWordSig + endOfMSGSig){
+          wait_count++;
+          fprintf(fp, "%d, ",wait_count);
+        }else {
+          setPower(0);
+          isInitial = true;
+          fprintf(fp, "\nFinished msg part 1 of 3\n\n");
+          fclose(fp);
+          return finishedMove;
+        }
+      }
     }
-    return finishedMove;
+  }
+  fclose(fp);
+  return false;
 }
 
 
-bool relayCoords(int coords){
+bool relayCoords(int coords) {
   static bool finishedMove = false;
   static bool isInitial = true;
   static char danceDirection = none;
 
+  char *danceSequence = buildDance(coords);
+  int i;
+  OPENLOG()
+  fprintf(fp, "\nDance built\n");
+  for (i = 0; i < 8; i++) {
+    fprintf(fp, "%c", danceSequence[i]);
+  }
+
+  fclose(fp);
   return finishedMove;
 }
-
 
 
 /*********************
  * Helper Methods
  ********************/
-char* buildDance(int coords){
+char *buildDance(int coords) {
 
   int numInts = 0;
   int unitsPlace = 1;
-  static char danceMoves[3*4];
+  static char danceMoves[3 * 4];
   memset(danceMoves, 0, sizeof(danceMoves));
-  fprintf(fp,"Begin buildDance(%d)\n",coords);
+  OPENLOG()
+  fprintf(fp, "\nBegin buildDance(%d)\n", coords);
+  fprintf(fp, "--------------------\n");
 
   //Get the number of integers to relay in the coordinate
   //ie 100 is 3 ints 20 is 2 ints and 254672 is 6 ints
-  do{
-    numInts +=1; //increments the number of integers each time the unitsPlace exists in the coordinates
+  do {
+    numInts += 1; //increments the number of integers each time the unitsPlace exists in the coordinates
     unitsPlace *= 10;
-  }while(coords/unitsPlace != 0);
-  unitsPlace /=10; //Divide by 10 because it is now too high from the do_while
-  fprintf(fp,"numInts: (%d)\n",numInts);
+  } while (coords / unitsPlace != 0);
+  unitsPlace /= 10; //Divide by 10 because it is now too high from the do_while
+  fprintf(fp, "numInts: (%d)\n", numInts);
 
   //Create array to hold the units of the coordinate
   int units[numInts];
   int i;
   int tempUnits = coords;
-  for(i = 0; i < numInts; i++){
-    units[i]    = tempUnits / unitsPlace;
+  for (i = 0; i < numInts; i++) {
+    units[i] = tempUnits / unitsPlace;
     fprintf(fp, "%d ", units[i]);
-    tempUnits  %= unitsPlace;           //ie 123 -> 23
+    tempUnits %= unitsPlace;           //ie 123 -> 23
     unitsPlace /= 10;                   //ie go from thousandths to hundredths
   }
 
 
   //Get the total number of dance moves in message
   int num_dance_moves = 0;
-  for(i = 0; i < numInts; i++){
+  for (i = 0; i < numInts; i++) {
     num_dance_moves += getDepthOfNumber(units[i]);
   }
   fprintf(fp, "\nnum_dance_moves: %d\n", num_dance_moves);
@@ -169,13 +202,13 @@ char* buildDance(int coords){
   //Create the array to hold all the dance moves
   //total_moves = num_dance_moves+num_ints to account for pauses after each int -1 because the end
   //doesnt need a pause
-  int total_moves = num_dance_moves+numInts-1;
+  int total_moves = num_dance_moves + numInts - 1;
   fprintf(fp, "total_moves: %d", total_moves);
 
 
   //Fill the danceMoves array with the moves
   int num_moves_added = 0;
-  for(i = 0; i < numInts; i++){
+  for (i = 0; i < numInts; i++) {
 
     //Get the dance moves for the specified number
     int currIdx = units[i];
@@ -184,41 +217,41 @@ char* buildDance(int coords){
     //Get path to idx
     int pathLength = getDepthOfNumber(currIdx);
     int pathToIdx[pathLength];
-    int pathIdx = pathLength-1;
+    int pathIdx = pathLength - 1;
     //Fill pathToIdx array
-    for(;pathIdx >= 0; pathIdx--){
+    for (; pathIdx >= 0; pathIdx--) {
       pathToIdx[pathIdx] = currIdx;
       currIdx = getParent(currIdx);
     }
 
     //Create dance for path to idx
-    for(currIdx = 0; currIdx < pathLength; currIdx++){
-      if(pathToIdx[currIdx] % 2 == 0){
+    for (currIdx = 0; currIdx < pathLength; currIdx++) {
+      if (pathToIdx[currIdx] % 2 == 0) {
         danceMoves[num_moves_added] = left;
-      }else{
+      } else {
         danceMoves[num_moves_added] = right;
       }
       fprintf(fp, "%c ", danceMoves[num_moves_added]);
       num_moves_added++;
     }
-    if(num_moves_added < num_dance_moves) {
+    if (num_moves_added < total_moves) {
       danceMoves[num_moves_added] = endOfSequence;
       fprintf(fp, "%c ", danceMoves[num_moves_added]);
       num_moves_added++;
     }
   }
-
+  fclose(fp);
   return danceMoves;
 }
 
-int getParent(int child){
-  return danceTree[child/2 -1];
+int getParent(int child) {
+  return danceTree[child / 2 - 1];
 }
 
-int getDepthOfNumber(int number){
+int getDepthOfNumber(int number) {
   int depth = 1;
   int currIndex = number;
-  while(currIndex / 2 - 1 >= 0){
+  while (currIndex / 2 - 1 >= 0) {
     currIndex = currIndex / 2 - 1;
     depth += 1;
   }

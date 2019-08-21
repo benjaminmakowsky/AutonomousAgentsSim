@@ -3265,16 +3265,15 @@ bool checkIfBeingObserved(){
   int selfX = getSelfX(); //Using custom made command instead relying on cAI.c
   int selfY = getSelfY(); //Using custom made command instead relying on cAI.c
 
-  char LogFile[20] = "";
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
-  fp = fopen(LogFile, "a");
+//  char LogFile[20] = "";
+//  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+//  FILE *fp;
+//  fp = fopen(LogFile, "a");
 
   //Used to make sure bee is being watch and bee didnt glance during fly-by
   static int observed_counter = 0;
 
   //See if anybody is observing self
-  //TODO: implement withinVicinity() [WAITING FOR DAVID]
   for (i = 0; i < num_ship; i++) {
     if ((ship_ptr[i].id != self->id)) {
       //Determine if they are looking in your direction
@@ -3286,7 +3285,7 @@ bool checkIfBeingObserved(){
 
       //get the heading from observer to self
       int angle = getHeadingBetween(ship_ptr[i].x,ship_ptr[i].y,selfX,selfY);
-      fprintf(fp, "ship.dir: %d angle: %d\n",others_dir,angle);
+      //fprintf(fp, "ship.dir: %d angle: %d\n",others_dir,angle);
 
       //If headings are the same they are looking at self
       if(others_dir >= angle-1 && others_dir <= angle+1){
@@ -3299,7 +3298,7 @@ bool checkIfBeingObserved(){
   } else {
     observed_counter = 0;
   }
-  fclose(fp);
+  //fclose(fp);
   return (observed_counter == 15);
 }
 

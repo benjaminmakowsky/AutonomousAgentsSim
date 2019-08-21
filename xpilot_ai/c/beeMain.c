@@ -116,7 +116,8 @@ void initialize()
 
   //Declare initialized and set state to typical flying.
   init = true;
-  int r = rand() % 2;
+  int r = selfID() % 2;
+  //int r = rand() % 2;
   switch(r)
   {
     case 0:
