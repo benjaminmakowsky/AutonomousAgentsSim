@@ -134,7 +134,7 @@ void forage() {
   //Step 2: Determine if near honey/hive
   if(!inVicinityOf(destination_x,destination_y)) {
     if(getPower() == 0){
-      setPower(10);
+      setPower(5);
     }
     refuel(0);
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);

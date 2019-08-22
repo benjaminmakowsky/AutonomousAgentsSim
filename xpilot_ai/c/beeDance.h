@@ -7,15 +7,19 @@
 #include <stdbool.h>
 
 //Defined values
-#define endOfMSGSig 16    //16 frames for end of message
-#define endOfWordSig 8    //8 frames for end of word
-#define endOfSymbolSig 4  //4 frames for end of symbol
+#define POWER_OFF setPower(0);
+#define POWER_ON setPower(3);
+#define endOfMSGSig 28    //16 frames for end of message
+#define endOfWordSig 14    //8 frames for end of word
+#define endOfSymbolSig 8  //4 frames for end of symbol
 #define foundSource 0
 #define foundEnemy 1
 #define left 'l'
 #define right 'r'
 #define endOfSequence 'p' //p for pause
 #define none '\0'
+
+
 
 //Array to hold message types ie (0: found honey, 1: found enemy hive) etc
 //Using an int so that when the message is transmitted its all in ints for the coordinates
@@ -61,5 +65,10 @@ int getDepthOfNumber(int number);
 /// \param sequence
 /// \return
 bool performSequence(char* sequence);
+
+/// Performs a different movement depending on param
+/// \param c can be l, r, or p for left, right, or pause
+/// \return true/false if finished movement
+bool performMovementFor(char dir);
 
 #endif //XPILOT_LE_BEE_DANCE_H

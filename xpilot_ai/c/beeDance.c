@@ -48,21 +48,22 @@ bool dance(int msgType) {
 
     switch (msgType) {
       case foundSource:
-
         //Dance msgType
         if (!completed_first_dance) {
           completed_first_dance = relayMsg(msgType);
 
           //Dance x coordinates
         } else if (!completed_second_dance) {
-          completed_second_dance = relayCoords(getHoneyX());
+          //completed_second_dance = relayCoords(getHoneyX());
+          completed_second_dance = true;
 
           //Dance y coordinates
         } else if (!completed_third_dance) {
-          completed_third_dance = relayCoords(getHoneyY());
+          completed_third_dance = true;
+          //completed_third_dance = relayCoords(getHoneyY());
         }
-        //dance_is_completed = honeyFoundDance();
         break;
+
       case foundEnemy:
         break;
     }
@@ -85,63 +86,24 @@ bool relayMsg(int symbol) {
   static bool finishedMove = false;
   static bool isInitial = true;
   static char danceDirection = none;
-  OPENLOG()
+  POWER_OFF
 
+  //Function initialization; reset all values for future dances
   if (isInitial) {
+    OPENLOG()
     finishedMove = false;
-    //determine which direction to dance
-    //If 0 turn left if 1 turn right
     danceDirection = (symbol == 0) ? left : right;
     isInitial = false;
     fprintf(fp, "Begin relayMsg(%d) in direction %c\n", symbol, danceDirection);
-
-  } else if (!finishedMove) {
-    setPower(3);
-    //move in that direction
-    if (danceDirection == left) {
-      fprintf(fp, "Signaling found source turning left: %d Currently: %d\n", leftHeading, (int) selfHeadingDeg());
-      turnToDeg(leftHeading);
-      finishedMove = headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
-    } else {
-      turnToDeg(rightHeading);
-      finishedMove = selfHeadingDeg() > rightHeading;
-    }
+    fclose(fp);
   }
-  if (finishedMove) {
 
-    //Wait 8 frames to signal end of word
-    static int wait_count = 0;
-    if(wait_count < endOfSymbolSig){
-      wait_count++;
-      setPower(0);
-      fprintf(fp, "%d, ",wait_count);
-    }else{
-      //move back to initial heading after each move
-      //fprintf(fp, "PRE_IF: END OF PART1 Turning to initial: %d, facing %d\n",initialHeading,(int)selfHeadingDeg());
-      if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,isInitial+2)){
-        fprintf(fp, "\nEND OF PART1 Turning to initial: %d, facing %d",initialHeading,(int)selfHeadingDeg());
-        setPower(3);
-        turnToDeg(initialHeading);
-      }else{
-        //reset for next msg
-        //Signal end of word
-        if(wait_count < endOfWordSig + endOfSymbolSig){
-          setPower(0);
-          wait_count++;
-          fprintf(fp, "%d, ",wait_count);
-        }else {
-          setPower(0);
-          isInitial = true;
-          fprintf(fp, "\nFinished msg part 1 of 3\n\n");
-          fclose(fp);
-          return finishedMove;
-        }
-      }
-    }
-  }
-  fclose(fp);
-  return false;
+  //After initialization perform the movement
+  finishedMove = performMovementFor(danceDirection);
+  if (finishedMove) {isInitial = true;}
+  return finishedMove;
 }
+
 
 
 bool relayCoords(int coords) {
@@ -154,7 +116,7 @@ bool relayCoords(int coords) {
     danceSequence = buildDance(coords);
     int i;
     OPENLOG()
-    fprintf(fp, "\nDance built\n");
+    fprintf(fp, "\nDance built:\n");
     for (i = 0; i < 8; i++) {
       fprintf(fp, "%c", danceSequence[i]);
     }
@@ -271,52 +233,55 @@ bool performSequence(char* sequence){
   static bool completedSequence = false;
   static bool isInitial = true;
   static int wait_count = 0;
+  static bool completedChar = false;
+  static bool needsReset = false;
 
   int sequenceLength = (int)(sizeof(sequence) / sizeof(sequence[0]));
-  OPENLOG()
 
   if(isInitial){
+    OPENLOG()
     fprintf(fp,"\n\nBeginning performSequence()\n");
     fprintf(fp,"Performing %d moves\n", sequenceLength);
     fprintf(fp,"---------------------------\n");
     isInitial = false;
+    fclose(fp);
   }
+
+  if(needsReset){
+    completedChar = false;
+    needsReset = false;
+    wait_count = 0;
+  }
+
   //Iterate through all the dance moves
   static int i = 0;
   if(i < sequenceLength){
-    bool completedChar = false;
     char danceDir = sequence[i];
-    switch (danceDir)
-    {
-      case left:
-        turnToDeg(leftHeading);
-        completedChar = headingIsBetween(selfHeadingDeg(),leftHeading-2,leftHeading+2);
-        break;
-      case right:
-        turnToDeg(rightHeading);
-        completedChar = headingIsBetween(selfHeadingDeg(),rightHeading-2,rightHeading+2);
-        break;
-      case endOfSequence:
-        completedChar = true;
-    }
 
+    completedChar = performMovementFor(danceDir);
 
+    //Once completed wait and return to start position
     if(completedChar) {
-
+      OPENLOG()
       //Wait at character direction
       if(wait_count < endOfSymbolSig){
+        POWER_OFF
         wait_count++;
-        fprintf(fp, "%d, ",wait_count);
+        fprintf(fp, "%d%c:%d, ",i,danceDir,wait_count);         //1...4
+        sprintf(bugstring, "dancing symbol: %d", i);
 
-      //Return to starting location for next direction
+        //Return to starting location for next direction
       }else{
         //move back to initial heading after each move
         if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,isInitial+2)){
-          fprintf(fp, "\nTurning to %d, facing %d\n",initialHeading,(int)selfHeadingDeg());
+          POWER_ON
+          fprintf(fp, "\nTurning to %d, facing %d",initialHeading,(int)selfHeadingDeg());
+          //TODO: THIS IS WHERE IT DIES!!!!
           turnToDeg(initialHeading);
         }else{
+          POWER_OFF
           i++;
-          wait_count = 0;
+          needsReset = true;
           fprintf(fp,"Finished sequence part %d\n", i);
         }
       }
@@ -327,4 +292,59 @@ bool performSequence(char* sequence){
   }
   fclose(fp);
   return completedSequence;
+}
+
+bool performMovementFor(char dir){
+  static bool finishedMove = false;
+  static int wait_count = 0;
+  static bool isInitial = true;
+  OPENLOG()
+  POWER_OFF
+
+  if (isInitial) {
+    finishedMove = false;
+    wait_count= 0;
+    isInitial = false;
+    fprintf(fp, "Begin movement(%c)\n", dir);
+  }
+
+  //If you havent finished moving, do it again
+  if (!finishedMove) {
+    if (dir == left) {
+      //fprintf(fp, "Turning left: %d Currently: %d\n", leftHeading, (int) selfHeadingDeg());
+      turnToDeg(leftHeading);
+      finishedMove = headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
+    } else {
+      //fprintf(fp, "Turning right: %d Currently: %d\n", rightHeading, (int) selfHeadingDeg());
+      turnToDeg(rightHeading);
+      finishedMove = selfHeadingDeg() > rightHeading;
+    }
+  }
+  if (finishedMove) {
+
+    //Wait 8 frames to signal end of Signal
+    if(wait_count < endOfSymbolSig){
+      wait_count++;
+      fprintf(fp, "%c%d, ",dir,wait_count);
+    }else{
+      fprintf(fp, "\nChecking headingIsBetween(%d,%d,%d)\n",selfHeadingDeg(),initialHeading-2,isInitial+2);
+      if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,initialHeading +2)){
+        fprintf(fp, "\nEND OF SYMBOL %c Turning to initial: %d, facing %d",dir,initialHeading,(int)selfHeadingDeg());
+        turnToDeg(initialHeading);
+      }else{
+        //reset for next msg
+        //Signal end of word
+        if(wait_count < endOfWordSig + endOfSymbolSig){
+          wait_count++;
+          fprintf(fp, "%d, ",wait_count);
+        }else {
+          isInitial = true;
+          fclose(fp);
+          return true;
+        }
+      }
+    }
+  }
+  fclose(fp);
+  return false;
 }
