@@ -11,7 +11,7 @@
 #define POWER_ON setPower(3);
 #define endOfMSGSig 28    //16 frames for end of message
 #define endOfWordSig 14    //8 frames for end of word
-#define endOfSymbolSig 8  //4 frames for end of symbol
+#define endOfSymbolSig 4  //4 frames for end of symbol
 #define foundSource 0
 #define foundEnemy 1
 #define left 'l'

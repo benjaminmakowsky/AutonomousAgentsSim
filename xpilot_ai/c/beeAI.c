@@ -359,12 +359,6 @@ bool beeDegIsBetween(int deg1, int deg2){
    }
 }
 
-//TODO: Deprecated updateship
-/*void updateShip(){
-
-  setSelfState(getCurrState());
-  sendDancingState(getIsDancing());
-}*/
 
 int interpretDance(int dance){
   if(dance == FOUND_HONEY){
