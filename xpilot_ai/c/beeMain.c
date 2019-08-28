@@ -61,7 +61,7 @@ int degToAim = -1;
 int turnLock = 0;
 int wallVector = -1;
 char bugstring[50] = "Init";
-char LogFile[15] = "";
+char LogFile[20] = "";
 FILE *fp;
 struct fuelStruct_t;
 

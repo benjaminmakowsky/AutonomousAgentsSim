@@ -10,7 +10,7 @@
 #define OPENLOG()   fp = fopen(LogFile, "a");
 
 extern char bugstring[50];
-extern char LogFile[15];
+extern char LogFile[20];
 extern FILE *fp;
 
 #endif //XPILOT_LE_BEEGLOBALS_H

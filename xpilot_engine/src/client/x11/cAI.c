@@ -13,7 +13,7 @@
 #include "cAI.h"
 #include "../../../../xpilot_ai/c/beeGlobals.h"
 char bugstring[50] = "Init";
-char LogFile[15] = "";
+char LogFile[20] = "";
 FILE *fp;
 
 #define BASE_X(i)    (((i % x_areas) << 8) + ext_view_x_offset)
@@ -3118,7 +3118,7 @@ int seeIfDancing(int fov, int rov){
     first_init = false;
   }
 
-  char LogFile[15] = "";
+  char LogFile[20] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
   fp = fopen(LogFile, "a");
@@ -3170,7 +3170,7 @@ int observeDance(int ship_id){
   int dance_observed = -1;             //Used to return the dance type
   static bool dancingCheck = true;     //Used to determine if bee is still dancing
   ship_t observed_ship = getShipWithID(ship_id);
-  char LogFile[15] = "";
+  char LogFile[20] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
   fp = fopen(LogFile, "a");
@@ -3267,7 +3267,7 @@ bool checkIfBeingObserved(){
   int selfX = getSelfX(); //Using custom made command instead relying on cAI.c
   int selfY = getSelfY(); //Using custom made command instead relying on cAI.c
 
-  char LogFile[15] = "";
+  char LogFile[20] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
   fp = fopen(LogFile, "a");
@@ -3365,7 +3365,7 @@ int getHeadingBetween(int x1, int y1, int x2, int y2){
 
 int countTurnsOfShip(int ship_id){
 
-  char LogFile[15] = "";
+  char LogFile[20] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
   fp = fopen(LogFile, "a");
