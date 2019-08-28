@@ -280,6 +280,7 @@ bool performSequence(char* sequence){
 bool performMovementFor(char dir){
   static bool finishedMove = false;
   static int wait_count = 0;
+  static int about_face = 0;
   static bool isInitial = true;
   OPENLOG()
   POWER_OFF
@@ -289,6 +290,7 @@ bool performMovementFor(char dir){
     wait_count= 0;
     isInitial = false;
     fprintf(fp, "\nBegin movement(%c)\n", dir);
+    about_face = (initialHeading + 180) % 360;
   }
 
   //If you havent finished moving, do it again
@@ -302,8 +304,8 @@ bool performMovementFor(char dir){
       turnToDeg(rightHeading);
       finishedMove = headingIsBetween((int)selfHeadingDeg(),rightHeading-2,rightHeading+2);
     }else{
-      wait_count -= endOfWordSig;
-      finishedMove = true;
+      turnToDeg(about_face);
+      finishedMove = headingIsBetween((int)selfHeadingDeg(),about_face-2,about_face+2);
     }
   }
   if (finishedMove) {

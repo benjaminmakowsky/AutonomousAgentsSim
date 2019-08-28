@@ -19,7 +19,9 @@ enum State
 };
 #endif
 
-
+#define endOfWord 'p'
+#define left 'l'
+#define right 'r'
 
 enum Dance
 {
@@ -295,7 +297,7 @@ extern int getSelfY();
 int getDancersY(int dancing_ship);
 int getDancersY(int dancing_ship);
 int getHeadingBetween(int x1, int y1, int x2, int y2);
-int countTurnsOfShip(int ship_id);
+char* observeDanceMoves(int ship_id);
 bool beeIsDancing(int ship_id);
 int determineDance(int num_turns);
 void logwrite();

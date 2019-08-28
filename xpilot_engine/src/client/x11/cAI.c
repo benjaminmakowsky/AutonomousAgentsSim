@@ -3138,11 +3138,11 @@ int seeIfDancing(int fov, int rov){
         if (local_ships[i][prevX] >= (int) ship_ptr[i].x - 1 && local_ships[i][prevX] <= (int) ship_ptr[i].x + 1 &&
             local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
           local_ships[i][stoppedCount] += 1;
-          fprintf(fp, "Ship not moving: %d\n", local_ships[i][stoppedCount]);
+          //fprintf(fp, "Ship not moving: %d\n", local_ships[i][stoppedCount]);
         } else {
-          fprintf(fp, "Ship Moving\n");
-          fprintf(fp, "Current X: %d, Previous X: %d\n", (int) ship_ptr[i].x, local_ships[i][prevX]);
-          fprintf(fp, "Current y: %d, Previous y: %d\n", (int) ship_ptr[i].y, local_ships[i][prevY]);
+//          fprintf(fp, "Ship Moving\n");
+//          fprintf(fp, "Current X: %d, Previous X: %d\n", (int) ship_ptr[i].x, local_ships[i][prevX]);
+//          fprintf(fp, "Current y: %d, Previous y: %d\n", (int) ship_ptr[i].y, local_ships[i][prevY]);
           local_ships[i][stoppedCount] = 0;
           local_ships[i][prevX] = (int) ship_ptr[i].x;
           local_ships[i][prevY] = (int) ship_ptr[i].y;
@@ -3171,27 +3171,39 @@ int observeDance(int ship_id){
   char LogFile[20] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
-  fp = fopen(LogFile, "a");
 
   //Initialization code
   if(!observing_dance){
     initialHeading = (int)observed_ship.dir;      //Record initial heading as start of dance orientation
     targetHeading = initialHeading + 180;         //Target Heading for when a dance move ends
     observing_dance = true;                       //Flag to exit initialization
+    fp = fopen(LogFile, "a");
     fprintf(fp,"observeDance(ship_id: %d)\n",ship_id);
-  //If not intializing counts the number of turns
+    fclose(fp);
   }else{
+    char* dancePattern = NULL;
     if(dancingCheck)
     {
       dancingCheck = beeIsDancing(ship_id);
-      //Count the number of target headings reached
-      num_turns = countTurnsOfShip(ship_id);
-      fprintf(fp,"Turns %d\n", num_turns);
-    }else{
-      dance_observed = determineDance(num_turns);
+      dancePattern = observeDanceMoves(ship_id);
+    }
+    if(!dancingCheck && dancePattern != NULL){
+      char LogFile[20] = "";
+      sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+      FILE *fp;
+      fp = fopen(LogFile, "a");
+
+      int sequenceLength = (int)(sizeof(dancePattern) / sizeof(dancePattern[0]));
+      int i;
+      fp = fopen(LogFile, "a");
+      for(i =0; i < sequenceLength; i++){
+        fprintf(fp," %c", dancePattern[i]);
+      }
+      fprintf(fp,"\n");
+      fclose(fp);
+      dance_observed = dancePattern[0];
     }
   }
-  fclose(fp);
   return dance_observed;
 }
 
@@ -3226,13 +3238,19 @@ bool beeIsDancing(int ship_id){
       prevHeading = currentHeading;
     }
 
-    int threshold = 20;
+    int threshold = 14*3;
     if(num_frames_same_dir < threshold){
       return true;
 
     //Return false if you have been in the same direction for the threshold limit
     }else{
       isInitial = true;
+      char LogFile[20] = "";
+      sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+      FILE *fp;
+      fp = fopen(LogFile, "a");
+      fprintf(fp,"Bee finished Danced\n");
+      fclose(fp);
       return false;
     }
   }
@@ -3360,7 +3378,7 @@ int getHeadingBetween(int x1, int y1, int x2, int y2){
   return (int)heading;
 }
 
-int countTurnsOfShip(int ship_id){
+char* observeDanceMoves(int ship_id){
 
   char LogFile[20] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
@@ -3371,42 +3389,61 @@ int countTurnsOfShip(int ship_id){
   ship_t observed_ship = getShipWithID(ship_id);
   static bool is_initial_setup = true;
   static int initial_heading = 0;
-  static int number_of_spins = 0;
-  static int target_degree = 0;
-  static short initialHeading = 0;
-  static short previous_heading = 0;
-  static short num_frames_still = 0;
+  static int left_heading = 0;
+  static int right_heading = 0;
+  static int space_heading = 0;
+  static char direction = 0;
+  static char dance_moves[20];
+  static int dance_index = 0;
+  static bool directionSet = false;
+
 
   //Reset all static variables
   if(is_initial_setup){
-    number_of_spins = 0;
-    initialHeading = (int)observed_ship.dir * 2.8125;          //Record initial heading as start of dance orientation
-    target_degree = (initial_heading + 345) % 360;    //+345 so that we have to turn at least that much for it to count
-    previous_heading = 0;
-    num_frames_still = 0;
-    fprintf(fp,"Observing Dance\nInitial Heading: %d\tTarget Heading: %d\n",initial_heading,target_degree);
+    initial_heading = (int)observed_ship.dir * 2.8125;          //Record initial heading as start of dance orientation
+    left_heading = (initial_heading + 90) % 360;
+    right_heading = (initial_heading - 90) % 360;
+    space_heading = (initial_heading + 180) % 360;
+    dance_index = 0;
+    directionSet = false;
+    direction = 0;
+    fprintf(fp,"Observing Dance\nInitial Heading: %d\n",initial_heading);
     is_initial_setup = false;
   }
 
   //Get Dance Motions
-  short observers_heading = observed_ship.dir * 2.8125;
+  int observees_heading = observed_ship.dir * 2.8125;
 
-  //IF the observed ships direction is the same after N frames, it has stopped dancing
-  if(num_frames_still <= 4) {
-    //Count number of rotations in order to determine when dance is finished
-    //fprintf(fp,"Observer's Heading %d\nTarget: %d\tTarget Upper: %d\n",(int)observers_heading, target_degree, (target_degree + 10) % 360);
-    if (headingIsBetween((int)observers_heading, target_degree, (target_degree + 10) % 360)) {
-      number_of_spins += 1;
-      fprintf(fp,"Number of spins: %d\n",number_of_spins);
+  //Determine if about to start char
+  if(headingIsBetween(observees_heading, initial_heading+2, observees_heading-2)){
+    //If you are near the initial heading state word determine if char ended or starting
+    if(direction == 0){
+      //You have not began observing yet or recorded direction
+      //NO ACTION NEEDED
+    }else{
+      //Otherwise you have already been observing and determine char
+      dance_moves[dance_index] = direction;
+      dance_index++;
+      directionSet = false;
+      direction = 0;
     }
-    fclose(fp);
-    return number_of_spins;
-    //If num frames is > 4 then the bee has stopped moving
-  } else{
-    fclose(fp);
-    is_initial_setup = true;
-    return number_of_spins;
+  } else {
+    //If observee bee is not near intitial heading you are recording the max distance away
+
+    //Determine if turning l/r or returning to initial
+    if(!directionSet){
+      if(observees_heading - initial_heading > 0){
+        direction = left;
+      }else{
+        direction = right;
+      }
+      directionSet = true;
+    }
+    if(headingIsBetween(observees_heading, space_heading-5, space_heading +5))
+    {direction = endOfWord;}
   }
+  fclose(fp);
+  return dance_moves;
 }
 
 /*** Private helper functions ***/
