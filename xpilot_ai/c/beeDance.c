@@ -311,8 +311,7 @@ bool performMovementFor(char dir){
   if (finishedMove) {
 
     //Wait 8 frames to signal end of Signal
-    if(wait_count == 0){
-      fprintf(fp, "END OF SYMBOL %c\n",dir);
+    if(wait_count < 10){
       wait_count++;
     }else{
       if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,initialHeading +2)){
@@ -320,7 +319,7 @@ bool performMovementFor(char dir){
       }else{
         //reset for next msg
         //Signal end of word
-        if(wait_count < endOfSymbolSig){
+        if(wait_count < 10 * 2){
           wait_count++;
           fprintf(fp, "%d, ",wait_count);
         }else {

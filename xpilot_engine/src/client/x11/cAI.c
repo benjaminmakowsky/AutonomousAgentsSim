@@ -3401,8 +3401,8 @@ char* observeDanceMoves(int ship_id){
   //Reset all static variables
   if(is_initial_setup){
     initial_heading = (int)observed_ship.dir * 2.8125;          //Record initial heading as start of dance orientation
+    right_heading = (initial_heading - 90 + 360) % 360; //+360 to account for going past -1 degrees
     left_heading = (initial_heading + 90) % 360;
-    right_heading = (initial_heading - 90) % 360;
     space_heading = (initial_heading + 180) % 360;
     dance_index = 0;
     directionSet = false;
@@ -3415,33 +3415,38 @@ char* observeDanceMoves(int ship_id){
   int observees_heading = observed_ship.dir * 2.8125;
 
   //Determine if about to start char
-  if(headingIsBetween(observees_heading, initial_heading+2, observees_heading-2)){
+  if(headingIsBetween(observees_heading, initial_heading-2, initial_heading+2)){
     //If you are near the initial heading state word determine if char ended or starting
-    if(direction == 0){
+    if(!directionSet){
       //You have not began observing yet or recorded direction
       //NO ACTION NEEDED
     }else{
       //Otherwise you have already been observing and determine char
+      fprintf(fp,"Storing Direction\n");
       dance_moves[dance_index] = direction;
       dance_index++;
       directionSet = false;
       direction = 0;
     }
-  } else {
-    //If observee bee is not near intitial heading you are recording the max distance away
-
-    //Determine if turning l/r or returning to initial
-    if(!directionSet){
-      if(observees_heading - initial_heading > 0){
-        direction = left;
-      }else{
-        direction = right;
-      }
-      directionSet = true;
-    }
-    if(headingIsBetween(observees_heading, space_heading-5, space_heading +5))
-    {direction = endOfWord;}
   }
+  //If observee bee is not near intitial heading you are recording the max distance away
+  //Determine if turning l/r or returning to initial
+  if(headingIsBetween(observees_heading, left_heading-5, left_heading+5) && !directionSet){
+    fprintf(fp,"Set left\t %d < %d < %d\n",left_heading-10,observees_heading, left_heading+10);
+    direction = left;
+    directionSet = true;
+  }
+  if(headingIsBetween(observees_heading, right_heading-5, right_heading+5) && !directionSet){
+    fprintf(fp,"Set right\n");
+    direction = right;
+    directionSet = true;
+  }
+  if(headingIsBetween(observees_heading, space_heading-5, space_heading +5)){
+    fprintf(fp,"Set space\n");
+    direction = endOfWord;
+    directionSet = true;
+  }
+
   fclose(fp);
   return dance_moves;
 }
