@@ -3193,11 +3193,13 @@ int observeDance(int ship_id){
       FILE *fp;
       fp = fopen(LogFile, "a");
 
+      //Should be 9 but its 8
       int sequenceLength = (int)(sizeof(dancePattern) / sizeof(dancePattern[0]));
       int i;
       fp = fopen(LogFile, "a");
+      fprintf(fp,"sequenceLength = %d\n",sequenceLength);
       for(i =0; i < sequenceLength; i++){
-        fprintf(fp," %c", dancePattern[i]);
+        fprintf(fp," %d:\t%c\n",i, dancePattern[i]);
       }
       fprintf(fp,"\n");
       fclose(fp);
@@ -3422,7 +3424,7 @@ char* observeDanceMoves(int ship_id){
       //NO ACTION NEEDED
     }else{
       //Otherwise you have already been observing and determine char
-      fprintf(fp,"Storing Direction\n");
+      fprintf(fp,"Storing Direction #%d\n", dance_index+1);
       dance_moves[dance_index] = direction;
       dance_index++;
       directionSet = false;
@@ -3442,7 +3444,7 @@ char* observeDanceMoves(int ship_id){
     directionSet = true;
   }
   if(headingIsBetween(observees_heading, space_heading-5, space_heading +5)){
-    fprintf(fp,"Set space\n");
+    //fprintf(fp,"Set space\n");
     direction = endOfWord;
     directionSet = true;
   }
