@@ -244,6 +244,7 @@ bool performSequence(char* sequence){
     fprintf(fp,"Performing %d moves\n", sequenceLength);
     fprintf(fp,"---------------------------\n");
     isInitial = false;
+    completedSequence = false; //added by DPM 20190830 to dance next time we return to hive
     fclose(fp);
   }
 
@@ -272,6 +273,8 @@ bool performSequence(char* sequence){
     completedSequence = true;
     fprintf(fp,"completedSequence\n");
     fclose(fp);
+    i=0; //added by DPM 20190830 to dance next time we return to hive
+    isInitial = true; //added by DPM 20190830 to dance-record next time we return to hive
   }
   return completedSequence;
 }

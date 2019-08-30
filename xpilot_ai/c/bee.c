@@ -177,6 +177,8 @@ void forage() {
         strcpy(bugstring, "Moving");
         depositing = !depositing;       //Change internal forage state
         forage_state_changed = true;    //Set flag for Logging change
+	performed_dance = false;        //added DPM 20190830: reset flag so we dance again next return to hive
+	beingObserved = false;          //added DPM 20190830: reset flag so we check before dancing on next return to hive
         waiting_counter = 0;            //Reset waiting limit for next iteration
       }
     }
