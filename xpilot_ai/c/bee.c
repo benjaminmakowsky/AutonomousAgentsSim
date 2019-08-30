@@ -5,6 +5,7 @@
 #include "beeGlobals.h"
 #include "bee.h"
 #include "beeAI.h"
+#include "beeDance.h"
 #include "cAI.h"
 #include "beeMain.h"
 #include <stdio.h>
@@ -133,7 +134,7 @@ void forage() {
   //Step 2: Determine if near honey/hive
   if(!inVicinityOf(destination_x,destination_y)) {
     if(getPower() == 0){
-      setPower(10);
+      setPower(5);
     }
     refuel(0);
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
@@ -156,10 +157,9 @@ void forage() {
         waiting_counter++;
         beingObserved = checkIfBeingObserved();
         sprintf(bugstring,"waiting: %.2f", (float)waiting_counter/(frameLimit) * 100);
-
       //If you are being observed perform dance
       }else {
-        performed_dance = dance(STATE_SEARCHING);
+        performed_dance = dance(foundSource);
       }
 
     }else {

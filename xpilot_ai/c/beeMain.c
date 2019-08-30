@@ -61,7 +61,7 @@ int degToAim = -1;
 int turnLock = 0;
 int wallVector = -1;
 char bugstring[50] = "Init";
-char LogFile[20] = "";
+//char LogFile[20] = "";
 FILE *fp;
 struct fuelStruct_t;
 
@@ -116,7 +116,8 @@ void initialize()
 
   //Declare initialized and set state to typical flying.
   init = true;
-  int r = rand() % 2;
+  int r = selfID() % 2;
+  //int r = rand() % 2;
   switch(r)
   {
     case 0:

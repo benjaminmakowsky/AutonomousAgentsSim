@@ -224,7 +224,7 @@ bool inVicinityOf(int x,int y){
   }else {
     //If not in the vicinty of the point slow down as you approach
     int distance = computeDistance(selfX(),x,selfY(),y);
-    int max_speed = 80;
+    int max_speed = 60;
     if(distance < 20) {
       setPower(max_speed/4);
     }else if(distance < 60){
@@ -281,30 +281,30 @@ void checkForFuel(){
   }
 }
 
-bool dance(int prevState){
-  static bool dance_is_completed = false;
-
-  //Make sure you are fully stopped before dancing
-  if(selfSpeed() == 0) {
-    switch (prevState) {
-      case STATE_SEARCHING: //If you were just searching then let others know you found honey
-        dance_is_completed = honeyFoundDance();
-        break;
-      case STATE_FORAGING:
-        break;
-    }
-  }else{
-    setPower(0);
-  }
-
-  //Stop dancing once dance has finished
-  if (dance_is_completed) {
-    dance_is_completed = false;
-    return true;
-  } else {
-    return false;
-  }
-}
+//bool dance(int prevState){
+//  static bool dance_is_completed = false;
+//
+//  //Make sure you are fully stopped before dancing
+//  if(selfSpeed() == 0) {
+//    switch (prevState) {
+//      case STATE_SEARCHING: //If you were just searching then let others know you found honey
+//        dance_is_completed = honeyFoundDance();
+//        break;
+//      case STATE_FORAGING:
+//        break;
+//    }
+//  }else{
+//    setPower(0);
+//  }
+//
+//  //Stop dancing once dance has finished
+//  if (dance_is_completed) {
+//    dance_is_completed = false;
+//    return true;
+//  } else {
+//    return false;
+//  }
+//}
 
 bool honeyFoundDance(){
 
@@ -359,12 +359,6 @@ bool beeDegIsBetween(int deg1, int deg2){
    }
 }
 
-//TODO: Deprecated updateship
-/*void updateShip(){
-
-  setSelfState(getCurrState());
-  sendDancingState(getIsDancing());
-}*/
 
 int interpretDance(int dance){
   if(dance == FOUND_HONEY){
