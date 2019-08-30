@@ -3195,12 +3195,13 @@ int observeDance(int ship_id){
 
       //Should be 9 but its 8
       int sequenceLength = (int)(sizeof(dancePattern) / sizeof(dancePattern[0]));
-      int i;
+      int i = 0;
       fp = fopen(LogFile, "a");
-      fprintf(fp,"sequenceLength = %d\n",sequenceLength);
-      for(i =0; i < sequenceLength; i++){
+      while(dancePattern[i] != '\0'){
         fprintf(fp," %d:\t%c\n",i, dancePattern[i]);
+        i++;
       }
+      fprintf(fp,"sequenceLength = %d\n",i);
       fprintf(fp,"\n");
       fclose(fp);
       dance_observed = dancePattern[0];
@@ -3411,6 +3412,7 @@ char* observeDanceMoves(int ship_id){
     direction = 0;
     fprintf(fp,"Observing Dance\nInitial Heading: %d\n",initial_heading);
     is_initial_setup = false;
+    memset(dance_moves,'\0',20);
   }
 
   //Get Dance Motions
