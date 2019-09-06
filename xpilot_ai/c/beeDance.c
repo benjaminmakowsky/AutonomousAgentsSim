@@ -59,8 +59,8 @@ bool dance(int msgType) {
 
           //Dance y coordinates
         } else if (!completed_third_dance) {
-          completed_third_dance = true;
-          //completed_third_dance = relayCoords(getHoneyY());
+          //completed_third_dance = true;
+          completed_third_dance = relayCoords(getHoneyY());
         }
         break;
 
@@ -108,7 +108,6 @@ bool relayMsg(int symbol) {
 
 bool relayCoords(int coords) {
   static bool finishedMove = false;
-  static bool isInitial = true;
   static char danceDirection = none;
   static char *danceSequence = 0;
 
@@ -123,6 +122,11 @@ bool relayCoords(int coords) {
   }else{
 
     finishedMove = performSequence(danceSequence);
+    if(finishedMove){
+      danceSequence = 0;
+      finishedMove = false;
+      return true;
+    }
     return finishedMove;
   }
 }
@@ -208,6 +212,8 @@ char *buildDance(int coords) {
       danceMoves[num_moves_added] = endOfSequence;
       fprintf(fp, "%c ", danceMoves[num_moves_added]);
       num_moves_added++;
+    }else{
+
     }
   }
   fclose(fp);
@@ -235,10 +241,17 @@ bool performSequence(char* sequence){
   static int wait_count = 0;
   static bool completedChar = false;
   static bool needsReset = false;
+  static int i = 0;
 
-  int sequenceLength = (int)(sizeof(sequence) / sizeof(sequence[0]));
 
-  if(isInitial){
+  int sequenceLength = 0;
+  while(sequence[sequenceLength] != '\0'){
+    sequenceLength++;
+  }
+
+  if(isInitial || completedSequence){
+    i = 0;
+    completedSequence = false;
     OPENLOG()
     fprintf(fp,"\n\nBeginning performSequence()\n");
     fprintf(fp,"Performing %d moves\n", sequenceLength);
@@ -251,10 +264,12 @@ bool performSequence(char* sequence){
     completedChar = false;
     needsReset = false;
     wait_count = 0;
+    OPENLOG()
+    fprintf(fp,"Reset for second coordinate\n");
+    fclose(fp);
   }
 
   //Iterate through all the dance moves
-  static int i = 0;
   if(i < sequenceLength){
     char danceDir = sequence[i];
 
@@ -270,6 +285,7 @@ bool performSequence(char* sequence){
   }else{
     OPENLOG()
     completedSequence = true;
+    needsReset = true;
     fprintf(fp,"completedSequence\n");
     fclose(fp);
   }
@@ -311,7 +327,7 @@ bool performMovementFor(char dir){
   if (finishedMove) {
 
     //Wait 8 frames to signal end of Signal
-    if(wait_count < 10){
+    if(wait_count < 5){
       wait_count++;
     }else{
       if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,initialHeading +2)){
@@ -319,7 +335,7 @@ bool performMovementFor(char dir){
       }else{
         //reset for next msg
         //Signal end of word
-        if(wait_count < 10 * 2){
+        if(wait_count < 5 * 2){
           wait_count++;
           fprintf(fp, "%d, ",wait_count);
         }else {

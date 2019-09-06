@@ -3190,23 +3190,22 @@ int observeDance(int ship_id){
       dancePattern = observeDanceMoves(ship_id);
     }
     if(!dancingCheck && dancePattern != NULL){
-      char LogFile[20] = "";
-      sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-      FILE *fp;
-      fp = fopen(LogFile, "a");
-
-      //Should be 9 but its 8
-      int sequenceLength = (int)(sizeof(dancePattern) / sizeof(dancePattern[0]));
-      int i = 0;
-      fp = fopen(LogFile, "a");
-      while(dancePattern[i] != '\0'){
-        fprintf(fp," %d:\t%c\n",i, dancePattern[i]);
-        i++;
-      }
-      fprintf(fp,"sequenceLength = %d\n",i);
-      fprintf(fp,"\n");
-      fclose(fp);
       dance_observed = dancePattern[0];
+
+//      char LogFile[20] = "";
+//      sprintf(LogFile, "./logs/LOG%d.txt", selfID());
+//      FILE *fp;
+//      fp = fopen(LogFile, "a");
+//      int sequenceLength = (int)(sizeof(dancePattern) / sizeof(dancePattern[0]));
+//      int i = 0;
+//      fp = fopen(LogFile, "a");
+//      while(dancePattern[i] != '\0'){
+//        fprintf(fp," %d:\t%c\n",i, dancePattern[i]);
+//        i++;
+//      }
+//      fprintf(fp,"sequenceLength = %d\n",i);
+//      fprintf(fp,"\n");
+//      fclose(fp);
     }
   }
   return dance_observed;
@@ -3398,15 +3397,15 @@ char* observeDanceMoves(int ship_id){
   static int right_heading = 0;
   static int space_heading = 0;
   static char direction = 0;
-  static char dance_moves[20];
+  static char dance_moves[max_dance_moves];
   static int dance_index = 0;
   static bool directionSet = false;
 
 
   //Reset all static variables
   if(is_initial_setup){
-    initial_heading = (int)observed_ship.dir * 2.8125;          //Record initial heading as start of dance orientation
-    right_heading = (initial_heading - 90 + 360) % 360; //+360 to account for going past -1 degrees
+    initial_heading = (int)observed_ship.dir * 2.8125;      //Record initial heading as start of dance orientation
+    right_heading = (initial_heading - 90 + 360) % 360;     //+360 to account for going past -1 degrees
     left_heading = (initial_heading + 90) % 360;
     space_heading = (initial_heading + 180) % 360;
     dance_index = 0;
@@ -3414,7 +3413,7 @@ char* observeDanceMoves(int ship_id){
     direction = 0;
     fprintf(fp,"Observing Dance\nInitial Heading: %d\n",initial_heading);
     is_initial_setup = false;
-    memset(dance_moves,'\0',20);
+    memset(dance_moves,'\0',max_dance_moves);
   }
 
   //Get Dance Motions
@@ -3422,7 +3421,6 @@ char* observeDanceMoves(int ship_id){
 
   //Determine if about to start char
   if(headingIsBetween(observees_heading, initial_heading-2, initial_heading+2)){
-    //If you are near the initial heading state word determine if char ended or starting
     if(!directionSet){
       //You have not began observing yet or recorded direction
       //NO ACTION NEEDED
@@ -3436,9 +3434,9 @@ char* observeDanceMoves(int ship_id){
     }
   }
   //If observee bee is not near intitial heading you are recording the max distance away
-  //Determine if turning l/r or returning to initial
+  //Determine if turning l/r/or word space or returning to initial
   if(headingIsBetween(observees_heading, left_heading-5, left_heading+5) && !directionSet){
-    fprintf(fp,"Set left\t %d < %d < %d\n",left_heading-10,observees_heading, left_heading+10);
+    fprintf(fp,"Set left\n");
     direction = left;
     directionSet = true;
   }
@@ -3448,7 +3446,6 @@ char* observeDanceMoves(int ship_id){
     directionSet = true;
   }
   if(headingIsBetween(observees_heading, space_heading-5, space_heading +5)){
-    //fprintf(fp,"Set space\n");
     direction = endOfWord;
     directionSet = true;
   }

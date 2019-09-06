@@ -9,8 +9,8 @@
 //Defined values
 #define POWER_OFF setPower(0);
 #define POWER_ON setPower(3);
-#define endOfMSGSig 28    //16 frames for end of message
-#define endOfWordSig 14    //8 frames for end of word
+#define endOfMSGSig 14    //16 frames for end of message
+#define endOfWordSig 7    //8 frames for end of word
 #define endOfSymbolSig 4  //4 frames for end of symbol
 #define foundSource 0
 #define foundEnemy 1
@@ -18,7 +18,6 @@
 #define right 'r'
 #define endOfSequence 'p' //p for pause
 #define none '\0'
-
 
 
 //Array to hold message types ie (0: found honey, 1: found enemy hive) etc
