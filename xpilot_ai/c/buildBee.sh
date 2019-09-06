@@ -9,4 +9,4 @@ gcc -o libcAI.so -fPIC -shared -Wl,-soname,libcAI.so,-wrap,Handle_end cAI.o abou
 mv libcAI.so ../../../../xpilot_ai/c/
 rm cAI.h
 cd ../../../../xpilot_ai/c/
-gcc -g -DBEE  beeGlobals.c beeObject.c beeAI.c beeMain.c bee.c libcAI.so -lpthread -lm -o bee
+gcc -g -DBEE  beeDance.c beeGlobals.c beeObject.c beeAI.c beeMain.c bee.c libcAI.so -lpthread -lm -o bee
