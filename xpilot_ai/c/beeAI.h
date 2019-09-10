@@ -83,11 +83,6 @@ void useFueler();
 ///Automatically cycles refueling state to determine if near honey
 
 
-//void log(char* string);
-/// Prints a string to the log file
-/// \param String to be printed to file
-
-
 //bool dance(int prevState);
 /// Performs a set of movements based on the state before dancing
 /// \param prevState The state the bee was in before initiating dance

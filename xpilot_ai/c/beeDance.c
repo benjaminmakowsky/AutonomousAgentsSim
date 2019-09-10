@@ -215,7 +215,11 @@ char* buildDance(int coords) {
       fprintf(fp, "%c ", danceMoves[num_moves_added]);
       num_moves_added++;
     }else{
-      danceMoves[num_moves_added] = END_OF_WORD;
+      //Add in end of coordinate double spacing
+      danceMoves[num_moves_added] = endOfSequence;
+      fprintf(fp, "%c ", danceMoves[num_moves_added]);
+      num_moves_added++;
+      danceMoves[num_moves_added] = endOfSequence;
       fprintf(fp, "%c ", danceMoves[num_moves_added]);
     }
   }
@@ -323,16 +327,6 @@ bool performMovementFor(char dir){
     }else if (dir == endOfSequence){
       turnToDeg(about_face);
       finishedMove = headingIsBetween((int)selfHeadingDeg(),about_face-2,about_face+2);
-
-
-    }else{ //Because the signaling end of coord requires 2 movements it must be reset before setting finishedMove
-      static bool completed_first_signal = false;
-      if(!completed_first_signal){
-        //recursion to the rescue
-        completed_first_signal = performMovementFor(endOfSequence);
-      }else{
-        finishedMove = performMovementFor(endOfSequence);
-      }
     }
   }
   if (finishedMove) {
@@ -343,13 +337,8 @@ bool performMovementFor(char dir){
       if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,initialHeading +2)){
         turnToDeg(initialHeading);
       }else{
-        //reset for next msg
-        //Signal end of word
         if(wait_count < 5 * 2){
           wait_count++;
-          OPENLOG()
-          fprintf(fp, "%d, ",wait_count);
-          fclose(fp);
         }else {
           isInitial = true;
           return true;
@@ -358,8 +347,4 @@ bool performMovementFor(char dir){
     }
   }
   return false;
-}
-
-bool signalEndOfWord(){
-
 }

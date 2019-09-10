@@ -17,7 +17,6 @@
 #define left 'l'
 #define right 'r'
 #define endOfSequence 'p' //p for pause
-#define END_OF_WORD '_'
 #define none '\0'
 
 
