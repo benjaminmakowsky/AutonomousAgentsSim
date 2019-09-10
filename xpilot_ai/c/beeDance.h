@@ -17,6 +17,7 @@
 #define left 'l'
 #define right 'r'
 #define endOfSequence 'p' //p for pause
+#define END_OF_WORD '_'
 #define none '\0'
 
 
@@ -69,5 +70,9 @@ bool performSequence(char* sequence);
 /// \param c can be l, r, or p for left, right, or pause
 /// \return true/false if finished movement
 bool performMovementFor(char dir);
+
+/// Signals the end of a word/coordinate by turning to rear 2x
+/// \return true once completed
+bool signalEndOfWord();
 
 #endif //XPILOT_LE_BEE_DANCE_H

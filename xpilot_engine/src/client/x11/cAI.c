@@ -3090,6 +3090,7 @@ int selfFuelY() {
 //  return ship_ptr[ship].dancingType;
 //}
 
+/**Used to determine whether or not bee is supposed to be dancing by determining if it is moving*/
 int seeIfDancing(int fov, int rov){
   /**Set up initial Variables*/
   static bool first_init = true;        //flag to determine if array has been intialized
@@ -3160,7 +3161,7 @@ int seeIfDancing(int fov, int rov){
   return -1;
 }
 
-
+/**Observes the direction of a ship to observe dancing behavior*/
 int observeDance(int ship_id){
 
   static bool observing_dance = false; //boolean used to flag if ship is dancing
@@ -3187,25 +3188,11 @@ int observeDance(int ship_id){
     if(dancingCheck)
     {
       dancingCheck = beeIsDancing(ship_id);
-      dancePattern = observeDanceMoves(ship_id);
+      dancePattern = observeDanceMoves(ship_id); //Gets the dance move performed by the dancer
     }
     if(!dancingCheck && dancePattern != NULL){
       dance_observed = dancePattern[0];
 
-//      char LogFile[20] = "";
-//      sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-//      FILE *fp;
-//      fp = fopen(LogFile, "a");
-//      int sequenceLength = (int)(sizeof(dancePattern) / sizeof(dancePattern[0]));
-//      int i = 0;
-//      fp = fopen(LogFile, "a");
-//      while(dancePattern[i] != '\0'){
-//        fprintf(fp," %d:\t%c\n",i, dancePattern[i]);
-//        i++;
-//      }
-//      fprintf(fp,"sequenceLength = %d\n",i);
-//      fprintf(fp,"\n");
-//      fclose(fp);
     }
   }
   return dance_observed;
@@ -3382,6 +3369,7 @@ int getHeadingBetween(int x1, int y1, int x2, int y2){
   return (int)heading;
 }
 
+/**Returns an array of the dance moves recorded*/
 char* observeDanceMoves(int ship_id){
 
   char LogFile[20] = "";
@@ -3416,21 +3404,23 @@ char* observeDanceMoves(int ship_id){
     memset(dance_moves,'\0',max_dance_moves);
   }
 
-  //Get Dance Motions
+  /**Get Dance Motions*/
+  //Get current heading of ship being observed
   int observees_heading = observed_ship.dir * 2.8125;
 
-  //Determine if about to start char
+  //Determine if observed bees heading is near their initial to signify end of symbol or start
   if(headingIsBetween(observees_heading, initial_heading-2, initial_heading+2)){
+    //If a direction has not been set then do nothing because a valid move has not been observed
     if(!directionSet){
       //You have not began observing yet or recorded direction
       //NO ACTION NEEDED
     }else{
       //Otherwise you have already been observing and determine char
       fprintf(fp,"Storing Direction #%d\n", dance_index+1);
-      dance_moves[dance_index] = direction;
-      dance_index++;
-      directionSet = false;
-      direction = 0;
+      dance_moves[dance_index] = direction; //Record move observed in array
+      dance_index++;                        //Increment array index
+      directionSet = false;                 //Resets if direction has been observed
+      direction = 0;                        //Resets direction
     }
   }
   //If observee bee is not near intitial heading you are recording the max distance away
@@ -3440,11 +3430,13 @@ char* observeDanceMoves(int ship_id){
     direction = left;
     directionSet = true;
   }
+  //Record if at a right heading
   if(headingIsBetween(observees_heading, right_heading-5, right_heading+5) && !directionSet){
     fprintf(fp,"Set right\n");
     direction = right;
     directionSet = true;
   }
+  //Record if at heading indicating a space in the message
   if(headingIsBetween(observees_heading, space_heading-5, space_heading +5)){
     direction = endOfWord;
     directionSet = true;

@@ -79,7 +79,7 @@ bool comeToStop(int number_of_frames);
 /// \param number_of_frames The number of frames to not be moving
 /// \return boolean if stopped or not
 
-void checkForFuel();
+void useFueler();
 ///Automatically cycles refueling state to determine if near honey
 
 

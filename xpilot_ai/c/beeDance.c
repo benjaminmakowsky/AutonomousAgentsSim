@@ -100,7 +100,9 @@ bool relayMsg(int symbol) {
 
   //After initialization perform the movement
   finishedMove = performMovementFor(danceDirection);
-  if (finishedMove) {isInitial = true;}
+  if (finishedMove) {
+    isInitial = true;
+  }
   return finishedMove;
 }
 
@@ -135,11 +137,11 @@ bool relayCoords(int coords) {
 /*********************
  * Helper Methods
  ********************/
-char *buildDance(int coords) {
+char* buildDance(int coords) {
 
   int numInts = 0;
   int unitsPlace = 1;
-  static char danceMoves[3 * 4];
+  static char danceMoves[3 * 5];
   memset(danceMoves, 0, sizeof(danceMoves));
   OPENLOG()
   fprintf(fp, "\n\n\nBegin buildDance(%d)\n", coords);
@@ -213,7 +215,8 @@ char *buildDance(int coords) {
       fprintf(fp, "%c ", danceMoves[num_moves_added]);
       num_moves_added++;
     }else{
-
+      danceMoves[num_moves_added] = END_OF_WORD;
+      fprintf(fp, "%c ", danceMoves[num_moves_added]);
     }
   }
   fclose(fp);
@@ -260,13 +263,11 @@ bool performSequence(char* sequence){
     fclose(fp);
   }
 
+  //Resets the static variables for the y coordinate after peforming the x coordinate
   if(needsReset){
     completedChar = false;
     needsReset = false;
     wait_count = 0;
-    OPENLOG()
-    fprintf(fp,"Reset for second coordinate\n");
-    fclose(fp);
   }
 
   //Iterate through all the dance moves
@@ -308,7 +309,7 @@ bool performMovementFor(char dir){
     fprintf(fp, "\nBegin movement(%c)\n", dir);
     about_face = (initialHeading + 180) % 360;
   }
-
+  fclose(fp);
   //If you havent finished moving, do it again
   if (!finishedMove) {
     if (dir == left) {
@@ -319,14 +320,23 @@ bool performMovementFor(char dir){
       //fprintf(fp, "Turning right: %d Currently: %d\n", rightHeading, (int) selfHeadingDeg());
       turnToDeg(rightHeading);
       finishedMove = headingIsBetween((int)selfHeadingDeg(),rightHeading-2,rightHeading+2);
-    }else{
+    }else if (dir == endOfSequence){
       turnToDeg(about_face);
       finishedMove = headingIsBetween((int)selfHeadingDeg(),about_face-2,about_face+2);
+
+
+    }else{ //Because the signaling end of coord requires 2 movements it must be reset before setting finishedMove
+      static bool completed_first_signal = false;
+      if(!completed_first_signal){
+        //recursion to the rescue
+        completed_first_signal = performMovementFor(endOfSequence);
+      }else{
+        finishedMove = performMovementFor(endOfSequence);
+      }
     }
   }
   if (finishedMove) {
-
-    //Wait 8 frames to signal end of Signal
+    //Wait frames to allow observation
     if(wait_count < 5){
       wait_count++;
     }else{
@@ -337,15 +347,19 @@ bool performMovementFor(char dir){
         //Signal end of word
         if(wait_count < 5 * 2){
           wait_count++;
+          OPENLOG()
           fprintf(fp, "%d, ",wait_count);
+          fclose(fp);
         }else {
           isInitial = true;
-          fclose(fp);
           return true;
         }
       }
     }
   }
-  fclose(fp);
   return false;
+}
+
+bool signalEndOfWord(){
+
 }

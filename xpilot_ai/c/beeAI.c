@@ -268,7 +268,7 @@ bool comeToStop(int number_of_frames) {
 }
 
 
-void checkForFuel(){
+void useFueler(){
   static bool fueling = false;
   if (fueling == false) {
     fuel = selfFuel();

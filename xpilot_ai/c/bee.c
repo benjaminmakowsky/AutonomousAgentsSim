@@ -48,7 +48,7 @@ void searching() {
 
   //Step 2: Attempt to Attain Honey
   if (!fuel_found) {
-    checkForFuel();
+    useFueler();//TODO: RENAME
 
     //Step 3: Check if fuel levels changed
     double new_fuel_level = selfFuel();
@@ -165,10 +165,10 @@ void forage() {
     }else {
       fuelLVL = (int) selfFuel();
       if (fuelLVL > EMPTY && depositing) {
-        checkForFuel();
+        useFueler();
         strcpy(bugstring, "Depositing");
       } else if (fuelLVL < FULL && !depositing) {
-        checkForFuel();
+        useFueler();
         strcpy(bugstring, "Gathering");
 
         //Step 4: Repeat Loop
