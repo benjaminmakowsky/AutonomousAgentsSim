@@ -19,22 +19,23 @@ int danceTree[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 static int initialHeading = 0;
 static int rightHeading = 0;
 static int leftHeading = 0;
+static int rearHeading = 0;
 
 
 bool dance(int msgType) {
   static bool completed_first_dance = false;
-  static bool completed_second_dance = false;
-  static bool completed_third_dance = false;
+  static bool completed_xcoord_dance = false;
+  static bool completed_ycoord_dance = false;
   static bool isInitial = true;
 
   if(isInitial) {
-    //Reset flags and set directional headings for dance
+    //Reset directional headings for dance
+    setDanceHeadings();
+
+    //Reset Flags
     completed_first_dance = false;
-    completed_second_dance = false;
-    completed_third_dance = false;
-    initialHeading = (int) selfHeadingDeg();
-    rightHeading = (initialHeading - 90 + 360) % 360; //+360 to account for going past -1 degrees
-    leftHeading = (initialHeading + 90) % 360;
+    completed_xcoord_dance = false;
+    completed_ycoord_dance = false;
     isInitial = false;
 
     OPENLOG()
@@ -54,14 +55,14 @@ bool dance(int msgType) {
           completed_first_dance = relayMsg(msgType);
 
           //Dance x coordinates
-        } else if (!completed_second_dance) {
-          completed_second_dance = relayCoords(getHoneyX());
+        } else if (!completed_xcoord_dance) {
+          completed_xcoord_dance = relayCoords(getHoneyX());
           //completed_second_dance = true;
 
           //Dance y coordinates
-        } else if (!completed_third_dance) {
+        } else if (!completed_ycoord_dance) {
           //completed_third_dance = true;
-          completed_third_dance = relayCoords(getHoneyY());
+          completed_ycoord_dance = relayCoords(getHoneyY());
         }
         break;
 
@@ -74,7 +75,7 @@ bool dance(int msgType) {
   }
 
   //Stop dancing once dance has finished
-  if (completed_first_dance && completed_second_dance && completed_third_dance) {
+  if (completed_first_dance && completed_xcoord_dance && completed_ycoord_dance) {
     isInitial = true;
     return true;
   } else {
@@ -304,27 +305,27 @@ bool performMovementFor(char dir){
   static int wait_count = 0;
   static int about_face = 0;
   static bool isInitial = true;
-  OPENLOG()
   POWER_OFF
 
   if (isInitial) {
+    OPENLOG()
     finishedMove = false;
     wait_count= 0;
     isInitial = false;
     fprintf(fp, "\nBegin movement(%c)\n", dir);
     about_face = (initialHeading + 180) % 360;
+    fclose(fp);
   }
-  fclose(fp);
   //If you havent finished moving, do it again
   if (!finishedMove) {
     if (dir == left) {
-      //fprintf(fp, "Turning left: %d Currently: %d\n", leftHeading, (int) selfHeadingDeg());
       turnToDeg(leftHeading);
       finishedMove = headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
+
     } else if (dir == right){
-      //fprintf(fp, "Turning right: %d Currently: %d\n", rightHeading, (int) selfHeadingDeg());
       turnToDeg(rightHeading);
       finishedMove = headingIsBetween((int)selfHeadingDeg(),rightHeading-2,rightHeading+2);
+
     }else if (dir == endOfSequence){
       turnToDeg(about_face);
       finishedMove = headingIsBetween((int)selfHeadingDeg(),about_face-2,about_face+2);
@@ -348,4 +349,12 @@ bool performMovementFor(char dir){
     }
   }
   return false;
+}
+
+/// Set the 4 dance headings, left,right, initial, and rear
+void setDanceHeadings(){
+  initialHeading = (int) selfHeadingDeg();
+  rightHeading = (initialHeading - 90 + 360) % 360; //+360 to account for going past -1 degrees
+  leftHeading = (initialHeading + 90) % 360;
+  rearHeading = (initialHeading + 180) % 360;
 }

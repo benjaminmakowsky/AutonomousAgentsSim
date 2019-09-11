@@ -74,4 +74,7 @@ bool performMovementFor(char dir);
 /// \return true once completed
 bool signalEndOfWord();
 
+/// Set the 4 dance headings, left,right, initial, and rear
+void setDanceHeadings();
+
 #endif //XPILOT_LE_BEE_DANCE_H

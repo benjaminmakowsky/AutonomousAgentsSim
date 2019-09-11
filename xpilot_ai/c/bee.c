@@ -126,13 +126,12 @@ void forage() {
   static int fuelLVL = 0;
   //Step 2: Determine if near honey/hive
   if(!inVicinityOf(destination_x,destination_y)) {
+    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
+    goToCoordinates(destination_x,destination_y);
     if(getPower() == 0){
       setPower(5);
     }
     refuel(0);
-    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
-    goToCoordinates(destination_x,destination_y);
-
 
   //Step 3; Gather or deposit fuel
   }else {
@@ -150,7 +149,8 @@ void forage() {
         waiting_counter++;
         beingObserved = checkIfBeingObserved();
         sprintf(bugstring,"waiting: %.2f", (float)waiting_counter/(frameLimit) * 100);
-      //If you are being observed perform dance
+
+        //If you are being observed perform dance
       }else {
         performed_dance = dance(foundSource);
       }
@@ -167,7 +167,6 @@ void forage() {
         //Step 4: Repeat Loop
       } else {
         refuel(0);
-        strcpy(bugstring, "Moving");
         depositing = !depositing;       //Change internal forage state
         forage_state_changed = true;    //Set flag for Logging change
         waiting_counter = 0;            //Reset waiting limit for next iteration
@@ -177,11 +176,10 @@ void forage() {
 }
 
 /*****************************************************************************
- * Foraging (Controller)- Benjamin Makowsky
+ * Onlooking (Controller)- Benjamin Makowsky
  * ***************************************************************************/
 void onlook(){
   static int dancing_ship = -1;
-
 
   //If not near the hive, go to it
   if(!inVicinityOf(selfBaseX(),selfBaseY())){
@@ -201,7 +199,6 @@ void onlook(){
       int range_of_view = 40;   //Distance for how far a bee can be seen
 
       //Check to see if any ships are nearby and if one is get its ID
-      //TODO: Possibly change name to getNearbySHipID() or similar
       dancing_ship = seeIfDancing(field_of_view,range_of_view);
       sprintf(bugstring,"Observing Ship: %d",dancing_ship);
     }else{
