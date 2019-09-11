@@ -28,18 +28,19 @@ bool dance(int msgType) {
   static bool isInitial = true;
 
   if(isInitial) {
-    OPENLOG()
-
+    //Reset flags and set directional headings for dance
     completed_first_dance = false;
     completed_second_dance = false;
     completed_third_dance = false;
     initialHeading = (int) selfHeadingDeg();
     rightHeading = (initialHeading - 90 + 360) % 360; //+360 to account for going past -1 degrees
     leftHeading = (initialHeading + 90) % 360;
+    isInitial = false;
+
+    OPENLOG()
     fprintf(fp, "\nInitializing beeDance() with msgType: %d\n", msgType);
     fprintf(fp, "Init: %d, Left: %d, Right: %d\n",initialHeading,leftHeading,rightHeading);
     fprintf(fp,"------------------------------\n");
-    isInitial = false;
     fclose(fp);
   }
 

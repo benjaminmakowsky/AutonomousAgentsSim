@@ -281,30 +281,30 @@ void useFueler(){
   }
 }
 
-//bool dance(int prevState){
-//  static bool dance_is_completed = false;
-//
-//  //Make sure you are fully stopped before dancing
-//  if(selfSpeed() == 0) {
-//    switch (prevState) {
-//      case STATE_SEARCHING: //If you were just searching then let others know you found honey
-//        dance_is_completed = honeyFoundDance();
-//        break;
-//      case STATE_FORAGING:
-//        break;
-//    }
-//  }else{
-//    setPower(0);
-//  }
-//
-//  //Stop dancing once dance has finished
-//  if (dance_is_completed) {
-//    dance_is_completed = false;
-//    return true;
-//  } else {
-//    return false;
-//  }
-//}
+/********************************************************
+ * Used to check if fuel levels changed                 *
+ * @param flag check whether increasing or decreasing   *
+ * @param original_level original fuel level            *
+ * @return bool whether the change happened             *
+ ********************************************************/
+bool checkforFuel(char* flag, double original_level){
+
+  double current_fuel_level = selfFuel();
+  if(strcmp(flag, "increasing") == 0){
+    if (current_fuel_level - original_level > 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }else if(strcmp(flag, "decreasing") == 0){
+    if (current_fuel_level - original_level < 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {return false;}
+}
 
 bool honeyFoundDance(){
 

@@ -45,43 +45,36 @@ void searching() {
   //Step 1: Check for walls
   avoidWalls();
 
-
   //Step 2: Attempt to Attain Honey
   if (!fuel_found) {
-    useFueler();//TODO: RENAME
+    useFueler();
 
     //Step 3: Check if fuel levels changed
-    double new_fuel_level = selfFuel();
-    if (new_fuel_level - fuel > 0) {
-      x = selfX();
-      y = selfY();
-      fuel_found = true;
-    }
+    fuel_found = checkforFuel("increasing", fuel);
   }
 
+  //Step 4: Store location of found honey
   if (fuel_found) {
-    if(comeToStop(30) == false){
-      //Do nothing
-    } else {
-      int POICoordinates[2];
-      static bool fileRead = false; //Boolean to set coordinates only once
-      if(!fileRead) {
-        memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(getPOICoordinates(x, y)));
-        setHoneyX(POICoordinates[0]);
-        setHoneyY(POICoordinates[1]);
-        fileRead = !fileRead;
-      }
+    x = selfX();
+    y = selfY();
 
-      OPENLOG()
-      fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",getHoneyX(),getHoneyY());
-      fprintf(fp,"Ending Search behavior\n");
-      fprintf(fp,"------------------------------\n");
-
-      fclose(fp);
-      sprintf(bugstring, "Search Moving to %d and %d",getHoneyX(), getHoneyY());
-      state = STATE_FORAGING;
-      sendSelfState(state);
+    static bool fileRead = false; //Boolean to set coordinates only once
+    if(!fileRead) {
+      int POICoordinates[2]; //Used to hold returned array from getPOICoordinates
+      memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(POICoordinates));
+      setHoneyX(POICoordinates[0]);
+      setHoneyY(POICoordinates[1]);
+      fileRead = !fileRead;
     }
+
+    OPENLOG()
+    fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",getHoneyX(),getHoneyY());
+    fprintf(fp,"Ending Search behavior\n");
+    fprintf(fp,"------------------------------\n");
+    fclose(fp);
+
+    state = STATE_FORAGING;
+    sendSelfState(state);
   }
 }
 

@@ -73,6 +73,11 @@ int avoidWalls();
 /// Used to determine the vector of the wall and turn to a specified degree
 /// \return The new heading
 
+bool checkforFuel(char* flag, double original_level);
+/// Used to check if fuel levels changed
+/// \param flag check whether increasing or decreasing
+/// \param original_level original fuel level
+/// \return whether the change happened
 
 bool comeToStop(int number_of_frames);
 /// Brings bee to a stop by setting power to zero and wait until no movement
