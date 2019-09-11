@@ -9,9 +9,11 @@
 //Defined values
 #define POWER_OFF setPower(0);
 #define POWER_ON setPower(3);
-#define endOfMSGSig 14    //16 frames for end of message
-#define endOfWordSig 7    //8 frames for end of word
-#define endOfSymbolSig 4  //4 frames for end of symbol
+#define max_num_moves 17 //3 max moves per number + 1 space * 4 possible numbers + 1 to end
+#define minimum_frames_to_observe 5
+#define endOfMSGSig 14            //16 frames for end of message
+#define endOfWordSig 7            //8 frames for end of word
+#define endOfSymbolSig 4          //4 frames for end of symbol
 #define foundSource 0
 #define foundEnemy 1
 #define left 'l'
@@ -76,5 +78,15 @@ bool signalEndOfWord();
 
 /// Set the 4 dance headings, left,right, initial, and rear
 void setDanceHeadings();
+
+/// Turns bee to dance direction specified
+/// \param dir Direction to turn
+/// \return boolean if turn was completed
+bool turnToDanceDirection(char dir);
+
+/// Returns bee to initial heading for dance
+/// \param num_frames_to_wait number of frames needed to wait to observe
+/// \return boolean if move was completed
+bool returnToInitialHeading(int *num_frames_to_wait);
 
 #endif //XPILOT_LE_BEE_DANCE_H

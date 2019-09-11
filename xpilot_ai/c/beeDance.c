@@ -92,22 +92,19 @@ bool relayMsg(int symbol) {
 
   //Function initialization; reset all values for future dances
   if (isInitial) {
-    OPENLOG()
     finishedMove = false;
     danceDirection = (symbol == 0) ? left : right;
     isInitial = false;
+    OPENLOG()
     fprintf(fp, "Begin relayMsg(%d) in direction %c\n", symbol, danceDirection);
     fclose(fp);
   }
 
   //After initialization perform the movement
   finishedMove = performMovementFor(danceDirection);
-  if (finishedMove) {
-    isInitial = true;
-  }
+  if (finishedMove) {isInitial = true;}
   return finishedMove;
 }
-
 
 
 bool relayCoords(int coords) {
@@ -143,7 +140,7 @@ char* buildDance(int coords) {
 
   int numInts = 0;
   int unitsPlace = 1;
-  static char danceMoves[3 * 5];
+  static char danceMoves[max_num_moves];
   memset(danceMoves, 0, sizeof(danceMoves));
   OPENLOG()
   fprintf(fp, "\n\n\nBegin buildDance(%d)\n", coords);
@@ -156,7 +153,7 @@ char* buildDance(int coords) {
     unitsPlace *= 10;
   } while (coords / unitsPlace != 0);
   unitsPlace /= 10; //Divide by 10 because it is now too high from the do_while
-  fprintf(fp, "numInts: (%d)\n", numInts);
+  fprintf(fp, "Number of digits: (%d)\n", numInts);
 
   //Create array to hold the units of the coordinate
   int units[numInts];
@@ -318,34 +315,12 @@ bool performMovementFor(char dir){
   }
   //If you havent finished moving, do it again
   if (!finishedMove) {
-    if (dir == left) {
-      turnToDeg(leftHeading);
-      finishedMove = headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
-
-    } else if (dir == right){
-      turnToDeg(rightHeading);
-      finishedMove = headingIsBetween((int)selfHeadingDeg(),rightHeading-2,rightHeading+2);
-
-    }else if (dir == endOfSequence){
-      turnToDeg(about_face);
-      finishedMove = headingIsBetween((int)selfHeadingDeg(),about_face-2,about_face+2);
-    }
+    finishedMove = turnToDanceDirection(dir);
   }
   if (finishedMove) {
-    //Wait frames to allow observation
-    if(wait_count < 5){
-      wait_count++;
-    }else{
-      if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,initialHeading +2)){
-        turnToDeg(initialHeading);
-      }else{
-        if(wait_count < 5 * 2){
-          wait_count++;
-        }else {
-          isInitial = true;
-          return true;
-        }
-      }
+    if(returnToInitialHeading(&wait_count)){
+      isInitial = true;
+      return true;
     }
   }
   return false;
@@ -357,4 +332,42 @@ void setDanceHeadings(){
   rightHeading = (initialHeading - 90 + 360) % 360; //+360 to account for going past -1 degrees
   leftHeading = (initialHeading + 90) % 360;
   rearHeading = (initialHeading + 180) % 360;
+}
+
+/// Turns bee to dance direction specified
+/// \param dir Direction to turn
+/// \return boolean if turn was completed
+bool turnToDanceDirection(char dir){
+  if (dir == left) {
+    turnToDeg(leftHeading);
+    return headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
+
+  } else if (dir == right){
+    turnToDeg(rightHeading);
+    return headingIsBetween((int)selfHeadingDeg(),rightHeading-2,rightHeading+2);
+
+  }else if (dir == endOfSequence){
+    turnToDeg(rearHeading);
+    return headingIsBetween((int)selfHeadingDeg(),rearHeading-2,rearHeading+2);
+  }
+}
+
+/// Returns bee to initial heading for dance
+/// \param num_frames_to_wait number of frames needed to wait to observe
+/// \return boolean if move was completed
+bool returnToInitialHeading(int *num_frames_to_wait){
+  //Wait frames to allow observation
+  if((*num_frames_to_wait) < minimum_frames_to_observe){
+    (*num_frames_to_wait)++;
+
+  }else{
+    if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,initialHeading +2)){
+      turnToDeg(initialHeading);
+    }else{
+      if((*num_frames_to_wait)  < minimum_frames_to_observe * 2){
+        (*num_frames_to_wait)++;
+      }else {return true;}
+    }
+  }
+  return false;
 }
