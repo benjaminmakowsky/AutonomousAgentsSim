@@ -361,6 +361,25 @@ void Player_hit_armor(player_t *pl)
 	}
 }
 
+void Player_hit_armor_custom(player_t *pl, int damageAmount)
+{
+	if(pl->item[ITEM_ARMOR] > 0 ){
+    if( pl->item[ITEM_ARMOR] - damageAmount < 0 ){
+      pl->item[ITEM_ARMOR] = 0;
+      pl->armor = 0;
+    }
+    else{
+      pl->item[ITEM_ARMOR] -= damageAmount;
+      pl->armor -= damageAmount;
+    }
+	}
+
+	if ((pl->armor) <= 0){
+		CLR_BIT(pl->have, HAS_ARMOR);
+	}
+}
+
+
 /*
  * Clear used bits.
  */
@@ -547,7 +566,8 @@ int Init_player(int ind, shipshape_t *ship, int type)
 		pl->cloak = 1;
 
 		pl->power = 0.5;
-		pl->armor = 2; 
+		pl->max_armor = BEE_HP; 
+		pl->armor = BEE_HP; 
 		pl->shots = 2;
 		pl->sight_range = 15;
 		pl->mass = 75;
@@ -575,6 +595,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
     pl->phasing = 1;
 
 		pl->power = 10.0;
+		pl->max_armor = 10;
 		pl->armor = 10;
 		pl->shots = 0;
 		pl->sight_range = 100;
@@ -604,6 +625,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
 		pl->cloak = 0;
 
 		pl->power = 0.5;
+		pl->max_armor = 1;
 		pl->armor = 1;
 		pl->shots = 1;
 		pl->sight_range = 20;
@@ -630,6 +652,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
 		pl->cloak = 0;
 
 		pl->power = 0.5;
+		pl->max_armor = 5;
 		pl->armor = 5;
 		pl->shots = 5;
 		pl->sight_range = 3;
@@ -655,6 +678,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
 		pl->cloak = 0;
 
 		pl->power = 0.5;
+		pl->max_armor = 2;
 		pl->armor = 2;
 		pl->shots = 5;
 		pl->sight_range = 3;
@@ -680,6 +704,7 @@ int Init_player(int ind, shipshape_t *ship, int type)
 		pl->cloak = 0;
 		pl->power = pl->power_s = MAX_PLAYER_POWER;
 		pl->shots = 2;
+		pl->max_armor = 1;
 		pl->armor = 1;
 		pl->sight_range = 15;
 		pl->mass = options.shipMass;

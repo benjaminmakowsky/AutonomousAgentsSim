@@ -336,7 +336,9 @@ typedef struct player {
 	bool	isoperator;		/* player has operator privileges? */
 	bool	want_audio;		/* player wants audio from server */
 
+  int max_armor;    /* Player starting health */
 	int armor;        /* Player health */
+	double regen_tick;  /* range 0-1, current regen tick value  */
 	int cloak;        /* Whether or not this ship has a cloak (stealth) ability */
 	int phasing;      /* Whether or not this ship has a phase (noclip) ability */
 	char shapename[MAX_CHARS]; /* ship shape name. Stats are based on this */
@@ -759,6 +761,7 @@ static inline bool Player_has_armor(player_t *pl)
 	void Player_add_tank(player_t *pl, double tank_fuel);
 	void Player_remove_tank(player_t *pl, int which_tank);
 	void Player_hit_armor(player_t *pl);
+	void Player_hit_armor_custom(player_t *pl, int damageAmount);
 	void Player_used_kill(player_t *pl);
 	void Player_set_mass(player_t *pl);
 	void Player_init_items(player_t *pl );

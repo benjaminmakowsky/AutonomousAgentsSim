@@ -29,6 +29,7 @@
  */
 
 #include "xpserver.h"
+#include "serverconst.h"
 
 /* new acd functions */
 /* doubles because the multiplies might overflow ints */
@@ -180,6 +181,109 @@ void Check_collision(void)
 	AsteroidCollision();
 }
 
+// Two players involved in the collision, and the range used to detect collisions
+void doPositionalDamage( player_t* pl, player_t* pl_j, double range ){
+        //
+        // Determine angles of collision, and assign damage accordingly
+        //  
+        int posDmg_i; // pl
+        int posDmg_j; // pl_j
+
+        double angDelta;
+        double plAngle = pl->float_dir*ANGLE_CONST;
+        double pl_jAngle = pl_j->float_dir*ANGLE_CONST;
+        angDelta = abs( plAngle - pl_jAngle );
+        
+        // Generate a point that is COLLISION_LINE_LENGTH in front of ship1 (pl) by COLLISION_LINE_SEPARATION
+        double angInRad = plAngle * M_PI / 180.0;
+        double ix = OBJ_PTR(pl)->prevpos.cx + (COLLISION_LINE_SEPARATION + COLLISION_LINE_LENGTH) * cos(angInRad); 
+        double iy = OBJ_PTR(pl)->prevpos.cy + (COLLISION_LINE_SEPARATION + COLLISION_LINE_LENGTH) * sin(angInRad); 
+
+        // 3 cases for collisions
+        // 1: Head-on collision
+        if( angDelta > 136 && angDelta < 225 ){
+#if COLLISION_DEBUG
+          printf("FRONT\n");
+#endif
+          posDmg_i = FRONT_DMG;
+          posDmg_j = FRONT_DMG;
+        }
+        // 2: Back collision
+        else if( angDelta < 44 || angDelta > 305  ){
+          // If ship2 is immediately in-front of ship1, ship1 is the collision leader
+          double collisionDirRange = range * DIR_RANGE_FACTOR;
+#if COLLISION_DEBUG
+          printf("BACK\n");
+          printf("%s x: %f, y: %f\n", pl->name, (double)(OBJ_PTR(pl)->prevpos.cx), (double)(OBJ_PTR(pl)->prevpos.cy) );
+          printf("x multiple: %f\n", cos(angInRad) );
+          printf("y multiple: %f\n", sin(angInRad) );
+          printf("cx: %f, cy: %f\n", ix, iy );
+          printf("%s x: %f, y: %f\n", pl_j->name, (double)(OBJ_PTR(pl_j)->prevpos.cx), (double)(OBJ_PTR(pl_j)->prevpos.cy) );
+          printf("Range: %f\n", collisionDirRange );  
+#endif 
+          
+          // If ship2 (i) is in very close these range to this point, ship1 is the collision leader 
+         if( in_range_simple( ix, iy, OBJ_PTR(pl_j)->prevpos.cx, OBJ_PTR(pl_j)->prevpos.cy, collisionDirRange ) ){
+            //ship1(pl) is leader
+#if COLLISION_DEBUG
+            printf("In range\n");
+#endif
+            posDmg_i = FRONT_DMG;
+            posDmg_j = BACK_DMG;
+          }
+          else{
+            //ship2(pl_j) is leader
+#if COLLISION_DEBUG
+            printf("NOT in range\n");
+#endif
+            posDmg_i = BACK_DMG;
+            posDmg_j = FRONT_DMG;
+          }
+
+        }
+        // 3: Side collsion
+        else{
+          // If ship2 is immediately in-front of ship B, ship1 is the collision leader
+  				double collisionDirRange = range * DIR_RANGE_FACTOR;
+#if COLLISION_DEBUG
+          printf("SIDE\n");
+          printf("%s x: %f, y: %f\n", pl->name, (double)(OBJ_PTR(pl)->prevpos.cx), (double)(OBJ_PTR(pl)->prevpos.cy) );
+          printf("x multiple: %f\n", cos(angInRad ) );
+          printf("y multiple: %f\n", sin(angInRad) );
+          printf("cx: %f, cy: %f\n", ix, iy );
+          printf("%s x: %f, y: %f\n", pl_j->name, (double)(OBJ_PTR(pl_j)->prevpos.cx), (double)(OBJ_PTR(pl_j)->prevpos.cy) );
+          printf("Range: %f\n", collisionDirRange );
+#endif
+          
+          // If ship1 (pl) is in very close these range to this point, ship1 is the collision leader 
+          if( in_range_simple( ix, iy, OBJ_PTR(pl_j)->prevpos.cx, OBJ_PTR(pl_j)->prevpos.cy, collisionDirRange ) ){
+            //ship1(pl) is leader
+#if COLLISION_DEBUG
+            printf("In range\n");
+#endif
+            posDmg_i = FRONT_DMG;
+            posDmg_j = SIDE_DMG;
+          }
+          else{
+            //ship2(pl_j) is leader
+#if COLLISION_DEBUG
+            printf("NOT in range\n");
+#endif
+            posDmg_i = SIDE_DMG;
+            posDmg_j = FRONT_DMG;
+          }
+        }
+
+#if COLLISION_DEBUG
+        printf("Player %s received %d damage\n", pl->name, posDmg_i);
+        printf("Player %s received %d damage\n", pl_j->name, posDmg_j);
+#endif
+				Player_hit_armor_custom(pl, posDmg_i );
+        Player_hit_armor_custom(pl_j, posDmg_j);
+ 
+
+}
+
 
 static void PlayerCollision(void)
 {
@@ -206,6 +310,7 @@ static void PlayerCollision(void)
 		if ( BIT(world->rules->mode, CRASH_WITH_PLAYER | BOUNCE_WITH_PLAYER)) {
 			for (j = i + 1; j < NumPlayers; j++) {
 				player_t *pl_j = Player_by_index(j);
+
 				double range;
 
 				if (!Player_is_alive(pl_j))
@@ -251,13 +356,9 @@ static void PlayerCollision(void)
 					pl_j->forceVisible = 20;
 
           
-          // Base bounce, fairly large
-					//Obj_repel(OBJ_PTR(pl), OBJ_PTR(pl_j),
-					//		PIXEL_TO_CLICK(2*SHIP_SZ));
-            
           // Bee-sim bounce, much more subtle
 					Obj_repel(OBJ_PTR(pl), OBJ_PTR(pl_j),
-							PIXEL_TO_CLICK(SHIP_SZ));
+							PIXEL_TO_CLICK(COLLISION_BOUNCE_FACTOR * SHIP_SZ));
 				}
 				if (!BIT(world->rules->mode, CRASH_WITH_PLAYER))
 					continue;
@@ -272,14 +373,21 @@ static void PlayerCollision(void)
 							&& !Player_has_armor(pl_j)))
 					Player_set_state(pl_j, PL_STATE_KILLED);
 
-        // Bees don't take damage from colliding
-				if (!BIT(pl->used, HAS_SHIELD)
-						&& Player_has_armor(pl) && strcmp(pl->shapename, "bee") != 0)
-					Player_hit_armor(pl);
+        if( POS_DAMAGE ){
+          doPositionalDamage(pl, pl_j, range);
+        }
+        else{
+          // Bees may/may-not take damage from colliding
+				  if (!BIT(pl->used, HAS_SHIELD)
+					  	&& Player_has_armor(pl) && COLLISION_DMG){
+					    Player_hit_armor(pl);
+          }
 
-				if (!BIT(pl_j->used, HAS_SHIELD)
-						&& Player_has_armor(pl_j) && strcmp(pl->shapename, "bee") != 0)
-					Player_hit_armor(pl_j);
+				  if (!BIT(pl_j->used, HAS_SHIELD)
+						  && Player_has_armor(pl_j) && COLLISION_DMG ){
+              Player_hit_armor(pl_j);
+            }
+        }
 
 				if (Player_is_killed(pl_j)) {
 					if (Player_is_killed(pl)) {

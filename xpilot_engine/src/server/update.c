@@ -1443,6 +1443,24 @@ void Update_objects(void)
 		}
 	}
 
+  /*
+   *  Update health-regen tick on players on damaged players
+   */
+	for (i = NumPlayers - 1; i >= 0; i--) {
+		pl = Player_by_index(i);
+    
+    // if player is damaged
+    if( REGEN_ENABLED && pl->armor < pl->max_armor ){
+      pl->regen_tick += SHIP_REGEN_FACTOR;
+      if( pl->regen_tick >= 1.0 ){
+        pl->armor++;
+        pl->regen_tick = 0.0;
+        pl->item[ITEM_ARMOR] = pl->armor;
+        printf("%s is regenerating 1 health to: %d\n", pl->name, pl->armor );
+      }
+    }
+  }
+
 	/*
 	 * Kill shots that ought to be dead.
 	 */

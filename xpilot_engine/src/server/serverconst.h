@@ -274,4 +274,51 @@ enum State
   STATE_ATTACKER  //8
 };
 
+/*
+ *  Basic Combat Defines
+ */
+
+// If bee's deal/receive damage from collisions
+#define COLLISION_DMG 1
+// Bee ship health
+#define BEE_HP 5
+// Magnitude by which ships bounce off each-other when colliding
+// Default is 2
+#define COLLISION_BOUNCE_FACTOR 1.5
+// Where or not regen health is enabled
+#define REGEN_ENABLED 1
+// Defines the frame-hz at which a ship regenerates 1 HP
+// i.e: SRF of 0.05 -> ships regen 1 HP every 20 frames
+#define SHIP_REGEN_FACTOR 0.01
+
+// If the collision leader should take damage
+// NOT IMPLEMENTED YET
+//#define COLLISION_LEADER_DMG 1
+
+/*
+*  Positional Collision Defines
+*/
+// If Damage taken / received should depend on position
+#define POS_DAMAGE 0
+// Damage taken from back-side collision
+#define BACK_DMG 3
+// Damage taken from side collision
+#define SIDE_DMG 2
+// Damage taken from front collision
+#define FRONT_DMG 1
+// Prints collision debug statements if enabled
+#define COLLISION_DEBUG 0
+// Length of line drawn to determine positional collisions
+#define COLLISION_LINE_SEPARATION 50.0
+#define COLLISION_LINE_LENGTH 1000.0
+// Factor by which to multiply the detection range when checking if
+// the collision line is in range of the collision receiver
+#define DIR_RANGE_FACTOR 0.8
+
+/*
+ * Other Defines
+ */ 
+#define ANGLE_CONST 2.8125
+
+
 #endif
