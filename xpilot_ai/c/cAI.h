@@ -291,7 +291,7 @@ extern void setSelfState(int state);
 extern int selfState();
 extern void sendDancingState(int state);
 extern int getDanceFrom(int ship);
-extern int seeIfDancing(int fov,int rov);
+extern int seeIfDancersWaiting(int fov,int rov);
 extern int getSelfIsDancing();
 extern bool headingIsBetween(int heading, int lowerHeading, int upperHeading);
 extern int observeDance(int ship_idx);

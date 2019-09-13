@@ -201,15 +201,13 @@ void onlook(){
       int range_of_view = 40;   //Distance for how far a bee can be seen
 
       //Check to see if any ships are nearby and if one is get its ID
-      dancing_ship = seeIfDancing(field_of_view,range_of_view);
+      dancing_ship = seeIfDancersWaiting(field_of_view,range_of_view);
       sprintf(bugstring,"Observing Ship: %d",dancing_ship);
     }else{
 
       //Turn towards the bee we are observing
       int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
       if(selfHeadingDeg() < targetHeading-1 || selfHeadingDeg() > targetHeading + 1) {
-        //sprintf(bugstring,"self: %d target: %d",selfHeadingDeg(),targetHeading);
-        //sprintf(bugstring,"targetHeading: %d",targetHeading);
         turnToDeg(targetHeading);
       }else{
         //While looking at dancer observe dance
