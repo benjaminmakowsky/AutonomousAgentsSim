@@ -21,7 +21,7 @@ enum State
 };
 #endif
 
-#define endOfWord 'p'
+#define endOfWord '_'
 #define left 'l'
 #define right 'r'
 #define max_dance_moves 25 //1 for dance type, 2*12 for max moves for coordinate 9999

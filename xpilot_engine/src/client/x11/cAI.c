@@ -3126,13 +3126,9 @@ int seeIfDancersWaiting(int fov, int rov){
 
         //Checks if x and y coordinates are the same as previously + or - 1
         if (local_ships[i][prevX] >= (int) ship_ptr[i].x - 1 && local_ships[i][prevX] <= (int) ship_ptr[i].x + 1 &&
-            local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
+          local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
           local_ships[i][stoppedCount] += 1;
-          //fprintf(fp, "Ship not moving: %d\n", local_ships[i][stoppedCount]);
         } else {
-//          fprintf(fp, "Ship Moving\n");
-//          fprintf(fp, "Current X: %d, Previous X: %d\n", (int) ship_ptr[i].x, local_ships[i][prevX]);
-//          fprintf(fp, "Current y: %d, Previous y: %d\n", (int) ship_ptr[i].y, local_ships[i][prevY]);
           local_ships[i][stoppedCount] = 0;
           local_ships[i][prevX] = (int) ship_ptr[i].x;
           local_ships[i][prevY] = (int) ship_ptr[i].y;
@@ -3177,8 +3173,14 @@ int observeDance(int ship_id){
       dancingCheck = beeIsDancing(ship_id);
       dancePattern = observeDanceMoves(ship_id); //Gets the dance move performed by the dancer
     }
+
+    //IF no longer dancing and dancePattern exists
     if(!dancingCheck && dancePattern != NULL){
       dance_observed = dancePattern[0];
+
+      //INPROGRESS: Save coordinates to self bee
+      //sethoneyx and y in beeobject
+      //TODO: create dance type enumeration
 
     }
   }
@@ -3216,7 +3218,7 @@ bool beeIsDancing(int ship_id){
       prevHeading = currentHeading;
     }
 
-    int threshold = 14*3;
+    int threshold = 14*3; //14 fps * 3 = 3 seconds
     if(num_frames_same_dir < threshold){
       return true;
 
@@ -3391,7 +3393,7 @@ char* observeDanceMoves(int ship_id){
       //NO ACTION NEEDED
     }else{
       //Otherwise you have already been observing and determine char
-      fprintf(fp,"Storing Direction #%d\n", dance_index+1);
+      fprintf(fp,"Storing Direction #%d: %c\n", dance_index+1,direction);
       dance_moves[dance_index] = direction; //Record move observed in array
       dance_index++;                        //Increment array index
       directionSet = false;                 //Resets if direction has been observed
@@ -3401,13 +3403,11 @@ char* observeDanceMoves(int ship_id){
   //If observee bee is not near intitial heading you are recording the max distance away
   //Determine if turning l/r/or word space or returning to initial
   if(headingIsBetween(observees_heading, left_heading-5, left_heading+5) && !directionSet){
-    fprintf(fp,"Set left\n");
     direction = left;
     directionSet = true;
   }
   //Record if at a right heading
   if(headingIsBetween(observees_heading, right_heading-5, right_heading+5) && !directionSet){
-    fprintf(fp,"Set right\n");
     direction = right;
     directionSet = true;
   }
