@@ -3091,7 +3091,7 @@ int selfFuelY() {
 //}
 
 /**Used to determine whether or not bee is supposed to be dancing by determining if it is moving*/
-int seeIfDancing(int fov, int rov){
+int seeIfDancing(int fov, int rov){ //TODO:RENAME FOR CLARITY Possible seeifdancerwaiting
   /**Set up initial Variables*/
   static bool first_init = true;        //flag to determine if array has been intialized
   static int ship_observed = -1;       //The ship being observed if one is dancing
@@ -3349,24 +3349,12 @@ int getDancersY(int dancing_ship) {
 
 int getHeadingBetween(int x1, int y1, int x2, int y2){
   //x1, y1 are self coordinates
-  double adjacent = x2 -x1;
-  double opposite  = y2 - y1;
+  double dx = x2 -x1;
+  double dy  = y2 - y1;
   double conversion = 180.0 / PI_AI;
-  double heading = atan(opposite/adjacent) * conversion; //retuns between -pi/2 and pi/2 in radians
+  double heading = atan2(dy,dx) * conversion; //retuns between -pi and pi in radians
 
-  //Determine which quadrant angle came from
-  if(adjacent >= 0 && opposite >= 0){
-    //came from quadrant 1 no conversion needed
-  }else if(adjacent < 0 && opposite >= 0){
-    //Came from quadrant 2 add 180
-    heading += 180;
-  }else if(adjacent < 0 && opposite < 0){
-    //came from quadrant 3 add 180
-    heading += 180;
-  }else if(adjacent >= 0 && opposite < 0){
-    //came from quadrant 4 no conversion needed
-  }
-  return (int)heading;
+  return (heading < 0) ? ((int) round(heading + 360)) : ((int) round(heading));
 }
 
 /**Returns an array of the dance moves recorded*/

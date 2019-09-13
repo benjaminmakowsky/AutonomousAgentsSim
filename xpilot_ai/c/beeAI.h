@@ -114,4 +114,11 @@ int interpretDance(int dance);
 /// Decides whether or not to change state based on observed dance
 /// \param dance The dance being observed
 /// \return The state bee has changed into based on dance
+
+
+void stopAtCoordinates(int x, int y);
+/// Brings bee to stop as it approaches the coordinate specified
+/// \param x x coordinate of location
+/// \param y y coordinate of location
+
 #endif //XPILOT_LE_BEEAI_H

@@ -128,6 +128,7 @@ void forage() {
   if(!inVicinityOf(destination_x,destination_y)) {
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
     goToCoordinates(destination_x,destination_y);
+    stopAtCoordinates(destination_x,destination_y);
     if(getPower() == 0){
       setPower(5);
     }
@@ -186,6 +187,7 @@ void onlook(){
 
     //Make sure we are at the base when we are observing
     goToCoordinates(selfBaseX(),selfBaseY());
+    stopAtCoordinates(selfBaseX(), selfBaseY());
 
   //While at the hive observe dancing bee
   }else{

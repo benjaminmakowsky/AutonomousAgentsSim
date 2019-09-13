@@ -250,11 +250,13 @@ bool performSequence(char* sequence){
   static int i = 0;
 
 
+  //Count the number of dance moves in the sequence
   int sequenceLength = 0;
   while(sequence[sequenceLength] != '\0'){
     sequenceLength++;
   }
 
+  //IF first time or you have already completed 1 sequence
   if(isInitial || completedSequence){
     i = 0;
     completedSequence = false;
@@ -275,9 +277,8 @@ bool performSequence(char* sequence){
 
   //Iterate through all the dance moves
   if(i < sequenceLength){
-    char danceDir = sequence[i];
+    completedChar = performMovementFor(sequence[i]);
 
-    completedChar = performMovementFor(danceDir);
     //Once completed wait and return to start position
     if(completedChar) {
       OPENLOG()
@@ -300,7 +301,6 @@ bool performSequence(char* sequence){
 bool performMovementFor(char dir){
   static bool finishedMove = false;
   static int wait_count = 0;
-  static int about_face = 0;
   static bool isInitial = true;
   POWER_OFF
 
@@ -310,20 +310,20 @@ bool performMovementFor(char dir){
     wait_count= 0;
     isInitial = false;
     fprintf(fp, "\nBegin movement(%c)\n", dir);
-    about_face = (initialHeading + 180) % 360;
     fclose(fp);
   }
   //If you havent finished moving, do it again
   if (!finishedMove) {
     finishedMove = turnToDanceDirection(dir);
   }
+
+  //Once finished moving to designated dance direction return to intitial heading
   if (finishedMove) {
-    if(returnToInitialHeading(&wait_count)){
-      isInitial = true;
-      return true;
-    }
+    isInitial = returnToInitialHeading(&wait_count);
   }
-  return false;
+
+  //isInitial will be false unless you have returned to the initial heading
+  return isInitial;
 }
 
 /// Set the 4 dance headings, left,right, initial, and rear

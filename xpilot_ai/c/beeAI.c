@@ -209,31 +209,10 @@ int* getPOICoordinates(int x ,int y){
 
 
 bool inVicinityOf(int x,int y){
-  int range = 40; //Had to increase range because of the walls around honey sources
-  int lowerXRange = x - range/2;
-  int upperXRange = x + range/2;
-  int lowerYRange = y - range/2;
-  int upperYRange = y + range/2;
+  int range = 30; //Had to increase range because of the walls around honey sources
+  int distance = computeDistance(selfX(),x,selfY(),y);
+  return distance < range;
 
-
-  //Check if lowerRange < x,y < upperRange
-  if(selfX() >= lowerXRange && selfX() <= upperXRange){
-    if(selfY() >= lowerYRange && selfY() <= upperYRange){
-      return true;
-    }
-  }else {
-    //If not in the vicinty of the point slow down as you approach
-    int distance = computeDistance(selfX(),x,selfY(),y);
-    int max_speed = 60;
-    if(distance < 20) {
-      setPower(max_speed/4);
-    }else if(distance < 60){
-      setPower(max_speed/2);
-    }else{
-      setPower(max_speed);
-    }
-    return false;
-  }
 }
 
 int avoidWalls(){
@@ -367,5 +346,18 @@ int interpretDance(int dance){
       state = STATE_FORAGING;
       setCurrState(STATE_FORAGING);
     }
+  }
+}
+
+void stopAtCoordinates(int x, int y){
+  //If not in the vicinty of the point slow down as you approach
+  int distance = computeDistance(selfX(),x,selfY(),y);
+  int max_speed = 60;
+  if(distance < 20) {
+    setPower(max_speed/4);
+  }else if(distance < 60){
+    setPower(max_speed/2);
+  }else{
+    setPower(max_speed);
   }
 }
