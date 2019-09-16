@@ -171,6 +171,31 @@ static void Player_collides_with_mine(player_t *pl, mineobject_t *mine);
 static void Player_collides_with_debris(player_t *pl, object_t *obj);
 static void Player_collides_with_asteroid(player_t *pl, wireobject_t *obj);
 static void Player_collides_with_killing_shot(player_t *pl, object_t *obj);
+static int Cmd_death_kick( char* name );
+
+static int Cmd_death_kick( char* name ){
+  if( !SERVER_KICKS_ON_DEATH ){
+    return 0;
+  }
+
+  player_t *kicked_pl;
+  const char *errorstr;
+
+  if (!name || !*name)
+    return 1;
+
+  kicked_pl = Get_player_by_name(name, NULL, &errorstr);
+  if (kicked_pl) {
+    if (kicked_pl->conn == NULL)
+      Delete_player(kicked_pl);
+    else
+      Destroy_connection(kicked_pl->conn, "killed");
+  return 0;
+}
+	
+  return 1;
+
+}
 
 
 void Check_collision(void)
@@ -182,7 +207,7 @@ void Check_collision(void)
 }
 
 // Two players involved in the collision, and the range used to detect collisions
-void doPositionalDamage( player_t* pl, player_t* pl_j, double range ){
+void doPositionalDamage( player_t* pl, player_t* pl_j, double range, bool enemyCollision, bool friendlyCollision ){
         //
         // Determine angles of collision, and assign damage accordingly
         //  
@@ -275,13 +300,14 @@ void doPositionalDamage( player_t* pl, player_t* pl_j, double range ){
         }
 
 #if COLLISION_DEBUG
-        printf("Player %s received %d damage\n", pl->name, posDmg_i);
-        printf("Player %s received %d damage\n", pl_j->name, posDmg_j);
+        printf("Player should %s received %d damage\n", pl->name, posDmg_i);
+        printf("Player should %s received %d damage\n", pl_j->name, posDmg_j);
 #endif
-				Player_hit_armor_custom(pl, posDmg_i );
-        Player_hit_armor_custom(pl_j, posDmg_j);
- 
-
+        if( ( FRIENDLY_COLLISIONS && friendlyCollision && FRIENDLY_DAMAGE) || 
+            ( ENEMY_COLLISIONS && enemyCollision && ENEMY_DAMAGE ) ){
+          Player_hit_armor_custom(pl, posDmg_i);
+          Player_hit_armor_custom(pl_j, posDmg_j);
+        }
 }
 
 
@@ -319,7 +345,27 @@ static void PlayerCollision(void)
 					continue;
 
 				range = (2*SHIP_SZ-6) * CLICK;
-				if (!in_range(OBJ_PTR(pl), OBJ_PTR(pl_j), range))
+
+        bool enemyCollision = 0;
+        bool friendlyCollision = 0;
+        if( Team_immune(pl->id, pl_j->id ) ){
+          friendlyCollision = true;
+        }
+        else{
+          enemyCollision = true;
+        }
+
+        // Don't collide if collisions are disabled or out of range
+				if ( ( !ENEMY_COLLISIONS && !FRIENDLY_COLLISIONS ) || !in_range(OBJ_PTR(pl), OBJ_PTR(pl_j), range))
+					continue;
+
+        // Don't collide if enemy collisions are disabled and is enemy collision
+        // Check if players are enemies
+        if( !ENEMY_COLLISIONS && enemyCollision )
+          continue;
+
+        // Don't collide if friendly collisions are disabled & is friend collision
+				if ( !FRIENDLY_COLLISIONS && friendlyCollision )
 					continue;
 
 				/*
@@ -338,10 +384,6 @@ static void PlayerCollision(void)
 				 * The choosing of the first line may not be easy however.
 				 */
 
-				if (Team_immune(pl->id, pl_j->id)
-						|| PSEUDO_TEAM(pl, pl_j))
-					continue;
-
 				sound_play_sensors(pl->pos, PLAYER_HIT_PLAYER_SOUND);
 				if (BIT(world->rules->mode, BOUNCE_WITH_PLAYER)) {
 					if (!Player_uses_emergency_shield(pl)) {
@@ -354,8 +396,7 @@ static void PlayerCollision(void)
 					}
 					pl->forceVisible = 20;
 					pl_j->forceVisible = 20;
-
-          
+ 
           // Bee-sim bounce, much more subtle
 					Obj_repel(OBJ_PTR(pl), OBJ_PTR(pl_j),
 							PIXEL_TO_CLICK(COLLISION_BOUNCE_FACTOR * SHIP_SZ));
@@ -374,18 +415,24 @@ static void PlayerCollision(void)
 					Player_set_state(pl_j, PL_STATE_KILLED);
 
         if( POS_DAMAGE ){
-          doPositionalDamage(pl, pl_j, range);
+          doPositionalDamage(pl, pl_j, range, enemyCollision, friendlyCollision);
         }
         else{
           // Bees may/may-not take damage from colliding
 				  if (!BIT(pl->used, HAS_SHIELD)
 					  	&& Player_has_armor(pl) && COLLISION_DMG){
-					    Player_hit_armor(pl);
+              if( ( FRIENDLY_COLLISIONS && friendlyCollision && FRIENDLY_DAMAGE ) || 
+                  ( ENEMY_COLLISIONS && enemyCollision && ENEMY_DAMAGE) ){
+                Player_hit_armor(pl);
+              }              
           }
 
 				  if (!BIT(pl_j->used, HAS_SHIELD)
 						  && Player_has_armor(pl_j) && COLLISION_DMG ){
-              Player_hit_armor(pl_j);
+              if( ( FRIENDLY_COLLISIONS && friendlyCollision && FRIENDLY_DAMAGE ) || 
+                  ( ENEMY_COLLISIONS && enemyCollision && ENEMY_DAMAGE) ){
+                Player_hit_armor(pl_j);
+              }
             }
         }
 
@@ -394,10 +441,13 @@ static void PlayerCollision(void)
 						Set_message_f("%s and %s crashed.",
 								pl->name, pl_j->name);
 						Handle_Scoring(SCORE_COLLISION,pl,pl_j,NULL,NULL);
+            Cmd_death_kick(pl->name);
+            Cmd_death_kick(pl_j->name);
 					} else {
 						Set_message_f("%s ran over %s.", pl->name, pl_j->name);
 						sound_play_sensors(pl_j->pos, PLAYER_RAN_OVER_PLAYER_SOUND);
 						Handle_Scoring(SCORE_ROADKILL,pl,pl_j,NULL,NULL);
+            Cmd_death_kick(pl_j->name);
 					}
 
 				} else {
@@ -405,6 +455,7 @@ static void PlayerCollision(void)
 						Set_message_f("%s ran over %s.", pl_j->name, pl->name);
 						sound_play_sensors(pl->pos, PLAYER_RAN_OVER_PLAYER_SOUND);
 						Handle_Scoring(SCORE_ROADKILL,pl_j,pl,NULL,NULL);
+            Cmd_death_kick(pl->name);
 					}
 				}
 

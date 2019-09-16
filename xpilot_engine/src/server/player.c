@@ -570,8 +570,8 @@ int Init_player(int ind, shipshape_t *ship, int type)
 		pl->armor = BEE_HP; 
 		pl->shots = 2;
 		pl->sight_range = 15;
-		pl->mass = 75;
-		pl->emptymass = 5;
+		pl->mass = 50;
+		pl->emptymass = 45;
 		pl->fuel.max = 4000;
 		pl->flying = true;
 		pl->velocity = 3;

@@ -275,21 +275,44 @@ enum State
 };
 
 /*
- *  Basic Combat Defines
+ *  Team-specific rules
+ *  Note: Damage is dealth only if collision is enabled.
+ *  So FRIENDLY_DAMAGE 1 and FRIENDLY_COLLISIONS 0 does
+ *  no damage.
  */
+// If bees collide with their team-members
+#define FRIENDLY_COLLISIONS 0
+// If bees take damage from colliding with team-members
+#define FRIENDLY_DAMAGE 0
+// If bees collide with enemy bees
+#define ENEMY_COLLISIONS 1
+// If bees take damage from colliding with enemies
+#define ENEMY_DAMAGE 1
 
-// If bee's deal/receive damage from collisions
-#define COLLISION_DMG 1
+/*
+ *  Basic stats
+ */
 // Bee ship health
-#define BEE_HP 5
+#define BEE_HP 20
 // Magnitude by which ships bounce off each-other when colliding
 // Default is 2
 #define COLLISION_BOUNCE_FACTOR 1.5
+
+
+/*
+ *  Basic Combat Defines
+ */
+// If bee's deal/receive damage from collisions
+#define COLLISION_DMG 1
 // Where or not regen health is enabled
 #define REGEN_ENABLED 1
 // Defines the frame-hz at which a ship regenerates 1 HP
 // i.e: SRF of 0.05 -> ships regen 1 HP every 20 frames
 #define SHIP_REGEN_FACTOR 0.01
+// If server kicks player out upon death ( recommended always on )
+#define SERVER_KICKS_ON_DEATH 1
+// If ships should explode and create debris upon death
+#define EXPLODE_ON_DEATH 0
 
 // If the collision leader should take damage
 // NOT IMPLEMENTED YET

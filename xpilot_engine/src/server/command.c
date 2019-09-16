@@ -727,7 +727,6 @@ static int Cmd_kick(char *arg, player_t *pl, bool oper, char *msg, size_t size)
 	return CMD_RESULT_ERROR;
 }
 
-
 static int Cmd_lock(char *arg, player_t *pl, bool oper, char *msg, size_t size)
 {
 	bool new_lock;

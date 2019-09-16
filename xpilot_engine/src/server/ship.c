@@ -733,6 +733,10 @@ void Make_wreckage(clpos_t  pos,
 
 void Explode_fighter(player_t *pl)
 {
+  if( !EXPLODE_ON_DEATH ){
+    return;
+  }
+
 	int min_debris;
 	double debris_range;
 
