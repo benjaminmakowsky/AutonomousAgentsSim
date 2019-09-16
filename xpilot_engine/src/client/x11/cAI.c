@@ -12,6 +12,7 @@
 #include "xpclient_x11.h"
 #include "cAI.h"
 #include "../../../../xpilot_ai/c/beeGlobals.h"
+#include "../../../../xpilot_ai/c/beeObject.h"
 char bugstring[50] = "Init";
 char LogFile[20] = "";
 FILE *fp;

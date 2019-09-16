@@ -127,7 +127,7 @@ void forage() {
   //Step 2: Determine if near honey/hive
   if(!inVicinityOf(destination_x,destination_y)) {
     sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
-    goToCoordinates(destination_x,destination_y);
+    turnToCoordinates(destination_x,destination_y);
     stopAtCoordinates(destination_x,destination_y);
     if(getPower() == 0){
       setPower(5);
@@ -186,7 +186,7 @@ void onlook(){
   if(!inVicinityOf(selfBaseX(),selfBaseY())){
 
     //Make sure we are at the base when we are observing
-    goToCoordinates(selfBaseX(),selfBaseY());
+    turnToCoordinates(selfBaseX(),selfBaseY());
     stopAtCoordinates(selfBaseX(), selfBaseY());
 
   //While at the hive observe dancing bee

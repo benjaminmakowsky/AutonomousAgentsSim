@@ -47,7 +47,7 @@ extern BaseStruct_t* getBases();
 extern FuelStruct_t* getFuelDepots();
 /// Creates array of honey coordinatess
 
-int goToCoordinates(int x, int y);
+int turnToCoordinates(int x, int y);
 /// Moves user in the direction of a point constantly adjusting heading
 /// \param x x coordinate of where to go
 /// \param y y coordinate of where to go
@@ -86,12 +86,6 @@ bool comeToStop(int number_of_frames);
 
 void useFueler();
 ///Automatically cycles refueling state to determine if near honey
-
-
-//bool dance(int prevState);
-/// Performs a set of movements based on the state before dancing
-/// \param prevState The state the bee was in before initiating dance
-/// \return boolean if dance has been completed or not
 
 
 bool honeyFoundDance();

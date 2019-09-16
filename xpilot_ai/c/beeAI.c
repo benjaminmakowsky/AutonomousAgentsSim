@@ -130,7 +130,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
  * Move Bee To Coordinates Specified
  * ***************************************************************************/
 
-int goToCoordinates(int x, int y){
+int turnToCoordinates(int x, int y){
 
   //Get Heading to new point
   int new_heading = getHeadingBetween(selfX(), selfY(), x, y);
