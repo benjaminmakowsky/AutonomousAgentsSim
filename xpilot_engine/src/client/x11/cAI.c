@@ -3188,14 +3188,6 @@ int observeDance(int ship_id){
   return dance_observed;
 }
 
-int determineDance(int num_turns){
-    switch(num_turns)
-    {
-        case 4:
-            return HONEY_FOUND;
-    }
-}
-
 
 bool beeIsDancing(int ship_id){
 

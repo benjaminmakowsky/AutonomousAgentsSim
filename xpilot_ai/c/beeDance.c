@@ -12,7 +12,7 @@
 #include <math.h>
 
 
-//Local Variables
+//Global Variables used in multiple functions
 static char danceMoves[4] = {none, none, none, none}; //Array to hold dance moves
 int msgTypes[2] = {foundSource, foundEnemy};
 int danceTree[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
