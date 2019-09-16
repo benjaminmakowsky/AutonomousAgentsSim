@@ -196,9 +196,8 @@ int* getPOICoordinates(int x ,int y){
     }
   }
 
+  //In order to return an array it must be static
   static int coordinates[2];
-
-
   coordinates[0] = xPOI;
   coordinates[1] = yPOI;
   fprintf(fp,"------------------------------\n");
@@ -285,38 +284,6 @@ bool checkforFuel(char* flag, double original_level){
   } else {return false;}
 }
 
-bool honeyFoundDance(){
-
-  static bool is_initial_setup = true;
-  static int initial_heading = 0;
-  static int number_of_spins = 0;
-  static int target_degree = 0;
-  int desired_rotations = 4;
-
-  //Reset all static variables
-  if(is_initial_setup){
-    number_of_spins = 0;
-    initial_heading = (int)selfHeadingDeg();
-    target_degree = (initial_heading + 345) % 360;
-    is_initial_setup = false;
-  }
-
-  //Perform Dance Motions
-  turnToDeg((int)selfHeadingDeg() + 40);
-
-  //Count number of rotations in order to determine when dance is finished
-  if(beeDegIsBetween(target_degree, (target_degree + 10) % 360)) {
-    number_of_spins+=1;
-  }
-
-  //If desired number of spins has been reached dance is finished
-  if(number_of_spins >= desired_rotations ){
-    is_initial_setup = true;
-    return true;
-  }
-  return false;
-}
-
 bool beeDegIsBetween(int deg1, int deg2){
 
   /*******************************************************
@@ -346,6 +313,8 @@ int interpretDance(int dance){
       state = STATE_FORAGING;
       setCurrState(STATE_FORAGING);
     }
+  }else if(dance == FOUND_ENEMY_HIVE){
+    //TODO: Complete this section
   }
 }
 
