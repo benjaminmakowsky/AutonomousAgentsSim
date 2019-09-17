@@ -1,5 +1,7 @@
 //Evan Gray - February 2012
+//Benjamin Makowsky June 2019
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <math.h>
 #include <sys/ipc.h>
@@ -3155,6 +3157,7 @@ int observeDance(int ship_id){
   int dance_observed = -1;             //Used to return the dance type
   static bool dancingCheck = true;     //Used to determine if bee is still dancing
   ship_t observed_ship = getShipWithID(ship_id);
+
   char LogFile[20] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
   FILE *fp;
@@ -3180,6 +3183,8 @@ int observeDance(int ship_id){
       dance_observed = dancePattern[0];
 
       //INPROGRESS: Save coordinates to self bee
+      setHoneyY(interpretCoord('x',dancePattern));
+      setHoneyY(interpretCoord('y',dancePattern));
       //sethoneyx and y in beeobject
       //TODO: create dance type enumeration
 
@@ -3413,6 +3418,37 @@ char* observeDanceMoves(int ship_id){
   fclose(fp);
   return dance_moves;
 }
+
+int interpretCoord(char coord, char* dance){
+  char moves[3] = {0,0,0};
+  int number[3] = {0,0,0};
+  int number_index = 0;
+  bool completed_coord = false;
+
+  if(coord == 'x'){
+    int dance_index = 1;
+    int move_index = 0;
+    while(!completed_coord){
+      moves[move_index] = dance[dance_index];
+      dance_index++;
+      move_index++;
+      if(dance[dance_index] == endOfWord){
+        number[number_index] = convertToInt(moves);
+        moves = {0,0,0};
+        dance_index++;
+        if(dance[dance_index] == endOfWord){
+          completed_coord = true;
+        }
+      }
+    }
+  }else if(coord == 'y'){
+
+  }else{
+    return -1;
+  }
+  return atoi(number);
+}
+
 
 /*** Private helper functions ***/
 ship_t getShipWithID(int ID){

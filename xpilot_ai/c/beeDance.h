@@ -38,14 +38,6 @@ bool dance(int msgType);
 
 
 
-
-
-
-
-/**********************************************************
- * Helper Methods
- *********************************************************/
-
 /// Builds the message for the dance
 /// \param msgType
 /// \return
@@ -88,5 +80,6 @@ bool turnToDanceDirection(char dir);
 /// \param num_frames_to_wait number of frames needed to wait to observe
 /// \return boolean if move was completed
 bool returnToInitialHeading(int *num_frames_to_wait);
+
 
 #endif //XPILOT_LE_BEE_DANCE_H

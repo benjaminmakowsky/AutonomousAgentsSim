@@ -344,6 +344,17 @@ char* observeDanceMoves(int ship_id);
 /// \return boolean value if bee heading is changing or not
 bool beeIsDancing(int ship_id);
 
+/// Used to determine coordinates transmitted during dance
+/// \param coord char represent x or y
+/// \param dance the dance to be observed
+/// \return to corresponding coordinate
+int interpretCoord(char coord, char* dance);
+
+/// Converts dances moves to integers
+/// \param moves array holding the moves to interpret
+/// \return int value of the moves observed
+int convertToInt(char* moves);
+
 void logwrite();
 #endif //XPILOT_LE_CAI_H
 
