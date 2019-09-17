@@ -1,6 +1,7 @@
 //
 // Created by makowskyb on 9/17/19.
 //
+#include "cAI.h"
 int observeDance(int ship_id){
 
   static bool observing_dance = false; //boolean used to flag if ship is dancing
@@ -9,7 +10,6 @@ int observeDance(int ship_id){
   static int num_turns = 0;            //Number of turns made to determine dance
   int dance_observed = -1;             //Used to return the dance type
   static bool dancingCheck = true;     //Used to determine if bee is still dancing
-  ship_t observed_ship = getShipWithID(ship_id);
 
   char LogFile[20] = "";
   sprintf(LogFile, "./logs/LOG%d.txt", selfID());
@@ -17,7 +17,7 @@ int observeDance(int ship_id){
 
   //Initialization code
   if(!observing_dance){
-    initialHeading = (int)observed_ship.dir;      //Record initial heading as start of dance orientation
+    initialHeading = getShipDir(ship_id);      //Record initial heading as start of dance orientation
     targetHeading = initialHeading + 180;         //Target Heading for when a dance move ends
     observing_dance = true;                       //Flag to exit initialization
     fp = fopen(LogFile, "a");
