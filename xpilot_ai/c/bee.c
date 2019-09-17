@@ -14,6 +14,7 @@
 #include <math.h>
 #include <string.h>
 #include "beeObject.h"
+#include "beeObserve.h"
 
 #define EMPTY 200
 #define FULL 700

@@ -21,10 +21,7 @@ enum State
 };
 #endif
 
-#define endOfWord '_'
-#define left 'l'
-#define right 'r'
-#define max_dance_moves 25 //1 for dance type, 2*12 for max moves for coordinate 9999
+
 
 
 enum Dance
@@ -298,11 +295,7 @@ int getShipDir(int ship_id);
 int getShipXPos(int ship_id);
 int getShipYPos(int ship_id);
 
-/// Observes nearby ships to determine if any are standing still preparing to dance
-/// \param fov the field of view to see
-/// \param rov the range of view (How far you can see)
-/// \return integer ID of ship being observed or -1 if none
-extern int seeIfDancersWaiting(int fov,int rov);
+
 
 /// Determines whether or not a specified heading is within a certain range
 /// \param heading the heading being analyzed
@@ -311,10 +304,7 @@ extern int seeIfDancersWaiting(int fov,int rov);
 /// \return boolean value if the hading is within the range
 extern bool headingIsBetween(int heading, int lowerHeading, int upperHeading);
 
-/// Observes the ship with the specified ID to determine what dance they are conveying
-/// \param ship_idx the id of the ship to observe
-/// \return the dance observed
-extern int observeDance(int ship_idx);
+
 
 /// Used to determine if any bees are looking in your direction observing
 /// \return boolean value if someone is watching you
@@ -323,15 +313,6 @@ extern bool checkIfBeingObserved();
 extern int getSelfX();
 extern int getSelfY();
 
-/// Returns the dancers y position
-/// \param dancing_ship the ship toget y position from
-/// \return the y position of the ship
-int getDancersY(int dancing_ship);
-
-/// Returns the dancers x position
-/// \param dancing_ship the ship toget x position from
-/// \return the x position of the ship
-int getDancersY(int dancing_ship);
 
 /// Determines the heading between 2 sets of coordinates
 /// \param x1 the x position of the first coordinate
@@ -341,26 +322,8 @@ int getDancersY(int dancing_ship);
 /// \return The heading between the 2 coordinates
 int getHeadingBetween(int x1, int y1, int x2, int y2);
 
-/// Observes a ship to determine all the moves it sees during a dance
-/// \param ship_id the id of the ship to observe
-/// \return a pointer to the array of the dance moves recorded
-char* observeDanceMoves(int ship_id);
 
-/// Determines whether or not a bee is dancing by determining if it is changing heading
-/// \param ship_id the id of the ship to observe
-/// \return boolean value if bee heading is changing or not
-bool beeIsDancing(int ship_id);
 
-/// Used to determine coordinates transmitted during dance
-/// \param coord char represent x or y
-/// \param dance the dance to be observed
-/// \return to corresponding coordinate
-int interpretCoord(char coord, char* dance);
-
-/// Converts dances moves to integers
-/// \param moves array holding the moves to interpret
-/// \return int value of the moves observed
-int convertToInt(char* moves);
 
 void logwrite();
 #endif //XPILOT_LE_CAI_H

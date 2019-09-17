@@ -22,6 +22,8 @@
 #include <string.h>
 #include <sys/time.h>
 #include <limits.h>
+#include "beeObserve.h"
+
 //global constants
 #define MAX_DEG 360
 

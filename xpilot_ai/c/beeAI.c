@@ -17,6 +17,8 @@
 #include "beeObject.h"
 #include <limits.h>
 #include "beeGlobals.h"
+#include "beeObserve.h"
+
 
 
 
