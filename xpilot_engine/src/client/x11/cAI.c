@@ -3449,7 +3449,13 @@ int interpretCoord(char coord, char* dance){
   return atoi(number);
 }
 
-
+int convertToInt(char* moves){
+  int i = 0;
+  while(i < 3 || moves[i] != NULL){
+    
+    i++;
+  }
+}
 /*** Private helper functions ***/
 ship_t getShipWithID(int ID){
   int i;
