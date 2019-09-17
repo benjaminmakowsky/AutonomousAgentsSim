@@ -3452,7 +3452,7 @@ int interpretCoord(char coord, char* dance){
 int convertToInt(char* moves){
   int i = 0;
   while(i < 3 || moves[i] != NULL){
-    
+
     i++;
   }
 }
