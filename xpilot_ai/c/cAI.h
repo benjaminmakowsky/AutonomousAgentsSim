@@ -291,6 +291,13 @@ extern void setSelfState(int state);
 extern int selfState();
 extern void sendDancingState(int state);
 
+/********************************************
+ * Used to return specified ship properites
+ ********************************************/
+int getShipDir(int ship_id);
+int getShipXPos(int ship_id);
+int getShipYPos(int ship_id);
+
 /// Observes nearby ships to determine if any are standing still preparing to dance
 /// \param fov the field of view to see
 /// \param rov the range of view (How far you can see)

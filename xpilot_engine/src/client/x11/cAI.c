@@ -3057,10 +3057,27 @@ int getWallAvoidance() {
   }
 }
 
+//INPROGRESS: Moving functions to beeObserve
+int getShipDir(int ship_id){
+  ship_t ship = getShipWithID(ship_id);
+  int dir = (int)ship.dir;
+  return dir;
+}
 
+int getShipXPos(int ship_id){
+  ship_t ship = getShipWithID(ship_id);
+  int dir = (int)ship.x;
+  return dir;
+}
+
+int getShipYPos(int ship_id){
+  ship_t ship = getShipWithID(ship_id);
+  int dir = (int)ship.y;
+  return dir;
+}
 /**********************************************
  * BEE Functions
- */
+ **********************************************/
 int selfFuelX() {
   int i;
   for (i = 0; i < num_ship; i++) {
