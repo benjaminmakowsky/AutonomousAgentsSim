@@ -21,11 +21,8 @@ enum State
 };
 #endif
 
-// These are also defined in beeDance.h, it would be best to move these 
-// common defitions to another file, i.e. xpilot_ai/c/common.h
-#define endOfWord 'p'
-#define left 'l'
-#define right 'r'
+
+
 
 enum Dance
 {
@@ -290,20 +287,44 @@ extern int selfFuelY();             // Returns ships designated fuel source y co
 extern void setSelfState(int state);
 extern int selfState();
 extern void sendDancingState(int state);
-extern int getDanceFrom(int ship);
-extern int seeIfDancing(int fov,int rov);
-extern int getSelfIsDancing();
+
+/********************************************
+ * Used to return specified ship properites
+ ********************************************/
+int getShipDir(int ship_id);
+int getShipXPos(int ship_id);
+int getShipYPos(int ship_id);
+
+
+
+/// Determines whether or not a specified heading is within a certain range
+/// \param heading the heading being analyzed
+/// \param lowerHeading the lower bound of the range being compared to
+/// \param upperHeading  the upper bound of the range being compared to
+/// \return boolean value if the hading is within the range
 extern bool headingIsBetween(int heading, int lowerHeading, int upperHeading);
-extern int observeDance(int ship_idx);
+
+
+
+/// Used to determine if any bees are looking in your direction observing
+/// \return boolean value if someone is watching you
 extern bool checkIfBeingObserved();
+
 extern int getSelfX();
 extern int getSelfY();
-int getDancersY(int dancing_ship);
-int getDancersY(int dancing_ship);
+
+
+/// Determines the heading between 2 sets of coordinates
+/// \param x1 the x position of the first coordinate
+/// \param y1 the y position of the first coordinate
+/// \param x2 the x position of the second coordinate
+/// \param y2 the y position of the second coordinate
+/// \return The heading between the 2 coordinates
 int getHeadingBetween(int x1, int y1, int x2, int y2);
-char* observeDanceMoves(int ship_id);
-bool beeIsDancing(int ship_id);
-int determineDance(int num_turns);
+
+
+
+
 void logwrite();
 #endif //XPILOT_LE_CAI_H
 

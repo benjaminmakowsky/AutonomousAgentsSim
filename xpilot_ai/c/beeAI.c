@@ -17,6 +17,8 @@
 #include "beeObject.h"
 #include <limits.h>
 #include "beeGlobals.h"
+#include "beeObserve.h"
+
 
 
 
@@ -130,7 +132,7 @@ FuelStruct_t *getFuelDepots(char *csv) {
  * Move Bee To Coordinates Specified
  * ***************************************************************************/
 
-int goToCoordinates(int x, int y){
+int turnToCoordinates(int x, int y){
 
   //Get Heading to new point
   int new_heading = getHeadingBetween(selfX(), selfY(), x, y);
@@ -196,6 +198,7 @@ int* getPOICoordinates(int x ,int y){
     }
   }
 
+  //In order to return an array it must be static
   static int coordinates[2];
 
 
@@ -209,32 +212,10 @@ int* getPOICoordinates(int x ,int y){
 
 
 bool inVicinityOf(int x,int y){
-  int range = 40; //Had to increase range because of the walls around honey sources
-  int lowerXRange = x - range/2;
-  int upperXRange = x + range/2;
-  int lowerYRange = y - range/2;
-  int upperYRange = y + range/2;
+  int range = 30; //Had to increase range because of the walls around honey sources
+  int distance = computeDistance(selfX(),x,selfY(),y);
+  return distance < range;
 
-
-  //Check if lowerRange < x,y < upperRange
-  if(selfX() >= lowerXRange && selfX() <= upperXRange){
-    if(selfY() >= lowerYRange && selfY() <= upperYRange){
-      return true;
-    }
-  }else {
-    //If not in the vicinty of the point slow down as you approach
-    int distance = computeDistance(selfX(),x,selfY(),y);
-    // Make max_speed val a define
-    int max_speed = 60;
-    if(distance < 20) {
-      setPower(max_speed/4);
-    }else if(distance < 60){
-      setPower(max_speed/2);
-    }else{
-      setPower(max_speed);
-    }
-    return false;
-  }
 }
 
 int avoidWalls(){
@@ -269,7 +250,7 @@ bool comeToStop(int number_of_frames) {
 }
 
 
-void checkForFuel(){
+void useFueler(){
   static bool fueling = false;
   if (fueling == false) {
     fuel = selfFuel();
@@ -282,61 +263,29 @@ void checkForFuel(){
   }
 }
 
-//bool dance(int prevState){
-//  static bool dance_is_completed = false;
-//
-//  //Make sure you are fully stopped before dancing
-//  if(selfSpeed() == 0) {
-//    switch (prevState) {
-//      case STATE_SEARCHING: //If you were just searching then let others know you found honey
-//        dance_is_completed = honeyFoundDance();
-//        break;
-//      case STATE_FORAGING:
-//        break;
-//    }
-//  }else{
-//    setPower(0);
-//  }
-//
-//  //Stop dancing once dance has finished
-//  if (dance_is_completed) {
-//    dance_is_completed = false;
-//    return true;
-//  } else {
-//    return false;
-//  }
-//}
+/********************************************************
+ * Used to check if fuel levels changed                 *
+ * @param flag check whether increasing or decreasing   *
+ * @param original_level original fuel level            *
+ * @return bool whether the change happened             *
+ ********************************************************/
+bool checkforFuel(char* flag, double original_level){
 
-bool honeyFoundDance(){
+  double current_fuel_level = selfFuel();
+  if(strcmp(flag, "increasing") == 0){
+    if (current_fuel_level - original_level > 0) {
+      return true;
+    } else {
+      return false;
+    }
 
-  static bool is_initial_setup = true;
-  static int initial_heading = 0;
-  static int number_of_spins = 0;
-  static int target_degree = 0;
-  int desired_rotations = 4;
-
-  //Reset all static variables
-  if(is_initial_setup){
-    number_of_spins = 0;
-    initial_heading = (int)selfHeadingDeg();
-    target_degree = (initial_heading + 345) % 360;
-    is_initial_setup = false;
-  }
-
-  //Perform Dance Motions
-  turnToDeg((int)selfHeadingDeg() + 40);
-
-  //Count number of rotations in order to determine when dance is finished
-  if(beeDegIsBetween(target_degree, (target_degree + 10) % 360)) {
-    number_of_spins+=1;
-  }
-
-  //If desired number of spins has been reached dance is finished
-  if(number_of_spins >= desired_rotations ){
-    is_initial_setup = true;
-    return true;
-  }
-  return false;
+  }else if(strcmp(flag, "decreasing") == 0){
+    if (current_fuel_level - original_level < 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {return false;}
 }
 
 bool beeDegIsBetween(int deg1, int deg2){
@@ -368,5 +317,20 @@ int interpretDance(int dance){
       state = STATE_FORAGING;
       setCurrState(STATE_FORAGING);
     }
+  }else if(dance == FOUND_ENEMY_HIVE){
+    //TODO: Complete this section
+  }
+}
+
+void stopAtCoordinates(int x, int y){
+  //If not in the vicinty of the point slow down as you approach
+  int distance = computeDistance(selfX(),x,selfY(),y);
+  int max_speed = 60;
+  if(distance < 20) {
+    setPower(max_speed/4);
+  }else if(distance < 60){
+    setPower(max_speed/2);
+  }else{
+    setPower(max_speed);
   }
 }

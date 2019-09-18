@@ -1,5 +1,7 @@
 //Evan Gray - February 2012
+//Benjamin Makowsky June 2019
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <math.h>
 #include <sys/ipc.h>
@@ -12,6 +14,7 @@
 #include "xpclient_x11.h"
 #include "cAI.h"
 #include "../../../../xpilot_ai/c/beeGlobals.h"
+#include "../../../../xpilot_ai/c/beeObject.h"
 char bugstring[50] = "Init";
 char LogFile[20] = "";
 FILE *fp;
@@ -3054,10 +3057,26 @@ int getWallAvoidance() {
   }
 }
 
+int getShipDir(int ship_id){
+  ship_t ship = getShipWithID(ship_id);
+  int dir = (int)ship.dir * 2.8125;
+  return dir;
+}
 
+int getShipXPos(int ship_id){
+  ship_t ship = getShipWithID(ship_id);
+  int x = (int)ship.x;
+  return x;
+}
+
+int getShipYPos(int ship_id){
+  ship_t ship = getShipWithID(ship_id);
+  int y = (int)ship.y;
+  return y;
+}
 /**********************************************
  * BEE Functions
- */
+ **********************************************/
 int selfFuelX() {
   int i;
   for (i = 0; i < num_ship; i++) {
@@ -3076,21 +3095,9 @@ int selfFuelY() {
     }
   }
 }
-//TODO: Dep check
-//int getSelfIsDancing(){
-//  int i;
-//  for (i = 0; i < num_ship; i++) {
-//    if ((self != NULL) && (ship_ptr[i].id == self->id)) {
-//      return ship_ptr[i].isDancing;
-//    }
-//  }
-//}
 
-//int getDanceFrom(int ship){
-//  return ship_ptr[ship].dancingType;
-//}
-
-int seeIfDancing(int fov, int rov){
+/**Used to determine whether or not bee is supposed to be dancing by determining if it is moving*/
+int seeIfDancersWaiting(int fov, int rov){
   /**Set up initial Variables*/
   static bool first_init = true;        //flag to determine if array has been intialized
   static int ship_observed = -1;       //The ship being observed if one is dancing
@@ -3138,13 +3145,9 @@ int seeIfDancing(int fov, int rov){
 
         //Checks if x and y coordinates are the same as previously + or - 1
         if (local_ships[i][prevX] >= (int) ship_ptr[i].x - 1 && local_ships[i][prevX] <= (int) ship_ptr[i].x + 1 &&
-            local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
+          local_ships[i][prevY] >= (int) ship_ptr[i].y - 1 && local_ships[i][prevY] <= (int) ship_ptr[i].y + 1) {
           local_ships[i][stoppedCount] += 1;
-          //fprintf(fp, "Ship not moving: %d\n", local_ships[i][stoppedCount]);
         } else {
-//          fprintf(fp, "Ship Moving\n");
-//          fprintf(fp, "Current X: %d, Previous X: %d\n", (int) ship_ptr[i].x, local_ships[i][prevX]);
-//          fprintf(fp, "Current y: %d, Previous y: %d\n", (int) ship_ptr[i].y, local_ships[i][prevY]);
           local_ships[i][stoppedCount] = 0;
           local_ships[i][prevX] = (int) ship_ptr[i].x;
           local_ships[i][prevY] = (int) ship_ptr[i].y;
@@ -3159,111 +3162,6 @@ int seeIfDancing(int fov, int rov){
   fclose(fp);
   return -1;
 }
-
-
-int observeDance(int ship_id){
-
-  static bool observing_dance = false; //boolean used to flag if ship is dancing
-  static int initialHeading = 0;       //Heading used to determine start of dance position
-  static int targetHeading = 0;        //Heading used as the marker for a dance turn
-  static int num_turns = 0;            //Number of turns made to determine dance
-  int dance_observed = -1;             //Used to return the dance type
-  static bool dancingCheck = true;     //Used to determine if bee is still dancing
-  ship_t observed_ship = getShipWithID(ship_id);
-  char LogFile[20] = "";
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
-
-  //Initialization code
-  if(!observing_dance){
-    initialHeading = (int)observed_ship.dir;      //Record initial heading as start of dance orientation
-    targetHeading = initialHeading + 180;         //Target Heading for when a dance move ends
-    observing_dance = true;                       //Flag to exit initialization
-    fp = fopen(LogFile, "a");
-    fprintf(fp,"observeDance(ship_id: %d)\n",ship_id);
-    fclose(fp);
-  }else{
-    char* dancePattern = NULL;
-    if(dancingCheck)
-    {
-      dancingCheck = beeIsDancing(ship_id);
-      dancePattern = observeDanceMoves(ship_id);
-    }
-    if(!dancingCheck && dancePattern != NULL){
-      char LogFile[20] = "";
-      sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-      FILE *fp;
-      fp = fopen(LogFile, "a");
-
-      //Should be 9 but its 8
-      // Won't work, you need to get the sequenceLength from observeDanceMoves. Best way to is to have
-      // observerDanceMoves return the sequenceLength, and pass dancePattern as a parameter to observeDanceMoves.
-      int sequenceLength = (int)(sizeof(dancePattern) / sizeof(dancePattern[0]));
-      int i = 0;
-      fp = fopen(LogFile, "a");
-      while(dancePattern[i] != '\0'){
-        fprintf(fp," %d:\t%c\n",i, dancePattern[i]);
-        i++;
-      }
-      fprintf(fp,"sequenceLength = %d\n",i);
-      fprintf(fp,"\n");
-      fclose(fp);
-      dance_observed = dancePattern[0];
-    }
-  }
-  return dance_observed;
-}
-
-int determineDance(int num_turns){
-    switch(num_turns)
-    {
-        case 4:
-            return HONEY_FOUND;
-    }
-}
-
-
-bool beeIsDancing(int ship_id){
-
-  static bool isInitial = true;
-  ship_t observed_ship= getShipWithID(ship_id);
-  static int prevHeading = 0;
-  static int num_frames_same_dir = 0;
-
-  if(isInitial){
-    prevHeading = (int)observed_ship.dir * 2.8125;
-    num_frames_same_dir = 0;
-    isInitial = false;
-  } else{
-
-    //Compare current direction to previous direction
-    int currentHeading = observed_ship.dir * 2.8125;
-    if(currentHeading == prevHeading){
-      num_frames_same_dir += 1;
-    }else{
-      num_frames_same_dir = 0;
-      prevHeading = currentHeading;
-    }
-
-    // C'mon, make this a #define already
-    int threshold = 14*3;
-    if(num_frames_same_dir < threshold){
-      return true;
-
-    //Return false if you have been in the same direction for the threshold limit
-    }else{
-      isInitial = true;
-      char LogFile[20] = "";
-      sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-      FILE *fp;
-      fp = fopen(LogFile, "a");
-      fprintf(fp,"Bee finished Danced\n");
-      fclose(fp);
-      return false;
-    }
-  }
-}
-
 
 bool headingIsBetween(int heading, int lowerHeading, int upperHeading){
 /*******************************************************
@@ -3291,10 +3189,6 @@ bool checkIfBeingObserved(){
   int selfX = getSelfX(); //Using custom made command instead relying on cAI.c
   int selfY = getSelfY(); //Using custom made command instead relying on cAI.c
 
-//  char LogFile[20] = "";
-//  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-//  FILE *fp;
-//  fp = fopen(LogFile, "a");
 
   //Used to make sure bee is being watch and bee didnt glance during fly-by
   static int observed_counter = 0;
@@ -3366,99 +3260,17 @@ int getDancersY(int dancing_ship) {
 
 int getHeadingBetween(int x1, int y1, int x2, int y2){
   //x1, y1 are self coordinates
-  double adjacent = x2 -x1;
-  double opposite  = y2 - y1;
+  double dx = x2 -x1;
+  double dy  = y2 - y1;
   double conversion = 180.0 / PI_AI;
-  double heading = atan(opposite/adjacent) * conversion; //retuns between -pi/2 and pi/2 in radians
+  double heading = atan2(dy,dx) * conversion; //retuns between -pi and pi in radians
 
-  //Determine which quadrant angle came from
-  if(adjacent >= 0 && opposite >= 0){
-    //came from quadrant 1 no conversion needed
-  }else if(adjacent < 0 && opposite >= 0){
-    //Came from quadrant 2 add 180
-    heading += 180;
-  }else if(adjacent < 0 && opposite < 0){
-    //came from quadrant 3 add 180
-    heading += 180;
-  }else if(adjacent >= 0 && opposite < 0){
-    //came from quadrant 4 no conversion needed
-  }
-  return (int)heading;
+  return (heading < 0) ? ((int) round(heading + 360)) : ((int) round(heading));
 }
 
-char* observeDanceMoves(int ship_id){
-
-  char LogFile[20] = "";
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
-  fp = fopen(LogFile, "a");
-
-  //Local Variables
-  ship_t observed_ship = getShipWithID(ship_id);
-  static bool is_initial_setup = true;
-  static int initial_heading = 0;
-  static int left_heading = 0;
-  static int right_heading = 0;
-  static int space_heading = 0;
-  static char direction = 0;
-  static char dance_moves[20];
-  static int dance_index = 0;
-  static bool directionSet = false;
+/**Returns an array of the dance moves recorded*/
 
 
-  //Reset all static variables
-  if(is_initial_setup){
-    initial_heading = (int)observed_ship.dir * 2.8125;          //Record initial heading as start of dance orientation
-    right_heading = (initial_heading - 90 + 360) % 360; //+360 to account for going past -1 degrees
-    left_heading = (initial_heading + 90) % 360;
-    space_heading = (initial_heading + 180) % 360;
-    dance_index = 0;
-    directionSet = false;
-    direction = 0;
-    fprintf(fp,"Observing Dance\nInitial Heading: %d\n",initial_heading);
-    is_initial_setup = false;
-    memset(dance_moves,'\0',20);
-  }
-
-  //Get Dance Motions
-  int observees_heading = observed_ship.dir * 2.8125;
-
-  //Determine if about to start char
-  if(headingIsBetween(observees_heading, initial_heading-2, initial_heading+2)){
-    //If you are near the initial heading state word determine if char ended or starting
-    if(!directionSet){
-      //You have not began observing yet or recorded direction
-      //NO ACTION NEEDED
-    }else{
-      //Otherwise you have already been observing and determine char
-      fprintf(fp,"Storing Direction #%d\n", dance_index+1);
-      dance_moves[dance_index] = direction;
-      dance_index++;
-      directionSet = false;
-      direction = 0;
-    }
-  }
-  //If observee bee is not near intitial heading you are recording the max distance away
-  //Determine if turning l/r or returning to initial
-  if(headingIsBetween(observees_heading, left_heading-5, left_heading+5) && !directionSet){
-    fprintf(fp,"Set left\t %d < %d < %d\n",left_heading-10,observees_heading, left_heading+10);
-    direction = left;
-    directionSet = true;
-  }
-  if(headingIsBetween(observees_heading, right_heading-5, right_heading+5) && !directionSet){
-    fprintf(fp,"Set right\n");
-    direction = right;
-    directionSet = true;
-  }
-  if(headingIsBetween(observees_heading, space_heading-5, space_heading +5)){
-    //fprintf(fp,"Set space\n");
-    direction = endOfWord;
-    directionSet = true;
-  }
-
-  fclose(fp);
-  return dance_moves;
-}
 
 /*** Private helper functions ***/
 ship_t getShipWithID(int ID){
