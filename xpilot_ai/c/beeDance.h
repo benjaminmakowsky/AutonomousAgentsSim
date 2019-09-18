@@ -12,9 +12,6 @@
 #define POWER_OFF setPower(0);
 #define POWER_ON setPower(3);
 //Nit-pick: #define variables are traditionally all upper-case, i.e: END_OF_MSG_SIG instead of endOfMsgSig
-#define endOfMSGSig 28    //16 frames for end of message
-#define endOfWordSig 14    //8 frames for end of word
-#define endOfSymbolSig 4  //4 frames for end of symbol
 #define max_num_moves 17 //3 max moves per number + 1 space * 4 possible numbers + 1 to end
 #define minimum_frames_to_observe 5
 #define endOfMSGSig 14            //16 frames for end of message

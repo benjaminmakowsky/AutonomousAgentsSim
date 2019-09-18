@@ -326,10 +326,10 @@ void stopAtCoordinates(int x, int y){
   //If not in the vicinty of the point slow down as you approach
   int distance = computeDistance(selfX(),x,selfY(),y);
   int max_speed = 60;
-  if(distance < 20) {
-    setPower(max_speed/4);
-  }else if(distance < 60){
-    setPower(max_speed/2);
+  if(distance < 40) {
+    setPower(max_speed/6);
+  }else if(distance < 100){
+    setPower(max_speed/3);
   }else{
     setPower(max_speed);
   }
