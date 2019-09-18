@@ -29,7 +29,7 @@
  * Global variables
  */
 int			NumQueuedPlayers = 0;
-int			MaxQueuedPlayers = 20;
+int			MaxQueuedPlayers = MAX_PLAYERS;
 int			NumPseudoPlayers = 0;
 
 sock_t			contactSocket;
@@ -719,8 +719,8 @@ void Queue_loop(void)
 
 		/* slow down the rate at which players enter the game. */
 		if (last_unqueued_loops + 2 + (FPS >> 2) < main_loops) {
-			int lim = options.playerLimit;
-
+			int lim = INT_MAX; 
+      game_lock = 0;
 			/* is there a homebase available? */
 			if (NumPlayers - NumPseudoPlayers + login_in_progress < lim
 					|| !game_lock && ((Kick_robot_players(TEAM_NOT_SET)
@@ -754,7 +754,6 @@ void Queue_loop(void)
 				}
 
 				/* now get him a decent login port. */
-
 				qp->login_port = Setup_connection(qp->user_name, qp->nick_name,
 						qp->disp_name, qp->team,
 						qp->host_addr, qp->host_name,
@@ -803,8 +802,9 @@ static int Queue_player(char *user, char *nick, char *disp, int team,
 	struct queued_player *qp, *prev = 0;
 
 	*qpos = 0;
-	if ((status = Check_names(nick, user, host)) != SUCCESS)
+	if ((status = Check_names(nick, user, host)) != SUCCESS){
 		return status;
+  }
 
 	for (qp = qp_list; qp; prev = qp, qp = qp->next) {
 		num_queued++;
@@ -832,22 +832,28 @@ static int Queue_player(char *user, char *nick, char *disp, int team,
 
 		/* same computer? */
 		if (!strcmp(addr, qp->host_addr)) {
-			if (++num_same_hosts > 1)
+			if (++num_same_hosts > 1){
 				return E_IN_USE;
+      }
 		}
 	}
 
 	NumQueuedPlayers = num_queued;
-	if (NumQueuedPlayers >= MaxQueuedPlayers)
+	if (NumQueuedPlayers >= MaxQueuedPlayers){
 		return E_GAME_FULL;
-	if (game_lock && !rplayback && !options.baselessPausing)
+  }
+  game_lock = 0;
+	if (game_lock && !rplayback && !options.baselessPausing){
 		return E_GAME_LOCKED;
-	if (Check_max_clients_per_IP(addr))
+  }
+	if (Check_max_clients_per_IP(addr)){
 		return E_GAME_LOCKED;
+  }
 
 	qp = (struct queued_player *)malloc(sizeof(struct queued_player));
-	if (!qp)
+	if (!qp){
 		return E_SOCKET;
+  }
 	++*qpos;
 	strlcpy(qp->user_name, user, sizeof(qp->user_name));
 	strlcpy(qp->nick_name, nick, sizeof(qp->nick_name));

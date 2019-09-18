@@ -297,7 +297,9 @@ enum State
 // Magnitude by which ships bounce off each-other when colliding
 // Default is 2
 #define COLLISION_BOUNCE_FACTOR 1.5
-
+// Max number of players allowed in a single server session
+// Keep it <= ~100, fd 127 is reserved for something
+#define MAX_PLAYERS 100
 
 /*
  *  Basic Combat Defines

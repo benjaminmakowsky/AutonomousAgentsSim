@@ -122,7 +122,8 @@ static int Receive_fps_request(connection_t *connp);
 
 static int Send_motd(connection_t *connp);
 
-#define MAX_SELECT_FD			(sizeof(int) * 8 - 1)
+//#define MAX_SELECT_FD			(sizeof(long) * 8 - 1)
+#define MAX_SELECT_FD      MAX_PLAYERS
 #define MAX_RELIABLE_DATA_PACKET_SIZE	1024
 
 #define MAX_MOTD_CHUNK			512
@@ -308,9 +309,8 @@ int Setup_net_server(void)
 	 * the select(2) call minus those for stdin, stdout, stderr,
 	 * the contact socket, and the socket for the resolver library routines.
 	 */
-	max_connections
-		= MIN((int)MAX_SELECT_FD - 5,
-				options.playerLimit_orig + MAX_SPECTATORS * !!rplayback);
+  
+	max_connections = (int)MAX_SELECT_FD - 5;
 	if ((Conn = XCALLOC(connection_t, max_connections)) == NULL) {
 		error("Cannot allocate memory for connections");
 		return -1;
@@ -663,11 +663,12 @@ int Setup_connection(char *user, char *nick, char *dpy, int team,
 				 * and if previous packet got lost.
 				 */
 				return connp->my_port;
-			else
+			else{
 				/*
 				 * Nick already in use.
 				 */
 				return -1;
+      }
 		}
 	}
 
@@ -690,8 +691,9 @@ int Setup_connection(char *user, char *nick, char *dpy, int team,
 		sock.fd = *playback_ei++;
 		my_port = *playback_ei++;
 	}
-	if (sock.fd == -1)
+	if (sock.fd == -1){
 		return -1;
+  }
 
 	Sockbuf_init(&connp->w, &sock, SERVER_SEND_SIZE,
 			SOCKBUF_WRITE | SOCKBUF_DGRAM);
@@ -746,7 +748,6 @@ int Setup_connection(char *user, char *nick, char *dpy, int team,
 			|| connp->addr == NULL
 			|| connp->host == NULL
 	   ) {
-		error("Not enough memory for connection");
 		/* socket is not yet connected, but it doesn't matter much. */
 		Destroy_connection(connp, "no memory");
 		return -1;
@@ -1290,8 +1291,8 @@ static void Handle_input(int fd, void *arg)
 	short *pbscheck = NULL;
 	char *pbdcheck = NULL;
 
-	UNUSED_PARAM(fd);
-	if (connp->state & (CONN_PLAYING | CONN_READY))
+  UNUSED_PARAM(fd);
+  if (connp->state & (CONN_PLAYING | CONN_READY))
 		receive_tbl = &playing_receive[0];
 	else if (connp->state == CONN_LOGIN)
 		receive_tbl = &login_receive[0];
@@ -1301,6 +1302,8 @@ static void Handle_input(int fd, void *arg)
 		Handle_listening(connp);
 		return;
 	} else {
+    printf("Unknown state for fd: %d\n", fd);
+    printf("connp->nick: %s\n", connp->nick );
 		if (connp->state != CONN_FREE)
 			Destroy_connection(connp, "not input");
 		return;
@@ -2054,126 +2057,126 @@ int Send_loseitem(connection_t *connp, int lose_item_index)
 
 int Send_start_of_frame(connection_t *connp)
 {
-	if (connp->state != CONN_PLAYING) {
-		if (connp->state != CONN_READY)
-			warn("Connection not ready for frame (%d,%d)",
-					connp->state, connp->id);
-		return -1;
-	}
-	/*
-	 * We tell the client which frame number this is and
-	 * which keyboard update we have last received.
-	 */
-	Sockbuf_clear(&connp->w);
-	if (Packet_printf(&connp->w,
-				"%c%ld%ld",
-				PKT_START, frame_loops, connp->last_key_change) <= 0) {
-		Destroy_connection(connp, "write error");
-		return -1;
-	}
+  if (connp->state != CONN_PLAYING) {
+    if (connp->state != CONN_READY)
+      warn("Connection not ready for frame (%d,%d)",
+          connp->state, connp->id);
+    return -1;
+  }
+  /*
+   * We tell the client which frame number this is and
+   * which keyboard update we have last received.
+   */
+  Sockbuf_clear(&connp->w);
+  if (Packet_printf(&connp->w,
+        "%c%ld%ld",
+        PKT_START, frame_loops, connp->last_key_change) <= 0) {
+    Destroy_connection(connp, "write error");
+    return -1;
+  }
 
-	/* Return ok */
-	return 0;
+  /* Return ok */
+  return 0;
 }
 
 int Send_end_of_frame(connection_t *connp)
 {
-	int			n;
+  int			n;
 
-	last_packet_of_frame = 1;
-	n = Packet_printf(&connp->w, "%c%ld", PKT_END, frame_loops);
-	last_packet_of_frame = 0;
-	if (n == -1) {
-		Destroy_connection(connp, "write error");
-		return -1;
-	}
-	if (n == 0) {
-		/*
-		 * Frame update size exceeded buffer size.
-		 * Drop this packet.
-		 */
-		Sockbuf_clear(&connp->w);
-		return 0;
-	}
-	while (connp->motd_offset >= 0
-			&& connp->c.len + connp->w.len < MAX_RELIABLE_DATA_PACKET_SIZE)
-		Send_motd(connp);
+  last_packet_of_frame = 1;
+  n = Packet_printf(&connp->w, "%c%ld", PKT_END, frame_loops);
+  last_packet_of_frame = 0;
+  if (n == -1) {
+    Destroy_connection(connp, "write error");
+    return -1;
+  }
+  if (n == 0) {
+    /*
+     * Frame update size exceeded buffer size.
+     * Drop this packet.
+     */
+    Sockbuf_clear(&connp->w);
+    return 0;
+  }
+  while (connp->motd_offset >= 0
+      && connp->c.len + connp->w.len < MAX_RELIABLE_DATA_PACKET_SIZE)
+    Send_motd(connp);
 
-	if (connp->c.len > 0 && connp->w.len < MAX_RELIABLE_DATA_PACKET_SIZE) {
-		if (Send_reliable(connp) == -1)
-			return -1;
-		if (connp->w.len == 0)
-			return 1;
-	}
-	if (Sockbuf_flushRec(&connp->w) == -1) {
-		Destroy_connection(connp, "flush error");
-		return -1;
-	}
-	Sockbuf_clear(&connp->w);
-	return 0;
+  if (connp->c.len > 0 && connp->w.len < MAX_RELIABLE_DATA_PACKET_SIZE) {
+    if (Send_reliable(connp) == -1)
+      return -1;
+    if (connp->w.len == 0)
+      return 1;
+  }
+  if (Sockbuf_flushRec(&connp->w) == -1) {
+    Destroy_connection(connp, "flush error");
+    return -1;
+  }
+  Sockbuf_clear(&connp->w);
+  return 0;
 }
 
 static int Receive_keyboard(connection_t *connp)
 {
-	player_t *pl;
-	long change;
-	u_byte ch;
-	size_t size = KEYBOARD_SIZE;
+  player_t *pl;
+  long change;
+  u_byte ch;
+  size_t size = KEYBOARD_SIZE;
 
-	if (connp->r.ptr - connp->r.buf + (int)size + 1 + 4 > connp->r.len)
-		/*
-		 * Incomplete client packet.
-		 */
-		return 0;
+  if (connp->r.ptr - connp->r.buf + (int)size + 1 + 4 > connp->r.len)
+    /*
+     * Incomplete client packet.
+     */
+    return 0;
 
-	Packet_scanf(&connp->r, "%c%ld", &ch, &change);
-	if (change <= connp->last_key_change)
-		/*
-		 * We already have this key.
-		 * Nothing to do.
-		 */
-		connp->r.ptr += size;
-	else {
-		connp->last_key_change = change;
-		pl = Player_by_id(connp->id);
-		memcpy(pl->last_keyv, connp->r.ptr, size);
-		connp->r.ptr += size;
-		Handle_keyboard(pl);
-	}
-	if (connp->num_keyboard_updates++ && (connp->state & CONN_PLAYING)) {
-		Destroy_connection(connp, "no macros");
-		return -1;
-	}
+  Packet_scanf(&connp->r, "%c%ld", &ch, &change);
+  if (change <= connp->last_key_change)
+    /*
+     * We already have this key.
+     * Nothing to do.
+     */
+    connp->r.ptr += size;
+  else {
+    connp->last_key_change = change;
+    pl = Player_by_id(connp->id);
+    memcpy(pl->last_keyv, connp->r.ptr, size);
+    connp->r.ptr += size;
+    Handle_keyboard(pl);
+  }
+  if (connp->num_keyboard_updates++ && (connp->state & CONN_PLAYING)) {
+    Destroy_connection(connp, "no macros");
+    return -1;
+  }
 
-	return 1;
+  return 1;
 }
 
 static int Receive_quit(connection_t *connp)
 {
-	Destroy_connection(connp, "client quit");
+  Destroy_connection(connp, "client quit");
 
-	return -1;
+  return -1;
 }
 
 static int Receive_play(connection_t *connp)
 {
-	unsigned char ch;
-	int n;
-	char errmsg[MAX_CHARS];
+  unsigned char ch;
+  int n;
+  char errmsg[MAX_CHARS];
 
-	if ((n = Packet_scanf(&connp->r, "%c", &ch)) != 1) {
-		warn("Cannot receive play packet");
-		Destroy_connection(connp, "receive error");
-		return -1;
-	}
-	if (ch != PKT_PLAY) {
-		warn("Packet is not of play type");
-		Destroy_connection(connp, "not play");
-		return -1;
-	}
-	if (connp->state != CONN_LOGIN) {
-		if (connp->state != CONN_PLAYING) {
-			if (connp->state == CONN_READY) {
+  if ((n = Packet_scanf(&connp->r, "%c", &ch)) != 1) {
+    warn("Cannot receive play packet");
+    Destroy_connection(connp, "receive error");
+    return -1;
+  }
+  if (ch != PKT_PLAY) {
+    warn("Packet is not of play type");
+    Destroy_connection(connp, "not play");
+    return -1;
+  }
+  if (connp->state != CONN_LOGIN) {
+    if (connp->state != CONN_PLAYING) {
+      if (connp->state == CONN_READY) {
 				connp->r.ptr = connp->r.buf + connp->r.len;
 				return 0;
 			}

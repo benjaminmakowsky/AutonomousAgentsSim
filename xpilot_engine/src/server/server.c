@@ -410,6 +410,7 @@ int Pick_team(int pick_for_type)
 
 	/* If game_lock is on, can't join playing teams (might be able to join
 	 * paused). */
+  game_lock = false;
 	if (game_lock && pick_for_type == PL_TYPE_HUMAN)
 		return TEAM_NOT_SET;
 
@@ -500,6 +501,7 @@ int Pick_team(int pick_for_type)
 
 const char *Describe_game_status(void)
 {
+  game_lock = 0;
 	return (game_lock && ShutdownServer == -1) ? "locked"
 		: (!game_lock && ShutdownServer != -1) ? "shutting down"
 		: (game_lock && ShutdownServer != -1) ? "locked and shutting down"

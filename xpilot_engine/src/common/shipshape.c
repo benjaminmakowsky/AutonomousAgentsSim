@@ -1181,7 +1181,6 @@ static int shape2wire(char *ship_shape_str, shipshape_t *ship)
 					sprintf(&buf[buflen], " %d,%d", (int)pt.x, (int)pt.y);
 					buflen += strlen(&buf[buflen]);
 					}
-					warn( "convert_ship_2_string ship name: %s\n", ship->name );
 					engine = Ship_get_engine_position(ship, 0);
 					m_gun = Ship_get_m_gun_position(ship, 0);
 					sprintf(&buf[buflen], ")(EN: %d,%d)(MG: %d,%d)",

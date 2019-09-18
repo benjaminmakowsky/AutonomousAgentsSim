@@ -1126,6 +1126,7 @@ static int Cmd_team(char *arg, player_t *pl, bool oper, char *msg, size_t size)
 				t->SwapperId = NO_ID;
 		}
 
+    game_lock = 0;
 		if (game_lock && pl->home_base == NULL)
 			snprintf(msg, size, "Playing teams are locked.");
 		else if (team < 0 || team >= MAX_TEAMS)

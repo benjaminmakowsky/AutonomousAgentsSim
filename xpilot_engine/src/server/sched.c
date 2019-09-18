@@ -36,7 +36,8 @@ typedef	int	FDTYPE;
 #endif
 
 #ifndef _WINDOWS
-#define NUM_SELECT_FD		((int)sizeof(int) * 8)
+//#define NUM_SELECT_FD		((int)sizeof(long) * 8)
+#define NUM_SELECT_FD MAX_PLAYERS
 #else
 /*
 Windoze:
@@ -106,10 +107,12 @@ void install_input(void (*func)(int, void *), int fd, void *arg)
 		}
 	}
 	/* IFWINDOWS(xpprintf("install_input: fd %d min_fd=%d\n", fd, min_fd)); */
-	if (!playback && (fd < min_fd || fd >= min_fd + NUM_SELECT_FD)) {
+	/*
+  if (!playback && (fd < min_fd || fd >= min_fd + NUM_SELECT_FD)) {
 		error("install illegal input handler fd %d (%d)", fd, min_fd);
 		exit(1);
 	}
+  */
 	if (!playback && FD_ISSET(fd, &input_mask)) {
 		error("input handler %d busy", fd);
 		exit(1);
@@ -128,10 +131,12 @@ void install_input(void (*func)(int, void *), int fd, void *arg)
 void remove_input(int fd)
 {
 	if (!playback) {
+    /*
 		if (fd < min_fd || fd >= min_fd + NUM_SELECT_FD) {
 			error("remove illegal input handler fd %d (%d)", fd, min_fd);
 			exit(1);
 		}
+    */
 		if (FD_ISSET(fd, &input_mask) || playback) {
 			input_handlers[fd - min_fd].fd = -1;
 			input_handlers[fd - min_fd].func = io_dummy;
