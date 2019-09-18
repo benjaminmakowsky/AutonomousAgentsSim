@@ -342,6 +342,15 @@ enum State
  * Other Defines
  */ 
 #define ANGLE_CONST 2.8125
+#define BASE_LOG_DIRECTORY "/tmp/xpilot_logs"
+#define BASE_LOG_NAME "BaseLog"
+#define LOG_TIME_LEN 200
+#define BASE_LOG_LEN LOG_TIME_LEN + 30
 
+#define BASE_HEADER "TEAM, HONEY EXPENSES, HONEY REVENUE, HONEY PROFIT, BEES, SEARCHERS, FORAGERS, NURSES, ONLOOKERS, GUARDS, ATTACKERS"
+#define BASE_HEADER_LEN 200
+extern char Base_Header[ BASE_HEADER_LEN ];
+
+#define BASE_ROW_LEN 1000
 
 #endif
