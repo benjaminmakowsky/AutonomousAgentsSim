@@ -13,8 +13,9 @@
 
 
 //Local Variables
-// Consider making danceMoves a struct instead of an array, this would allow for more 
+// Consider making danceMoves a struct instead of an array, this would allow for more
 // descriptive fields. Additionally, a struct is easier to expand upon.
+//Global Variables used in multiple functions
 static char danceMoves[4] = {none, none, none, none}; //Array to hold dance moves
 // msgTypes would work better as an enum
 int msgTypes[2] = {foundSource, foundEnemy};
@@ -23,27 +24,29 @@ int danceTree[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 static int initialHeading = 0;
 static int rightHeading = 0;
 static int leftHeading = 0;
+static int rearHeading = 0;
 
 
 bool dance(int msgType) {
   static bool completed_first_dance = false;
-  static bool completed_second_dance = false;
-  static bool completed_third_dance = false;
+  static bool completed_xcoord_dance = false;
+  static bool completed_ycoord_dance = false;
   static bool isInitial = true;
 
   if(isInitial) {
-    OPENLOG()
+    //Reset directional headings for dance
+    setDanceHeadings();
 
+    //Reset Flags
     completed_first_dance = false;
-    completed_second_dance = false;
-    completed_third_dance = false;
-    initialHeading = (int) selfHeadingDeg();
-    rightHeading = (initialHeading - 90 + 360) % 360; //+360 to account for going past -1 degrees
-    leftHeading = (initialHeading + 90) % 360;
+    completed_xcoord_dance = false;
+    completed_ycoord_dance = false;
+    isInitial = false;
+
+    OPENLOG()
     fprintf(fp, "\nInitializing beeDance() with msgType: %d\n", msgType);
     fprintf(fp, "Init: %d, Left: %d, Right: %d\n",initialHeading,leftHeading,rightHeading);
     fprintf(fp,"------------------------------\n");
-    isInitial = false;
     fclose(fp);
   }
 
@@ -57,14 +60,14 @@ bool dance(int msgType) {
           completed_first_dance = relayMsg(msgType);
 
           //Dance x coordinates
-        } else if (!completed_second_dance) {
-          completed_second_dance = relayCoords(getHoneyX());
+        } else if (!completed_xcoord_dance) {
+          completed_xcoord_dance = relayCoords(getHoneyX());
           //completed_second_dance = true;
 
           //Dance y coordinates
-        } else if (!completed_third_dance) {
-          completed_third_dance = true;
-          //completed_third_dance = relayCoords(getHoneyY());
+        } else if (!completed_ycoord_dance) {
+          //completed_third_dance = true;
+          completed_ycoord_dance = relayCoords(getHoneyY());
         }
         break;
 
@@ -77,7 +80,7 @@ bool dance(int msgType) {
   }
 
   //Stop dancing once dance has finished
-  if (completed_first_dance && completed_second_dance && completed_third_dance) {
+  if (completed_first_dance && completed_xcoord_dance && completed_ycoord_dance) {
     isInitial = true;
     return true;
   } else {
@@ -94,10 +97,10 @@ bool relayMsg(int symbol) {
 
   //Function initialization; reset all values for future dances
   if (isInitial) {
-    OPENLOG()
     finishedMove = false;
     danceDirection = (symbol == 0) ? left : right;
     isInitial = false;
+    OPENLOG()
     fprintf(fp, "Begin relayMsg(%d) in direction %c\n", symbol, danceDirection);
     fclose(fp);
   }
@@ -109,10 +112,8 @@ bool relayMsg(int symbol) {
 }
 
 
-
 bool relayCoords(int coords) {
   static bool finishedMove = false;
-  static bool isInitial = true;
   static char danceDirection = none;
   static char *danceSequence = 0;
 
@@ -127,6 +128,11 @@ bool relayCoords(int coords) {
   }else{
 
     finishedMove = performSequence(danceSequence);
+    if(finishedMove){
+      danceSequence = 0;
+      finishedMove = false;
+      return true;
+    }
     return finishedMove;
   }
 }
@@ -135,11 +141,11 @@ bool relayCoords(int coords) {
 /*********************
  * Helper Methods
  ********************/
-char *buildDance(int coords) {
+char* buildDance(int coords) {
 
   int numInts = 0;
   int unitsPlace = 1;
-  static char danceMoves[3 * 4]; // explain why 3 * 4, with #defines if possible
+  static char danceMoves[max_num_moves];
   memset(danceMoves, 0, sizeof(danceMoves));
   OPENLOG()
   fprintf(fp, "\n\n\nBegin buildDance(%d)\n", coords);
@@ -155,7 +161,7 @@ char *buildDance(int coords) {
   } while (coords / unitsPlace != 0);
   // Another reason to do a for-loop instead of a do-while
   unitsPlace /= 10; //Divide by 10 because it is now too high from the do_while
-  fprintf(fp, "numInts: (%d)\n", numInts);
+  fprintf(fp, "Number of digits: (%d)\n", numInts);
 
   //Create array to hold the units of the coordinate
   int units[numInts];
@@ -215,6 +221,13 @@ char *buildDance(int coords) {
       danceMoves[num_moves_added] = endOfSequence;
       fprintf(fp, "%c ", danceMoves[num_moves_added]);
       num_moves_added++;
+    }else{
+      //Add in end of coordinate double spacing
+      danceMoves[num_moves_added] = endOfSequence;
+      fprintf(fp, "%c ", danceMoves[num_moves_added]);
+      num_moves_added++;
+      danceMoves[num_moves_added] = endOfSequence;
+      fprintf(fp, "%c ", danceMoves[num_moves_added]);
     }
   }
   fclose(fp);
@@ -242,21 +255,28 @@ bool performSequence(char* sequence){
   static int wait_count = 0;
   static bool completedChar = false;
   static bool needsReset = false;
+  static int i = 0;
 
-  // This wont work in this context, you should pass in the sequenceLenght to the function as a parameter instead.
-  int sequenceLength = (int)(sizeof(sequence) / sizeof(sequence[0]));
 
-  if(isInitial){
+  //Count the number of dance moves in the sequence
+  int sequenceLength = 0;
+  while(sequence[sequenceLength] != '\0'){
+    sequenceLength++;
+  }
+
+  //IF first time or you have already completed 1 sequence
+  if(isInitial || completedSequence){
+    i = 0;
+    completedSequence = false;
     OPENLOG()
     fprintf(fp,"\n\nBeginning performSequence()\n");
     fprintf(fp,"Performing %d moves\n", sequenceLength);
     fprintf(fp,"---------------------------\n");
     isInitial = false;
-    completedSequence = false; //added by DPM 20190830 to dance next time we return to hive
     fclose(fp);
   }
 
-  // Add a comment explaining why we need a reset
+  //Resets the static variables for the y coordinate after peforming the x coordinate
   if(needsReset){
     completedChar = false;
     needsReset = false;
@@ -264,11 +284,9 @@ bool performSequence(char* sequence){
   }
 
   //Iterate through all the dance moves
-  static int i = 0;
   if(i < sequenceLength){
-    char danceDir = sequence[i];
+    completedChar = performMovementFor(sequence[i]);
 
-    completedChar = performMovementFor(danceDir);
     //Once completed wait and return to start position
     if(completedChar) {
       OPENLOG()
@@ -280,10 +298,10 @@ bool performSequence(char* sequence){
   }else{
     OPENLOG()
     completedSequence = true;
+    needsReset = true;
     fprintf(fp,"completedSequence\n");
     fclose(fp);
     i=0; //added by DPM 20190830 to dance next time we return to hive
-    isInitial = true; //added by DPM 20190830 to dance-record next time we return to hive
   }
   return completedSequence;
 }
@@ -292,63 +310,73 @@ bool performSequence(char* sequence){
 bool performMovementFor(char dir){
   static bool finishedMove = false;
   static int wait_count = 0;
-  static int about_face = 0;
   static bool isInitial = true;
-  OPENLOG()
   POWER_OFF
 
   if (isInitial) {
+    OPENLOG()
     finishedMove = false;
     wait_count= 0;
     isInitial = false;
     fprintf(fp, "\nBegin movement(%c)\n", dir);
-    about_face = (initialHeading + 180) % 360;
+    fclose(fp);
   }
-
   //If you havent finished moving, do it again
   if (!finishedMove) {
-    if (dir == left) {
-      // If you want to have some control over what strings get printed & which don't when running 
-      // the code, you could do something like this:
-      //   #ifdef _LOG_DEBUG_ 
-      //    fprintf()fp, "...");
-      //   #endif
-      // And add a -D_LOG_DEBUG_ to the gcc line in the build script.
-      // You can control which messages get printed by defining and looking for various _LOG_<LOG LEVEL>_
-      //fprintf(fp, "Turning left: %d Currently: %d\n", leftHeading, (int) selfHeadingDeg());
-      turnToDeg(leftHeading);
-      finishedMove = headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
-    } else if (dir == right){
-      //fprintf(fp, "Turning right: %d Currently: %d\n", rightHeading, (int) selfHeadingDeg());
-      turnToDeg(rightHeading);
-      finishedMove = headingIsBetween((int)selfHeadingDeg(),rightHeading-2,rightHeading+2);
-    }else{
-      turnToDeg(about_face);
-      finishedMove = headingIsBetween((int)selfHeadingDeg(),about_face-2,about_face+2);
-    }
+    finishedMove = turnToDanceDirection(dir);
   }
-  if (finishedMove) {
 
-    //Wait 8 frames to signal end of Signal
-    if(wait_count < 10){
-      wait_count++;
+  //Once finished moving to designated dance direction return to intitial heading
+  if (finishedMove) {
+    isInitial = returnToInitialHeading(&wait_count);
+  }
+
+  //isInitial will be false unless you have returned to the initial heading
+  return isInitial;
+}
+
+/// Set the 4 dance headings, left,right, initial, and rear
+void setDanceHeadings(){
+  initialHeading = (int) selfHeadingDeg();
+  rightHeading = (initialHeading - 90 + 360) % 360; //+360 to account for going past -1 degrees
+  leftHeading = (initialHeading + 90) % 360;
+  rearHeading = (initialHeading + 180) % 360;
+}
+
+/// Turns bee to dance direction specified
+/// \param dir Direction to turn
+/// \return boolean if turn was completed
+bool turnToDanceDirection(char dir){
+  if (dir == left) {
+    turnToDeg(leftHeading);
+    return headingIsBetween((int)selfHeadingDeg(),leftHeading-2,leftHeading+2);
+
+  } else if (dir == right){
+    turnToDeg(rightHeading);
+    return headingIsBetween((int)selfHeadingDeg(),rightHeading-2,rightHeading+2);
+
+  }else if (dir == endOfSequence){
+    turnToDeg(rearHeading);
+    return headingIsBetween((int)selfHeadingDeg(),rearHeading-2,rearHeading+2);
+  }
+}
+
+/// Returns bee to initial heading for dance
+/// \param num_frames_to_wait number of frames needed to wait to observe
+/// \return boolean if move was completed
+bool returnToInitialHeading(int *num_frames_to_wait){
+  //Wait frames to allow observation
+  if((*num_frames_to_wait) < minimum_frames_to_observe){
+    (*num_frames_to_wait)++;
+
+  }else{
+    if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,initialHeading +2)){
+      turnToDeg(initialHeading);
     }else{
-      if(!headingIsBetween(selfHeadingDeg(),initialHeading-2,initialHeading +2)){
-        turnToDeg(initialHeading);
-      }else{
-        //reset for next msg
-        //Signal end of word
-        if(wait_count < 10 * 2){
-          wait_count++;
-          fprintf(fp, "%d, ",wait_count);
-        }else {
-          isInitial = true;
-          fclose(fp);
-          return true;
-        }
-      }
+      if((*num_frames_to_wait)  < minimum_frames_to_observe * 2){
+        (*num_frames_to_wait)++;
+      }else {return true;}
     }
   }
-  fclose(fp);
   return false;
 }

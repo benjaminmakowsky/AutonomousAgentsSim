@@ -14,6 +14,7 @@
 #include <math.h>
 #include <string.h>
 #include "beeObject.h"
+#include "beeObserve.h"
 
 #define EMPTY 200
 #define FULL 700
@@ -45,43 +46,36 @@ void searching() {
   //Step 1: Check for walls
   avoidWalls();
 
-
   //Step 2: Attempt to Attain Honey
   if (!fuel_found) {
-    checkForFuel();
+    useFueler();
 
     //Step 3: Check if fuel levels changed
-    double new_fuel_level = selfFuel();
-    if (new_fuel_level - fuel > 0) {
-      x = selfX();
-      y = selfY();
-      fuel_found = true;
-    }
+    fuel_found = checkforFuel("increasing", fuel);
   }
 
+  //Step 4: Store location of found honey
   if (fuel_found) {
-    if(comeToStop(30) == false){
-      //Do nothing
-    } else {
-      int POICoordinates[2];
-      static bool fileRead = false; //Boolean to set coordinates only once
-      if(!fileRead) {
-        memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(getPOICoordinates(x, y)));
-        setHoneyX(POICoordinates[0]);
-        setHoneyY(POICoordinates[1]);
-        fileRead = !fileRead;
-      }
+    x = selfX();
+    y = selfY();
 
-      OPENLOG()
-      fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",getHoneyX(),getHoneyY());
-      fprintf(fp,"Ending Search behavior\n");
-      fprintf(fp,"------------------------------\n");
-
-      fclose(fp);
-      sprintf(bugstring, "Search Moving to %d and %d",getHoneyX(), getHoneyY());
-      state = STATE_FORAGING;
-      sendSelfState(state);
+    static bool fileRead = false; //Boolean to set coordinates only once
+    if(!fileRead) {
+      int POICoordinates[2]; //Used to hold returned array from getPOICoordinates
+      memcpy(POICoordinates, getPOICoordinates(x, y), sizeof(POICoordinates));
+      setHoneyX(POICoordinates[0]);
+      setHoneyY(POICoordinates[1]);
+      fileRead = !fileRead;
     }
+
+    OPENLOG()
+    fprintf(fp,"Saved POI Coordinates as (%d,%d)\n",getHoneyX(),getHoneyY());
+    fprintf(fp,"Ending Search behavior\n");
+    fprintf(fp,"------------------------------\n");
+    fclose(fp);
+
+    state = STATE_FORAGING;
+    sendSelfState(state);
   }
 }
 
@@ -133,14 +127,14 @@ void forage() {
   static int fuelLVL = 0;
   //Step 2: Determine if near honey/hive
   if(!inVicinityOf(destination_x,destination_y)) {
+    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
+    turnToCoordinates(destination_x,destination_y);
+    stopAtCoordinates(destination_x,destination_y);
     if(getPower() == 0){
       // Make this '5' a define
       setPower(5);
     }
     refuel(0);
-    sprintf(bugstring, "Forage: Moving to location (%d, %d) ",destination_x,destination_y);
-    goToCoordinates(destination_x,destination_y);
-
 
   //Step 3; Gather or deposit fuel
   }else {
@@ -158,7 +152,8 @@ void forage() {
         waiting_counter++;
         beingObserved = checkIfBeingObserved();
         sprintf(bugstring,"waiting: %.2f", (float)waiting_counter/(frameLimit) * 100);
-      //If you are being observed perform dance
+
+        //If you are being observed perform dance
       }else {
         performed_dance = dance(foundSource);
       }
@@ -166,16 +161,15 @@ void forage() {
     }else {
       fuelLVL = (int) selfFuel();
       if (fuelLVL > EMPTY && depositing) {
-        checkForFuel();
+        useFueler();
         strcpy(bugstring, "Depositing");
       } else if (fuelLVL < FULL && !depositing) {
-        checkForFuel();
+        useFueler();
         strcpy(bugstring, "Gathering");
 
         //Step 4: Repeat Loop
       } else {
         refuel(0);
-        strcpy(bugstring, "Moving");
         depositing = !depositing;       //Change internal forage state
         forage_state_changed = true;    //Set flag for Logging change
 	performed_dance = false;        //added DPM 20190830: reset flag so we dance again next return to hive
@@ -187,17 +181,17 @@ void forage() {
 }
 
 /*****************************************************************************
- * Foraging (Controller)- Benjamin Makowsky
+ * Onlooking (Controller)- Benjamin Makowsky
  * ***************************************************************************/
 void onlook(){
   static int dancing_ship = -1;
-
 
   //If not near the hive, go to it
   if(!inVicinityOf(selfBaseX(),selfBaseY())){
 
     //Make sure we are at the base when we are observing
-    goToCoordinates(selfBaseX(),selfBaseY());
+    turnToCoordinates(selfBaseX(),selfBaseY());
+    stopAtCoordinates(selfBaseX(), selfBaseY());
 
   //While at the hive observe dancing bee
   }else{
@@ -208,19 +202,16 @@ void onlook(){
     //While not watching a dancing ship, check to see who may be dancing
     if(dancing_ship == -1){
       int field_of_view = 360;  //Looks for ships all around bee
-      int range_of_view = 40;   //Distance for how far a bee can be seen
+      int range_of_view = 60;   //Distance for how far a bee can be seen
 
       //Check to see if any ships are nearby and if one is get its ID
-      //TODO: Possibly change name to getNearbySHipID() or similar
-      dancing_ship = seeIfDancing(field_of_view,range_of_view);
+      dancing_ship = seeIfDancersWaiting(field_of_view,range_of_view);
       sprintf(bugstring,"Observing Ship: %d",dancing_ship);
     }else{
 
       //Turn towards the bee we are observing
       int targetHeading = getHeadingBetween(selfX(),selfY(),getDancersX(dancing_ship),getDancersY(dancing_ship));
-      if(selfHeadingDeg() < targetHeading-1 || selfHeadingDeg() > targetHeading + 1) {
-        //sprintf(bugstring,"self: %d target: %d",selfHeadingDeg(),targetHeading);
-        //sprintf(bugstring,"targetHeading: %d",targetHeading);
+      if(!headingIsBetween((int)selfHeadingDeg(),targetHeading-1,targetHeading+1)) {
         turnToDeg(targetHeading);
       }else{
         //While looking at dancer observe dance

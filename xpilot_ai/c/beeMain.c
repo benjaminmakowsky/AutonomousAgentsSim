@@ -22,6 +22,8 @@
 #include <string.h>
 #include <sys/time.h>
 #include <limits.h>
+#include "beeObserve.h"
+
 //global constants
 #define MAX_DEG 360
 
@@ -677,10 +679,7 @@ AI_loop()
       break;
 
     case(STATE_SEARCHING):
-      //thrust(1);
       searching();
-      //Update ship_t every frame
-      //updateShip();
       break;
 
     case(STATE_FORAGING):

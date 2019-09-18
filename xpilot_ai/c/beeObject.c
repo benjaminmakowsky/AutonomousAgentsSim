@@ -49,3 +49,8 @@ void setDanceType(int type){
 int getDanceType(){
   return danceType;
 }
+
+
+void rememberObservedDanceMoves(char* dance){
+  observed_dance = dance;
+}
