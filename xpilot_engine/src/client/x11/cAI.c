@@ -3057,7 +3057,6 @@ int getWallAvoidance() {
   }
 }
 
-//INPROGRESS: Moving functions to beeObserve
 int getShipDir(int ship_id){
   ship_t ship = getShipWithID(ship_id);
   int dir = (int)ship.dir * 2.8125;
@@ -3190,10 +3189,6 @@ bool checkIfBeingObserved(){
   int selfX = getSelfX(); //Using custom made command instead relying on cAI.c
   int selfY = getSelfY(); //Using custom made command instead relying on cAI.c
 
-//  char LogFile[20] = "";
-//  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-//  FILE *fp;
-//  fp = fopen(LogFile, "a");
 
   //Used to make sure bee is being watch and bee didnt glance during fly-by
   static int observed_counter = 0;
