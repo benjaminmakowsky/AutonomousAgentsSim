@@ -30,10 +30,22 @@
 #include <pthread.h>
 
 #include "xpserver.h"
+#include "unistd.h"
+#include "time.h"
 
 int		roundtime = -1;		/* time left this round */
 static double	time_to_tick = 1.0;	/* game time till next tick */
 static bool	tick = false; 		/* new tick of game time this frame */
+
+char logStartTime[LOG_TIME_LEN];
+
+char baseLogNameOne[BASE_LOG_LEN];
+char baseLogNameTwo[BASE_LOG_LEN];
+
+FILE* baseLogFileOne;
+FILE* baseLogFileTwo;
+
+char Base_Header[BASE_HEADER_LEN];
 
 static inline void update_object_speed(object_t *obj)
 {
@@ -177,10 +189,12 @@ void Do_nurse(player_t *pl){
   // NURSE_TICK is how much fuel a nurse bee spends per tick
   // Add NURSE_TICK amount of fuel towards nursed bees
 	if((closestBase->fuel - NURSE_TICK ) <= 0 ){
+    closestBase->totalNursedFuel += closestBase->fuel;
     closestBase->nursedFuel += closestBase->fuel;
     closestBase->fuel = 0;
 	}
   else{
+    closestBase->totalNursedFuel += NURSE_TICK;
     closestBase->nursedFuel += NURSE_TICK;
     closestBase->fuel -= NURSE_TICK;
   }
@@ -488,6 +502,56 @@ static void do_Autopilot (player_t *pl)
 		Thrust(pl, true);
 }
 
+static void initializeBaseOne(){
+  // Create log directory if not exists
+  struct stat st = {0};
+  if( stat(BASE_LOG_DIRECTORY, &st) == -1 ){
+    mkdir(BASE_LOG_DIRECTORY, 0700 );
+  }
+  // Create log file if doesn't exist
+  if( !baseLogFileOne ){
+    sprintf(baseLogNameOne, "%s/%s_%sOne.csv", BASE_LOG_DIRECTORY, logStartTime, BASE_LOG_NAME );
+    baseLogFileOne = fopen(baseLogNameOne, "a");
+    // Write the log header to the file
+    fprintf( baseLogFileOne, "%s", Base_Header );
+  }  
+}
+
+static void initializeBaseTwo(){
+  // Create log directory if not exists
+  struct stat st = {0};
+  if( stat(BASE_LOG_DIRECTORY, &st) == -1 ){
+    mkdir(BASE_LOG_DIRECTORY, 0700 );
+  }
+  // Create log file if doesn't exist
+  if( !baseLogFileTwo ){
+    sprintf(baseLogNameTwo, "%s/%s_%sTwo.csv", BASE_LOG_DIRECTORY, logStartTime, BASE_LOG_NAME );
+    baseLogFileTwo = fopen(baseLogNameTwo, "a");
+    // Write the log header to the file
+    fprintf( baseLogFileTwo, "%s", Base_Header );
+  }  
+}
+
+static void logBaseData(FILE* file, fuel_t* fs){
+  char logRow[BASE_ROW_LEN];
+  team_t* teamObj = Team_by_index(fs->team);
+
+  // team, honey exp, honey rev, honey profit, num bees, {roles}
+  sprintf(logRow, "%d,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d\n",
+      fs->team,   // team
+      fs->totalNursedFuel + fs->fuelTaken, // honey expenses
+      fs->fuel - START_STATION_FUEL, // honey revenue
+      fs->fuel - fs->totalNursedFuel - fs->fuelTaken - START_STATION_FUEL,  // honey profit
+      teamObj->NumMembers, // num bees
+      teamObj->numSearchers, // searchers
+      teamObj->numForagers, // foragers
+      teamObj->numNurses, // nurses
+      teamObj->numOnlookers, // onlooking
+      teamObj->numGuards,  // guards
+      teamObj->numAttackers // attackers
+      );
+}
+
 
 static void Fuel_update(void)
 {
@@ -507,6 +571,39 @@ static void Fuel_update(void)
 		// If this the fuel reserver for a player's base, in this case
 		// the station has negative fuel regeneration
 		if( fs->isBase ){
+
+      // timestamp to assign to log files from this sim
+      if( strcmp(logStartTime,"") == 0 ){
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        sprintf(logStartTime, "%d-%d-%d_%d:%d:%d", tm.tm_year + 1900, tm.tm_mon + 1, 
+            tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec );
+        printf("logStartTime: %s\n", logStartTime );
+      }
+     
+      // Initialize the log file header
+      if( strcmp(Base_Header,"") == 0 ){
+        sprintf(Base_Header, "%s", BASE_HEADER );
+      }
+
+      if( fs->team == 1 ){
+        // Create this base's log file if it doesn't exist 
+        if( strcmp(baseLogNameOne,"" ) == 0 ){
+          initializeBaseOne();
+        }
+        // Log data
+        logBaseData( baseLogFileOne, fs );
+      }
+
+      if( fs->team == 2 ){
+        // Create this base's log file if it doesn't exist 
+        if( strcmp(baseLogNameTwo,"") == 0 ){
+          initializeBaseTwo();
+        }
+        // Log Data
+        logBaseData( baseLogFileTwo, fs );
+      }
+
 			if( fs->fuel == 0 ){
 				continue;
 			}
@@ -825,6 +922,7 @@ static void Do_refuel(player_t *pl)
 				}
 				else{
 					fs->fuel -= REFUEL_RATE * timeStep;
+          fs->fuelTaken += REFUEL_RATE * timeStep;
 					Player_add_fuel(pl, REFUEL_RATE * timeStep);
 				}
 				fs->conn_mask = 0;

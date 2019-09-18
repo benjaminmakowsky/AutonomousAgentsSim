@@ -60,6 +60,10 @@ static volatile int termsig = 0;
 
 static void Handle_signal(int sig_no)
 {
+  // Close base log files
+  fclose(baseLogFileOne);
+  fclose(baseLogFileTwo);
+
 	termsig = sig_no;
 	stop_sched();
 }

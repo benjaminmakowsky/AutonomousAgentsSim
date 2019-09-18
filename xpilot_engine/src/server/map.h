@@ -84,6 +84,8 @@ typedef struct fuel {
 	clpos_t	pos;
 	double	fuel;
   double  nursedFuel;
+  double  totalNursedFuel;
+  double  fuelTaken;
 	uint32_t	conn_mask;
 	long	last_change;
 	int		team;
@@ -212,6 +214,13 @@ typedef struct team {
 	int		TreasuresDestroyed;	/* Number of destroyed treasures */
 	int		TreasuresLeft;		/* Number of treasures left */
 	int		SwapperId;		/* Player swapping to this full team */
+
+  int   numSearchers;
+  int   numForagers;
+  int   numNurses;
+  int   numOnlookers;
+  int   numGuards;
+  int   numAttackers;
 } team_t;
 
 typedef struct item_concentrator {

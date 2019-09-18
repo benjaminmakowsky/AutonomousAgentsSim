@@ -184,14 +184,15 @@ static int Cmd_death_kick( char* name ){
   if (!name || !*name)
     return 1;
 
+  printf("Kicking %s\n", name );
   kicked_pl = Get_player_by_name(name, NULL, &errorstr);
   if (kicked_pl) {
     if (kicked_pl->conn == NULL)
       Delete_player(kicked_pl);
     else
       Destroy_connection(kicked_pl->conn, "killed");
-  return 0;
-}
+    return 0;
+  }
 	
   return 1;
 
@@ -315,6 +316,8 @@ static void PlayerCollision(void)
 {
 	int i, j;
 	player_t *pl;
+  list_t kickList;  // List of player names to kick out
+  kickList = List_new();
 
 	/* Player - player, checkpoint, treasure, object and wall */
 	for (i = 0; i < NumPlayers; i++) {
@@ -441,13 +444,13 @@ static void PlayerCollision(void)
 						Set_message_f("%s and %s crashed.",
 								pl->name, pl_j->name);
 						Handle_Scoring(SCORE_COLLISION,pl,pl_j,NULL,NULL);
-            Cmd_death_kick(pl->name);
-            Cmd_death_kick(pl_j->name);
+            List_push_back(kickList, &(pl->name) );
+            List_push_back(kickList, &(pl_j->name) ); 
 					} else {
 						Set_message_f("%s ran over %s.", pl->name, pl_j->name);
 						sound_play_sensors(pl_j->pos, PLAYER_RAN_OVER_PLAYER_SOUND);
 						Handle_Scoring(SCORE_ROADKILL,pl,pl_j,NULL,NULL);
-            Cmd_death_kick(pl_j->name);
+            List_push_back(kickList, &(pl_j->name) ); 
 					}
 
 				} else {
@@ -455,7 +458,7 @@ static void PlayerCollision(void)
 						Set_message_f("%s ran over %s.", pl_j->name, pl->name);
 						sound_play_sensors(pl->pos, PLAYER_RAN_OVER_PLAYER_SOUND);
 						Handle_Scoring(SCORE_ROADKILL,pl_j,pl,NULL,NULL);
-            Cmd_death_kick(pl->name);
+            List_push_back(kickList, &(pl->name) ); 
 					}
 				}
 
@@ -560,6 +563,13 @@ static void PlayerCollision(void)
 		PlayerObjectCollision(pl);
 		PlayerCheckpointCollision(pl);
 	}
+
+  // Kick all the players who died this frame
+  list_iter_t iter;
+  for( iter = List_begin(kickList); iter != List_end(kickList); LI_FORWARD(iter) ){
+    Cmd_death_kick( LI_DATA(iter) );
+  }
+  List_delete(kickList);
 }
 
 int IsOffensiveItem(enum Item i)

@@ -97,6 +97,12 @@ extern double		timePerFrame;
 extern double		ecmSizeFactor;
 extern double		coriolisCosine, coriolisSine;
 
+extern char logStartTime[LOG_TIME_LEN];
+extern char baseLogNameOne[BASE_LOG_LEN];
+extern char baseLogNameTwo[BASE_LOG_LEN];
+extern FILE* baseLogFileOne;
+extern FILE* baseLogFileTwo;
+
 extern shape_t ball_wire, wormhole_wire, filled_wire;
 
 static inline vector_t World_gravity(clpos_t pos)
