@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 //Macro open a log file appending
+#define X_COORD_START 1
 #define OPENLOG()   fp = fopen(LogFile, "a");
 
 extern char bugstring[50];

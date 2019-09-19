@@ -15,6 +15,8 @@
 #include "beeObject.h"
 #include "beeObserve.h"
 
+char danceTree[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
 
 int observeDance(int ship_id){
 
@@ -34,7 +36,7 @@ int observeDance(int ship_id){
     initialHeading = getShipDir(ship_id);      //Record initial heading as start of dance orientation
     targetHeading = initialHeading + 180;         //Target Heading for when a dance move ends
     observing_dance = true;                       //Flag to exit initialization
-    fp = fopen(LogFile, "a");
+    OPENLOG()
     fprintf(fp,"observeDance(ship_id: %d)\n",ship_id);
     fclose(fp);
   }else{
@@ -173,40 +175,53 @@ char* observeDanceMoves(int ship_id){
 }
 
 int interpretCoord(char coord, char* dance){
-//  char moves[3] = {'\0'};
-//  int number[3] = {'\0'}; todo: must be char for atoi and strol
-//  int number_index = 0;
-//  bool completed_coord = false;
-//
-//  if(coord == 'x'){
-//    int dance_index = 1;
-//    int move_index = 0;
-//    while(!completed_coord){
-//      moves[move_index] = dance[dance_index];
-//      dance_index++;
-//      move_index++;
-//      if(dance[dance_index] == endOfWord){
-//        number[number_index] = convertToInt(moves);
-//        memset(moves, '\0', 3);
-//        dance_index++;
-//        if(dance[dance_index] == endOfWord){
-//          completed_coord = true;
-//        }
-//      }
-//    }
-//  }else if(coord == 'y'){
-//
-//  }else{
-//    return -1;
-//  }
-//  char * pEnd;
-//  return strtol (number,&pEnd,10);
+
+  char moves[3] = {'\0'};
+  char number[3] = {'\0'};
+  int number_index = 0;
+  bool completed_coord = false;
+
+  //Interpret Dance for x coordinate (starts at index 1)
+  if(coord == 'x'){
+    int dance_index = X_COORD_START;
+    int move_index = 0;
+
+    //Coord is considered completed when you have reached the end of word
+    while(!completed_coord){
+      moves[move_index] = dance[dance_index];
+      dance_index++;
+      move_index++;
+      if(dance[dance_index] == endOfWord){
+        number[number_index] = convertToInt(moves);
+        memset(moves, '\0', 3);
+        dance_index++;
+        if(dance[dance_index] == endOfWord){
+          completed_coord = true;
+        }
+      }
+    }
+  }else if(coord == 'y'){
+
+  }else{
+    return -1;
+  }
+  char * pEnd;
+  return strtol (number,&pEnd,10);
 }
 
-int convertToInt(char* moves){
+char convertToInt(char* moves){
   int i = 0;
+  int curr_tree_node = 0;
   while(i < 3 || moves[i] != '\0'){
 
+    //Move down right
+    if(moves[i] == left){
+      curr_tree_node = (curr_tree_node + 1) * 2;
+    }else{
+      curr_tree_node = (curr_tree_node + 1) * 2 + 1;
+    }
+    //move down left
     i++;
   }
+  return danceTree[curr_tree_node];
 }
