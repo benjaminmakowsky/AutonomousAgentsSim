@@ -217,6 +217,11 @@ void onlook(){
         //While looking at dancer observe dance
         int danceObserved = observeDance(dancing_ship);
         sprintf(bugstring, "Observed Dance: %d", danceObserved);
+
+        if(danceObserved == FOUND_HONEY){
+          state = STATE_FORAGING;
+          sendSelfState(state);
+        }
       }
     }
   }
