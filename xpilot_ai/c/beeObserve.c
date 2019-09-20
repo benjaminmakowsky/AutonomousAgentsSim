@@ -52,7 +52,6 @@ int observeDance(int ship_id){
         dance_observed = FOUND_HONEY;
       }else{
         dance_observed = FOUND_ENEMY_HIVE;
-
       }
 
       //Store x coordinate in beeObject honeyX

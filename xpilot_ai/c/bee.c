@@ -76,6 +76,7 @@ void searching() {
 
     state = STATE_FORAGING;
     sendSelfState(state);
+    setNeedsToDance(true);
   }
 }
 
@@ -111,6 +112,10 @@ void forage() {
    *    4) Repeat
    */
 
+  if(getPrevState() == STATE_ONLOOKING){
+    setPrevState(STATE_FORAGING);
+    depositing = false;
+  }
   //Step 1:
   //Determine whether or not you are heading to hive to deposit honey or
   //if you are headed to flower to pickup honey
@@ -144,7 +149,7 @@ void forage() {
     setPower(0);                        //Come to stop until being observed or time limit has been reached
 
     //wait to fly off until someone has seen dance or time has been reached
-    if(performed_dance == false && waiting_counter < frameLimit && depositing){
+    if(performed_dance == false && waiting_counter < frameLimit && depositing && getNeedsToDance() == true){
 
       //while not being observed increment counter
       if(!beingObserved){
@@ -219,8 +224,10 @@ void onlook(){
         sprintf(bugstring, "Observed Dance: %d", danceObserved);
 
         if(danceObserved == FOUND_HONEY){
+          setNeedsToDance(false);
           state = STATE_FORAGING;
           sendSelfState(state);
+          setPrevState(STATE_ONLOOKING);
         }
       }
     }
