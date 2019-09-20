@@ -54,3 +54,10 @@ int getDanceType(){
 void rememberObservedDanceMoves(char* dance){
   observed_dance = dance;
 }
+
+bool getSaw_Dance(){
+  return saw_dance;
+}
+void setSaw_Dance(bool seen){
+  saw_dance = seen;
+}

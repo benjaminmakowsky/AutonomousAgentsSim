@@ -90,8 +90,7 @@ cAI.o: cAI.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/X11/Xatom.h /usr/include/X11/Xmd.h bitmaps.h \
  ../../../src/client/gfx2d.h ../../../src/common/types.h dbuff.h \
  paintdata.h record.h widget.h xevent.h xeventhandlers.h xinit.h xpaint.h \
- cAI.h ../../../../xpilot_ai/c/beeGlobals.h \
- ../../../../xpilot_ai/c/beeObject.h
+ cAI.h
 
 /usr/include/stdc-predef.h:
 
@@ -504,7 +503,3 @@ xinit.h:
 xpaint.h:
 
 cAI.h:
-
-../../../../xpilot_ai/c/beeGlobals.h:
-
-../../../../xpilot_ai/c/beeObject.h:

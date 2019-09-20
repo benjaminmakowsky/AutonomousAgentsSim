@@ -15,7 +15,7 @@
 #include "beeObject.h"
 #include "beeObserve.h"
 
-char danceTree[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+char danceTreeChars[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 
 int observeDance(int ship_id){
@@ -27,9 +27,7 @@ int observeDance(int ship_id){
   int dance_observed = -1;             //Used to return the dance type
   static bool dancingCheck = true;     //Used to determine if bee is still dancing
 
-  char LogFile[20] = "";
-  sprintf(LogFile, "./logs/LOG%d.txt", selfID());
-  FILE *fp;
+
 
   //Initialization code
   if(!observing_dance){
@@ -43,16 +41,21 @@ int observeDance(int ship_id){
     char* dancePattern = NULL;
     if(dancingCheck)
     {
+
       dancingCheck = beeIsDancing(ship_id);
       dancePattern = observeDanceMoves(ship_id); //Gets the dance move performed by the dancer
     }
 
     //IF no longer dancing and dancePattern exists
-    if(!dancingCheck && dancePattern != NULL){
+    if(getSaw_Dance() == true && beeIsDancing(ship_id) == false){
       dance_observed = dancePattern[0];
 
+
       //INPROGRESS: Save coordinates to self bee
-      //setHoneyX(interpretCoord('x',dancePattern));
+      setHoneyX(interpretCoord('x',dancePattern));
+      OPENLOG()
+      fprintf(fp,"Stored %d\n",getHoneyX());
+      CLOSE_LOG()
       //setHoneyY(interpretCoord('y',dancePattern));
       //sethoneyx and y in beeobject
       //TODO: create dance type enumeration
@@ -147,6 +150,7 @@ char* observeDanceMoves(int ship_id){
     }else{
       //Otherwise you have already been observing and determine char
       fprintf(fp,"Storing Direction #%d: %c\n", dance_index+1,direction);
+      setSaw_Dance(true);
       dance_moves[dance_index] = direction; //Record move observed in array
       dance_index++;                        //Increment array index
       directionSet = false;                 //Resets if direction has been observed
@@ -191,9 +195,16 @@ int interpretCoord(char coord, char* dance){
       moves[move_index] = dance[dance_index];
       dance_index++;
       move_index++;
+
+
+      //If you reached a '_' thats the end of a digit and convert moves to dance
       if(dance[dance_index] == endOfWord){
-        number[number_index] = convertToInt(moves);
-        memset(moves, '\0', 3);
+        number[number_index] = convertToNumber(moves);
+        number_index++;
+        memset(moves, '\0', 3); //Reset moves for next digit
+        move_index = 0;
+
+        //If dance index pulls a second '_' in a row you have finished the coordinate
         dance_index++;
         if(dance[dance_index] == endOfWord){
           completed_coord = true;
@@ -209,19 +220,29 @@ int interpretCoord(char coord, char* dance){
   return strtol (number,&pEnd,10);
 }
 
-char convertToInt(char* moves){
+char convertToNumber(char* moves){
   int i = 0;
-  int curr_tree_node = 0;
-  while(i < 3 || moves[i] != '\0'){
-
+  int curr_tree_node = -1; //Begins at -1 so left properly corresponds to 0
+  while(i < 3 && moves[i] != '\0'){
     //Move down right
+    OPENLOG()
+    fprintf(fp,"Interpreting %c\n",moves[i]);
+    CLOSE_LOG()
+
     if(moves[i] == left){
       curr_tree_node = (curr_tree_node + 1) * 2;
     }else{
       curr_tree_node = (curr_tree_node + 1) * 2 + 1;
     }
-    //move down left
+
+    OPENLOG()
+    fprintf(fp,"at index %d\n", curr_tree_node);
+    CLOSE_LOG()
+
     i++;
   }
-  return danceTree[curr_tree_node];
+  OPENLOG()
+  fprintf(fp,"at index %d CONVERTED TO: %c \n", curr_tree_node, danceTreeChars[curr_tree_node]);
+  CLOSE_LOG()
+  return danceTreeChars[curr_tree_node];
 }

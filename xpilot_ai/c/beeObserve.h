@@ -36,5 +36,5 @@ int interpretCoord(char coord, char* dance);
 /// Converts dances moves to integers
 /// \param moves array holding the moves to interpret
 /// \return int value of the moves observed
-char convertToInt(char* moves);
+char convertToNumber(char* moves);
 #endif //XPILOT_LE_BEEOBSERVE_H
