@@ -81,6 +81,7 @@ bool dance(int msgType) {
 
   //Stop dancing once dance has finished
   if (completed_first_dance && completed_xcoord_dance && completed_ycoord_dance) {
+    setNeedsToDance(false);
     isInitial = true;
     return true;
   } else {
